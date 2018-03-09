@@ -1,3 +1,3 @@
-import '../css/scss/base.scss';
+import './css/scss/base.scss';
 
 console.log('rendering!!!!!')
