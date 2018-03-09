@@ -12,33 +12,60 @@ const extractPlugin = new ExtractTextPlugin({
 
 
 module.exports = {
-    entry: './client/src/App.js',  // can be array, can be object with aliases or string
+    entry: './client/src/index.js',  // can be array, can be object with aliases or string
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
         // publicPath: '/dist'
     },
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
     module: {
         rules: [
+
             {
                 test: /\.js$/,
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['es2015']
+                            presets: ['es2015', 'react', 'stage-1']
                         }
                     }
                 ]
             },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         'style-loader',
+            //         'css-loader',
+            //         'sass-loader',
+            //         'resolve-url-loader'
+            //     ]
+            // },
             {
-                test: /\.scss$/,
+                test: /\.scss|css$/,
                 use: extractPlugin.extract({
-                    use: ['css-loader', 'sass-loader']
+                    use: ['css-loader', 'sass-loader', 'resolve-url-loader']
                 })
-            }, {
+            },
+            {
                 test: /\.html$/,
                 use: ['html-loader']
+            },
+            {
+                test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[text]',
+                            outputPath: 'fonts/',
+                            publicPath: 'fonts/'
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(jpg|png)$/,
@@ -55,6 +82,7 @@ module.exports = {
             }
         ]
     },
+
     plugins: [
         new webpack.ProvidePlugin({ // to enable jquery
             $: 'jquery',
