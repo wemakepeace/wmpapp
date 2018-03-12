@@ -1,29 +1,36 @@
 @import '/vendor/react-select/dist/react-select.css';
 @import '/vendor/react-toggle-switch/dist/css/switch.min.css';
 
+$pink: #de174f;
+
+/* Global */
 body {
-    background-color: yellow !important;
-    // background-color: lightgray !important;
+    // background-color: yellow !important;
+    background-color: #f7f7f7 !important;
 }
 
-.form-row {
-    /*padding: 10px 0;
-    display: flex;*/
+.ui.menu {
+    font-size: 1.7rem;
+    box-shadow: none;
+    border: none;
+    min-width: 14vh;
 }
 
-.form-row {
-    padding: 10px 0;
-    display: flex;
 
-    input {
-        flex: 1;
+.main-page-container {
+    display: flex !important;
+    height: 86vh;
+    width: 100%;
+    // width: 900px;
+
+    .pain-page-content {
+        margin: auto;
     }
-
-    label {
-        padding-right: 10px;
-    }
 }
 
+.underline {
+    text-decoration: underline;
+}
 
 /***/
 
@@ -89,7 +96,7 @@ body {
 /***/
 
 .equal-height-container {
-    max-width: 900px;
+    max-width: 600px;
     margin: 0 auto;
     display: flex;
 
@@ -117,6 +124,131 @@ body {
     }
 }
 
+/* Main Page */
+.title-container {
+    display: flex;
+    height: 200px;
+    width: 100vw;
+    background-color: $pink;
+    align-items: flex-end;
+    margin: auto;
+
+    .heading {
+        padding: 5px;
+
+        .title h1 {
+            font-size: 3em;
+            color: #fff;
+            line-height: 0.9;
+        }
+
+        .title-span {
+            background-color: white;
+            color: $pink;
+            padding: 0 5px;
+        }
+    }
+}
+
+@media (min-width: 900px) {
+    .title-container {
+        height: 200px;
+        width: 600px;
+
+        .heading {
+            .title h1 {
+                font-size: 5em;
+            }
+        }
+    }
+}
+
+
+.login-signup-container {
+    max-width: 600px;
+    margin: 0 auto;
+    height: 330px;
+
+
+    .first {
+        background-color: lightgoldenrodyellow !important;
+        padding: 20px;
+    }
+
+    .second {
+        background-color: yellow;
+        flex: 1;
+        display: flex;
+        cursor: pointer;
+
+        .second-a, .second-b {
+            flex: 1;
+            display: flex;
+
+            h3 {
+                font-size: 2em;
+                margin: auto;
+            }
+        }
+
+        .second-a { background-color: #c0dbe2; }
+        // .second-b { background-color: green; }
+        .second-b { background-color: lightcyan; }
+        .second-b { background-color: peachpuff; }
+
+    }
+}
+
+@media (min-width: 900px) {
+    .login-signup-container {
+         display: flex;
+
+        .first {
+            flex: 1;
+        }
+
+        .second {
+            flex-direction: column;
+
+            .second-a, .second-b {
+                h3 {
+                    font-size: 4em;
+                }
+            }
+        }
+    }
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+
+    .form-row {
+        padding: 6px 0;
+        display: flex;
+
+        input {
+            padding: 8px;
+            flex: 3;
+            letter-spacing: 0.5em;
+            -webkit-appearance:  button-bevel;
+        }
+
+        label {
+            flex: 1;
+            padding-right: 10px;
+        }
+    }
+
+    button.ui.large.button.signup-login-btn {
+        margin: 10px;
+        padding: 10px;
+        color: #000;
+        // background-color: $pink;
+    }
+}
+
+
 
 
 .promo-container {
@@ -140,5 +272,13 @@ body {
     .promo-container {
         display: flex;
         justify-content: space-between;
+    }
+}
+
+
+@media (max-width: 900px) {
+    .main-page-container {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
     }
 }
