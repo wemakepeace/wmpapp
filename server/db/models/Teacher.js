@@ -1,4 +1,4 @@
-const conn = require('../conn');
+const conn = require('../../conn');
 const Sequelize = conn.Sequelize;
 
 const Teacher = conn.define('teacher', {

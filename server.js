@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
 const open = require('open');
-// const db = require('./server/db');
+const { seed } = require('./server/index.js');
 
 const webpack =  require('webpack');
 const config =  require('./webpack.config');
@@ -14,8 +14,6 @@ app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath
 }));
-
-
 
 
 app.use(bodyparser.json());
@@ -43,7 +41,4 @@ app.listen(port, function (error) {
     }
 });
 
-
-// console.log(db)
-// seed here later
-// db.seed();
+seed();

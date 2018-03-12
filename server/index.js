@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const Teacher = require('./models/Teacher');
+const Teacher = require('./db/models/Teacher');
 
 
 const sync = () => conn.sync({ force: true });
