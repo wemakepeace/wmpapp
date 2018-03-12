@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
-// const { seed } = require('./server/db/index.js');
+// const db = require('./server/db');
 
 const app = express();
 
@@ -19,9 +19,10 @@ app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`${port} is a beautiful port.`));
 
+console.log(db)
 // seed here later
-// seed();
+// db.seed();

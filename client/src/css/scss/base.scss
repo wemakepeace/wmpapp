@@ -1,4 +1,139 @@
+@import '/vendor/react-select/dist/react-select.css';
+@import '/vendor/react-toggle-switch/dist/css/switch.min.css';
+
 body {
-    background-color: red;
+    background-color: lightgray !important;
 }
 
+.form-row {
+    /*padding: 10px 0;
+    display: flex;*/
+}
+
+.form-row {
+    padding: 10px 0;
+    display: flex;
+
+    input {
+        flex: 1;
+    }
+
+    label {
+        padding-right: 10px;
+    }
+}
+
+
+/***/
+
+.column-layout {
+    max-width: 1300px;
+    background-color: #fff;
+    line-height: 1.65;
+    margin: 40px auto 0 auto;
+    padding: 20px 50px;
+    display: flex;
+
+    .main-column {
+        flex: 3;
+        order: 2;
+    }
+
+    .sidebar-1 {
+        flex: 1;
+        order: 1;
+    }
+
+    .sidebar-2 {
+        flex: 1;
+        order: 3;
+    }
+}
+
+.call-outs-container {
+    max-width: 1300px;
+    margin: 40px auto 0 auto;
+
+    // align-items: flex-start;
+    // align-items: flex-end;
+    // align-items: center;
+    // align-items: stretch; default
+
+    .call-out {
+        padding: 20px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        flex-basis: 30% // same as width: 30%
+        // flex: 1;
+        // margin-right: 40px;
+    }
+
+    // .call-out:last-child {
+        // margin-right: 0px;
+    // }
+
+}
+
+@media (min-width: 900px) {
+    .call-outs-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.call-out:nth-child(1) { background-color: #c0dbe2 }
+.call-out:nth-child(2) { background-color: #cdf1c3 }
+.call-out:nth-child(3) { background-color: #ccb0da }
+
+/***/
+
+.equal-height-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+
+    .first {
+        background-color: #fff !important;
+        padding: 20px;
+        flex: 1;
+    }
+
+    .second {
+        background-color: yellow;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .second-a {
+            background-color: #c0dbe2;
+            flex: 1;
+        }
+
+        .second-b {
+            background-color: green;
+            flex: 1;
+        }
+    }
+}
+
+
+
+.promo-container {
+    max-width: 1300px;
+    margin: 40px auto 0 auto;
+
+    .promo-box {
+        // width: 32%;
+        flex-basis: 32%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+}
+
+
+@media (min-width: 900px) {
+    .promo-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}
