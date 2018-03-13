@@ -1,9 +1,22 @@
 const express = require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
-// const { seed } = require('./server/db/index.js');
+const open = require('open');
+const { seed } = require('./server/index.js');
 
+const webpack =  require('webpack');
+const config =  require('./webpack.config');
+
+const compiler = webpack(config);
 const app = express();
+
+app.use(require('webpack-dev-middleware')(compiler, {
+    noInfo: true,
+    publicPath: config.output.publicPath
+}));
+
+app.use(require('webpack-hot-middleware')(compiler));
+
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
@@ -16,12 +29,18 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
 
 app.get('*', (req, res, next) => {
-    return res.sendFile(path.join(__dirname, 'index.html'));
+    return res.sendFile(path.join(__dirname, '/client/src/index.html'));
 });
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`${port} is a beautiful port.`));
+// app.listen(port, () => console.log(`${port} is a beautiful port.`));
+app.listen(port, function (error) {
+    if(error) {
+        console.log(error);
+    } else {
+        open(`http://localhost:${port}`)
+    }
+});
 
-// seed here later
-// seed();
+seed();

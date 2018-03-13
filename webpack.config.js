@@ -12,7 +12,11 @@ const extractPlugin = new ExtractTextPlugin({
 
 
 module.exports = {
-    entry: './client/src/index.js',  // can be array, can be object with aliases or string
+    entry: [
+        'webpack-hot-middleware/client?reload=true',
+        './client/src/index.js',
+    ],
+    // entry: './client/src/index.js',  // can be array, can be object with aliases or string
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
@@ -82,6 +86,8 @@ module.exports = {
         new HtmlWebpackPlugin({ // to create the html file
             template: 'client/src/index.html'
         }),
-        new CleanWebPackPlugin(['dist']) // to remove dist folder before each build
+        new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
     ]
 };
