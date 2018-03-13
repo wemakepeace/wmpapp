@@ -14,7 +14,13 @@ class MainMenu extends Component {
 
         return (
             <Menu>
-                <Menu.Item header>Our Company</Menu.Item>
+                <Menu.Item
+                    header
+                    as={Link}
+                    to='/'
+                    name='/'
+                    active={activeItem === '/'}
+                    onClick={this.handleItemClick}>WE MAKE PEACE</Menu.Item>
                 <Menu.Item
                     as={Link}
                     to='/flex'

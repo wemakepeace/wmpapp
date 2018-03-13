@@ -48,7 +48,7 @@ class Main extends Component {
                                 </div>
                             </div>
                     </div>
-                    <div className='promo-container'>
+                    {/*<div className='promo-container'>
                         <div className='promo-box'>
                             When I started to learn it, I couldn’t find blogs that show “Which part of React Redux to build first?” or how to generally approach building any React-Redux apps. So I went through several example and blogs and came out with general steps as to how to approach building most React Redux Apps.
 
@@ -64,7 +64,7 @@ class Main extends Component {
 
                             Please Note: I am using “Mocks” to keep it at a high level and not get into the weeds. I am using the classic Todo list app as the basis for building ANY app. If your app has multiple screens, simply repeat the process for each screen.
                         </div>
-                    </div>
+                    </div>*/}
                 </div>
             </div>
         )
