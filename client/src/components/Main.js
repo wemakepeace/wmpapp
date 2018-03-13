@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 
 import Signup from './Signup';
+import Login from './Login';
 // import logo from '../../../assets/logos/WMPlogo_transparent.png';
 class Main extends Component {
     state = {
@@ -34,16 +35,16 @@ class Main extends Component {
                                     <div
                                         className='second-a'
                                         onClick={()=> this.toggleForm('signup')}>
-                                        <h3 className={showForm === 'signup' ? 'underline' :null }>SIGNUP</h3>
+                                        <h3 className={showForm === 'signup' ? 'dashed' : null }>SIGNUP</h3>
                                     </div>
                                     <div
                                         className='second-b'
                                         onClick={()=> this.toggleForm('login')}>
-                                        <h3 className={showForm === 'login' ? 'underline' :null }>LOGIN</h3>
+                                        <h3 className={showForm === 'login' ? 'dashed' : null }>LOGIN</h3>
                                     </div>
                                 </div>
                                 <div className='first'>
-                                { showForm === 'signup' ? <Signup /> : null }
+                                { showForm === 'signup' ? <Signup /> : <Login /> }
                                 </div>
                             </div>
                     </div>
