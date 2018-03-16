@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 
 import WMPHeader from './WMPHeader';
 import SchoolForm from './SchoolForm';
+import ClassForm from './ClassForm';
+import TeacherForm from './TeacherForm';
 
 class Profile extends Component {
     state = {
-        showTab: 'class'
+        showTab: 'intro'
     }
 
     onViewChange = (showTab) => {
         this.setState({ showTab });
     }
+
+    getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : ''
 
     render() {
         const { showTab } = this.state;
@@ -23,27 +27,32 @@ class Profile extends Component {
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <div
-                                className='profile-menu-item'
-                                onClick={() => this.onViewChange('class')}>
-                                <h3>CLASS PROFILE</h3>
+                                className={`profile-menu-item ${this.getActiveClass('intro')}`}
+                                onClick={() => this.onViewChange('intro')}>
+                                <h3>ABOUT THE PROGRAM</h3>
                             </div>
                             <div
-                                className='profile-menu-item'
+                                className={`profile-menu-item ${this.getActiveClass('class')}`}
+                                onClick={() => this.onViewChange('class')}>
+                                <h3>CLASS DETAILS</h3>
+                            </div>
+                            <div
+                                className={`profile-menu-item ${this.getActiveClass('teacher')}`}
+                                onClick={() => this.onViewChange('teacher')}>
+                                <h3>TEACHER DETAILS</h3>
+                            </div>
+                            <div
+                                className={`profile-menu-item ${this.getActiveClass('school')}`}
                                 onClick={() => this.onViewChange('school')}>
                                 <h3>SCHOOL DETAILS</h3>
                             </div>
-                            <div
-                                className='profile-menu-item'
-                                onClick={() => this.onViewChange('match')}>
-                                <h3>FIND A MATCH</h3>
-                            </div>
                         </div>
                         <div className='profile-form-column'>
-                        {showTab === 'class'
-                            ? null // <ClassForm />
+                        {   showTab === 'class'
+                            ? <ClassForm />
                             : showTab === 'school'
                             ? <SchoolForm />
-                            : null // <Match />
+                            : <TeacherForm />
                         }
                         </div>
                     </div>
