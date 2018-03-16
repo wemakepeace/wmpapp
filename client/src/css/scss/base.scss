@@ -1,8 +1,14 @@
 @import '/vendor/react-select/dist/react-select.css';
 @import '/vendor/react-toggle-switch/dist/css/switch.min.css';
 @import '/vendor/semantic-ui-css/semantic.min.css'; // needs to be imported here or in src/index
+@import '../partials/_flex.scss';
 
 $pink: #de174f;
+
+// @function calcWindowWidth($target, $container) {
+//     @return ($target/$container) * 100vw;
+// }
+
 
 /* Global */
 body {
@@ -14,126 +20,33 @@ body {
     font-size: 1.7rem;
     box-shadow: none;
     border: none;
-    min-width: 14vh;
+    min-height: 10vh;
 }
 
-
-.main-page-container {
+.page-container {
     display: flex !important;
     height: 86vh;
     width: 100%;
-    // width: 900px;
 
-    .pain-page-content {
+    .page-content {
         margin: auto;
     }
 }
 
-.underline {
-    text-decoration: underline;
-}
 
-.dashed {
-    border-bottom: 4px dashed black;
-}
 
-/***/
+.underline { text-decoration: underline }
 
-.column-layout {
-    max-width: 1300px;
-    background-color: #fff;
-    line-height: 1.65;
-    margin: 40px auto 0 auto;
-    padding: 20px 50px;
-    display: flex;
+.dashed { border-bottom: 4px dashed #fff }
 
-    .main-column {
-        flex: 3;
-        order: 2;
-    }
+.dotted { border-bottom: 7px dotted #000 }
 
-    .sidebar-1 {
-        flex: 1;
-        order: 1;
-    }
-
-    .sidebar-2 {
-        flex: 1;
-        order: 3;
-    }
-}
-
-.call-outs-container {
-    max-width: 1300px;
-    margin: 40px auto 0 auto;
-
-    // align-items: flex-start;
-    // align-items: flex-end;
-    // align-items: center;
-    // align-items: stretch; default
-
-    .call-out {
-        padding: 20px;
-        margin-bottom: 20px;
-        box-sizing: border-box;
-        flex-basis: 30% // same as width: 30%
-        // flex: 1;
-        // margin-right: 40px;
-    }
-
-    // .call-out:last-child {
-        // margin-right: 0px;
-    // }
-
-}
-
-@media (min-width: 900px) {
-    .call-outs-container {
-        display: flex;
-        justify-content: space-between;
-    }
-}
-
-.call-out:nth-child(1) { background-color: #c0dbe2 }
-.call-out:nth-child(2) { background-color: #cdf1c3 }
-.call-out:nth-child(3) { background-color: #ccb0da }
-
-/***/
-
-.equal-height-container {
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-
-    .first {
-        background-color: #fff !important;
-        padding: 20px;
-        flex: 1;
-    }
-
-    .second {
-        background-color: yellow;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-
-        .second-a {
-            background-color: #c0dbe2;
-            flex: 1;
-        }
-
-        .second-b {
-            background-color: green;
-            flex: 1;
-        }
-    }
-}
 
 /* Main Page */
 .title-container {
     display: flex;
-    height: 226px;
-    width: 100vw;
+    // height: 226px;
+    width: 100%;
     background-color: $pink;
     align-items: flex-end;
     margin: auto;
@@ -147,6 +60,10 @@ body {
 
         .title:last-child {
            margin: 15px 4px;
+        }
+
+        .title:first-child {
+           padding-top: 4px;
         }
 
         .title h1 {
@@ -163,9 +80,20 @@ body {
     }
 }
 
+
 @media (min-width: 900px) {
-    .title-container {
+    .page-content {
+        width: 1100px;
+    }
+
+    .login-signup .page-content {
         width: 600px;
+    }
+
+
+    .login-signup .title-container {
+        width: 100%;
+        height: 226px;
 
         .heading {
             .title h1 {
@@ -200,20 +128,25 @@ body {
             h3 {
                 font-size: 2em;
                 margin: auto;
+                &:hover { color: white }
             }
         }
 
         .second-a { background-color: #c0dbe2; }
         // .second-b { background-color: green; }
-        .second-b { background-color: lightcyan; }
+        // .second-b { background-color: lightcyan; }
         .second-b { background-color: peachpuff; }
-
     }
 }
+
 
 @media (min-width: 900px) {
     .login-signup-container {
          display: flex;
+
+         .first, .second {
+            display: flex;
+         }
 
         .first {
             flex: 1;
@@ -231,28 +164,37 @@ body {
     }
 }
 
-.signup-form, .login-form {
+@mixin input-styles {
+    padding: 8px;
+    flex: 3;
+    letter-spacing: 0.5em;
+    -webkit-appearance:  button-bevel;
+}
+
+@mixin action-btn {
+    margin: 10px;
+    padding: 10px;
+    color: #000;
+}
+
+@mixin form-styles {
     display: flex;
     flex-direction: column;
+    margin: auto;
+    width: 100%;
 
     .form-row {
         padding: 6px 0;
         display: flex;
-
-        input {
-            padding: 8px;
-            flex: 3;
-            letter-spacing: 0.5em;
-            -webkit-appearance:  button-bevel;
-        }
     }
+}
 
-    button.ui.large.button.signup-login-btn {
-        margin: 10px;
-        padding: 10px;
-        color: #000;
-        // background-color: $pink;
-    }
+.signup-form, .login-form {
+    @include form-styles
+
+    input { @include input-styles }
+
+    button { @include action-btn }
 }
 
 
@@ -284,8 +226,46 @@ body {
 
 
 @media (max-width: 900px) {
-    .main-page-container {
+    .page-container {
         margin-left: 0px !important;
         margin-right: 0px !important;
     }
+}
+
+
+
+
+/** Profile page **/
+.profile-column-container {
+    display: flex;
+}
+
+
+.profile-menu-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .profile-menu-item {
+        display: flex;
+        flex: 1;
+        border-bottom: 1px dotted #000;
+
+        h3 {
+            margin: auto;
+        }
+    }
+
+    .profile-menu-item:last-child {
+        border-bottom: none;
+    }
+}
+
+
+
+.profile-form-column {
+    height: 500px;
+    background-color: gray;
+    flex: 5;
 }
