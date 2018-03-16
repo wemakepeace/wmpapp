@@ -41,15 +41,15 @@ class FlexExamples extends Component {
                     </Container>
                     <Container>
                         <div className='call-outs-container'>
-                            <div className='call-out'>
+                            <div className='call-out blue'>
                                 <h2>Callout 1</h2>
                                 <p>Redux is becoming the de facto way to build React apps. And there are tons of examples that show how it’s done. But React-Redux apps have too many parts like: “Reducers”, “Actions”, “Action Creators”, “State”, “Middleware” and more). It could be overwhelming!</p>
                             </div>
-                            <div className='call-out'>
+                            <div className='call-out green'>
                                 <h2>Callout 2</h2>
                                 <p>Redux is becoming the de facto way to build React apps. And there are tons of examples that show how it’s done!</p>
                             </div>
-                            <div className='call-out'>
+                            <div className='call-out purple'>
                                 <h2>Callout 3</h2>
                                 <p>Redux is becoming the de facto way to build React apps.</p>
                             </div>

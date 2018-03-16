@@ -5,7 +5,9 @@ import { Container } from 'semantic-ui-react';
 
 import Signup from './Signup';
 import Login from './Login';
+import WMPHeader from './WMPHeader';
 // import logo from '../../../assets/logos/WMPlogo_transparent.png';
+
 class Main extends Component {
     state = {
         showForm: 'signup'
@@ -20,33 +22,27 @@ class Main extends Component {
         const { showForm } = this.state;
 
         return (
-            <div className='main-page-container'>
-                <div className='pain-page-content'>
-                    <div className='title-container'>
-                        <div className='heading'>
-                            <div className='title'><h1>WE</h1></div>
-                            <div className='title'><h1>MAKE</h1></div>
-                            <div className='title'><h1><span className='title-span'>PEACE LETTERS</span></h1></div>
-                        </div>
-                    </div>
+            <div className='page-container login-signup'>
+                <div className='page-content'>
+                    <WMPHeader />
                     <div>
-                            <div className='login-signup-container'>
-                                <div className='second'>
-                                    <div
-                                        className='second-a'
-                                        onClick={()=> this.toggleForm('signup')}>
-                                        <h3 className={showForm === 'signup' ? 'dashed' : null }>SIGNUP</h3>
-                                    </div>
-                                    <div
-                                        className='second-b'
-                                        onClick={()=> this.toggleForm('login')}>
-                                        <h3 className={showForm === 'login' ? 'dashed' : null }>LOGIN</h3>
-                                    </div>
+                        <div className='login-signup-container'>
+                            <div className='second'>
+                                <div
+                                    className='second-a'
+                                    onClick={()=> this.toggleForm('signup')}>
+                                    <h3 className={showForm === 'signup' ? 'dotted' : null }>SIGNUP</h3>
                                 </div>
-                                <div className='first'>
-                                { showForm === 'signup' ? <Signup /> : <Login /> }
+                                <div
+                                    className='second-b'
+                                    onClick={()=> this.toggleForm('login')}>
+                                    <h3 className={showForm === 'login' ? 'dotted' : null }>LOGIN</h3>
                                 </div>
                             </div>
+                            <div className='first'>
+                            { showForm === 'signup' ? <Signup /> : <Login /> }
+                            </div>
+                        </div>
                     </div>
                     {/*<div className='promo-container'>
                         <div className='promo-box'>
