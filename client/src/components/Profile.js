@@ -11,9 +11,7 @@ class Profile extends Component {
         showTab: 'intro'
     }
 
-    onViewChange = (showTab) => {
-        this.setState({ showTab });
-    }
+    onViewChange = (showTab) => this.setState({ showTab })
 
     getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : ''
 

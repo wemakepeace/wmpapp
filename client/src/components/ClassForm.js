@@ -13,10 +13,7 @@ class ClassForm extends Component {
         language: ''
     }
 
-
-    onInputChange = (ev, key) => {
-        this.setState({ [key]: ev.target.value });
-    }
+    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     render() {
         return (

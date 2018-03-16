@@ -6,16 +6,13 @@ import { Container } from 'semantic-ui-react';
 import Signup from './Signup';
 import Login from './Login';
 import WMPHeader from './WMPHeader';
-// import logo from '../../../assets/logos/WMPlogo_transparent.png';
 
 class Main extends Component {
     state = {
         showForm: 'signup'
     }
 
-    toggleForm = (form) => {
-        this.setState({showForm: form})
-    }
+    toggleForm = (form) => this.setState({showForm: form})
 
     getActiveClass = (item) => this.state.showForm === item ? 'active-main' : '';
 

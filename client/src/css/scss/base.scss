@@ -6,14 +6,9 @@
 $pink: #de174f;
 $lightyellow: lightgoldenrodyellow;
 
-// @function calcWindowWidth($target, $container) {
-//     @return ($target/$container) * 100vw;
-// }
-
 
 /* Global */
 body {
-    // background-color: yellow !important;
     background-color: #f7f7f7 !important;
 }
 
@@ -35,18 +30,13 @@ body {
     }
 }
 
-
-
-.underline { text-decoration: underline }
-
-.dashed { border-bottom: 4px dashed #fff }
-
-
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
 
 /* Main Page */
 .title-container {
     display: flex;
-    // height: 226px;
     width: 100%;
     background-color: $pink;
     align-items: flex-end;
@@ -192,6 +182,15 @@ body {
     }
 }
 
+@mixin active($backgroundColor, $paddingBottom) {
+    background-color: $backgroundColor;
+    h3 {
+        border-bottom: 7px dotted #000 !important;
+        padding-bottom: $paddingBottom;
+    }
+}
+
+
 .signup-form, .login-form {
     @include form-styles
 
@@ -246,17 +245,64 @@ body {
     justify-content: space-between;
 
     .profile-menu-item {
-        // background-color: $lightyellow;
         cursor: pointer;
-        h3 {
-            margin: auto;
-
-        }
+        h3 { margin: auto; }
     }
 
     .profile-menu-item:last-child {
         border-bottom: none;
     }
+}
+
+.profile-form-column {
+    height: 500px;
+    background-color: #fff;
+    flex: 5;
+}
+
+
+
+.profile-form {
+    padding: 60px;
+
+    .profile-segment {
+        margin: 10px;
+        padding-bottom: 15px;
+
+        .form-row {
+            display: flex;
+            margin: 10px 0;
+
+            .form-label {
+                letter-spacing: 0.2em;
+                padding-right: 8px;
+            }
+
+            .form-input-span {
+                flex: 1;
+
+                .form-input {
+                    width: 100%;
+                    letter-spacing: 0.2em !important;
+                    flex: 1;
+                }
+
+            }
+
+            .form-label, .form-input {
+                padding: 8px;
+            }
+        }
+    }
+}
+
+
+.active-main {
+    @include active(none, none)
+}
+
+.active-profile {
+    @include active($lightyellow, 10px)
 }
 
 @media(min-width: 900px) {
@@ -273,86 +319,4 @@ body {
             border-bottom: 1px dotted #000;
         }
     }
-}
-
-.profile-form-column {
-    height: 500px;
-    background-color: #fff;
-    flex: 5;
-
-    .form-input {
-        // @include input-styles
-        letter-spacing: 0.2em !important;
-        flex: 1;
-        // background-color: lightgoldenrodyellow;
-    }
-}
-
-input:focus, textarea:focus, select:focus{
-    outline: none;
-}
-
-
-.form-label {
-    letter-spacing: 0.2em;
-}
-
-
-.profile-form {
-    padding: 60px;
-}
-
-.form-row {
-    // margin-bottom: 27px;
-    display: flex;
-}
-
-.form-label {
-    padding-right: 8px;
-}
-
-label.form-label, input.form-input {
-    padding: 8px;
-}
-
-.form-input-span {
-    // border-bottom: 1px solid black;
-    flex: 1;
-}
-
-input.form-input {
-    width: 100%;
-}
-
-.profile .form-row {
-    margin: 10px 0;
-}
-
-
-.profile-segment {
-    margin: 10px;
-    padding-bottom: 15px;
-    // border-bottom: 1px solid #000;
-}
-
-@mixin dotted {  }
-
-
-@mixin active($backgroundColor) {
-    background-color: $backgroundColor;
-    h3 {
-        border-bottom: 7px dotted #000 !important;
-    }
-}
-
-.active-main {
-    @include active(none)
-}
-
-.profile-menu-item h3 {
-    padding: 10px
-}
-
-.active-profile {
-    @include active($lightyellow)
 }

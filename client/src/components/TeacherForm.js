@@ -13,10 +13,7 @@ class TeacherForm extends Component {
         password: ''
     }
 
-
-    onInputChange = (ev, key) => {
-        this.setState({ [key]: ev.target.value });
-    }
+    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     render() {
         return (

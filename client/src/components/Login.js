@@ -9,9 +9,7 @@ export default class Login extends Component {
         password: '',
     }
 
-    onChange = (ev, key) => {
-        this.setState({[key]: ev.target.value})
-    }
+    onChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     render() {
         return (

@@ -6,8 +6,6 @@ import { Container } from 'semantic-ui-react'
 
 class FlexExamples extends Component {
 
-
-
     render() {
         return (
             <Container>

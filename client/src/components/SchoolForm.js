@@ -14,9 +14,7 @@ class SchoolForm extends Component {
         country: ''
     }
 
-    onInputChange = (ev, key) => {
-        this.setState({ [key]: ev.target.value });
-    }
+    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     render() {
         return (

@@ -12,9 +12,7 @@ export default class Signup extends Component {
         confirmpassword: ''
     }
 
-    onChange = (ev, key) => {
-        this.setState({[key]: ev.target.value})
-    }
+    onChange = (ev, key) => this.setState({[key]: ev.target.value})
 
     render() {
         return (
