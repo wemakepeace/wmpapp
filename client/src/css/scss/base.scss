@@ -4,15 +4,11 @@
 @import '../partials/_flex.scss';
 
 $pink: #de174f;
-
-// @function calcWindowWidth($target, $container) {
-//     @return ($target/$container) * 100vw;
-// }
+$lightyellow: lightgoldenrodyellow;
 
 
 /* Global */
 body {
-    // background-color: yellow !important;
     background-color: #f7f7f7 !important;
 }
 
@@ -30,22 +26,17 @@ body {
 
     .page-content {
         margin: auto;
+        width: 100%;
     }
 }
 
-
-
-.underline { text-decoration: underline }
-
-.dashed { border-bottom: 4px dashed #fff }
-
-.dotted { border-bottom: 7px dotted #000 }
-
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
 
 /* Main Page */
 .title-container {
     display: flex;
-    // height: 226px;
     width: 100%;
     background-color: $pink;
     align-items: flex-end;
@@ -81,10 +72,12 @@ body {
 }
 
 
-@media (min-width: 900px) {
-    .page-content {
-        width: 1100px;
-    }
+@media (min-width: 1000px) {
+    .profile {
+        .page-content {
+            width: 70vw;
+        }
+   }
 
     .login-signup .page-content {
         width: 600px;
@@ -111,7 +104,7 @@ body {
 
 
     .first {
-        background-color: lightgoldenrodyellow !important;
+        background-color: $lightyellow !important;
         padding: 20px;
     }
 
@@ -166,7 +159,7 @@ body {
 
 @mixin input-styles {
     padding: 8px;
-    flex: 3;
+    width: 100%;
     letter-spacing: 0.5em;
     -webkit-appearance:  button-bevel;
 }
@@ -188,6 +181,15 @@ body {
         display: flex;
     }
 }
+
+@mixin active($backgroundColor, $paddingBottom) {
+    background-color: $backgroundColor;
+    h3 {
+        border-bottom: 7px dotted #000 !important;
+        padding-bottom: $paddingBottom;
+    }
+}
+
 
 .signup-form, .login-form {
     @include form-styles
@@ -236,25 +238,15 @@ body {
 
 
 /** Profile page **/
-.profile-column-container {
-    display: flex;
-}
-
 
 .profile-menu-column {
-    flex: 1;
+    flex: 1.5;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
 
     .profile-menu-item {
-        display: flex;
-        flex: 1;
-        border-bottom: 1px dotted #000;
-
-        h3 {
-            margin: auto;
-        }
+        cursor: pointer;
+        h3 { margin: auto; }
     }
 
     .profile-menu-item:last-child {
@@ -262,10 +254,69 @@ body {
     }
 }
 
-
-
 .profile-form-column {
     height: 500px;
-    background-color: gray;
+    background-color: #fff;
     flex: 5;
+}
+
+
+
+.profile-form {
+    padding: 60px;
+
+    .profile-segment {
+        margin: 10px;
+        padding-bottom: 15px;
+
+        .form-row {
+            display: flex;
+            margin: 10px 0;
+
+            .form-label {
+                letter-spacing: 0.2em;
+                padding-right: 8px;
+            }
+
+            .form-input-span {
+                flex: 1;
+
+                .form-input {
+                    width: 100%;
+                    letter-spacing: 0.2em !important;
+                    flex: 1;
+                }
+
+            }
+
+            .form-label, .form-input {
+                padding: 8px;
+            }
+        }
+    }
+}
+
+
+.active-main {
+    @include active(none, none)
+}
+
+.active-profile {
+    @include active($lightyellow, 10px)
+}
+
+@media(min-width: 900px) {
+    .profile-column-container {
+        display: flex;
+    }
+
+    .profile-menu-column {
+        flex-direction: column;
+
+        .profile-menu-item {
+            display: flex;
+            flex: 1;
+            border-bottom: 1px dotted #000;
+        }
+    }
 }

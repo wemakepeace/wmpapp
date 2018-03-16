@@ -6,16 +6,16 @@ import { Container } from 'semantic-ui-react';
 import Signup from './Signup';
 import Login from './Login';
 import WMPHeader from './WMPHeader';
-// import logo from '../../../assets/logos/WMPlogo_transparent.png';
 
 class Main extends Component {
     state = {
         showForm: 'signup'
     }
 
-    toggleForm = (form) => {
-        this.setState({showForm: form})
-    }
+    toggleForm = (form) => this.setState({showForm: form})
+
+    getActiveClass = (item) => this.state.showForm === item ? 'active-main' : '';
+
 
     render() {
 
@@ -29,14 +29,14 @@ class Main extends Component {
                         <div className='login-signup-container'>
                             <div className='second'>
                                 <div
-                                    className='second-a'
+                                    className={`second-a ${this.getActiveClass('signup')}`}
                                     onClick={()=> this.toggleForm('signup')}>
-                                    <h3 className={showForm === 'signup' ? 'dotted' : null }>SIGNUP</h3>
+                                    <h3>SIGNUP</h3>
                                 </div>
                                 <div
-                                    className='second-b'
+                                    className={`second-b ${this.getActiveClass('login')}`}
                                     onClick={()=> this.toggleForm('login')}>
-                                    <h3 className={showForm === 'login' ? 'dotted' : null }>LOGIN</h3>
+                                    <h3>LOGIN</h3>
                                 </div>
                             </div>
                             <div className='first'>
