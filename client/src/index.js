@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux';
 import { HashRouter, Route } from 'react-router-dom';
 import React from 'react';
 import { render } from 'react-dom';
@@ -7,10 +8,15 @@ import './css/scss/index.scss';
 
 import Routes from './routes';
 
+import store from './redux/store';
+
+
 const root = document.getElementById('root');
 
 render(
-    <HashRouter>
-        <Route component={Routes} />
-    </HashRouter>, root);
+    <Provider store={store}>
+        <HashRouter>
+            <Route component={Routes} />
+        </HashRouter>
+    </Provider>, root);
 
