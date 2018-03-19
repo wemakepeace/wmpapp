@@ -29,7 +29,7 @@ const Teacher = conn.define('teacher', {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-            notEmpty: { msg: 'Please fill in your first name.'}
+            notEmpty: { msg: 'Password must be at least 8 characters long.'}
         }
     }
 })

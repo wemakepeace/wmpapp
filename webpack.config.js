@@ -77,7 +77,7 @@ module.exports = {
         ]
     },
     devServer: {
-        historyApiFallback: true,
+        historyApiFallback: true
     },
     plugins: [
         new webpack.ProvidePlugin({ // to enable jquery
@@ -88,7 +88,7 @@ module.exports = {
         new HtmlWebpackPlugin({ // to create the html file
             template: 'client/src/index.html'
         }),
-        // new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
+        new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
     ]

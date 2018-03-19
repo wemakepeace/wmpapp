@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "build": "webpack-dev-server --hot",
+    "xbuild": "webpack-dev-server",
     "build:prod": "webpack -p",
     "start:dev": "npm run build -- -w & JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore src/ server.js sass --watch"
   },

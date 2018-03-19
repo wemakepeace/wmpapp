@@ -10,6 +10,10 @@ import Routes from './routes';
 
 import store from './redux/store';
 
+// for hot reloading
+if (module.hot) {
+    module.hot.accept();
+}
 
 const root = document.getElementById('root');
 
