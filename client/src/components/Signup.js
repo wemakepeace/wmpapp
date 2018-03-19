@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
 
-export default class Signup extends Component {
+import { createClassUser } from '../redux/actions/class';
+
+class Signup extends Component {
     state = {
         firstname: '',
         lastname: '',
@@ -13,6 +15,11 @@ export default class Signup extends Component {
     }
 
     onChange = (ev, key) => this.setState({[key]: ev.target.value})
+
+    onSubmit = () => {
+        const data = this.state;
+        this.props.createClassUser(data);
+    }
 
     render() {
         return (
@@ -49,8 +56,14 @@ export default class Signup extends Component {
                         type='password'
                         onChange={(ev) => this.onChange(ev, 'confirmpassword')}/>
                 </div>
-                <Button className='signup-login-btn' size='large'>SIGN UP</Button>
+                <Button
+                    className='signup-login-btn'
+                    size='large'
+                    onClick={()=>this.onSubmit()}>SIGN UP</Button>
             </div>
         )
     }
 }
+
+
+export default connect(null, { createClassUser })(Signup);
