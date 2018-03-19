@@ -1,0 +1,32 @@
+@mixin input-styles {
+    padding: 8px;
+    width: 100%;
+    letter-spacing: 0.5em;
+    -webkit-appearance:  button-bevel;
+}
+
+@mixin action-btn {
+    margin: 10px;
+    padding: 10px;
+    color: #000;
+}
+
+@mixin form-styles {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 100%;
+
+    .form-row {
+        padding: 6px 0;
+        display: flex;
+    }
+}
+
+@mixin active($backgroundColor, $paddingBottom) {
+    background-color: $backgroundColor;
+    h3 {
+        border-bottom: 7px dotted #000 !important;
+        padding-bottom: $paddingBottom;
+    }
+}

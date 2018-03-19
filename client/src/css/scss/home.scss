@@ -1,0 +1,22 @@
+.promo-container {
+    max-width: 1300px;
+    margin: 40px auto 0 auto;
+
+    .promo-box {
+        flex-basis: 32%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+
+    .promo-box:nth-child(1) { background-color: #c0dbe2 }
+    .promo-box:nth-child(2) { background-color: #cdf1c3 }
+    .promo-box:nth-child(3) { background-color: #ccb0da }
+}
+
+
+@media (min-width: 900px) {
+    .promo-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}

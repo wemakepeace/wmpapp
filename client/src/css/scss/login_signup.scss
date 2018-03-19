@@ -1,0 +1,94 @@
+@import '../partials/_mixins';
+@import '../partials/_colors';
+
+.login-signup-container {
+    max-width: 600px;
+    margin: 0 auto;
+    height: 330px;
+
+    .first {
+        background-color: $lightyellow !important;
+        padding: 20px;
+
+        .signup-form, .login-form {
+            @include form-styles
+
+            input { @include input-styles }
+
+            button { @include action-btn }
+        }
+
+    }
+
+    .second {
+        flex: 1;
+        display: flex;
+        cursor: pointer;
+
+        .second-a, .second-b {
+            flex: 1;
+            display: flex;
+
+            h3 {
+                font-size: 2em;
+                margin: auto;
+                &:hover { color: white }
+            }
+        }
+
+        .active-main {
+            @include active(none, none)
+        }
+
+        .second-a { background-color: $lightblue; }
+        .second-b { background-color: $peach; }
+    }
+}
+
+
+
+@media (min-width: 1000px) {
+
+    .login-signup .page-content {
+        width: 600px;
+    }
+
+    .login-signup .title-container {
+        width: 100%;
+        height: 226px;
+
+        .heading {
+            .title h1 {
+                font-size: 5em;
+            }
+        }
+    }
+}
+
+@media (min-width: 900px) {
+    .login-signup-container {
+         display: flex;
+
+        .first, .second {
+            display: flex;
+         }
+
+        .first {
+            flex: 1;
+        }
+
+        .second {
+            flex-direction: column;
+
+            .second-a, .second-b {
+                h3 {
+                    font-size: 4em;
+                }
+            }
+        }
+    }
+}
+
+
+
+

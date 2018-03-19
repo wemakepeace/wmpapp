@@ -1,16 +1,17 @@
-@import '/vendor/react-select/dist/react-select.css';
-@import '/vendor/react-toggle-switch/dist/css/switch.min.css';
-@import '/vendor/semantic-ui-css/semantic.min.css'; // needs to be imported here or in src/index
-@import '../partials/_flex.scss';
+@import '../partials/_colors';
+@import '../partials/_mixins';
 
-$pink: #de174f;
-$lightyellow: lightgoldenrodyellow;
-
-
-/* Global */
 body {
-    background-color: #f7f7f7 !important;
+    background-color: $lightgray !important;
 }
+
+/* Remove blue outline around selected inputs */
+
+input:focus, textarea:focus, select:focus{
+    outline: none;
+}
+
+/* Main menu styles */
 
 .ui.menu {
     font-size: 1.7rem;
@@ -18,6 +19,8 @@ body {
     border: none;
     min-height: 10vh;
 }
+
+/* Reusbale standardized page-container */
 
 .page-container {
     display: flex !important;
@@ -30,11 +33,8 @@ body {
     }
 }
 
-input:focus, textarea:focus, select:focus{
-    outline: none;
-}
+/* Reusable title header styles, appears on Home page and Profile pages */
 
-/* Main Page */
 .title-container {
     display: flex;
     width: 100%;
@@ -71,162 +71,6 @@ input:focus, textarea:focus, select:focus{
     }
 }
 
-
-@media (min-width: 1000px) {
-    .profile {
-        .page-content {
-            width: 70vw;
-        }
-   }
-
-    .login-signup .page-content {
-        width: 600px;
-    }
-
-
-    .login-signup .title-container {
-        width: 100%;
-        height: 226px;
-
-        .heading {
-            .title h1 {
-                font-size: 5em;
-            }
-        }
-    }
-}
-
-
-.login-signup-container {
-    max-width: 600px;
-    margin: 0 auto;
-    height: 330px;
-
-
-    .first {
-        background-color: $lightyellow !important;
-        padding: 20px;
-    }
-
-    .second {
-        background-color: yellow;
-        flex: 1;
-        display: flex;
-        cursor: pointer;
-
-        .second-a, .second-b {
-            flex: 1;
-            display: flex;
-
-            h3 {
-                font-size: 2em;
-                margin: auto;
-                &:hover { color: white }
-            }
-        }
-
-        .second-a { background-color: #c0dbe2; }
-        // .second-b { background-color: green; }
-        // .second-b { background-color: lightcyan; }
-        .second-b { background-color: peachpuff; }
-    }
-}
-
-
-@media (min-width: 900px) {
-    .login-signup-container {
-         display: flex;
-
-         .first, .second {
-            display: flex;
-         }
-
-        .first {
-            flex: 1;
-        }
-
-        .second {
-            flex-direction: column;
-
-            .second-a, .second-b {
-                h3 {
-                    font-size: 4em;
-                }
-            }
-        }
-    }
-}
-
-@mixin input-styles {
-    padding: 8px;
-    width: 100%;
-    letter-spacing: 0.5em;
-    -webkit-appearance:  button-bevel;
-}
-
-@mixin action-btn {
-    margin: 10px;
-    padding: 10px;
-    color: #000;
-}
-
-@mixin form-styles {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 100%;
-
-    .form-row {
-        padding: 6px 0;
-        display: flex;
-    }
-}
-
-@mixin active($backgroundColor, $paddingBottom) {
-    background-color: $backgroundColor;
-    h3 {
-        border-bottom: 7px dotted #000 !important;
-        padding-bottom: $paddingBottom;
-    }
-}
-
-
-.signup-form, .login-form {
-    @include form-styles
-
-    input { @include input-styles }
-
-    button { @include action-btn }
-}
-
-
-
-
-.promo-container {
-    max-width: 1300px;
-    margin: 40px auto 0 auto;
-
-    .promo-box {
-        // width: 32%;
-        flex-basis: 32%;
-        box-sizing: border-box;
-        padding: 10px;
-    }
-
-    .promo-box:nth-child(1) { background-color: #c0dbe2 }
-    .promo-box:nth-child(2) { background-color: #cdf1c3 }
-    .promo-box:nth-child(3) { background-color: #ccb0da }
-}
-
-
-@media (min-width: 900px) {
-    .promo-container {
-        display: flex;
-        justify-content: space-between;
-    }
-}
-
-
 @media (max-width: 900px) {
     .page-container {
         margin-left: 0px !important;
@@ -235,88 +79,3 @@ input:focus, textarea:focus, select:focus{
 }
 
 
-
-
-/** Profile page **/
-
-.profile-menu-column {
-    flex: 1.5;
-    display: flex;
-    justify-content: space-between;
-
-    .profile-menu-item {
-        cursor: pointer;
-        h3 { margin: auto; }
-    }
-
-    .profile-menu-item:last-child {
-        border-bottom: none;
-    }
-}
-
-.profile-form-column {
-    height: 500px;
-    background-color: #fff;
-    flex: 5;
-}
-
-
-
-.profile-form {
-    padding: 60px;
-
-    .profile-segment {
-        margin: 10px;
-        padding-bottom: 15px;
-
-        .form-row {
-            display: flex;
-            margin: 10px 0;
-
-            .form-label {
-                letter-spacing: 0.2em;
-                padding-right: 8px;
-            }
-
-            .form-input-span {
-                flex: 1;
-
-                .form-input {
-                    width: 100%;
-                    letter-spacing: 0.2em !important;
-                    flex: 1;
-                }
-
-            }
-
-            .form-label, .form-input {
-                padding: 8px;
-            }
-        }
-    }
-}
-
-
-.active-main {
-    @include active(none, none)
-}
-
-.active-profile {
-    @include active($lightyellow, 10px)
-}
-
-@media(min-width: 900px) {
-    .profile-column-container {
-        display: flex;
-    }
-
-    .profile-menu-column {
-        flex-direction: column;
-
-        .profile-menu-item {
-            display: flex;
-            flex: 1;
-            border-bottom: 1px dotted #000;
-        }
-    }
-}
