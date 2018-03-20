@@ -33,9 +33,11 @@ app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.set('port', port);
+
+console.log('OOOOOOOOPA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 

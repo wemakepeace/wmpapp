@@ -16,7 +16,7 @@ export default class Login extends Component {
             <div className='login-form'>
                 <div className='form-row'>
                     <input
-                        placeholder='USERNAME'
+                        placeholder='USERNAME!!'
                         name='email'
                         onChange={(ev) => this.onChange(ev, 'email')}/>
                 </div>
