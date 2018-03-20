@@ -7,7 +7,8 @@ const sync = () => conn.sync({ force: true });
 const seed = () => {
     return sync()
         .then(() => {
-            return Teacher.create({ firstName: 'Leonard', lastName: 'Alnes', email: 'k@m.com', password: '11111111' })
+            const seedTeacher = Teacher.create({ firstName: 'Leonard', lastName: 'Alnes', email: 'k@m.com', password: '11111111' })
+            return Promise.all([seedTeacher])
         })
         .catch((error) => {
             console.log(error)
@@ -16,5 +17,8 @@ const seed = () => {
 
 module.exports = {
     sync,
-    seed
+    seed,
+    models: {
+        Teacher
+    }
 }

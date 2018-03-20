@@ -2,7 +2,7 @@
 @import '../partials/_colors';
 
 .login-signup-container {
-    max-width: 600px;
+    // max-width: 700px;
     margin: 0 auto;
     height: 330px;
 
@@ -50,7 +50,7 @@
 @media (min-width: 1000px) {
 
     .login-signup .page-content {
-        width: 600px;
+        width: 760px;
     }
 
     .login-signup .title-container {
@@ -59,7 +59,7 @@
 
         .heading {
             .title h1 {
-                font-size: 5em;
+                font-size: 4em;
             }
         }
     }
@@ -74,7 +74,7 @@
          }
 
         .first {
-            flex: 1;
+            flex: 2;
         }
 
         .second {
@@ -82,7 +82,7 @@
 
             .second-a, .second-b {
                 h3 {
-                    font-size: 4em;
+                    font-size: 3em;
                 }
             }
         }

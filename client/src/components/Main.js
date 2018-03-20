@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 
-import Signup from './Signup';
-import Login from './Login';
+import SignupForm from './SignupForm';
+import LoginForm from './LoginForm';
 import WMPHeader from './WMPHeader';
 
 class Main extends Component {
@@ -40,7 +40,7 @@ class Main extends Component {
                                 </div>
                             </div>
                             <div className='first'>
-                            { showForm === 'signup' ? <Signup /> : <Login /> }
+                            { showForm === 'signup' ? <SignupForm /> : <LoginForm /> }
                             </div>
                         </div>
                     </div>

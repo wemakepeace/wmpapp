@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "build": "webpack-dev-server --hot --port 3000",
-    "xbuild": "webpack-dev-server",
     "start:dev-server": "JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/src/ ./server.js",
     "build:prod": "webpack -p",
     "start:dev-client": "npm run build",

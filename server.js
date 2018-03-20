@@ -7,6 +7,8 @@ const { seed } = require('./server/index.js');
 const webpack =  require('webpack');
 const config =  require('./webpack.config');
 
+const classRoutes = require('./server/api/class');
+
 const compiler = webpack(config);
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
+
+app.use('/class', classRoutes);
 
 app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));

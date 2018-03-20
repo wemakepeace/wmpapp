@@ -7,11 +7,11 @@ import { createClassUser } from '../redux/actions/class';
 
 class Signup extends Component {
     state = {
-        firstname: '',
-        lastname: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
-        confirmpassword: ''
+        confirmPassword: ''
     }
 
     onChange = (ev, key) => this.setState({[key]: ev.target.value})
@@ -28,13 +28,13 @@ class Signup extends Component {
                     <input
                         placeholder='FIRST NAME'
                         name='firstname'
-                        onChange={(ev)=>this.onChange(ev, 'lastname')}/>
+                        onChange={(ev)=>this.onChange(ev, 'firstName')}/>
                 </div>
                 <div className='form-row'>
                     <input
                         placeholder='LAST NAME'
                         name='lastname'
-                        onChange={(ev) => this.onChange(ev, 'lastname')}/>
+                        onChange={(ev) => this.onChange(ev, 'lastName')}/>
                 </div>
                 <div className='form-row'>
                     <input
@@ -54,7 +54,7 @@ class Signup extends Component {
                         placeholder='CONFIRM PASSWORD'
                         name='confirmpassword'
                         type='password'
-                        onChange={(ev) => this.onChange(ev, 'confirmpassword')}/>
+                        onChange={(ev) => this.onChange(ev, 'confirmPassword')}/>
                 </div>
                 <Button
                     className='signup-login-btn'
