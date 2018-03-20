@@ -1,6 +1,7 @@
 const app = require('express').Router();
 const Teacher = require('../index').models.Teacher;
-// const Class = require('../db/models/Class');
+const Class = require('../index').models.Class;
+const conn = require('../conn');
 
 app.post('/create', (req, res, next) => {
     // console.log('req.body', req.body)
@@ -24,10 +25,18 @@ app.post('/create', (req, res, next) => {
     //     })
     // }
 
-    Teacher.create(userData)
-    .then(response => {
-        console.log('result from creating user', response)
-        res.send({user: response})
+    return conn.transaction((t) => {
+        return Promise.all([
+            Teacher.create(userData, { transaction: t})
+        ])
+        .then(response => {
+            console.log('response[0]', response[0])
+            // create new class
+                Class.create({ teacherId: response[0].dataValues.id })
+                .then(classInstance => {
+                    res.send({ class: classInstance, teacher: response[0] })
+                })
+            })
     })
     .catch(error => {
         console.log('error', error)
