@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import classReducer from './reducers/class';
 
 const combinedReducers = combineReducers({
-    classUser: classReducer
+    classProfile: classReducer
 });
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

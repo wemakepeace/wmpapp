@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
 
-import { createClassUser } from '../redux/actions/class';
+import { createClassProfile } from '../redux/actions/class';
 
 class Signup extends Component {
     state = {
@@ -18,7 +18,7 @@ class Signup extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        this.props.createClassUser(data);
+        this.props.createClassProfile(data);
     }
 
     render() {
@@ -66,4 +66,4 @@ class Signup extends Component {
 }
 
 
-export default connect(null, { createClassUser })(Signup);
+export default connect(null, { createClassProfile })(Signup);
