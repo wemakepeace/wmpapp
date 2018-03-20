@@ -1,13 +1,19 @@
 const conn = require('./conn');
 const Teacher = require('./db/models/Teacher');
+const Class = require('./db/models/Class');
 
+
+Class.belongsTo(Teacher);
+Teacher.hasMany(Class);
 
 const sync = () => conn.sync({ force: true });
 
 const seed = () => {
-    return sync()
+    return sync({ force: true })
         .then(() => {
-            return Teacher.create({ firstName: 'Leonard', lastName: 'Alnes', email: 'k@m.com', password: '11111111' })
+            const seedTeacher = Teacher.create({ firstName: 'Leonard', lastName: 'Alnes', email: 'k@m.com', password: '11111111' })
+            const classInstance = Class.create({teacherId: 1})
+            return Promise.all([seedTeacher, classInstance])
         })
         .catch((error) => {
             console.log(error)
@@ -16,5 +22,9 @@ const seed = () => {
 
 module.exports = {
     sync,
-    seed
+    seed,
+    models: {
+        Teacher,
+        Class
+    }
 }

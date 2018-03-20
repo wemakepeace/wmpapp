@@ -13,7 +13,8 @@ const extractPlugin = new ExtractTextPlugin({
 
 module.exports = {
     entry: [
-        'webpack-hot-middleware/client?reload=true',
+        // 'webpack-hot-middleware/client?reload=true',
+        'webpack-hot-middleware/client',
         './client/src/index.js',
     ],
     // entry: './client/src/index.js',  // can be array, can be object with aliases or string
@@ -77,7 +78,17 @@ module.exports = {
         ]
     },
     devServer: {
+        hot: true,
+        inline: true,
         historyApiFallback: true,
+        host: 'localhost', // Defaults to `localhost`
+        port: 3000, // Defaults to 8080
+        proxy: {
+            '^/api/*': {
+                target: 'http://localhost:8080/api/',
+                secure: false
+            }
+        }
     },
     plugins: [
         new webpack.ProvidePlugin({ // to enable jquery
@@ -89,6 +100,7 @@ module.exports = {
             template: 'client/src/index.html'
         }),
         // new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
+        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
     ]

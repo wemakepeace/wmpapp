@@ -3,16 +3,23 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
 
-export default class Signup extends Component {
+import { createClassProfile } from '../redux/actions/class';
+
+class Signup extends Component {
     state = {
-        firstname: '',
-        lastname: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
-        confirmpassword: ''
+        confirmPassword: ''
     }
 
     onChange = (ev, key) => this.setState({[key]: ev.target.value})
+
+    onSubmit = () => {
+        const data = this.state;
+        this.props.createClassProfile(data);
+    }
 
     render() {
         return (
@@ -21,13 +28,13 @@ export default class Signup extends Component {
                     <input
                         placeholder='FIRST NAME'
                         name='firstname'
-                        onChange={(ev)=>this.onChange(ev, 'lastname')}/>
+                        onChange={(ev)=>this.onChange(ev, 'firstName')}/>
                 </div>
                 <div className='form-row'>
                     <input
                         placeholder='LAST NAME'
                         name='lastname'
-                        onChange={(ev) => this.onChange(ev, 'lastname')}/>
+                        onChange={(ev) => this.onChange(ev, 'lastName')}/>
                 </div>
                 <div className='form-row'>
                     <input
@@ -47,10 +54,16 @@ export default class Signup extends Component {
                         placeholder='CONFIRM PASSWORD'
                         name='confirmpassword'
                         type='password'
-                        onChange={(ev) => this.onChange(ev, 'confirmpassword')}/>
+                        onChange={(ev) => this.onChange(ev, 'confirmPassword')}/>
                 </div>
-                <Button className='signup-login-btn' size='large'>SIGN UP</Button>
+                <Button
+                    className='signup-login-btn'
+                    size='large'
+                    onClick={()=>this.onSubmit()}>SIGN UP</Button>
             </div>
         )
     }
 }
+
+
+export default connect(null, { createClassProfile })(Signup);

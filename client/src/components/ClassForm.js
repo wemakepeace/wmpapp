@@ -53,20 +53,20 @@ class ClassForm extends Component {
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>When would you like to participate in the Exchange Program?</label>
-                        <span className='form-input-span'>
+                        <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
+                        <span className=''>
                             [DROPDOWN / CHECKBOXES]
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>What language would you like your class to use in the Exchange?</label>
-                        <span className='form-input-span'>
+                        <label className='form-label-wide'>What language would you like your class to use in the Exchange?</label>
+                        <span className=''>
                             [DROPDOWN]
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>How proficient are your students in the selected language?</label>
-                        <span className='form-input-span'>
+                        <label className='form-label-wide'>How proficient are your students in the selected language?</label>
+                        <span className=''>
                             [SCALE]
                         </span>
                     </div>

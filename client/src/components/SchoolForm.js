@@ -34,7 +34,7 @@ class SchoolForm extends Component {
                     </div>
 
                     <div className='form-row'>
-                        <label className='form-label'>Address line 1</label>
+                        <label className='form-label'>Address</label>
                         <span className='form-input-span'>
                             <input
                                 className='form-input'
@@ -44,7 +44,7 @@ class SchoolForm extends Component {
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>Address line 2</label>
+                        <label className='form-label'>Address</label>
                         <span className='form-input-span'>
                             <input
                                 className='form-input'
@@ -54,7 +54,7 @@ class SchoolForm extends Component {
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>City / Town </label>
+                        <label className='form-label'>City</label>
                         <span className='form-input-span'>
                             <input
                                 className='form-input'
@@ -62,6 +62,8 @@ class SchoolForm extends Component {
                                 name='city'
                                 onChange={(ev)=>this.onInputChange(ev, 'city')}/>
                         </span>
+                    </div>
+                    <div className='form-row'>
                         <label className='form-label'>Zip code </label>
                         <span className='form-input-span'>
                             <input
