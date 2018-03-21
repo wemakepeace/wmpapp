@@ -35,6 +35,7 @@ const login = (credentials) => {
             .then(response => response.data)
             .then(({ user, token }) => {
                 localStorage.setItem('token', token);
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 dispatch(loginSuccess(user))
             })
     }
