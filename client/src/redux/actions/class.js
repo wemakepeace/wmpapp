@@ -1,10 +1,10 @@
-import { CREATE_CLASS_PROFILE_SUCCESS } from '../constants/class';
+import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS } from '../constants/class';
 
 import axios from 'axios';
 
 const createClassProfile = (data) => {
     return (dispatch) => {
-        return axios.post('/class/create', { data })
+        return axios.post('/public/create', { data })
             .then((response) => {
                 console.log('response', response)
                 return response.data
@@ -29,6 +29,25 @@ const createClassProfileSuccess = (data) => {
     }
 }
 
+const login = (credentials) => {
+    return (dispatch) => {
+        return axios.post('/auth/login', credentials )
+            .then(response => response.data)
+            .then(({ user, token }) => {
+                localStorage.setItem('token', token);
+                dispatch(loginSuccess(user))
+            })
+    }
+}
+
+const loginSuccess = (user) => {
+    return {
+        type: LOGIN_SUCCESS,
+        user
+    }
+}
+
 export {
-    createClassProfile
+    createClassProfile,
+    login
 }

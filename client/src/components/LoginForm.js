@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
+import { login } from '../redux/actions/class';
 
-export default class Login extends Component {
+class Login extends Component {
     state = {
         email: '',
         password: '',
     }
 
     onChange = (ev, key) => this.setState({ [key]: ev.target.value })
+
+    onSubmit = () => {
+        this.props.login({email: this.state.email, password: this.state.password});
+    }
 
     render() {
         return (
@@ -27,8 +32,13 @@ export default class Login extends Component {
                         type='password'
                         onChange={(ev) => this.onChange(ev, 'password')}/>
                 </div>
-                <Button className='signup-login-btn' size='large'>LOGIN</Button>
+                <Button
+                    className='signup-login-btn'
+                    size='large'
+                    onClick={this.onSubmit}>LOGIN</Button>
             </div>
         )
     }
 }
+
+export default connect(null, { login })(Login);
