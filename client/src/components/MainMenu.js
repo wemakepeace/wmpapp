@@ -3,11 +3,18 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
+import { logout } from '../redux/actions/class';
 
 class MainMenu extends Component {
     state = {}
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+    componentDidUpdate() {
+        if (!localStorage.getItem('token')) {
+            return this.props.logout();
+        }
+    }
 
     render() {
         const { activeItem } = this.state
@@ -35,13 +42,13 @@ class MainMenu extends Component {
                     onClick={this.handleItemClick} >Profile</Menu.Item>
                 <Menu.Item
                     as={Link}
-                    to='login'
-                    name='login'
-                    active={activeItem === 'login'}
+                    to='secret'
+                    name='secret'
+                    active={activeItem === 'secret'}
                     onClick={this.handleItemClick} />
             </Menu>
         )
     }
 }
 
-export default MainMenu;
+export default connect(null, { logout })(MainMenu);

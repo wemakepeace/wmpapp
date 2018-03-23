@@ -22,7 +22,6 @@ if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
-
 const root = document.getElementById('root');
 
 render(

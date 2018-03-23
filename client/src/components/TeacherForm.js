@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+// import { updateTeacher } from '../redux/actions/class';
+
 import WMPHeader from './WMPHeader';
 
 
@@ -14,6 +16,11 @@ class TeacherForm extends Component {
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
+
+
+    onSubmit = () => {
+        const data = this.state;
+    }
 
     render() {
         return (
@@ -71,6 +78,9 @@ class TeacherForm extends Component {
                                 name='password'
                                 onChange={(ev)=>this.onInputChange(ev, 'password')}/>
                         </span>
+                    </div>
+                    <div className='form-row'>
+                        <button onClick={this.onSubmit}>Save</button>
                     </div>
                 </div>
             </div>

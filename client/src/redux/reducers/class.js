@@ -1,13 +1,15 @@
-import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS } from '../constants/class';
+import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/class';
 
 const initialState = {};
 
 const classReducer = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_CLASS_PROFILE_SUCCESS:
-            return { ...state, teacher: action.teacher, class: action.class }
+            return { ...state, ...action.user, ...action.info }
         case LOGIN_SUCCESS:
-            return { ...state, auth: action.user }
+            return { ...state, ...action.user }
+        case LOGOUT_SUCCESS:
+            return {}
     }
     return state
 }

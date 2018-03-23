@@ -16,7 +16,6 @@ class Main extends Component {
 
     getActiveClass = (item) => this.state.showForm === item ? 'active-main' : '';
 
-
     render() {
 
         const { showForm } = this.state;

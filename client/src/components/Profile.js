@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import WMPHeader from './WMPHeader';
 import SchoolForm from './SchoolForm';
@@ -7,13 +8,11 @@ import ClassForm from './ClassForm';
 import TeacherForm from './TeacherForm';
 
 class Profile extends Component {
-    state = {
-        showTab: 'intro'
-    }
+    state = { showTab: 'intro' }
 
     onViewChange = (showTab) => this.setState({ showTab })
 
-    getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : ''
+    getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : '';
 
     render() {
         const { showTab } = this.state;
@@ -61,5 +60,13 @@ class Profile extends Component {
     }
 }
 
-export default Profile;
+
+
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
+
+export default connect(mapStateToProps)(Profile);
 

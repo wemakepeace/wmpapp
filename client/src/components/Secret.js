@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import {  BrowserRouter, Route, Switch } from 'react-router-dom';
+import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 class Secret extends Component {
-    state = {
 
-    }
-
-    componentWillMount() {
-        return axios.get('/secret/test')
-        .then(response => console.log(response))
-    }
+    // componentWillMount() {
+    //     return axios.get('/auth')
+    //     .then(response => response.data)
+    //     .then(authorized => {
+    //         if (authorized === true) {
+    //             this.setState({isAuthenticated: true})
+    //         }
+    //     })
+    // }
 
     render() {
         return (

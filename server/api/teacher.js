@@ -4,11 +4,15 @@ const Class = require('../index').models.Class;
 const conn = require('../conn');
 
 app.get('/', (req, res, next) => {
-    Class.findAll()
-        .then(result => {
-            console.log('result', result)
-            res.send(result)
-        })
+    Teacher.findAll()
+        .then(result => res.send(result))
 });
+
+
+app.put('/:id', (req, res, next) => {
+    Teacher.findOne({id})
+    .then(teacher => console.log('teacher', teacher))
+})
+
 
 module.exports = app;
