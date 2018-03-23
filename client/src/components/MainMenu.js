@@ -12,6 +12,7 @@ class MainMenu extends Component {
 
     componentDidUpdate() {
         if (!localStorage.getItem('token')) {
+            console.log('token lost')
             return this.props.logout();
         }
     }

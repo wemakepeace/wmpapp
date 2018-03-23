@@ -57,6 +57,53 @@ const logout = () => {
 }
 
 
+const loadSession = () => {
+    return (dispatch) => {
+        const token = localStorage.getItem('token');
+        return axios.get(`/class/${token}`)
+            .then(response => response.data)
+            .then(data => {
+                console.log(data)
+                dispatch(loginSuccess({...data}))
+            })
+    }
+}
+// const loadProfessional = () => {
+//     return (dispatch) => {
+//         const token = localStorage.getItem('token');
+//         if (token) {
+//             axios.get(`/professional/login/${token}`)
+//             .then( response => response.data)
+//             .then(
+//                 (data) => {
+//                     dispatch(loginProfessionalSuccess({user:{...data.user, loggedIn:true}, feedback: data.feedback}));
+//                 },
+//                 (error) => {
+//                     const status = error.response.status;
+//                     let feedback;
+
+//                     if (status === 500) {
+//                         feedback = {
+//                             feedback: {
+//                                 type: 'error',
+//                                 messages: ['There was an internal server error.']
+//                             }
+//                         }
+//                     } else if (status === 401) {
+//                         feedback = {
+//                             type: 'error',
+//                             messages: ['Your attempt of signing in was unauthorized.']
+//                         }
+//                     }
+
+//                     dispatch(loginProfessionalError(feedback))
+//                 }
+//             );
+//         };
+//     };
+// };
+
+
 // const updateTeacher = (data) => {
 //     return (dispatch) => {
 //         return axios.put('/class/:id/teacher', )
@@ -66,5 +113,6 @@ const logout = () => {
 export {
     createClassProfile,
     login,
-    logout
+    logout,
+    loadSession
 }
