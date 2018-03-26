@@ -1,45 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, Button } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-import axios from 'axios';
-
-// import { logout } from '../redux/actions/class';
+import { logout } from '../redux/actions/class';
 
 class MainMenu extends Component {
     state = {}
 
-    handleItemClick = (e, { name }) => {
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-
-        if(this.props.auth) {
-            console.log('we are logged in')
-            return axios.get('/auth')
-                .then(res => {
-                    console.log('res.data', res.data)
-                    if (res.data.auth === true) {
-                        this.setState({ activeItem: name })
-                    } else {
-                        this.props.history.push('/')
-                        console.log('this.props.history', this.props.history)
-                    }
-                })
-        } else {
-            this.setState({ activeItem: name })
-        }
+    onLogout = () => {
+        this.props.logout();
+        this.props.history.push('/');
+        this.setState({ activeItem: '/' });
     }
 
-    // componentDidUpdate() {
-    //     if (!localStorage.getItem('token')) {
-    //         console.log('token lost')
-    //         return this.props.logout();
-    //     }
-    // }
-
-
     render() {
-        const { activeItem } = this.state
+        const { activeItem } = this.state;
+        const { auth } = this.props;
 
         return (
             <Menu>
@@ -68,6 +47,13 @@ class MainMenu extends Component {
                     name='secret'
                     active={activeItem === 'secret'}
                     onClick={this.handleItemClick} />
+                { auth === true
+                ? <Menu.Item
+                    as={Button}
+                    name='Log out'
+                    position='right'
+                    onClick={this.onLogout} />
+                    : null}
             </Menu>
         )
     }
@@ -79,4 +65,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(null)(MainMenu);
+export default connect(mapStateToProps, { logout })(MainMenu);

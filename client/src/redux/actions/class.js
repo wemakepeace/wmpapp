@@ -36,7 +36,6 @@ const login = (credentials) => {
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-
                 dispatch(loginSuccess(user));
             })
     }
@@ -63,9 +62,7 @@ const loadSession = () => {
         return axios.get(`/class/${token}`)
             .then(response => response.data)
             .then(
-                (success) => {
-                    return dispatch(loginSuccess(success))
-                },
+                (success) => dispatch(loginSuccess(success)),
                 (error) => {
                     // TODO handle error messages
                     console.log('error=====', error)

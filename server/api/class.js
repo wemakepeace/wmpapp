@@ -6,7 +6,6 @@ const conn = require('../conn');
 app.get('/', (req, res, next) => {
     Class.findAll()
         .then(result => {
-            console.log('result', result)
             res.send(result)
         })
 });

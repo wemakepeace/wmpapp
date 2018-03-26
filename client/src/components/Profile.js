@@ -15,7 +15,6 @@ class Profile extends Component {
     getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : '';
 
     render() {
-        console.log('Profile is rendering')
         const { showTab } = this.state;
 
         return (
@@ -61,13 +60,5 @@ class Profile extends Component {
     }
 }
 
-
-
-const mapStateToProps = (state) => {
-    return {
-        auth: state.auth
-    }
-}
-
-export default connect(mapStateToProps)(Profile);
+export default Profile;
 
