@@ -12,8 +12,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/:token', (req, res, next) => {
-    console.log('req.user', req.user)
-
     req.user.getClasses()
     .then(data => {
         const classes = data.map(_class => _class.dataValues);

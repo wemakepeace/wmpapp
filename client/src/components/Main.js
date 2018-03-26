@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import { Container } from 'semantic-ui-react';
+import { Container, Message } from 'semantic-ui-react';
 
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
@@ -9,7 +9,8 @@ import WMPHeader from './WMPHeader';
 
 class Main extends Component {
     state = {
-        showForm: 'signup'
+        showForm: 'signup',
+        message: ''
     }
 
     toggleForm = (form) => this.setState({showForm: form})

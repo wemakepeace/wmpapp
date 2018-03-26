@@ -1,21 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-import { logout } from '../redux/actions/class';
+import axios from 'axios';
+
+// import { logout } from '../redux/actions/class';
 
 class MainMenu extends Component {
     state = {}
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    handleItemClick = (e, { name }) => {
 
-    componentDidUpdate() {
-        if (!localStorage.getItem('token')) {
-            console.log('token lost')
-            return this.props.logout();
+
+        if(this.props.auth) {
+            console.log('we are logged in')
+            return axios.get('/auth')
+                .then(res => {
+                    console.log('res.data', res.data)
+                    if (res.data.auth === true) {
+                        this.setState({ activeItem: name })
+                    } else {
+                        this.props.history.push('/')
+                        console.log('this.props.history', this.props.history)
+                    }
+                })
+        } else {
+            this.setState({ activeItem: name })
         }
     }
+
+    // componentDidUpdate() {
+    //     if (!localStorage.getItem('token')) {
+    //         console.log('token lost')
+    //         return this.props.logout();
+    //     }
+    // }
+
 
     render() {
         const { activeItem } = this.state
@@ -52,4 +73,10 @@ class MainMenu extends Component {
     }
 }
 
-export default connect(null, { logout })(MainMenu);
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
+
+export default connect(null)(MainMenu);

@@ -36,7 +36,8 @@ const login = (credentials) => {
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-                dispatch(loginSuccess(user))
+
+                dispatch(loginSuccess(user));
             })
     }
 }
@@ -56,16 +57,21 @@ const logout = () => {
     }
 }
 
-
 const loadSession = () => {
     return (dispatch) => {
         const token = localStorage.getItem('token');
         return axios.get(`/class/${token}`)
             .then(response => response.data)
-            .then(data => {
-                console.log(data)
-                dispatch(loginSuccess({...data}))
-            })
+            .then(
+                (success) => {
+                    return dispatch(loginSuccess(success))
+                },
+                (error) => {
+                    // TODO handle error messages
+                    console.log('error=====', error)
+                    return dispatch(logout())
+                }
+            )
     }
 }
 // const loadProfessional = () => {

@@ -13,9 +13,15 @@ import NoAccess from '../components/NoAccess';
 import PrivateRoute from './PrivateRoute';
 
 class Routes extends Component  {
+    state = {
+        loading: true
+    }
 
-    componentDidMount () {
-        this.props.loadSession();
+    componentWillMount () {
+        return this.props.loadSession()
+        .then(() => {
+            this.setState({ loading: false })
+        })
     }
 
     render() {
@@ -28,13 +34,15 @@ class Routes extends Component  {
                     <Route key={1} exact path={match.url} render={(props) => <Main {...this.props} />} />
                     <Route key={2} exact path={match.url + 'flex'} render={() => <FlexExamples />} />
                     <Route key={3} exact path={match.url + 'unauthorized'} render={() => <NoAccess {...this.props} />} />
-                    <PrivateRoute key={4} exact path={match.url + 'profile'} component={Profile} />
-                    <PrivateRoute key={5} exact path={match.url + 'secret'} component={Secret} />
-                    <PrivateRoute key={6} exact path={match.url + 'protected'} component={Main} />
+                    <PrivateRoute loading={this.state.loading} key={4} exact path={match.url + 'profile'} component={Profile} />
+                    <PrivateRoute loading={this.state.loading} key={5} exact path={match.url + 'secret'} component={Secret} />
+                    <PrivateRoute loading={this.state.loading} key={6} exact path={match.url + 'protected'} component={Main} />
                 </Switch>
             </div>
         )
     }
 }
+
+
 
 export default connect(null, { loadSession })(Routes);
