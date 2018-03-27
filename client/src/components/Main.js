@@ -40,7 +40,7 @@ class Main extends Component {
                                 </div>
                             </div>
                             <div className='first'>
-                            { showForm === 'signup' ? <SignupForm /> : <LoginForm /> }
+                            { showForm === 'signup' ? <SignupForm {...this.props}/> : <LoginForm /> }
                             </div>
                         </div>
                     </div>

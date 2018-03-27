@@ -6,18 +6,6 @@ import { login, logout } from '../redux/actions/session';
 
 
 // passes match and history to component
-import { withRouter } from 'react-router-dom';
-
-// const AuthButton = withRouter(({ history }) => (
-//     props.auth === true
-//     ? <button
-//         onClick={() => {
-//             logout()
-//             .then(() => history.push('/'))
-//         }}>LOGOUT</button>
-//     : <button>LOGIN</button>
-// ));
-
 
 class Login extends Component {
     state = {

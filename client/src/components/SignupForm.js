@@ -21,6 +21,13 @@ class Signup extends Component {
         this.props.createClassProfile(data);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.auth === true && localStorage.getItem('token')) {
+            this.props.history.push('/profile')
+        }
+    }
+
+
     render() {
         return (
             <div className='signup-form'>
@@ -65,5 +72,10 @@ class Signup extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
 
-export default connect(null, { createClassProfile })(Signup);
+export default connect(mapStateToProps, { createClassProfile })(Signup);
