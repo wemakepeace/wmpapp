@@ -6,6 +6,12 @@ const jwt = require('jsonwebtoken');
 const { conn, models } = require('../index.js');
 
 
+const extractSequelizeErrorMessages = (response) => {
+    return response.errors.map(err => {
+        return err.message
+    });
+}
+
 app.post('/create', (req, res, next) => {
     let userData = req.body.data;
 
@@ -42,9 +48,20 @@ app.post('/create', (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log(error)
+
+            let errorMessages = extractSequelizeErrorMessages(error);
+            console.log('errorMessages', errorMessages)
+            if (!errorMessages.length) {
+                errorMessages = ['Something went wrong when creating a user']
+            }
+
+            // const feedback = {
+            //     type: 'error',
+            //     messages: errorMessages
+            // };
+
             // [TODO] handle error feedback
-            res.status(500).send({ feedback: error })
+            res.status(500).send({ feedback: errorMessages[0] })
         })
 });
 
@@ -59,8 +76,9 @@ app.post('/login', (req, res) => {
         })
         .then(session => {
             if( !session ){
-                res.status(401).json({feedback:"No profile found"});
+                res.status(401).send({feedback:"No profile found."});
             }
+
             session = session.dataValues;
 
             if(session.password === req.body.password) {
@@ -73,6 +91,11 @@ app.post('/login', (req, res) => {
             } else {
                 res.status(401).json({feedback:"Username or password is incorrect."});
             }
+    })
+     .catch(error => {
+        console.log(error)
+        // [TODO] handle error feedback
+        res.status(500).send({ feedback: error })
     });
 });
 

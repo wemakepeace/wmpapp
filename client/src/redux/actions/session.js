@@ -1,4 +1,9 @@
-import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS  } from '../constants/class';
+import {
+    CREATE_CLASS_PROFILE_SUCCESS,
+    LOGIN_SUCCESS,
+    LOGOUT_SUCCESS,
+    LOGIN_ERROR,
+    CREATE_CLASS_PROFILE_ERROR  } from '../constants/class';
 
 import axios from 'axios';
 
@@ -17,6 +22,8 @@ const createClassProfile = (data) => {
                 (error) => {
                     // TODO handle error messages
                     console.log('error=====', error)
+                    const feedback = error.response.data.feedback
+                    dispatch({ type: CREATE_CLASS_PROFILE_ERROR, feedback})
                 }
             )
     }
@@ -31,18 +38,25 @@ const createClassProfileSuccess = (session, feedback) => {
     }
 }
 
+
+
 const login = (credentials) => {
     return (dispatch) => {
         return axios.post('/public/login', credentials )
             .then(response => response.data)
-            .then(({ session, token, feedback }) => {
+            .then(
+                ({ session, token, feedback }) => {
 
-                localStorage.setItem('token', token);
+                    localStorage.setItem('token', token);
 
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-                dispatch(loginSuccess(session, feedback));
-            })
+                 dispatch(loginSuccess(session, feedback));
+                },
+                (error) => {
+                    dispatch(loginError(error.response.data))
+                    // console.log('error.response.data.feedback', error.response.data.feedback)
+                })
     }
 }
 
@@ -52,6 +66,13 @@ const loginSuccess = (session, feedback) => {
         session,
         feedback,
         auth: true
+    }
+}
+
+const loginError = ({ feedback }) => {
+    return {
+        type: LOGIN_ERROR,
+        feedback
     }
 }
 
