@@ -36,7 +36,8 @@ app.post('/create', (req, res, next) => {
                 session = response.dataValues;
                 // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
                 const payload = { id: session.id };
-                const token = jwt.sign(payload, 'foo');
+                const secret = process.env.SECRET;
+                const token = jwt.sign(payload, secret, { expiresIn: '30m' });
 
                 res.send({
                     feedback: feedback(success, ['ok']),
@@ -79,8 +80,8 @@ app.post('/login', (req, res) => {
             if(session.password === req.body.password) {
                 // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
                 const payload = { id: session.id };
-                // foo is secret key, where should this come from ? .config ? ? ?
-                const token = jwt.sign(payload, 'foo');
+                const secret = process.env.SECRET;
+                const token = jwt.sign(payload, secret, { expiresIn: '30m' });
 
                 res.send({
                     feedback: feedback(success, ["ok"]),
