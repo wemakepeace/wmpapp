@@ -36,6 +36,7 @@ app.put('/teacher', (req, res, next) => {
     // console.log('data', data)
     // NB may want to only use the id here to find user in case user wants to change email
     // Id is the only value that will never change
+
     Teacher.findOne({
         where: { id },
         include: Class
@@ -49,21 +50,14 @@ app.put('/teacher', (req, res, next) => {
         teacher.password = data.password;
 
         teacher.save()
-        .then(updatedTeacher => {
-            res.send({
-                feedback: feedback(SUCCESS, ['Teacher info updated.']),
-                session: {...updatedTeacher.dataValues }
+            .then(updatedTeacher => {
+                res.send({
+                    feedback: feedback(SUCCESS, ['Teacher info updated.']),
+                    session: {...updatedTeacher.dataValues }
+                })
             })
-        })
         .catch(response => {
-            let errorMessages;
-
-            if (response && response.name === 'SequelizeUniqueConstraintError') {
-                errorMessages = extractSequelizeErrorMessages(response);
-            } else {
-                errorMessages = ['Something went wrong when updating your profile.']
-            }
-
+            let errorMessages = ['Something went wrong when updating your profile.']
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
         })
     })
