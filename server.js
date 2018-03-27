@@ -62,13 +62,13 @@ app.use('/css', express.static(path.join(__dirname, 'client/css')));
 // const authRoutes = require('./server/api/auth');
 const publicRoutes = require('./server/api/public');
 const authRoutes = require('./server/api/auth');
-const classRoutes = require('./server/api/class');
+const sessionRoutes = require('./server/api/session');
 const teacherRoutes = require('./server/api/teacher');
 
 // app.use('/auth', authRoutes);
 app.use('/auth', passport.authenticate('jwt', { session: false }), authRoutes);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
-app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
+app.use('/session', passport.authenticate('jwt', { session: false }), sessionRoutes);
 app.use('/public', publicRoutes);
 
 

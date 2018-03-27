@@ -30,21 +30,22 @@ const login = (credentials) => {
     return (dispatch) => {
         return axios.post('/public/login', credentials )
             .then(response => response.data)
-            .then(({ user, token }) => {
+            .then(({ session, token, feedback }) => {
 
                 localStorage.setItem('token', token);
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-                dispatch(loginSuccess(user));
+                dispatch(loginSuccess(session, feedback));
             })
     }
 }
 
-const loginSuccess = (user) => {
+const loginSuccess = (session, feedback) => {
     return {
         type: LOGIN_SUCCESS,
-        user,
+        session,
+        feedback,
         auth: true
     }
 }
@@ -52,17 +53,16 @@ const loginSuccess = (user) => {
 const logout = () => {
     localStorage.clear();
     return (dispatch) => {
-        return dispatch({ type: LOGOUT_SUCCESS })
+        return dispatch({ type: LOGOUT_SUCCESS, feedback: '' })
     }
 }
 
 const loadSession = () => {
     return (dispatch) => {
-        const token = localStorage.getItem('token');
-        return axios.get(`/class/${token}`)
+        return axios.get(`/session`)
             .then(response => response.data)
             .then(
-                (success) => dispatch(loginSuccess(success)),
+                ({ session, feedback }) => dispatch(loginSuccess(session, feedback)),
                 (error) => {
                     // TODO handle error messages
                     console.log('error=====', error)

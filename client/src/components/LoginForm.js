@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
-import { login, logout } from '../redux/actions/class';
+import { login, logout } from '../redux/actions/session';
 
 
 // passes match and history to component

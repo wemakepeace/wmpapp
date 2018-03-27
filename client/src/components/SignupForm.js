@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
 
-import { createClassProfile } from '../redux/actions/class';
+import { createClassProfile } from '../redux/actions/session';
 
 class Signup extends Component {
     state = {

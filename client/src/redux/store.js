@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 
 import classReducer from './reducers/class';
 import authReducer from './reducers/auth';
+import feedbackReducer from './reducers/feedback';
 
 const combinedReducers = combineReducers({
-    info: classReducer,
-    auth: authReducer
+    session: classReducer,
+    auth: authReducer,
+    feedback: feedbackReducer
 });
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

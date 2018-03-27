@@ -49,19 +49,19 @@ app.post('/login', (req, res) => {
         where: { email, password },
         include: models.Class
         })
-        .then(user => {
-            if( !user ){
-                res.status(401).json({message:"No profile found"});
+        .then(session => {
+            if( !session ){
+                res.status(401).json({feedback:"No profile found"});
             }
-            user = user.dataValues;
+            session = session.dataValues;
 
-            if(user.password === req.body.password) {
+            if(session.password === req.body.password) {
                 // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
-                const payload = { id: user.id };
+                const payload = { id: session.id };
                 // foo is secret key, where should this come from ? .config ? ? ?
                 const token = jwt.sign(payload, 'foo');
 
-                res.json({message: "ok", token: token, user: user});
+                res.json({feedback: "ok", token: token, session: session });
             } else {
                 res.status(401).json({message:"Username or password is incorrect."});
             }

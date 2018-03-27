@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect, Button } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-import { logout } from '../redux/actions/class';
+import { logout } from '../redux/actions/session';
 
 class MainMenu extends Component {
     state = {}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import { updateTeacher } from '../redux/actions/class';
+// import { updateTeacher } from '../redux/actions/session';
 
 import WMPHeader from './WMPHeader';
 

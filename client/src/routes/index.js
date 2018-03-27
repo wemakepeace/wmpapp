@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { loadSession } from '../redux/actions/class';
+import { loadSession } from '../redux/actions/session';
 
 import Main from '../components/Main';
 import FlexExamples from '../components/FlexExamples';
