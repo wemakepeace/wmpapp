@@ -17,7 +17,6 @@ app.get('/', (req, res, next) => {
         })
     })
     .catch(error => {
-        console.log('error', error)
         let errors;
         if (error.name = 'SequelizeUniqueConstraintError') {
             errorMessages = extractSequelizeErrorMessages(error);
