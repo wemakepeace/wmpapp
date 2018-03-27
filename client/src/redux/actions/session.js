@@ -17,17 +17,16 @@ const createClassProfile = (data) => {
                     localStorage.setItem('token', token);
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-                    dispatch(createClassProfileSuccess(session, feedback))
+                    dispatch(createClassProfileSuccess(session, feedback));
                 },
                 (error) => {
                     // TODO handle error messages
-                    console.log('error=====', error)
-                    const feedback = error.response.data.feedback
-                    dispatch({ type: CREATE_CLASS_PROFILE_ERROR, feedback})
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: CREATE_CLASS_PROFILE_ERROR, feedback});
                 }
             )
     }
-}
+};
 
 const createClassProfileSuccess = (session, feedback) => {
     return {
@@ -36,9 +35,7 @@ const createClassProfileSuccess = (session, feedback) => {
         feedback,
         auth: true
     }
-}
-
-
+};
 
 const login = (credentials) => {
     return (dispatch) => {
@@ -48,17 +45,16 @@ const login = (credentials) => {
                 ({ session, token, feedback }) => {
 
                     localStorage.setItem('token', token);
-
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
-                 dispatch(loginSuccess(session, feedback));
+                    dispatch(loginSuccess(session, feedback));
                 },
                 (error) => {
-                    dispatch(loginError(error.response.data))
-                    // console.log('error.response.data.feedback', error.response.data.feedback)
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: LOGIN_ERROR, feedback })
                 })
     }
-}
+};
 
 const loginSuccess = (session, feedback) => {
     return {
@@ -67,21 +63,12 @@ const loginSuccess = (session, feedback) => {
         feedback,
         auth: true
     }
-}
-
-const loginError = ({ feedback }) => {
-    return {
-        type: LOGIN_ERROR,
-        feedback
-    }
-}
+};
 
 const logout = () => {
     localStorage.clear();
-    return (dispatch) => {
-        return dispatch({ type: LOGOUT_SUCCESS, feedback: '' })
-    }
-}
+    return (dispatch) => dispatch({ type: LOGOUT_SUCCESS });
+};
 
 const loadSession = () => {
     return (dispatch) => {
@@ -89,59 +76,14 @@ const loadSession = () => {
             .then(response => response.data)
             .then(
                 ({ session, feedback }) => dispatch(loginSuccess(session, feedback)),
-                (error) => {
-                    // TODO handle error messages
-                    console.log('error=====', error)
-                    return dispatch(logout())
-                }
+                (error) => dispatch(logout())
             )
     }
-}
-// const loadProfessional = () => {
-//     return (dispatch) => {
-//         const token = localStorage.getItem('token');
-//         if (token) {
-//             axios.get(`/professional/login/${token}`)
-//             .then( response => response.data)
-//             .then(
-//                 (data) => {
-//                     dispatch(loginProfessionalSuccess({user:{...data.user, loggedIn:true}, feedback: data.feedback}));
-//                 },
-//                 (error) => {
-//                     const status = error.response.status;
-//                     let feedback;
-
-//                     if (status === 500) {
-//                         feedback = {
-//                             feedback: {
-//                                 type: 'error',
-//                                 messages: ['There was an internal server error.']
-//                             }
-//                         }
-//                     } else if (status === 401) {
-//                         feedback = {
-//                             type: 'error',
-//                             messages: ['Your attempt of signing in was unauthorized.']
-//                         }
-//                     }
-
-//                     dispatch(loginProfessionalError(feedback))
-//                 }
-//             );
-//         };
-//     };
-// };
-
-
-// const updateTeacher = (data) => {
-//     return (dispatch) => {
-//         return axios.put('/class/:id/teacher', )
-//     }
-// }
+};
 
 export {
     createClassProfile,
     login,
     logout,
     loadSession
-}
+};

@@ -1,16 +1,11 @@
 const app = require('express').Router();
+const jwt = require('jsonwebtoken');
+const { conn } = require('../index.js');
 const Teacher = require('../index').models.Teacher;
 const Class = require('../index').models.Class;
+const { success, error } = require('../constants/feedback_types');
+const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 
-const jwt = require('jsonwebtoken');
-const { conn, models } = require('../index.js');
-
-
-const extractSequelizeErrorMessages = (response) => {
-    return response.errors.map(err => {
-        return err.message
-    });
-}
 
 app.post('/create', (req, res, next) => {
     let userData = req.body.data;
@@ -44,10 +39,8 @@ app.post('/create', (req, res, next) => {
                 const token = jwt.sign(payload, 'foo');
 
                 res.send({
-                    feedback: {
-                        type: 'success',
-                        mesagges: ['ok']
-                    }, token: token,
+                    feedback: feedback(success, ['ok']),
+                    token: token,
                     session: {
                         ...response.dataValues,
                         classes: [{...classInstance.dataValues}]
@@ -63,13 +56,7 @@ app.post('/create', (req, res, next) => {
                 errorMessages = ['Something went wrong when creating a user']
             }
 
-            // const feedback = {
-            //     type: 'error',
-            //     messages: errorMessages
-            // };
-
-            // [TODO] handle error feedback
-            res.status(500).send({ feedback: { type: 'error', messages: errorMessages }})
+            res.status(500).send({ feedback: feedback(error, errorMessages) })
         })
 });
 
@@ -78,13 +65,13 @@ app.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    return models.Teacher.findOne({
+    return Teacher.findOne({
         where: { email, password },
-        include: models.Class
+        include: Class
         })
         .then(session => {
             if( !session ){
-                res.status(401).send({ feedback: "No  profile found." });
+                return res.status(401).send({ feedback: feedback(error, ['No  profile found.']) });
             }
 
             session = session.dataValues;
@@ -95,14 +82,19 @@ app.post('/login', (req, res) => {
                 // foo is secret key, where should this come from ? .config ? ? ?
                 const token = jwt.sign(payload, 'foo');
 
-                res.json({feedback: { type: 'success', messages: ["ok"] } , token: token, session: session });
-            } else {
-                res.status(401).json({ feedback: { type: 'error', messages: ["Username or password is incorrect."] }});
+                res.send({
+                    feedback: feedback(success, ["ok"]),
+                    token: token,
+                    session: session
+                });
+            }
+            else {
+                res.status(401).send({ feedback: feedback(error, ["Username or password is incorrect."]) });
             }
     })
      .catch(error => {
         // [TODO] handle error feedback
-        res.status(500).send({ feedback: { type: 'error', messages: ["Internal server error. Please try logging in again."]  }});
+        res.status(500).send({ feedback: feedback(error, ["Internal server error. Please try logging in again."]) });
     });
 });
 
