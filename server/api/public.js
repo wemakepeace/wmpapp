@@ -41,17 +41,25 @@ app.post('/create', (req, res, next) => {
                 session = response.dataValues;
                 // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
                 const payload = { id: session.id };
-
                 const token = jwt.sign(payload, 'foo');
 
-                res.send({ feedback: 'ok', token: token, session: { ...response.dataValues, classes: [{...classInstance.dataValues}] }})
+                res.send({
+                    feedback: {
+                        type: 'success',
+                        mesagges: ['ok']
+                    }, token: token,
+                    session: {
+                        ...response.dataValues,
+                        classes: [{...classInstance.dataValues}]
+                    }
+                })
             })
         })
         .catch(error => {
-
-            let errorMessages = extractSequelizeErrorMessages(error);
-            console.log('errorMessages', errorMessages)
-            if (!errorMessages.length) {
+            let errors;
+            if (error.name = 'SequelizeUniqueConstraintError') {
+                errorMessages = extractSequelizeErrorMessages(error);
+            } else {
                 errorMessages = ['Something went wrong when creating a user']
             }
 
@@ -61,7 +69,7 @@ app.post('/create', (req, res, next) => {
             // };
 
             // [TODO] handle error feedback
-            res.status(500).send({ feedback: errorMessages[0] })
+            res.status(500).send({ feedback: { type: 'error', messages: errorMessages }})
         })
 });
 
@@ -76,7 +84,7 @@ app.post('/login', (req, res) => {
         })
         .then(session => {
             if( !session ){
-                res.status(401).send({feedback:"No profile found."});
+                res.status(401).send({ feedback: "No  profile found." });
             }
 
             session = session.dataValues;
@@ -87,15 +95,14 @@ app.post('/login', (req, res) => {
                 // foo is secret key, where should this come from ? .config ? ? ?
                 const token = jwt.sign(payload, 'foo');
 
-                res.json({feedback: "ok", token: token, session: session });
+                res.json({feedback: { type: 'success', messages: ["ok"] } , token: token, session: session });
             } else {
-                res.status(401).json({feedback:"Username or password is incorrect."});
+                res.status(401).json({ feedback: { type: 'error', messages: ["Username or password is incorrect."] }});
             }
     })
      .catch(error => {
-        console.log(error)
         // [TODO] handle error feedback
-        res.status(500).send({ feedback: error })
+        res.status(500).send({ feedback: { type: 'error', messages: ["Internal server error. Please try logging in again."]  }});
     });
 });
 

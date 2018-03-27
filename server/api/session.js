@@ -8,7 +8,13 @@ app.get('/', (req, res, next) => {
     req.user.getClasses()
     .then(data => {
         const classes = data.map(_class => _class.dataValues);
-        res.send({feedback: 'ok', session: {...req.user.dataValues, classes: classes }})
+        res.send({
+            feedback: {
+                type: 'success',
+                messages: ['ok']
+            },
+            session: {...req.user.dataValues, classes: classes }
+        })
     })
 });
 
