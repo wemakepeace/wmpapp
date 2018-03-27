@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import { Container, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 import { createClassProfile } from '../redux/actions/session';
 
@@ -22,7 +22,7 @@ class Signup extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.auth === true && localStorage.getItem('token')) {
+        if((nextProps.session && nextProps.session.id) && localStorage.getItem('token')) {
             this.props.history.push('/profile')
         }
     }
@@ -64,7 +64,7 @@ class Signup extends Component {
                         onChange={(ev) => this.onChange(ev, 'confirmPassword')}/>
                 </div>
                 <Button
-                    className='signup-login-btn'
+                    className='large-custom-btn'
                     size='large'
                     onClick={()=>this.onSubmit()}>SIGN UP</Button>
             </div>
@@ -74,7 +74,7 @@ class Signup extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth
+        session: state.session
     }
 }
 

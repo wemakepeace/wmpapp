@@ -21,7 +21,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.auth === true && localStorage.getItem('token')) {
+        if((nextProps.session && nextProps.session.id) && localStorage.getItem('token')) {
             this.setState({redirectToReferrer: true })
         }
     }
@@ -54,7 +54,7 @@ class Login extends Component {
                         onChange={(ev) => this.onChange(ev, 'password')}/>
                 </div>
                 <Button
-                    className='signup-login-btn'
+                    className='large-custom-btn'
                     size='large'
                     onClick={this.onSubmit}>LOGIN</Button>
             </div>
@@ -64,7 +64,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth
+        session: state.session
     }
 }
 

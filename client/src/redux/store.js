@@ -1,13 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import classReducer from './reducers/class';
-import authReducer from './reducers/auth';
+import sessionReducer from './reducers/session';
 import feedbackReducer from './reducers/feedback';
 
 const combinedReducers = combineReducers({
-    session: classReducer,
-    auth: authReducer,
+    session: sessionReducer,
     feedback: feedbackReducer
 });
 

@@ -3,9 +3,16 @@ import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     LOGIN_ERROR,
-    CREATE_CLASS_PROFILE_ERROR  } from '../constants/class';
+    CREATE_CLASS_PROFILE_ERROR,
+    UPDATE_ERROR  } from '../constants/session';
 
 import axios from 'axios';
+
+
+const setToken = (token) => {
+    localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+};
 
 const createClassProfile = (data) => {
     return (dispatch) => {
@@ -14,8 +21,7 @@ const createClassProfile = (data) => {
             .then(
                 ({ session, token, feedback }) => {
 
-                    localStorage.setItem('token', token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    setToken(token);
 
                     dispatch(createClassProfileSuccess(session, feedback));
                 },
@@ -32,8 +38,7 @@ const createClassProfileSuccess = (session, feedback) => {
     return {
         type: CREATE_CLASS_PROFILE_SUCCESS,
         session,
-        feedback,
-        auth: true
+        feedback
     }
 };
 
@@ -44,8 +49,7 @@ const login = (credentials) => {
             .then(
                 ({ session, token, feedback }) => {
 
-                    localStorage.setItem('token', token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    setToken(token);
 
                     dispatch(loginSuccess(session, feedback));
                 },
@@ -60,8 +64,7 @@ const loginSuccess = (session, feedback) => {
     return {
         type: LOGIN_SUCCESS,
         session,
-        feedback,
-        auth: true
+        feedback
     }
 };
 
@@ -81,9 +84,26 @@ const loadSession = () => {
     }
 };
 
+
+const updateTeacher = (data) => {
+    return (dispatch) => {
+        return axios.put('/session/teacher', data)
+            .then(response => response.data)
+            .then(
+                ({ session, feedback }) => {
+                    dispatch(loginSuccess(session, feedback))
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: UPDATE_ERROR, feedback })
+                })
+    }
+}
+
 export {
     createClassProfile,
     login,
     logout,
-    loadSession
+    loadSession,
+    updateTeacher
 };

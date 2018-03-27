@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { conn } = require('../index.js');
 const Teacher = require('../index').models.Teacher;
 const Class = require('../index').models.Class;
-const { success, error } = require('../constants/feedback_types');
+const { SUCCESS, ERROR } = require('../constants/feedback_types');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 
 
@@ -40,7 +40,7 @@ app.post('/create', (req, res, next) => {
                 const token = jwt.sign(payload, secret, { expiresIn: '30m' });
 
                 res.send({
-                    feedback: feedback(success, ['ok']),
+                    feedback: feedback(SUCCESS, ['ok']),
                     token: token,
                     session: {
                         ...response.dataValues,
@@ -49,15 +49,15 @@ app.post('/create', (req, res, next) => {
                 })
             })
         })
-        .catch(error => {
+        .catch(response => {
             let errors;
-            if (error.name = 'SequelizeUniqueConstraintError') {
-                errorMessages = extractSequelizeErrorMessages(error);
+            if (response.name = 'SequelizeUniqueConstraintError') {
+                errorMessages = extractSequelizeErrorMessages(response);
             } else {
                 errorMessages = ['Something went wrong when creating a user']
             }
 
-            res.status(500).send({ feedback: feedback(error, errorMessages) })
+            res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
         })
 });
 
@@ -72,7 +72,7 @@ app.post('/login', (req, res) => {
         })
         .then(session => {
             if( !session ){
-                return res.status(401).send({ feedback: feedback(error, ['No  profile found.']) });
+                return res.status(401).send({ feedback: feedback(ERROR, ['No  profile found.']) });
             }
 
             session = session.dataValues;
@@ -84,18 +84,18 @@ app.post('/login', (req, res) => {
                 const token = jwt.sign(payload, secret, { expiresIn: '30m' });
 
                 res.send({
-                    feedback: feedback(success, ["ok"]),
+                    feedback: feedback(SUCCESS, ["ok"]),
                     token: token,
                     session: session
                 });
             }
             else {
-                res.status(401).send({ feedback: feedback(error, ["Username or password is incorrect."]) });
+                res.status(401).send({ feedback: feedback(ERROR, ["Username or password is incorrect."]) });
             }
     })
-     .catch(error => {
+     .catch(response => {
         // [TODO] handle error feedback
-        res.status(500).send({ feedback: feedback(error, ["Internal server error. Please try logging in again."]) });
+        res.status(500).send({ feedback: feedback(ERROR, ["Internal server error. Please try logging in again."]) });
     });
 });
 

@@ -18,7 +18,7 @@ class MainMenu extends Component {
 
     render() {
         const { activeItem } = this.state;
-        const { auth } = this.props;
+        const { session } = this.props;
 
         return (
             <Menu>
@@ -47,7 +47,7 @@ class MainMenu extends Component {
                     name='secret'
                     active={activeItem === 'secret'}
                     onClick={this.handleItemClick} />
-                { auth === true
+                { session && session.id
                 ? <Menu.Item
                     as={Button}
                     name='Log out'
@@ -61,7 +61,7 @@ class MainMenu extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth
+        session: state.session
     }
 }
 

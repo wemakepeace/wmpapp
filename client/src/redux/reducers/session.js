@@ -1,8 +1,8 @@
-import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/class';
+import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/session';
 
 const initialState = {};
 
-const classReducer = (state = initialState, action) => {
+const sessionReducer = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_CLASS_PROFILE_SUCCESS:
             return { ...state, ...action.session }
@@ -15,4 +15,4 @@ const classReducer = (state = initialState, action) => {
 }
 
 
-export default classReducer;
+export default sessionReducer;

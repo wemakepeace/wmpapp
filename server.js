@@ -14,7 +14,7 @@ const passportJWT = require("passport-jwt");
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
-let jwtOptions = {}
+let jwtOptions = {};
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = process.env.SECRET || 'foo';
@@ -36,7 +36,6 @@ const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
     })
 });
 
-
 passport.use(strategy);
 
 const app = express();
@@ -54,25 +53,19 @@ app.use(bodyparser.urlencoded({
     extended:true
 }));
 
-
 app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
 
-// const authRoutes = require('./server/api/auth');
 const publicRoutes = require('./server/api/public');
-const authRoutes = require('./server/api/auth');
 const sessionRoutes = require('./server/api/session');
 const teacherRoutes = require('./server/api/teacher');
 
-// app.use('/auth', authRoutes);
-app.use('/auth', passport.authenticate('jwt', { session: false }), authRoutes);
-app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
-app.use('/session', passport.authenticate('jwt', { session: false }), sessionRoutes);
+
 app.use('/public', publicRoutes);
-
-
+app.use('/session', passport.authenticate('jwt', { session: false }), sessionRoutes);
+app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
 
 
 app.get('*', (req, res, next) => {

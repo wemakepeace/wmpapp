@@ -11,13 +11,13 @@ class PrivateRoute extends Component {
     }
 
     componentDidMount() {
-        if (this.props.auth === true) {
+        if (this.props.session && this.props.session.id) {
             this.setState({isAuth: true});
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if(newProps.auth === true) {
+        if(this.props.session && this.props.session.id) {
             this.setState({isAuth: true});
         }
     }
@@ -48,7 +48,7 @@ class PrivateRoute extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    session: state.session
 });
 
 export default connect(mapStateToProps)(PrivateRoute);
