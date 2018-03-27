@@ -7,8 +7,12 @@ const createClassProfile = (data) => {
         return axios.post('/public/create', { data })
             .then((response) => response.data)
             .then(
-                ({ session, feedback }) => {
-                     dispatch(createClassProfileSuccess(session, feedback))
+                ({ session, token, feedback }) => {
+
+                    localStorage.setItem('token', token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+
+                    dispatch(createClassProfileSuccess(session, feedback))
                 },
                 (error) => {
                     // TODO handle error messages
@@ -22,7 +26,8 @@ const createClassProfileSuccess = (session, feedback) => {
     return {
         type: CREATE_CLASS_PROFILE_SUCCESS,
         session,
-        feedback
+        feedback,
+        auth: true
     }
 }
 

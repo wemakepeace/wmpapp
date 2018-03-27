@@ -31,13 +31,20 @@ app.post('/create', (req, res, next) => {
         .then(response => {
             return Class.create({ teacherId: response.dataValues.id })
             .then(classInstance => {
-                res.send({ feedback: 'ok', session: { ...response.dataValues, classes: [{...classInstance.dataValues}] }})
+                // create session
+                session = response.dataValues;
+                // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
+                const payload = { id: session.id };
+
+                const token = jwt.sign(payload, 'foo');
+
+                res.send({ feedback: 'ok', token: token, session: { ...response.dataValues, classes: [{...classInstance.dataValues}] }})
             })
         })
         .catch(error => {
             console.log(error)
             // [TODO] handle error feedback
-            res.status(500).send(error)
+            res.status(500).send({ feedback: error })
         })
 });
 
@@ -64,7 +71,7 @@ app.post('/login', (req, res) => {
 
                 res.json({feedback: "ok", token: token, session: session });
             } else {
-                res.status(401).json({message:"Username or password is incorrect."});
+                res.status(401).json({feedback:"Username or password is incorrect."});
             }
     });
 });
