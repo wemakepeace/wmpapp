@@ -5,7 +5,7 @@ const initialState = {};
 const classReducer = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_CLASS_PROFILE_SUCCESS:
-            return { ...state, ...action.session, ...action.info }
+            return { ...state, ...action.session }
         case LOGIN_SUCCESS:
             return { ...state, ...action.session }
         case LOGOUT_SUCCESS:

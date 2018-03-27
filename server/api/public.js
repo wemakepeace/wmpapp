@@ -26,18 +26,19 @@ app.post('/create', (req, res, next) => {
         })
     }*/
 
-    return conn.transaction((t) => {
-        return Promise.all([
-            Teacher.create(userData, { transaction: t})
-        ])
+
+    return Teacher.create(userData)
         .then(response => {
-            Class.create({ teacherId: response[0].dataValues.id })
+            return Class.create({ teacherId: response.dataValues.id })
             .then(classInstance => {
-                res.send({ info: classInstance, user: response[0] })
+                res.send({ feedback: 'ok', session: { ...response.dataValues, classes: [{...classInstance.dataValues}] }})
             })
         })
-    })
-    .catch(error => res.status(500).send(error))
+        .catch(error => {
+            console.log(error)
+            // [TODO] handle error feedback
+            res.status(500).send(error)
+        })
 });
 
 app.post('/login', (req, res) => {

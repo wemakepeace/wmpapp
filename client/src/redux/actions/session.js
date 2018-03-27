@@ -7,8 +7,8 @@ const createClassProfile = (data) => {
         return axios.post('/public/create', { data })
             .then((response) => response.data)
             .then(
-                (success) => {
-                     dispatch(createClassProfileSuccess(success))
+                ({ session, feedback }) => {
+                     dispatch(createClassProfileSuccess(session, feedback))
                 },
                 (error) => {
                     // TODO handle error messages
@@ -18,11 +18,11 @@ const createClassProfile = (data) => {
     }
 }
 
-const createClassProfileSuccess = (data) => {
+const createClassProfileSuccess = (session, feedback) => {
     return {
         type: CREATE_CLASS_PROFILE_SUCCESS,
-        info: data.class,
-        user: data.user
+        session,
+        feedback
     }
 }
 
