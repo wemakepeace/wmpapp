@@ -11,28 +11,24 @@ const teachers = [
         firstName: 'Leonard',
         lastName: 'Alnes',
         email: 'k@m.com',
-        passwordHash: 'z',
         password: 'z'
     },
     {
         firstName: 'Moon',
         lastName: 'Alnes',
         email: 'moon@m.com',
-        passwordHash: 'z',
         password: 'z'
     },
     {
         firstName: 'Nacy',
         lastName: 'Yo yo',
         email: 'cantstopnanc@m.com',
-        passwordHash: 'z',
         password: 'z'
     },
     {
         firstName: 'Corn',
         lastName: 'Flakes',
         email: 'cornstar88@m.com',
-        passwordHash: 'z',
         password: 'z'
     }
 ]

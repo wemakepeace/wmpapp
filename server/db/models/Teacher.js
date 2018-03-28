@@ -51,12 +51,6 @@ const Teacher = conn.define('teacher', {
             }
         }
     },
-    passwordHash: {
-        type: Sequelize.STRING,
-        validate: {
-            notEmpty: { msg: 'Password must be at least 8 characters long.'}
-        }
-    },
     salt: {
         type: Sequelize.STRING,
     },
@@ -72,18 +66,16 @@ Teacher.beforeCreate((teacher, options) => {
         throw new Error('You need to enter a password.')
     }
     const hashedPw = saltHashPassword(teacher.password);
-    teacher.passwordHash = hashedPw.passwordHash;
     teacher.salt = hashedPw.salt;
-    teacher.password = null;
+    teacher.password = hashedPw.passwordHash;
 });
 
 
 Teacher.beforeUpdate((teacher, options) => {
     if(options.fields.indexOf('password') > -1) {
         const hashedPw = saltHashPassword(teacher.password);
-        teacher.passwordHash = hashedPw.passwordHash;
         teacher.salt = hashedPw.salt;
-        teacher.password = null;
+        teacher.password = hashedPw.passwordHash;
     }
 });
 

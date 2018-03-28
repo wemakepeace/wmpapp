@@ -4,6 +4,7 @@ const Class = require('../index').models.Class;
 const conn = require('../conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { extractSessionData } = require('../utils/session');
 const { SUCCESS, ERROR } = require('../constants/feedback_types');
 
 
@@ -11,16 +12,17 @@ app.get('/', (req, res, next) => {
     req.user.getClasses()
     .then(data => {
         const classes = data.map(_class => _class.dataValues);
+        const session = extractSessionData({...req.user.dataValues, classes: classes });
         res.send({
             feedback: feedback(SUCCESS, ['Valid session loaded.']),
-            session: {...req.user.dataValues, classes: classes }
+            session: session
         })
     })
     .catch(error => {
         const defaultError = 'Something went wrong when loading your session. Please login again.';
         const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-        res.status(500).såend({ feedback: feedback(ERROR, errorMessages) });
+        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     })
 });
 
@@ -45,7 +47,7 @@ app.put('/teacher', (req, res, next) => {
             .then(updatedTeacher => {
                 res.send({
                     feedback: feedback(SUCCESS, ['Teacher info updated.']),
-                    session: {...updatedTeacher.dataValues }
+                    session: extractSessionData({...updatedTeacher.dataValues})
                 })
             })
             .catch(error => {

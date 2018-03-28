@@ -19,9 +19,7 @@ class TeacherForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        this.props.updateTeacher(data)
-        // send data to action creator
-
+        this.props.updateTeacher(data);
     }
 
     componentDidMount() {

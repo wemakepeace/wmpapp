@@ -41,7 +41,7 @@ select * from [tablename];
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Will be added soon.
 
 ## Built With
 * [Express](https://expressjs.com/) - The web framework used

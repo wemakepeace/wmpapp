@@ -5,6 +5,7 @@ const Teacher = require('../index').models.Teacher;
 const Class = require('../index').models.Class;
 const { SUCCESS, ERROR } = require('../constants/feedback_types');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { extractSessionData } = require('../utils/session');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
 
 
@@ -39,10 +40,10 @@ app.post('/create', (req, res, next) => {
                 res.send({
                     feedback: feedback(SUCCESS, ['ok']),
                     token: token,
-                    session: {
+                    session: extractSessionData({
                         ...teacher.dataValues,
                         classes: [{...classInstance.dataValues}]
-                    }
+                    })
                 })
             })
         })
@@ -75,14 +76,14 @@ app.post('/login', (req, res) => {
 
             const hashTest = pbkdf2(password, session.salt);
 
-            if (hashTest.passwordHash === session.passwordHash) {
+            if (hashTest.passwordHash === session.password) {
 
                 const token = createToken(session.id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
                     token: token,
-                    session: session
+                    session: extractSessionData({...session})
                 });
             }
             else {
