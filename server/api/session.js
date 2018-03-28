@@ -27,9 +27,6 @@ app.get('/', (req, res, next) => {
 app.put('/teacher', (req, res, next) => {
     const data = req.body;
     const { id } = data;
-    // console.log('data', data)
-    // NB may want to only use the id here to find user in case user wants to change email
-    // Id is the only value that will never change
 
     Teacher.findOne({
         where: { id },
@@ -41,6 +38,7 @@ app.put('/teacher', (req, res, next) => {
         teacher.lastName = data.lastName;
         teacher.email = data.email;
         teacher.phone = data.phone;
+        // needs to handle password update...
         teacher.password = data.password;
 
         teacher.save()
@@ -50,12 +48,12 @@ app.put('/teacher', (req, res, next) => {
                     session: {...updatedTeacher.dataValues }
                 })
             })
-        .catch(error => {
-            const defaultError = ['Something went wrong when updating your profile.']
-            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+            .catch(error => {
+                const defaultError = ['Something went wrong when updating your profile.']
+                const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-            res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
-        })
+                res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
+            })
     })
     .catch(error => {
         // [TODO] make sure that the errors go through

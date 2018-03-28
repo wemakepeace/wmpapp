@@ -68,6 +68,9 @@ const Teacher = conn.define('teacher', {
 
 // May want to make this async since node is single threaded
 Teacher.beforeCreate((teacher, options) => {
+    if(!teacher.password) {
+        throw new Error('You need to enter a password.')
+    }
     const hashedPw = saltHashPassword(teacher.password);
     teacher.passwordHash = hashedPw.passwordHash;
     teacher.salt = hashedPw.salt;
@@ -75,8 +78,13 @@ Teacher.beforeCreate((teacher, options) => {
 });
 
 
-Teacher.afterCreate((teacher, options) => {
-    teacher.updateAttributes({ password: null });
+Teacher.beforeUpdate((teacher, options) => {
+    if(options.fields.indexOf('password') > -1) {
+        const hashedPw = saltHashPassword(teacher.password);
+        teacher.passwordHash = hashedPw.passwordHash;
+        teacher.salt = hashedPw.salt;
+        teacher.password = null;
+    }
 });
 
 
