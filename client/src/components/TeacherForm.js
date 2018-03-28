@@ -40,7 +40,7 @@ class TeacherForm extends Component {
                         <label className='form-label'>First name</label>
                         <span className='form-input-span'>
                             <input
-                                value={firstName}
+                                value={firstName || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
                                 name='firstName'
@@ -51,7 +51,7 @@ class TeacherForm extends Component {
                         <label className='form-label'>Last name</label>
                         <span className='form-input-span'>
                             <input
-                                value={lastName}
+                                value={lastName || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
                                 name='lastName'
@@ -62,7 +62,7 @@ class TeacherForm extends Component {
                         <label className='form-label'>Email</label>
                         <span className='form-input-span'>
                             <input
-                                value={email}
+                                value={email || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
                                 name='email'
@@ -73,7 +73,7 @@ class TeacherForm extends Component {
                         <label className='form-label'>Phone</label>
                         <span className='form-input-span'>
                             <input
-                                value={phone}
+                                value={phone || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
                                 name='phone'
@@ -84,7 +84,7 @@ class TeacherForm extends Component {
                         <label className='form-label'>Password</label>
                         <span className='form-input-span'>
                             <input
-                                value={password}
+                                value={password || ''}
                                 type='password'
                                 className='form-input'
                                 placeholder='. . . . . .'

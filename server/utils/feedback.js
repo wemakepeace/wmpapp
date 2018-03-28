@@ -5,10 +5,14 @@ const feedback = (type, messages) => {
     }
 };
 
-const extractSequelizeErrorMessages = (response) => {
-    return response.errors.map(err => {
-        return err.message
-    });
+const extractSequelizeErrorMessages = (error, defaultError) => {
+    if (error && (error.name.indexOf('Sequelize') > -1)) {
+        return error.errors.map(err => {
+            return err.message;
+        });
+    } else {
+        return [defaultError];
+    }
 };
 
 module.exports = {

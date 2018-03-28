@@ -6,16 +6,52 @@ const Class = require('./db/models/Class');
 Class.belongsTo(Teacher);
 Teacher.hasMany(Class);
 
+const teachers = [
+    {
+        firstName: 'Leonard',
+        lastName: 'Alnes',
+        email: 'k@m.com',
+        passwordHash: 'z',
+        password: 'z'
+    },
+    {
+        firstName: 'Moon',
+        lastName: 'Alnes',
+        email: 'moon@m.com',
+        passwordHash: 'z',
+        password: 'z'
+    },
+    {
+        firstName: 'Nacy',
+        lastName: 'Yo yo',
+        email: 'cantstopnanc@m.com',
+        passwordHash: 'z',
+        password: 'z'
+    },
+    {
+        firstName: 'Corn',
+        lastName: 'Flakes',
+        email: 'cornstar88@m.com',
+        passwordHash: 'z',
+        password: 'z'
+    }
+]
+
 const sync = () => conn.sync({ force: true });
 
 const seed = () => {
     return sync({ force: true })
         .then(() => {
-            const teacher1 = Teacher.create({ firstName: 'Leonard', lastName: 'Alnes', email: 'k@m.com', password: 'z' });
-            const teacher2 = Teacher.create({ firstName: 'Moon', lastName: 'Alnes', email: 'moon@m.com', password: 'z' });
-            const classInstance1 = Class.create({teacherId: 1});
-            const classInstance2 = Class.create({teacherId: 1});
-            return Promise.all([teacher1, teacher2, classInstance1, classInstance2])
+
+            const teacherPromises = teachers.map(teacher => {
+                return Teacher.create(teacher);
+            })
+            return Promise.all(teacherPromises)
+            .then(result => {
+                const classInstance1 = Class.create({teacherId: 1});
+                const classInstance2 = Class.create({teacherId: 1});
+                return Promise.all([classInstance1, classInstance2])
+            })
         })
         .catch((error) => {
             console.log(error)

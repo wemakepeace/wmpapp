@@ -5,6 +5,7 @@ const Teacher = require('../index').models.Teacher;
 const Class = require('../index').models.Class;
 const { SUCCESS, ERROR } = require('../constants/feedback_types');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { pbkdf2, saltHashPassword } = require('../utils/security');
 
 
 app.post('/create', (req, res, next) => {
@@ -49,13 +50,9 @@ app.post('/create', (req, res, next) => {
                 })
             })
         })
-        .catch(response => {
-            let errors;
-            if (response.name = 'SequelizeUniqueConstraintError') {
-                errorMessages = extractSequelizeErrorMessages(response);
-            } else {
-                errorMessages = ['Something went wrong when creating a user']
-            }
+        .catch(error => {
+            const defaultError = 'Something went wrong when creating a user.'
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
         })
@@ -67,17 +64,21 @@ app.post('/login', (req, res) => {
     const password = req.body.password;
 
     return Teacher.findOne({
-        where: { email, password },
+        where: { email },
         include: Class
         })
         .then(session => {
-            if( !session ){
+            if (!session){
                 return res.status(401).send({ feedback: feedback(ERROR, ['No  profile found.']) });
             }
 
             session = session.dataValues;
 
-            if(session.password === req.body.password) {
+            const hashTest = pbkdf2(password, session.salt);
+            console.log('hashTest', hashTest)
+            if (hashTest.passwordHash === session.passwordHash) {
+                console.log('hashes are matching')
+
                 // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
                 const payload = { id: session.id };
                 const secret = process.env.SECRET;
@@ -93,9 +94,12 @@ app.post('/login', (req, res) => {
                 res.status(401).send({ feedback: feedback(ERROR, ["Username or password is incorrect."]) });
             }
     })
-     .catch(response => {
+     .catch(error => {
         // [TODO] handle error feedback
-        res.status(500).send({ feedback: feedback(ERROR, ["Internal server error. Please try logging in again."]) });
+        const defaultError = 'Internal server error. Please try logging in again.';
+        const errorMessages = extractSequelizeErrorMessages(error, errorMessages);
+
+        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     });
 });
 

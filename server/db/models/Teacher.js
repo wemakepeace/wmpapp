@@ -1,5 +1,8 @@
 const conn = require('../../conn');
 const Sequelize = conn.Sequelize;
+const phone = require('phone');
+
+const { saltHashPassword } = require('../../utils/security');
 
 const Teacher = conn.define('teacher', {
     firstName: {
@@ -19,20 +22,62 @@ const Teacher = conn.define('teacher', {
     email: {
         type: conn.Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        unique: {
+            args: true,
+            msg: 'This email address is already registered.'
+        },
         validate: {
-            isEmail: true,
-            notEmpty: { msg: 'Please fill in email' },
+            isEmail: {
+                args: true,
+                msg: 'This is not a an email address.'
+            },
+            notEmpty: { msg: 'Please fill in email.' },
         }
     },
-    password: {
+    phone: {
+        type: conn.Sequelize.STRING,
+        validate: {
+            notEmpty: { msg: 'Phone number cannot be empty.'},
+            isPhone(value) {
+                if (value === '') {
+                    return
+                }
+
+                const phoneValid = phone(value);
+
+                if (!phoneValid.length) {
+                    throw new Error('The number you entered is not valid phone number');
+                }
+            }
+        }
+    },
+    passwordHash: {
         type: Sequelize.STRING,
-        allowNull: false,
         validate: {
             notEmpty: { msg: 'Password must be at least 8 characters long.'}
         }
+    },
+    salt: {
+        type: Sequelize.STRING,
+    },
+    password: {
+        type: Sequelize.STRING,
     }
-})
+});
+
+
+// May want to make this async since node is single threaded
+Teacher.beforeCreate((teacher, options) => {
+    const hashedPw = saltHashPassword(teacher.password);
+    teacher.passwordHash = hashedPw.passwordHash;
+    teacher.salt = hashedPw.salt;
+    teacher.password = null;
+});
+
+
+Teacher.afterCreate((teacher, options) => {
+    teacher.updateAttributes({ password: null });
+});
 
 
 module.exports = Teacher;

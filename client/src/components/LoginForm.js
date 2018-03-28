@@ -42,7 +42,7 @@ class Login extends Component {
 
                 <div className='form-row'>
                     <input
-                        placeholder='USERNAME!!'
+                        placeholder='USERNAME'
                         name='email'
                         onChange={(ev) => this.onChange(ev, 'email')}/>
                 </div>

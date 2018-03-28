@@ -16,17 +16,11 @@ app.get('/', (req, res, next) => {
             session: {...req.user.dataValues, classes: classes }
         })
     })
-    .catch(response => {
+    .catch(error => {
+        const defaultError = 'Something went wrong when loading your session. Please login again.';
+        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-        let errors;
-
-        if (error.name = 'SequelizeUniqueConstraintError') {
-            errorMessages = extractSequelizeErrorMessages(response);
-        } else {
-            errorMessages = ['Something went wrong when loading your session. Please login again.']
-        }
-
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
+        res.status(500).såend({ feedback: feedback(ERROR, errorMessages) })
     })
 });
 
@@ -56,20 +50,17 @@ app.put('/teacher', (req, res, next) => {
                     session: {...updatedTeacher.dataValues }
                 })
             })
-        .catch(response => {
-            let errorMessages = ['Something went wrong when updating your profile.']
+        .catch(error => {
+            const defaultError = ['Something went wrong when updating your profile.']
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
         })
     })
-    .catch(response => {
+    .catch(error => {
         // [TODO] make sure that the errors go through
-        let errorMessages;
-
-        if (response && response.name === 'SequelizeUniqueConstraintError') {
-            errorMessages = extractSequelizeErrorMessages(response);
-        } else {
-            errorMessages = ['Something went wrong when updating your profile.']
-        }
+        const defaultError = ['Something went wrong when updating your profile.']
+        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
         res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
     })
