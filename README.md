@@ -1,4 +1,4 @@
-# Project Title
+# WMP application
 
 Portal that connects teacher peer to peer, and facilitates a letter exchange program between school classes
 
@@ -23,6 +23,7 @@ To install the project on your local machine
 ```
 npm install
 
+psql
 psql CREATE DATABASE wmp;
 
 npm run start:dev
@@ -51,13 +52,8 @@ Add additional notes about how to deploy this on a live system
 * [Sequelize](http://docs.sequelizejs.com/) - Object relational mapping system
 * [Semantic UI](https://react.semantic-ui.com/introduction/) - Frontend development framework
 * [Sass](https://sass-lang.com/documentation/file.SASS_REFERENCE.html) - CSS extension language
-* [Sass](https://webpack.js.org/) - Module bundler
+* [Webpack](https://webpack.js.org/) - Module bundler
 
-
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/kjalnes/wmpapp/tags).
 
 ## Authors
 
