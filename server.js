@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
 const open = require('open');
-const { seed, models } = require('./server/index.js');
+const { seed, models } = require('./server/db/index.js');
 
 const webpack =  require('webpack');
 const config =  require('./webpack.config');

@@ -1,9 +1,12 @@
 const app = require('express').Router();
 const jwt = require('jsonwebtoken');
-const { conn } = require('../index.js');
-const Teacher = require('../index').models.Teacher;
-const Class = require('../index').models.Class;
-const { SUCCESS, ERROR } = require('../constants/feedback_types');
+
+const { conn } = require('../db/index.js');
+const Teacher = require('../db/index').models.Teacher;
+const Class = require('../db/index').models.Class;
+const AgeGroup = require('../db/index').models.AgeGroup;
+
+const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractSessionData } = require('../utils/session');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
@@ -63,7 +66,12 @@ app.post('/login', (req, res) => {
 
     return Teacher.findOne({
         where: { email },
-        include: Class
+        include: [
+                {
+                    model: Class,
+                    include: [ AgeGroup ]
+                }
+            ]
         })
         .then(session => {
             let errorMessage;
@@ -94,7 +102,7 @@ app.post('/login', (req, res) => {
      .catch(error => {
 
         const defaultError = 'Internal server error. Please try logging in again.';
-        const errorMessages = extractSequelizeErrorMessages(error, errorMessages);
+        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
         res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     });

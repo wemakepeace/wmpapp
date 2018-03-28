@@ -1,29 +1,40 @@
 const app = require('express').Router();
-const Teacher = require('../index').models.Teacher;
-const Class = require('../index').models.Class;
-const conn = require('../conn');
+const Teacher = require('../db/index').models.Teacher;
+const Class = require('../db/index').models.Class;
+const AgeGroup = require('../db/index').models.AgeGroup;
+const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractSessionData } = require('../utils/session');
-const { SUCCESS, ERROR } = require('../constants/feedback_types');
+const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 
 app.get('/', (req, res, next) => {
-    req.user.getClasses()
-    .then(data => {
-        const classes = data.map(_class => _class.dataValues);
-        const session = extractSessionData({...req.user.dataValues, classes: classes });
-        res.send({
-            feedback: feedback(SUCCESS, ['Valid session loaded.']),
-            session: session
+    console.log('req.user', req.user)
+    return Teacher.findOne({
+        where: { id: req.user.id },
+        include: [
+                {
+                    model: Class,
+                    include: [ AgeGroup ]
+                }
+            ]
         })
-    })
-    .catch(error => {
-        const defaultError = 'Something went wrong when loading your session. Please login again.';
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+        .then(data => {
+            console.log('data', data)
+            // const classes = data.map(_class => _class.dataValues);
+            const session = extractSessionData({...data.dataValues});
+            res.send({
+                feedback: feedback(SUCCESS, ['Valid session loaded.']),
+                session: session
+            })
+        })
+        .catch(error => {
+            const defaultError = 'Something went wrong when loading your session. Please login again.';
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
-    })
+            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        })
 });
 
 app.put('/teacher', (req, res, next) => {

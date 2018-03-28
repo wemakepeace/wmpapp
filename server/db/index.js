@@ -1,10 +1,15 @@
 const conn = require('./conn');
-const Teacher = require('./db/models/Teacher');
-const Class = require('./db/models/Class');
+const Teacher = require('./models/Teacher');
+const Class = require('./models/Class');
+const AgeGroup = require('./models/AgeGroup');
 
+const ageGroupData = require('../constants/ageGroups');
 
 Class.belongsTo(Teacher);
 Teacher.hasMany(Class);
+
+Class.belongsTo(AgeGroup);
+AgeGroup.hasMany(Class);
 
 const teachers = [
     {
@@ -44,8 +49,12 @@ const seed = () => {
             })
             return Promise.all(teacherPromises)
             .then(result => {
-                const classInstance1 = Class.create({teacherId: 1});
-                const classInstance2 = Class.create({teacherId: 1});
+                const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group))
+                return Promise.all(ageGroupPromises)
+            })
+            .then(result => {
+                const classInstance1 = Class.create({teacherId: 1, name: '1A', size: 30, ageGroupId:2 });
+                const classInstance2 = Class.create({teacherId: 1, name: '1B', size: 28, ageGroupId: 1 });
                 return Promise.all([classInstance1, classInstance2])
             })
         })
@@ -60,6 +69,7 @@ module.exports = {
     conn,
     models: {
         Teacher,
-        Class
+        Class,
+        AgeGroup
     }
 }
