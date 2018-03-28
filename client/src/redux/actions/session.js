@@ -8,7 +8,6 @@ import {
 
 import axios from 'axios';
 
-
 const setToken = (token) => {
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
@@ -98,7 +97,7 @@ const updateTeacher = (data) => {
                     dispatch({ type: UPDATE_ERROR, feedback })
                 })
     }
-}
+};
 
 export {
     createClassProfile,

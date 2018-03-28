@@ -20,7 +20,7 @@ app.get('/', (req, res, next) => {
         const defaultError = 'Something went wrong when loading your session. Please login again.';
         const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-        res.status(500).såend({ feedback: feedback(ERROR, errorMessages) })
+        res.status(500).såend({ feedback: feedback(ERROR, errorMessages) });
     })
 });
 
@@ -49,10 +49,10 @@ app.put('/teacher', (req, res, next) => {
                 })
             })
             .catch(error => {
-                const defaultError = ['Something went wrong when updating your profile.']
+                const defaultError = ['Something went wrong when updating your profile.'];
                 const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-                res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
+                res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
             })
     })
     .catch(error => {
@@ -60,7 +60,7 @@ app.put('/teacher', (req, res, next) => {
         const defaultError = ['Something went wrong when updating your profile.']
         const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
+        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     })
 });
 
