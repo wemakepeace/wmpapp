@@ -69,6 +69,7 @@ const loginSuccess = (session, feedback) => {
 
 const logout = () => {
     localStorage.clear();
+    axios.defaults.headers.common['Authorization'] = null;
     return (dispatch) => dispatch({ type: LOGOUT_SUCCESS });
 };
 

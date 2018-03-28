@@ -25,7 +25,13 @@ const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
     models.Teacher.findOne({
         where: {
            id: jwt_payload.id
-        }
+        },
+        include: [
+            {
+                model: models.Class,
+                where: { id: jwt_payload.classId }
+            }
+        ]
     })
     .then(user => {
         if (user) {

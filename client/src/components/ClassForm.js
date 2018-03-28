@@ -5,17 +5,31 @@ import WMPHeader from './WMPHeader';
 
 class ClassForm extends Component {
     state = {
-        classId: '',
+        name: '',
         size: '',
-        age: '',
+        age_group: '',
         requestedTerm: '',
         languageProficiency: '',
-        language: ''
+        language: '',
+        showFeedback: false
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
+    componentDidMount() {
+        this.setState(this.props.session.classes[0]);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.feedback && nextProps.feedback.type) {
+            this.setState({showFeedback: true})
+        }
+    }
+
     render() {
+        const { name, size, age_group } = this.state;
+
+
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>
@@ -25,16 +39,18 @@ class ClassForm extends Component {
                         <label className='form-label'>Class ID</label>
                         <span className='form-input-span'>
                             <input
+                                value={name || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
-                                name='classId'
-                                onChange={(ev)=>this.onInputChange(ev, 'classId')}/>
+                                name='name'
+                                onChange={(ev)=>this.onInputChange(ev, 'name')}/>
                         </span>
                     </div>
                     <div className='form-row'>
                         <label className='form-label'>Class size</label>
                         <span className='form-input-span'>
                             <input
+                                value={size || ''}
                                 className='form-input'
                                 placeholder='. . . . . .'
                                 name='size'
@@ -76,4 +92,10 @@ class ClassForm extends Component {
     }
 }
 
-export default ClassForm;
+const mapStateToProps = (state) => {
+    return {
+        session: state.session
+    }
+}
+
+export default connect(mapStateToProps)(ClassForm);

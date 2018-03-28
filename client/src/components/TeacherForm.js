@@ -4,6 +4,7 @@ import { Button } from 'semantic-ui-react';
 
 import WMPHeader from './WMPHeader';
 import Feedback from './Feedback';
+import ClassMenu from './ClassMenu';
 
 import { updateTeacher } from '../redux/actions/session';
 

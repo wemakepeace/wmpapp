@@ -10,19 +10,22 @@ const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 
 app.get('/', (req, res, next) => {
-    console.log('req.user', req.user)
+
+    const teacherId = req.user.id;
+    const classId = req.user.classes[0].id;
+
     return Teacher.findOne({
-        where: { id: req.user.id },
+        where: { id: teacherId },
         include: [
                 {
                     model: Class,
+                    where: { id: classId },
+                    limit: 1,
                     include: [ AgeGroup ]
                 }
             ]
         })
         .then(data => {
-            console.log('data', data)
-            // const classes = data.map(_class => _class.dataValues);
             const session = extractSessionData({...data.dataValues});
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),

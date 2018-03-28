@@ -12,9 +12,13 @@ const { extractSessionData } = require('../utils/session');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
 
 
-const createToken = (id) => {
+const createToken = (id, classId) => {
     const secret = process.env.SECRET;
     const payload = { id: id };
+    if (classId) {
+        payload.classId = classId;
+    }
+
     return jwt.sign(payload, secret, { expiresIn: '30m' });
 }
 
@@ -38,7 +42,8 @@ app.post('/create', (req, res, next) => {
             .then(classInstance => {
 
                 session = teacher.dataValues;
-                const token = createToken(session.id);
+                console.log('classInstance.id', classInstance.id)
+                const token = createToken(session.id, classInstance.id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ['ok']),
@@ -63,17 +68,20 @@ app.post('/login', (req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
+    const name = req.body.name;
 
     return Teacher.findOne({
         where: { email },
         include: [
                 {
                     model: Class,
+                    where: { name },
                     include: [ AgeGroup ]
                 }
             ]
         })
         .then(session => {
+            // console.log('session', session)
             let errorMessage;
             if (!session){
                 errorMessage = ['No profile found.'];
@@ -86,7 +94,7 @@ app.post('/login', (req, res) => {
 
             if (hashTest.passwordHash === session.password) {
 
-                const token = createToken(session.id);
+                const token = createToken(session.id, session.classes[0].id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
