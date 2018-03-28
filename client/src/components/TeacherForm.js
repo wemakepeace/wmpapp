@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
 import WMPHeader from './WMPHeader';
+import Feedback from './Feedback';
 
 import { updateTeacher } from '../redux/actions/session';
 
@@ -12,10 +13,13 @@ class TeacherForm extends Component {
         lastName: '',
         email: '',
         phone: '',
-        password: ''
+        password: '',
+        showFeedback: false
     }
 
-    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
+    onInputChange = (ev, key) => {
+        this.setState({ [key]: ev.target.value, showFeedback: false })
+    }
 
     onSubmit = () => {
         const data = this.state;
@@ -23,17 +27,30 @@ class TeacherForm extends Component {
     }
 
     componentDidMount() {
-        this.setState(this.props.session)
+        this.setState(this.props.session);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.feedback && nextProps.feedback.type) {
+            this.setState({showFeedback: true})
+        }
+    }
+
+
     render() {
-        const { firstName, lastName, email, phone, password } = this.state;
-        console.log('this.state', this.state)
+        const { firstName, lastName, email, phone, password, showFeedback } = this.state;
+        const { feedback } = this.props;
+
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>
                     <h4>Teacher Information</h4>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
+                    {
+                        showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null
+                    }
                     <div className='form-row'>
                         <label className='form-label'>First name</label>
                         <span className='form-input-span'>
@@ -104,7 +121,8 @@ class TeacherForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session
+        session: state.session,
+        feedback: state.feedback
     }
 }
 

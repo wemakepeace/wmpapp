@@ -15,8 +15,6 @@ const extractSequelizeErrorMessages = (error, defaultError) => {
     }
 };
 
-
-
 module.exports = {
     feedback,
     extractSequelizeErrorMessages

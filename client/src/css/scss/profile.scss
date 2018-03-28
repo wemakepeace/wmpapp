@@ -16,7 +16,8 @@
 }
 
 .profile-form-column {
-    height: 500px;
+    min-height: 600px;
+    // height: 100%;
     background-color: #fff;
     flex: 5;
     display: flex;

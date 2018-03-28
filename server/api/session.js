@@ -46,7 +46,7 @@ app.put('/teacher', (req, res, next) => {
         teacher.save()
             .then(updatedTeacher => {
                 res.send({
-                    feedback: feedback(SUCCESS, ['Teacher info updated.']),
+                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
                     session: extractSessionData({...updatedTeacher.dataValues})
                 })
             })

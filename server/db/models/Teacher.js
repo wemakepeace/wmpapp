@@ -29,9 +29,9 @@ const Teacher = conn.define('teacher', {
         validate: {
             isEmail: {
                 args: true,
-                msg: 'This is not a an email address.'
+                msg: 'The email you entered is not a valid email address.'
             },
-            notEmpty: { msg: 'Please fill in email.' },
+            notEmpty: { msg: 'Please fill in email address.' },
         }
     },
     phone: {
