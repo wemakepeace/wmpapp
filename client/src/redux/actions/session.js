@@ -5,7 +5,8 @@ import {
     LOGIN_ERROR,
     CREATE_CLASS_PROFILE_ERROR,
     UPDATE_ERROR,
-    UPDATE_TEACHER_SUCCESS  } from '../constants/session';
+    UPDATE_TEACHER_SUCCESS,
+    UPDATE_CLASS_SUCCESS  } from '../constants/session';
 
 import axios from 'axios';
 
@@ -85,14 +86,13 @@ const loadSession = () => {
     }
 };
 
-
-const updateTeacher = (data, className) => {
+const updateTeacher = (data) => {
     return (dispatch) => {
-        return axios.put('/session/teacher', data)
+        return axios.put('/teacher', data)
             .then(response => response.data)
             .then(
-                ({ session, feedback }) => {
-                    dispatch(updateTeacherSuccess(session, feedback));
+                ({ teacher, feedback }) => {
+                    dispatch(updateTeacherSuccess(teacher, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
@@ -111,20 +111,30 @@ const updateTeacherSuccess = (teacher, feedback) => {
 };
 
 
-// const updateClass = (data, className) => {
-//     return (dispatch) => {
-//         return axios.put('/session/class', data)
-//             .then(response => response.data)
-//             .then(
-//                 ({ session, feedback }) => {
-//                     dispatch(loginSuccess(session, feedback))
-//                 },
-//                 (error) => {
-//                     const feedback = error.response.data.feedback;
-//                     dispatch({ type: UPDATE_ERROR, feedback })
-//                 })
-//     }
-// };
+const updateClass = (data) => {
+    return (dispatch) => {
+        return axios.put('/class', data)
+            .then(response => response.data)
+            .then(
+                ({ updatedClass, feedback }) => {
+                    console.log('updatedClass', updatedClass)
+                    dispatch(updateClassSuccess(updatedClass, feedback))
+                    // dispatch(loginSuccess(session, feedback))
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: UPDATE_ERROR, feedback })
+                })
+    }
+};
+
+const updateClassSuccess = (updatedClass, feedback) => {
+    return {
+        type: UPDATE_CLASS_SUCCESS,
+        updatedClass,
+        feedback
+    }
+};
 
 
 export {
@@ -132,5 +142,6 @@ export {
     login,
     logout,
     loadSession,
-    updateTeacher
+    updateTeacher,
+    updateClass
 };

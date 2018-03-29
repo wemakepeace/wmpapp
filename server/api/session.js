@@ -43,42 +43,4 @@ app.get('/', (req, res, next) => {
         })
 });
 
-app.put('/teacher', (req, res, next) => {
-    const data = req.body;
-    const { id, className } = data;
-
-    Teacher.findOne({
-        where: { id }
-    })
-    .then(teacher => {
-
-        teacher.firstName = data.firstName;
-        teacher.lastName = data.lastName;
-        teacher.email = data.email;
-        teacher.phone = data.phone;
-        teacher.password = data.password;
-        teacher.save()
-            .then(updatedTeacher => {
-                updatedTeacher =  updatedTeacher.dataValues;
-                res.send({
-                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    session: extractDataForFrontend(updatedTeacher, {})
-                })
-            })
-            .catch(error => {
-                const defaultError = ['Something went wrong when updating your profile.'];
-                const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-                res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
-            })
-    })
-    .catch(error => {
-        // [TODO] make sure that the errors go through
-        const defaultError = ['Something went wrong when updating your profile.']
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
-    })
-});
-
 module.exports = app;

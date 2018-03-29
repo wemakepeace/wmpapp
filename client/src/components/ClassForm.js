@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'semantic-ui-react';
+
+import { updateClass } from '../redux/actions/session';
 
 import WMPHeader from './WMPHeader';
+import Feedback from './Feedback';
 
 class ClassForm extends Component {
     state = {
@@ -29,18 +33,23 @@ class ClassForm extends Component {
     onSubmit = () => {
         const data = this.state;
         data.id = this.props.session.classes.id;
-        // this.props.updateClass(data);
+        this.props.updateClass(data);
     }
 
     render() {
-        const { name, size, age_group } = this.state;
-
+        const { name, size, age_group, showFeedback } = this.state;
+        const { feedback } = this.props;
 
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>
                     <h4>Class Information</h4>
                     <p>This information will be used to facilitate the Exchange.</p>
+                    {
+                        showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null
+                    }
                     <div className='form-row'>
                         <label className='form-label'>Class ID</label>
                         <span className='form-input-span'>
@@ -92,6 +101,12 @@ class ClassForm extends Component {
                             [SCALE]
                         </span>
                     </div>
+                    <div className='form-row'>
+                        <Button
+                            className='large-custom-btn'
+                            size='large'
+                            onClick={()=>this.onSubmit()}>SAVE</Button>
+                    </div>
                 </div>
             </div>
         )
@@ -100,8 +115,9 @@ class ClassForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session
+        session: state.session,
+        feedback: state.feedback
     }
 }
 
-export default connect(mapStateToProps)(ClassForm);
+export default connect(mapStateToProps, { updateClass })(ClassForm);
