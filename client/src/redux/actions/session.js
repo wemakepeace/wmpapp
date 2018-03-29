@@ -4,7 +4,8 @@ import {
     LOGOUT_SUCCESS,
     LOGIN_ERROR,
     CREATE_CLASS_PROFILE_ERROR,
-    UPDATE_ERROR  } from '../constants/session';
+    UPDATE_ERROR,
+    UPDATE_TEACHER_SUCCESS  } from '../constants/session';
 
 import axios from 'axios';
 
@@ -85,13 +86,13 @@ const loadSession = () => {
 };
 
 
-const updateTeacher = (data) => {
+const updateTeacher = (data, className) => {
     return (dispatch) => {
         return axios.put('/session/teacher', data)
             .then(response => response.data)
             .then(
                 ({ session, feedback }) => {
-                    dispatch(loginSuccess(session, feedback))
+                    dispatch(updateTeacherSuccess(session, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
@@ -99,6 +100,32 @@ const updateTeacher = (data) => {
                 })
     }
 };
+
+
+const updateTeacherSuccess = (teacher, feedback) => {
+    return {
+        type: UPDATE_TEACHER_SUCCESS,
+        teacher,
+        feedback
+    }
+};
+
+
+// const updateClass = (data, className) => {
+//     return (dispatch) => {
+//         return axios.put('/session/class', data)
+//             .then(response => response.data)
+//             .then(
+//                 ({ session, feedback }) => {
+//                     dispatch(loginSuccess(session, feedback))
+//                 },
+//                 (error) => {
+//                     const feedback = error.response.data.feedback;
+//                     dispatch({ type: UPDATE_ERROR, feedback })
+//                 })
+//     }
+// };
+
 
 export {
     createClassProfile,

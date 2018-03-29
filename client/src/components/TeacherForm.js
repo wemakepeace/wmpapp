@@ -24,6 +24,7 @@ class TeacherForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
+        data.className = this.props.session.classes.name;
         this.props.updateTeacher(data);
     }
 

@@ -3,8 +3,8 @@ import { Message } from 'semantic-ui-react';
 
 const Feedback = ({type, messages}) => {
     return (
-        <Message success={type === 'success'} warning={type==='error'}>
-        {messages.map(message => <p>{message}</p>)}
+        <Message animation='fade' success={type === 'success'} warning={type==='error'}>
+        {messages.map((message, i) => <p key={i}>{message}</p>)}
         </Message>
     )
 

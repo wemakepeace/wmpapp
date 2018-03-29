@@ -1,4 +1,8 @@
-import { CREATE_CLASS_PROFILE_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/session';
+import {
+    CREATE_CLASS_PROFILE_SUCCESS,
+    LOGIN_SUCCESS,
+    LOGOUT_SUCCESS,
+    UPDATE_TEACHER_SUCCESS } from '../constants/session';
 
 const initialState = {};
 
@@ -10,6 +14,9 @@ const sessionReducer = (state = initialState, action) => {
             return { ...state, ...action.session }
         case LOGOUT_SUCCESS:
             return {}
+        case UPDATE_TEACHER_SUCCESS:
+            const classes = state.classes;
+            return {...action.teacher, classes: classes }
     }
     return state
 }

@@ -5,7 +5,8 @@ import {
     LOGIN_ERROR,
     LOGOUT_SUCCESS,
     CLEAR_FEEDBACK,
-    UPDATE_ERROR } from '../constants/session';
+    UPDATE_ERROR,
+    UPDATE_TEACHER_SUCCESS } from '../constants/session';
 
 const initialState = {};
 
@@ -13,7 +14,7 @@ const feedback = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_CLASS_PROFILE_SUCCESS:
         case LOGIN_SUCCESS:
-
+        case UPDATE_TEACHER_SUCCESS:
         case CREATE_CLASS_PROFILE_ERROR:
         case LOGIN_ERROR:
         case UPDATE_ERROR:

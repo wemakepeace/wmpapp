@@ -17,13 +17,19 @@ class ClassForm extends Component {
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     componentDidMount() {
-        this.setState(this.props.session.classes[0]);
+        this.setState(this.props.session.classes);
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback && nextProps.feedback.type) {
             this.setState({showFeedback: true})
         }
+    }
+
+    onSubmit = () => {
+        const data = this.state;
+        data.id = this.props.session.classes.id;
+        // this.props.updateClass(data);
     }
 
     render() {

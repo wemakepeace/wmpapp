@@ -5,7 +5,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
-const { extractSessionData } = require('../utils/session');
+const { extractDataForFrontend } = require('../utils/session');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 
@@ -25,11 +25,14 @@ app.get('/', (req, res, next) => {
                 }
             ]
         })
-        .then(data => {
-            const session = extractSessionData({...data.dataValues});
+        .then(session => {
+            session = session.dataValues;
+            session.classes = session.classes[0].dataValues;
+            session.classes.age_group = session.classes.age_group.dataValues;
+
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),
-                session: session
+                session: extractDataForFrontend(session, {})
             })
         })
         .catch(error => {
@@ -42,11 +45,10 @@ app.get('/', (req, res, next) => {
 
 app.put('/teacher', (req, res, next) => {
     const data = req.body;
-    const { id } = data;
+    const { id, className } = data;
 
     Teacher.findOne({
-        where: { id },
-        include: Class
+        where: { id }
     })
     .then(teacher => {
 
@@ -54,14 +56,13 @@ app.put('/teacher', (req, res, next) => {
         teacher.lastName = data.lastName;
         teacher.email = data.email;
         teacher.phone = data.phone;
-        // needs to handle password update...
         teacher.password = data.password;
-
         teacher.save()
             .then(updatedTeacher => {
+                updatedTeacher =  updatedTeacher.dataValues;
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    session: extractSessionData({...updatedTeacher.dataValues})
+                    session: extractDataForFrontend(updatedTeacher, {})
                 })
             })
             .catch(error => {

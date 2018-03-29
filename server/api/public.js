@@ -8,7 +8,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
-const { extractSessionData } = require('../utils/session');
+const { extractSessionData, extractDataForFrontend } = require('../utils/session');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
 
 
@@ -42,20 +42,20 @@ app.post('/create', (req, res, next) => {
             .then(classInstance => {
 
                 session = teacher.dataValues;
-                console.log('classInstance.id', classInstance.id)
+                session.classes = classInstance.dataValues;
+
                 const token = createToken(session.id, classInstance.id);
+
 
                 res.send({
                     feedback: feedback(SUCCESS, ['ok']),
                     token: token,
-                    session: extractSessionData({
-                        ...teacher.dataValues,
-                        classes: [{...classInstance.dataValues}]
-                    })
+                    session: extractDataForFrontend(session, {})
                 })
             })
         })
         .catch(error => {
+            console.log('error', error)
 
             const defaultError = 'Something went wrong when creating a user.'
             const errorMessages = extractSequelizeErrorMessages(error, defaultError);
@@ -81,7 +81,7 @@ app.post('/login', (req, res) => {
             ]
         })
         .then(session => {
-            // console.log('session', session)
+
             let errorMessage;
             if (!session){
                 errorMessage = ['No profile found.'];
@@ -89,17 +89,19 @@ app.post('/login', (req, res) => {
             }
 
             session = session.dataValues;
+            session.classes = session.classes[0].dataValues;
+            session.classes.age_group = session.classes.age_group.dataValues;
 
             const hashTest = pbkdf2(password, session.salt);
 
             if (hashTest.passwordHash === session.password) {
 
-                const token = createToken(session.id, session.classes[0].id);
+                const token = createToken(session.id, session.classes.id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
                     token: token,
-                    session: extractSessionData({...session})
+                    session: extractDataForFrontend(session, {})
                 });
             }
             else {
@@ -108,6 +110,7 @@ app.post('/login', (req, res) => {
             }
     })
      .catch(error => {
+        console.log('error', error)
 
         const defaultError = 'Internal server error. Please try logging in again.';
         const errorMessages = extractSequelizeErrorMessages(error, defaultError);
