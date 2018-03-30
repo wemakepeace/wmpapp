@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 
 import teacher from './reducers/teacher';
 import feedback from './reducers/feedback';
+import classes from './reducers/classes';
 
 
 const combinedReducers = combineReducers({
     teacher,
+    classes,
     feedback
 });
 

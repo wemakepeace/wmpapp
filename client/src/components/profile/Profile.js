@@ -6,10 +6,10 @@ import WMPHeader from '../WMPHeader';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
 import TeacherForm from './TeacherForm';
-import Intro from './Intro';
+import Overview from './Overview';
 
 class Profile extends Component {
-    state = { showTab: 'intro' }
+    state = { showTab: 'overview' }
 
     onViewChange = (showTab) => this.setState({ showTab })
 
@@ -26,9 +26,9 @@ class Profile extends Component {
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <div
-                                className={`profile-menu-item ${this.getActiveClass('intro')}`}
-                                onClick={() => this.onViewChange('intro')}>
-                                <h3>INTRO</h3>
+                                className={`profile-menu-item ${this.getActiveClass('overview')}`}
+                                onClick={() => this.onViewChange('overview')}>
+                                <h3>OVERVIEW</h3>
                             </div>
                             <div
                                 className={`profile-menu-item ${this.getActiveClass('teacher')}`}
@@ -47,8 +47,8 @@ class Profile extends Component {
                             </div>
                         </div>
                         <div className='profile-form-column'>
-                        {   showTab === 'intro'
-                            ? <Intro />
+                        {   showTab === 'overview'
+                            ? <Overview />
                             : showTab === 'class'
                             ? <ClassForm />
                             : showTab === 'school'
@@ -64,9 +64,11 @@ class Profile extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        teacher: state.teacher
+    }
+}
+
 export default Profile;
 
-// const mapStateToProps = (state) => {
-    // currentClass: state.classes[this.props.location.pathname.split....d]
-    // or window.location
-// }

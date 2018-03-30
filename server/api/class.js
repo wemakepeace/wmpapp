@@ -14,6 +14,16 @@ app.get('/', (req, res, next) => {
         .then(result => res.send(result))
 });
 
+
+app.get('/:id', (req, res, next) => {
+    Class.findOne({ id: req.params.id })
+        .then(result => res.send(result))
+        .catch(error =>{
+            // [TODO] handle error
+            console.log(error)
+        })
+});
+
 app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;

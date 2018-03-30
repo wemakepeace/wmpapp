@@ -2,7 +2,40 @@ import {
     UPDATE_ERROR,
     UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
+import { UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
+
+
 import axios from 'axios';
+
+const fetchClass = id => {
+    return dispatch => {
+        return axios.get(`/class/${id}`)
+            .then(response => response.data)
+            .then(
+                    (_class) => {
+                        // console.log('_class', _class)
+                        let object = {};
+                        object[_class.id] = _class
+
+                        console.log('object', object)
+
+                        dispatch({
+                            type: FETCH_CLASS,
+                            _class: object,
+                            currentClass: _class.id
+                        })
+                        // add class to classes store
+                        // set currentclass
+                    },
+                    (error) => {
+                        const feedback = error.response.data.feedback;
+                        dispatch({ type: UPDATE_CLASS_ERROR, feedback })
+                    })
+    }
+}
+
+
+
 
 const updateClass = (data) => {
     return (dispatch) => {
@@ -29,5 +62,6 @@ const updateClassSuccess = (updatedClass, feedback) => {
 
 
 export {
+    fetchClass,
     updateClass
 };

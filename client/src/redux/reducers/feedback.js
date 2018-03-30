@@ -1,13 +1,14 @@
 import {
     CREATE_TEACHER_SUCCESS,
-    CREATE_CLASS_PROFILE_ERROR,
+    CREATE_TEACHER_ERROR,
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGOUT_SUCCESS,
     CLEAR_FEEDBACK,
     UPDATE_ERROR,
-    UPDATE_TEACHER_SUCCESS,
-    UPDATE_CLASS_SUCCESS } from '../constants/teacher';
+    UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
+
+import { UPDATE_CLASS_SUCCESS } from '../constants/class';
 
 const initialState = {};
 
@@ -17,7 +18,7 @@ const feedback = (state = initialState, action) => {
         case LOGIN_SUCCESS:
         case UPDATE_TEACHER_SUCCESS:
         case UPDATE_CLASS_SUCCESS:
-        case CREATE_CLASS_PROFILE_ERROR:
+        case CREATE_TEACHER_ERROR:
         case LOGIN_ERROR:
         case UPDATE_ERROR:
             return action.feedback
