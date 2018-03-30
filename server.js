@@ -22,18 +22,7 @@ jwtOptions.secretOrKey = process.env.SECRET || 'foo';
 const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
     console.log('payload received', jwt_payload);
 
-    models.Teacher.findOne({
-        where: {
-           id: jwt_payload.id
-        },
-        include: [
-            {
-                model: models.Class,
-                as: 'class',
-                where: { id: jwt_payload.classId }
-            }
-        ]
-    })
+    models.Teacher.findOne({ id: jwt_payload.id })
     .then(user => {
         if (user) {
             next(null, user)

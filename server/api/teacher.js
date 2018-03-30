@@ -1,6 +1,6 @@
 const app = require('express').Router();
 const Teacher = require('../db/index').models.Teacher;
-// const Class = require('../db/index').models.Class;
+const Class = require('../db/index').models.Class;
 // const AgeGroup = require('../db/index').models.AgeGroup;
 const conn = require('../db/conn');
 
@@ -16,11 +16,9 @@ app.get('/', (req, res, next) => {
 
 app.put('/', (req, res, next) => {
     const data = req.body;
-    const { id, className } = data;
+    const { id } = data;
 
-    Teacher.findOne({
-        where: { id }
-    })
+    Teacher.findOne({ id })
     .then(teacher => {
         teacher.firstName = data.firstName;
         teacher.lastName = data.lastName;
@@ -30,6 +28,7 @@ app.put('/', (req, res, next) => {
         teacher.save()
             .then(updatedTeacher => {
                 updatedTeacher =  updatedTeacher.dataValues;
+
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
                     teacher: extractDataForFrontend(updatedTeacher, {})

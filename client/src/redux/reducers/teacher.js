@@ -16,7 +16,7 @@ const teacher = (state = initialState, action) => {
         case LOGOUT_SUCCESS:
             return {}
         case UPDATE_TEACHER_SUCCESS:
-            return {...action.teacher, classes: state.classes }
+            return {...state, ...action.teacher }
         case UPDATE_CLASS_SUCCESS:
             return { ...state, classes: action.updatedClass }
     }

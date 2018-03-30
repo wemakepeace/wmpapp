@@ -15,15 +15,14 @@ const setToken = (token) => {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 };
 
-const createTeacher = (data) => {
-    return (dispatch) => {
+const createTeacher = data => {
+    return dispatch => {
         return axios.post('/public/create', { data })
-            .then((response) => response.data)
+            .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {
 
                     setToken(token);
-
                     dispatch(createTeacherSuccess(teacher, feedback));
                 },
                 (error) => {
@@ -43,19 +42,18 @@ const createTeacherSuccess = (teacher, feedback) => {
     }
 };
 
-const login = (credentials) => {
-    return (dispatch) => {
+const login = credentials => {
+    return dispatch => {
         return axios.post('/public/login', credentials )
             .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {
-
                     setToken(token);
-                    console.log('teacher', teacher);
                     dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
+
                     dispatch({ type: LOGIN_ERROR, feedback })
                 })
     }
@@ -77,7 +75,7 @@ const logout = () => {
 
 // const loadSession = (classId) => {
 const loadSession = () => {
-    return (dispatch) => {
+    return dispatch => {
         // return axios.get(`/session/${classId}`)
         return axios.get(`/teacher`)
             .then(response => response.data)
