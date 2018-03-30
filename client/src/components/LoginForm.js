@@ -12,13 +12,12 @@ class Login extends Component {
         redirectToReferrer: false,
         email: '',
         password: '',
-        name: ''
     }
 
     onChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     onSubmit = () => {
-        this.props.login({email: this.state.email, password: this.state.password, name: this.state.name});
+        this.props.login({email: this.state.email, password: this.state.password });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -31,7 +30,7 @@ class Login extends Component {
         const { redirectToReferrer } = this.state;
         const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile' }};
 
-        if (redirectToReferrer === true || this.props.auth === true) {
+        if (redirectToReferrer === true || this.props.teacher.id) {
             return (
                 <Redirect
                     to={from} />
@@ -53,13 +52,6 @@ class Login extends Component {
                         name='password'
                         type='password'
                         onChange={(ev) => this.onChange(ev, 'password')}/>
-                </div>
-                <div className='form-row'>
-                    <input
-                        placeholder='CLASS'
-                        name='name'
-                        type='name'
-                        onChange={(ev) => this.onChange(ev, 'name')}/>
                 </div>
                 <Button
                     className='large-custom-btn'

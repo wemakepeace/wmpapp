@@ -51,7 +51,7 @@ const login = (credentials) => {
                 ({ teacher, token, feedback }) => {
 
                     setToken(token);
-
+                    console.log('teacher', teacher);
                     dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {

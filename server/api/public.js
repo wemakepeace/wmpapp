@@ -59,40 +59,36 @@ app.post('/login', (req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
-    const name = req.body.name;
 
     return Teacher.findOne({
         where: { email },
-        include: [
-                {
-                    model: Class,
-                    as: 'class',
-                    where: { name },
-                    include: [ AgeGroup ]
-                }
-            ]
+        include: [ Class ]
         })
-        .then(session => {
+        .then(teacher => {
             let errorMessage;
-            if (!session){
+            if (!teacher){
                 errorMessage = ['No profile found.'];
                 return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
             }
 
-            session = session.dataValues;
-            session.class = session.class[0].dataValues;
-            session.class.age_group = session.class.age_group.dataValues;
+            teacher = teacher.dataValues;
+            teacher.classes = teacher.classes.map(_class => {
+                return {
+                    name: _class.dataValues.name,
+                    id: _class.dataValues.id
+                }
+            });
 
-            const hashTest = pbkdf2(password, session.salt);
+            const hashTest = pbkdf2(password, teacher.salt);
 
-            if (hashTest.passwordHash === session.password) {
+            if (hashTest.passwordHash === teacher.password) {
 
-                const token = createToken(session.id, session.class.id);
+                const token = createToken(teacher.id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
                     token: token,
-                    session: extractDataForFrontend(session, {})
+                    teacher: extractDataForFrontend(teacher, {})
                 });
             }
             else {

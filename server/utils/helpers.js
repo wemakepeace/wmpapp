@@ -46,7 +46,7 @@ const valuesForFrontend = [
     'lastName',
     'email',
     'phone',
-    'class',
+    'classes',
     'size',
     'name',
     'size',

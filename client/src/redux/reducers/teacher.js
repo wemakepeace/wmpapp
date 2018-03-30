@@ -12,7 +12,7 @@ const teacher = (state = initialState, action) => {
         case CREATE_TEACHER_SUCCESS:
             return { ...state, ...action.teacher }
         case LOGIN_SUCCESS:
-            return { ...state, ...action.session }
+            return { ...state, ...action.teacher }
         case LOGOUT_SUCCESS:
             return {}
         case UPDATE_TEACHER_SUCCESS:
