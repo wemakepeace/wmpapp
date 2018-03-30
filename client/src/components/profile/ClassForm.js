@@ -1,45 +1,76 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { Button } from 'semantic-ui-react';
+import Select from 'react-select';
+import { Async } from 'react-select';
+
 
 import { updateClass } from '../../redux/actions/session';
 
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 
+const fetchAgeGroups = () => {
+    return axios.get('/resources/agegroups')
+        .then(response => response.data)
+        .then(data => {
+
+            return { options: data }
+        });
+}
+
+
+
 class ClassForm extends Component {
     state = {
         name: '',
         size: '',
-        age_group: '',
+        age_group: null,
         requestedTerm: '',
         languageProficiency: '',
         language: '',
-        showFeedback: false
+        showFeedback: false,
+        ageGroups: []
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
+    onSelectOptionChange = (value) => {
+        this.setState({ age_group: value });
+    }
+
     componentDidMount() {
         this.setState(this.props.session.class);
+        if(this.props.session.class.age_group) {
+            console.log('we got age_group', this.props.session.class.age_group)
+            // id
+            // value
+            const age_group = {
+                label: this.props.session.class.age_group.label,
+                value: this.props.session.class.age_group.id
+            }
+            this.setState({ age_group });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback && nextProps.feedback.type) {
-            this.setState({showFeedback: true})
+            this.setState({ showFeedback: true });
         }
     }
 
     onSubmit = () => {
         const data = this.state;
         data.id = this.props.session.class.id;
+        // fetch new id from this.state.age_group
         this.props.updateClass(data);
     }
 
     render() {
         const { name, size, age_group, showFeedback } = this.state;
         const { feedback } = this.props;
-
+        console.log('this.state.age_group', this.state.age_group)
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>
@@ -73,14 +104,14 @@ class ClassForm extends Component {
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>Age of students</label>
+                        <label className='form-label'>Age Group</label>
                         <span className='form-input-span'>
-                            <input
-                                type='number'
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='age'
-                                onChange={(ev)=>this.onInputChange(ev, 'age')}/>
+                            <Async
+                                name='form-field-name'
+                                value={age_group && age_group.value}
+                                onChange={this.onSelectOptionChange}
+                                loadOptions={fetchAgeGroups}
+                            />
                         </span>
                     </div>
                     <div className='form-row'>

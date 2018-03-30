@@ -16,6 +16,8 @@ class Routes extends Component  {
 
     componentWillMount () {
         /* Checks to see if active session */
+        const classId = localStorage.getItem('classId');
+        // return this.props.loadSession(classId)
         return this.props.loadSession()
         .then(() => this.setState({ loading: false }))
     }

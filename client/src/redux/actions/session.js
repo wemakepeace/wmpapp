@@ -75,8 +75,10 @@ const logout = () => {
     return (dispatch) => dispatch({ type: LOGOUT_SUCCESS });
 };
 
+// const loadSession = (classId) => {
 const loadSession = () => {
     return (dispatch) => {
+        // return axios.get(`/session/${classId}`)
         return axios.get(`/session`)
             .then(response => response.data)
             .then(

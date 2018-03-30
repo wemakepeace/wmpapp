@@ -66,3 +66,7 @@ class Profile extends Component {
 
 export default Profile;
 
+// const mapStateToProps = (state) => {
+    // currentClass: state.classes[this.props.location.pathname.split....d]
+    // or window.location
+// }

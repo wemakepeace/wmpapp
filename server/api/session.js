@@ -14,6 +14,7 @@ app.get('/', (req, res, next) => {
     const teacherId = req.user.id;
     const classId = req.user.class[0].id;
 
+
     return Teacher.findOne({
         where: { id: teacherId },
         include: [

@@ -1,4 +1,4 @@
 module.exports = [
-    { value: '8-10' },
-    { value: '11-13' }
+    { label: '8-10' },
+    { label: '11-13' }
 ];
