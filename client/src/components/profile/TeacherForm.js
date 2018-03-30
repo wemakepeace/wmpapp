@@ -6,7 +6,7 @@ import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 import ClassMenu from './ClassMenu';
 
-import { updateTeacher } from '../../redux/actions/session';
+import { updateTeacher } from '../../redux/actions/teacher';
 
 class TeacherForm extends Component {
     state = {
@@ -24,12 +24,12 @@ class TeacherForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        data.className = this.props.session.classes.name;
+        data.className = this.props.teacher.classes.name;
         this.props.updateTeacher(data);
     }
 
     componentDidMount() {
-        this.setState(this.props.session);
+        this.setState(this.props.teacher);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -123,7 +123,7 @@ class TeacherForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session,
+        teacher: state.teacher,
         feedback: state.feedback
     }
 }

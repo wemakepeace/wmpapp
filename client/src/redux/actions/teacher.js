@@ -1,12 +1,12 @@
 import {
-    CREATE_CLASS_PROFILE_SUCCESS,
+    CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     LOGIN_ERROR,
     CREATE_CLASS_PROFILE_ERROR,
     UPDATE_ERROR,
     UPDATE_TEACHER_SUCCESS,
-    UPDATE_CLASS_SUCCESS  } from '../constants/session';
+    UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
 import axios from 'axios';
 
@@ -15,16 +15,16 @@ const setToken = (token) => {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 };
 
-const createClassProfile = (data) => {
+const createTeacher = (data) => {
     return (dispatch) => {
         return axios.post('/public/create', { data })
             .then((response) => response.data)
             .then(
-                ({ session, token, feedback }) => {
+                ({ teacher, token, feedback }) => {
 
                     setToken(token);
 
-                    dispatch(createClassProfileSuccess(session, feedback));
+                    dispatch(createTeacherSuccess(teacher, feedback));
                 },
                 (error) => {
                     // TODO handle error messages
@@ -35,10 +35,10 @@ const createClassProfile = (data) => {
     }
 };
 
-const createClassProfileSuccess = (session, feedback) => {
+const createTeacherSuccess = (teacher, feedback) => {
     return {
-        type: CREATE_CLASS_PROFILE_SUCCESS,
-        session,
+        type: CREATE_TEACHER_SUCCESS,
+        teacher,
         feedback
     }
 };
@@ -48,11 +48,11 @@ const login = (credentials) => {
         return axios.post('/public/login', credentials )
             .then(response => response.data)
             .then(
-                ({ session, token, feedback }) => {
+                ({ teacher, token, feedback }) => {
 
                     setToken(token);
 
-                    dispatch(loginSuccess(session, feedback));
+                    dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
@@ -61,10 +61,10 @@ const login = (credentials) => {
     }
 };
 
-const loginSuccess = (session, feedback) => {
+const loginSuccess = (teacher, feedback) => {
     return {
         type: LOGIN_SUCCESS,
-        session,
+        teacher,
         feedback
     }
 };
@@ -79,10 +79,10 @@ const logout = () => {
 const loadSession = () => {
     return (dispatch) => {
         // return axios.get(`/session/${classId}`)
-        return axios.get(`/session`)
+        return axios.get(`/teacher`)
             .then(response => response.data)
             .then(
-                ({ session, feedback }) => dispatch(loginSuccess(session, feedback)),
+                ({ teacher, feedback }) => dispatch(loginSuccess(teacher, feedback)),
                 (error) => dispatch(logout())
             )
     }
@@ -140,7 +140,7 @@ const updateClassSuccess = (updatedClass, feedback) => {
 
 
 export {
-    createClassProfile,
+    createTeacher,
     login,
     logout,
     loadSession,

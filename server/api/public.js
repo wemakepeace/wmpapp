@@ -15,9 +15,6 @@ const { pbkdf2, saltHashPassword } = require('../utils/security');
 const createToken = (id, classId) => {
     const secret = process.env.SECRET;
     const payload = { id: id };
-    if (classId) {
-        payload.classId = classId;
-    }
 
     return jwt.sign(payload, secret, { expiresIn: '30m' });
 }
@@ -38,20 +35,14 @@ app.post('/create', (req, res, next) => {
 
     return Teacher.create(userData)
         .then(teacher => {
-            return Class.create({ teacherId: teacher.dataValues.id })
-            .then(classInstance => {
 
-                session = teacher.dataValues;
-                session.class = classInstance.dataValues;
+            teacher = teacher.dataValues;
+            const token = createToken(teacher.id);
 
-                const token = createToken(session.id, classInstance.id);
-
-
-                res.send({
-                    feedback: feedback(SUCCESS, ['ok']),
-                    token: token,
-                    session: extractDataForFrontend(session, {})
-                })
+            res.send({
+                feedback: feedback(SUCCESS, ['ok']),
+                token: token,
+                teacher: extractDataForFrontend(teacher, {})
             })
         })
         .catch(error => {

@@ -11,13 +11,13 @@ class PrivateRoute extends Component {
     }
 
     componentDidMount() {
-        if (this.props.session && this.props.session.id) {
+        if (this.props.teacher && this.props.teacher.id) {
             this.setState({isAuth: true});
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if(this.props.session && this.props.session.id) {
+        if(this.props.teacher && this.props.teacher.id) {
             this.setState({isAuth: true});
         }
     }
@@ -48,7 +48,7 @@ class PrivateRoute extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    session: state.session
+    teacher: state.teacher
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

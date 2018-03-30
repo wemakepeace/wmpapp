@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect, Button } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-import { logout } from '../redux/actions/session';
+import { logout } from '../redux/actions/teacher';
 
 class MainMenu extends Component {
     state = {}
@@ -18,7 +18,7 @@ class MainMenu extends Component {
 
     render() {
         const { activeItem } = this.state;
-        const { session } = this.props;
+        const { teacher } = this.props;
 
         return (
             <Menu>
@@ -47,7 +47,7 @@ class MainMenu extends Component {
                     name='secret'
                     active={activeItem === 'secret'}
                     onClick={this.handleItemClick} />
-                { session && session.id
+                { teacher && teacher.id
                 ? <Menu.Item
                     as={Button}
                     name='Log out'
@@ -61,7 +61,7 @@ class MainMenu extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session
+        teacher: state.teacher
     }
 }
 

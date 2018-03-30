@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 
-import { createClassProfile } from '../redux/actions/session';
+import { createTeacher } from '../redux/actions/teacher';
 
 class Signup extends Component {
     state = {
@@ -18,11 +18,11 @@ class Signup extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        this.props.createClassProfile(data);
+        this.props.createTeacher(data);
     }
 
     componentWillReceiveProps(nextProps) {
-        if((nextProps.session && nextProps.session.id) && localStorage.getItem('token')) {
+        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
             this.props.history.push('/profile')
         }
     }
@@ -74,8 +74,8 @@ class Signup extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session
+        teacher: state.teacher
     }
 }
 
-export default connect(mapStateToProps, { createClassProfile })(Signup);
+export default connect(mapStateToProps, { createTeacher })(Signup);

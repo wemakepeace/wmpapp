@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { Async } from 'react-select';
 
 
-import { updateClass } from '../../redux/actions/session';
+import { updateClass } from '../../redux/actions/teacher';
 
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
@@ -41,14 +41,14 @@ class ClassForm extends Component {
     }
 
     componentDidMount() {
-        this.setState(this.props.session.class);
-        if(this.props.session.class.age_group) {
-            console.log('we got age_group', this.props.session.class.age_group)
+        this.setState(this.props.teacher.class);
+        if(this.props.teacher.class.age_group) {
+            console.log('we got age_group', this.props.teacher.class.age_group)
             // id
             // value
             const age_group = {
-                label: this.props.session.class.age_group.label,
-                value: this.props.session.class.age_group.id
+                label: this.props.teacher.class.age_group.label,
+                value: this.props.teacher.class.age_group.id
             }
             this.setState({ age_group });
         }
@@ -62,7 +62,7 @@ class ClassForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        data.id = this.props.session.class.id;
+        data.id = this.props.teacher.class.id;
         // fetch new id from this.state.age_group
         this.props.updateClass(data);
     }
@@ -146,7 +146,7 @@ class ClassForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session,
+        teacher: state.teacher,
         feedback: state.feedback
     }
 }

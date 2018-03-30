@@ -1,13 +1,13 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import sessionReducer from './reducers/session';
-import feedbackReducer from './reducers/feedback';
+import teacher from './reducers/teacher';
+import feedback from './reducers/feedback';
 
 
 const combinedReducers = combineReducers({
-    session: sessionReducer,
-    feedback: feedbackReducer
+    teacher,
+    feedback
 });
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

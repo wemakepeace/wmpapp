@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
-import { login, logout } from '../redux/actions/session';
+import { login, logout } from '../redux/actions/teacher';
 
 
 // passes match and history to component
@@ -22,7 +22,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if((nextProps.session && nextProps.session.id) && localStorage.getItem('token')) {
+        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
             this.setState({redirectToReferrer: true })
         }
     }
@@ -72,7 +72,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.session
+        teacher: state.teacher
     }
 }
 

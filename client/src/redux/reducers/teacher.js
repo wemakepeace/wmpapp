@@ -1,16 +1,16 @@
 import {
-    CREATE_CLASS_PROFILE_SUCCESS,
+    CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     UPDATE_TEACHER_SUCCESS,
-    UPDATE_CLASS_SUCCESS } from '../constants/session';
+    UPDATE_CLASS_SUCCESS } from '../constants/teacher';
 
 const initialState = {};
 
-const sessionReducer = (state = initialState, action) => {
+const teacher = (state = initialState, action) => {
     switch(action.type) {
-        case CREATE_CLASS_PROFILE_SUCCESS:
-            return { ...state, ...action.session }
+        case CREATE_TEACHER_SUCCESS:
+            return { ...state, ...action.teacher }
         case LOGIN_SUCCESS:
             return { ...state, ...action.session }
         case LOGOUT_SUCCESS:
@@ -24,4 +24,4 @@ const sessionReducer = (state = initialState, action) => {
 }
 
 
-export default sessionReducer;
+export default teacher;

@@ -63,6 +63,7 @@ const isObject = (obj) => {
 };
 
 const extractDataForFrontend = (data, result) => {
+
     valuesForFrontend.map(key => {
         if (data.hasOwnProperty(key)) {
             if (isObject(data[key])) {
@@ -75,7 +76,7 @@ const extractDataForFrontend = (data, result) => {
           return;
         }
     })
-    console.log('result', result)
+
     return result;
 };
 

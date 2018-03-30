@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { loadSession } from '../redux/actions/session';
+import { loadSession } from '../redux/actions/teacher';
 
 import Main from '../components/Main';
 import FlexExamples from '../components/FlexExamples';
@@ -52,10 +52,5 @@ class Routes extends Component  {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.auth
-    }
-}
 
-export default connect(mapStateToProps, { loadSession })(Routes);
+export default connect(null, { loadSession })(Routes);
