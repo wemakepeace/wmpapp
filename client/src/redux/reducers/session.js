@@ -16,8 +16,7 @@ const sessionReducer = (state = initialState, action) => {
         case LOGOUT_SUCCESS:
             return {}
         case UPDATE_TEACHER_SUCCESS:
-            const classes = state.classes;
-            return {...action.teacher, classes: classes }
+            return {...action.teacher, classes: state.classes }
         case UPDATE_CLASS_SUCCESS:
             return { ...state, classes: action.updatedClass }
     }

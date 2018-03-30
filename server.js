@@ -29,6 +29,7 @@ const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
         include: [
             {
                 model: models.Class,
+                as: 'class',
                 where: { id: jwt_payload.classId }
             }
         ]

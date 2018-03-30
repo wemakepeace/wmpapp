@@ -5,7 +5,7 @@ const Teacher = require('../db/index').models.Teacher;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
-const { extractDataForFrontend } = require('../utils/session');
+const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 

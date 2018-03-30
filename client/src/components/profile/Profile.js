@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import WMPHeader from './WMPHeader';
+import WMPHeader from '../WMPHeader';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
 import TeacherForm from './TeacherForm';

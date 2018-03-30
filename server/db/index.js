@@ -6,7 +6,7 @@ const AgeGroup = require('./models/AgeGroup');
 const ageGroupData = require('../constants/ageGroups');
 
 Class.belongsTo(Teacher);
-Teacher.hasMany(Class);
+Teacher.hasMany(Class, { as: 'class' });
 
 Class.belongsTo(AgeGroup);
 AgeGroup.hasMany(Class);

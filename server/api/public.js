@@ -8,7 +8,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
-const { extractSessionData, extractDataForFrontend } = require('../utils/session');
+const { extractSessionData, extractDataForFrontend } = require('../utils/helpers');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
 
 
@@ -42,7 +42,7 @@ app.post('/create', (req, res, next) => {
             .then(classInstance => {
 
                 session = teacher.dataValues;
-                session.classes = classInstance.dataValues;
+                session.class = classInstance.dataValues;
 
                 const token = createToken(session.id, classInstance.id);
 
@@ -75,13 +75,13 @@ app.post('/login', (req, res) => {
         include: [
                 {
                     model: Class,
+                    as: 'class',
                     where: { name },
                     include: [ AgeGroup ]
                 }
             ]
         })
         .then(session => {
-
             let errorMessage;
             if (!session){
                 errorMessage = ['No profile found.'];
@@ -89,14 +89,14 @@ app.post('/login', (req, res) => {
             }
 
             session = session.dataValues;
-            session.classes = session.classes[0].dataValues;
-            session.classes.age_group = session.classes.age_group.dataValues;
+            session.class = session.class[0].dataValues;
+            session.class.age_group = session.class.age_group.dataValues;
 
             const hashTest = pbkdf2(password, session.salt);
 
             if (hashTest.passwordHash === session.password) {
 
-                const token = createToken(session.id, session.classes.id);
+                const token = createToken(session.id, session.class.id);
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),

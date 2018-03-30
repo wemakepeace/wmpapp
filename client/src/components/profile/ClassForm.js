@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import { updateClass } from '../redux/actions/session';
+import { updateClass } from '../../redux/actions/session';
 
-import WMPHeader from './WMPHeader';
-import Feedback from './Feedback';
+import WMPHeader from '../WMPHeader';
+import Feedback from '../Feedback';
 
 class ClassForm extends Component {
     state = {
@@ -21,7 +21,7 @@ class ClassForm extends Component {
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     componentDidMount() {
-        this.setState(this.props.session.classes);
+        this.setState(this.props.session.class);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -32,7 +32,7 @@ class ClassForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        data.id = this.props.session.classes.id;
+        data.id = this.props.session.class.id;
         this.props.updateClass(data);
     }
 

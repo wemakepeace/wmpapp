@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import WMPHeader from './WMPHeader';
-import Feedback from './Feedback';
+import WMPHeader from '../WMPHeader';
+import Feedback from '../Feedback';
 import ClassMenu from './ClassMenu';
 
-import { updateTeacher } from '../redux/actions/session';
+import { updateTeacher } from '../../redux/actions/session';
 
 class TeacherForm extends Component {
     state = {

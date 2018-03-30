@@ -46,7 +46,7 @@ const valuesForFrontend = [
     'lastName',
     'email',
     'phone',
-    'classes',
+    'class',
     'size',
     'name',
     'size',
@@ -75,6 +75,7 @@ const extractDataForFrontend = (data, result) => {
           return;
         }
     })
+    console.log('result', result)
     return result;
 };
 

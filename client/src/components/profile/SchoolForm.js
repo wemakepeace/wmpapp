@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import WMPHeader from './WMPHeader';
+import WMPHeader from '../WMPHeader';
 
 
 class SchoolForm extends Component {

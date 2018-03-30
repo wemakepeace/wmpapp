@@ -5,7 +5,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
-const { extractDataForFrontend } = require('../utils/session');
+const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 

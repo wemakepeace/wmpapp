@@ -7,7 +7,7 @@ import { loadSession } from '../redux/actions/session';
 import Main from '../components/Main';
 import FlexExamples from '../components/FlexExamples';
 import MainMenu from '../components/MainMenu';
-import Profile from '../components/Profile';
+import Profile from '../components/profile/Profile';
 import Secret from '../components/Secret';
 import PrivateRoute from './PrivateRoute';
 
