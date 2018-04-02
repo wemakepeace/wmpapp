@@ -21,7 +21,8 @@ const teacher = (state = initialState, action) => {
         case UPDATE_CLASS_SUCCESS:
             return { ...state, classes: action.updatedClass }
         case FETCH_CLASS:
-            return { ...state, currentClass: action._class.id}
+            console.log('action', action)
+            return { ...state, currentClass: action.currentClass }
     }
     return state
 }

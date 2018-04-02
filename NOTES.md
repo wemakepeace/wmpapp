@@ -21,7 +21,7 @@ store = {
     },
     classes: {
         1: {
-            id
+            id: 1
             name
             size,
             exchangeClass: {

@@ -14,14 +14,13 @@ const fetchClass = id => {
             .then(
                     (_class) => {
                         // console.log('_class', _class)
-                        let object = {};
-                        object[_class.id] = _class
+                        let classObject = {};
+                        classObject[_class.id] = _class
 
-                        console.log('object', object)
 
                         dispatch({
                             type: FETCH_CLASS,
-                            _class: object,
+                            _class: classObject,
                             currentClass: _class.id
                         })
                         // add class to classes store
@@ -33,8 +32,6 @@ const fetchClass = id => {
                     })
     }
 }
-
-
 
 
 const updateClass = (data) => {

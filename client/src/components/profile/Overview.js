@@ -17,7 +17,7 @@ class Overview extends Component  {
 
     onClassSelect = (value) => {
         this.setState({ selectedClass: value });
-        console.log('value', value)
+        // console.log('value', value)
         this.props.fetchClass(value)
         // make call to db to fetch the class
         // set currentClass to the selectedclass
