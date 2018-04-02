@@ -11,16 +11,13 @@ import { fetchClass } from '../../redux/actions/class';
 
 class Overview extends Component  {
     state = {
-        selectedClass: '',
+        selected: '',
         options: []
     }
 
-    onClassSelect = (value) => {
-        this.setState({ selectedClass: value });
-        // console.log('value', value)
-        this.props.fetchClass(value)
-        // make call to db to fetch the class
-        // set currentClass to the selectedclass
+    onClassSelect = (selected) => {
+        this.setState({ selected });
+        this.props.fetchClass(selected.value);
     }
 
     componentDidMount() {
@@ -35,9 +32,9 @@ class Overview extends Component  {
     }
 
     render() {
-        const { selectedClass, options } = this.state;
+        const { selected, options } = this.state;
         const { firstName, classes } = this.props.teacher;
-        const value = selectedClass && selectedClass.value;
+        const value = selected && selected.value;
 
         return (
             <div className='profile-form'>
