@@ -13,7 +13,8 @@ const fetchClass = id => {
         return axios.get(`/class/${id}`)
             .then(response => response.data)
             .then(
-                (_class) => {
+                ({ _class, feedback}) => {
+                    console.log('_class', _class)
                     let classObject = {};
                     classObject[_class.id] = _class
 

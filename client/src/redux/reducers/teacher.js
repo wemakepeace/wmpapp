@@ -4,8 +4,6 @@ import {
     LOGOUT_SUCCESS,
     UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
 
-import { UPDATE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
-
 const initialState = {};
 
 const teacher = (state = initialState, action) => {
@@ -18,10 +16,6 @@ const teacher = (state = initialState, action) => {
             return {}
         case UPDATE_TEACHER_SUCCESS:
             return {...state, ...action.teacher }
-        case UPDATE_CLASS_SUCCESS:
-            return { ...state, classes: action.updatedClass }
-        case FETCH_CLASS:
-            return { ...state, currentClass: action.currentClass }
     }
     return state
 }

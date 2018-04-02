@@ -13,8 +13,8 @@ const WMPHeader = (props) => {
                 </div>
             </div>
             <div className='logged-in'>Logged in as {props.teacher.firstName}
-            {props.teacher && props.teacher.currentClass
-                ? <span> for class {props.classes[props.teacher.currentClass].name}</span>
+            {props.classes && props.classes.currentClass
+                ? <span> for class {props.classes.list[props.classes.currentClass].name}</span>
                 : null
             }
             </div>

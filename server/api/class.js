@@ -16,19 +16,25 @@ app.get('/', (req, res, next) => {
 
 
 app.get('/:id', (req, res, next) => {
-    console.log('req.params.id', req.params.id)
     const { id } = req.params;
+
     Class.findOne({
-        where: { id: id }
+        where: { id },
+        include: [ AgeGroup ]
     })
-        .then(result => {
-            console.log('result', result)
-            res.send(result)
-        })
-        .catch(error =>{
-            // [TODO] handle error
-            console.log(error)
-        })
+    .then(result => {
+        _result = result.dataValues;
+        _result.age_group = result.age_group.dataValues;
+
+        res.send({
+            feedback: feedback(SUCCESS, ['Class fetched.']),
+            _class: extractDataForFrontend(_classresult, {})
+        });
+    })
+    .catch(error =>{
+        // [TODO] handle error
+        console.log(error);
+    })
 });
 
 app.put('/', (req, res, next) => {

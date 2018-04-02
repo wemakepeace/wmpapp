@@ -41,14 +41,18 @@ class ClassForm extends Component {
     }
 
     componentDidMount() {
-        this.setState(this.props.teacher.class);
-        if(this.props.teacher.class.age_group) {
-            console.log('we got age_group', this.props.teacher.class.age_group)
+        const classes = this.props.classes.list;
+        const currentClass = classes[this.props.classes.currentClass];
+
+        this.setState(currentClass);
+
+        if(currentClass && currentClass.age_group ) {
+            console.log('we got age_group', currentClass.age_group)
             // id
             // value
             const age_group = {
-                label: this.props.teacher.class.age_group.label,
-                value: this.props.teacher.class.age_group.id
+                label: currentClass.age_group.label,
+                value: currentClass.age_group.id
             }
             this.setState({ age_group });
         }
@@ -62,7 +66,7 @@ class ClassForm extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        data.id = this.props.teacher.class.id;
+        data.id = this.props.classes.currentClass;
         // fetch new id from this.state.age_group
         this.props.updateClass(data);
     }
@@ -147,7 +151,8 @@ class ClassForm extends Component {
 const mapStateToProps = (state) => {
     return {
         teacher: state.teacher,
-        feedback: state.feedback
+        feedback: state.feedback,
+        classes: state.classes
     }
 }
 
