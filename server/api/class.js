@@ -28,7 +28,7 @@ app.get('/:id', (req, res, next) => {
 
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
-            _class: extractDataForFrontend(_classresult, {})
+            _class: extractDataForFrontend(_result, {})
         });
     })
     .catch(error =>{

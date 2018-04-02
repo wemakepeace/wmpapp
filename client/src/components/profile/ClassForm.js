@@ -47,13 +47,11 @@ class ClassForm extends Component {
         this.setState(currentClass);
 
         if(currentClass && currentClass.age_group ) {
-            console.log('we got age_group', currentClass.age_group)
-            // id
-            // value
             const age_group = {
                 label: currentClass.age_group.label,
                 value: currentClass.age_group.id
             }
+
             this.setState({ age_group });
         }
     }

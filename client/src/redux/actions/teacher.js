@@ -77,14 +77,37 @@ const logout = () => {
 const loadSession = () => {
     return dispatch => {
         // return axios.get(`/session/${classId}`)
-        return axios.get(`/teacher`)
+        return axios.get(`/session`)
             .then(response => response.data)
             .then(
-                ({ teacher, feedback }) => dispatch(loginSuccess(teacher, feedback)),
+                ({ teacher, feedback }) =>  dispatch(loginSuccess(teacher, feedback)),
                 (error) => dispatch(logout())
             )
     }
 };
+
+// const loadSession = (classId) => {
+// const loadSession = () => {
+//     return dispatch => {
+//         const currentClass = localStorage.getItem('currentClass');
+//         // return axios.get(`/session/${classId}`)
+//         let promises;
+//         if (currentClass) {
+//             promises = [
+//                 axios.get(`/session`),
+//                 axios.get(`/class/${currentClass}`)
+//             ]
+//         } else {
+//             promises = [axios.get(`/session`)]
+//         }
+//         return Promise.all(promises)
+//         .then(response => response.data)
+//         .then( res => {
+//             console.log('res', res)
+//         })
+//     }
+// };
+
 
 const updateTeacher = (data) => {
     return (dispatch) => {

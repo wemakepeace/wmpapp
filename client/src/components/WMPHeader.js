@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 
-const WMPHeader = (props) => {
+const WMPHeader = ({ teacher, classes }) => {
     return (
         <div className='title-container'>
             <div className='heading'>
@@ -12,11 +12,15 @@ const WMPHeader = (props) => {
                     <h1><span className='title-span'>PEACE LETTERS</span></h1>
                 </div>
             </div>
-            <div className='logged-in'>Logged in as {props.teacher.firstName}
-            {props.classes && props.classes.currentClass
-                ? <span> for class {props.classes.list[props.classes.currentClass].name}</span>
-                : null
-            }
+            <div className='logged-in'>
+                {teacher
+                    ? <div className='logged-in-inner'>
+                         <span>Logged in as {teacher.firstName}<br /></span>
+                        {classes && classes.currentClass
+                            ? <span> Class {classes.list[classes.currentClass].name}</span>
+                        : null}
+                    </div>
+                    : null}
             </div>
         </div>
     );

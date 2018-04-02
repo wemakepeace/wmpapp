@@ -8,21 +8,21 @@ import { UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
 import axios from 'axios';
 
 const fetchClass = id => {
-    console.log('id', id)
     return dispatch => {
         return axios.get(`/class/${id}`)
             .then(response => response.data)
             .then(
                 ({ _class, feedback}) => {
-                    console.log('_class', _class)
                     let classObject = {};
                     classObject[_class.id] = _class
 
-                    dispatch({
+                    localStorage.setItem('currentClass',  _class.id );
+                    return dispatch({
                         type: FETCH_CLASS,
                         _class: classObject,
                         currentClass: _class.id
                     })
+
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;

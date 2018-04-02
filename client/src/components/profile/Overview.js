@@ -8,7 +8,6 @@ import axios from 'axios';
 import { fetchClass } from '../../redux/actions/class';
 
 
-
 class Overview extends Component  {
     state = {
         selected: '',
@@ -17,7 +16,11 @@ class Overview extends Component  {
 
     onClassSelect = (selected) => {
         this.setState({ selected });
-        this.props.fetchClass(selected.value);
+        if (this.props.classes.list[selected.value]) {
+            return
+        } else {
+            this.props.fetchClass(selected.value);
+        }
     }
 
     componentDidMount() {
@@ -28,7 +31,16 @@ class Overview extends Component  {
                 value: _class.id
             }
         });
-        this.setState({ options })
+
+        this.setState({ options });
+
+        if(classes && this.props.classes.currentClass) {
+            const selected = options.find(option => {
+                return option.value === this.props.classes.currentClass
+            });
+
+            this.setState({ selected });
+        }
     }
 
     render() {
@@ -40,7 +52,7 @@ class Overview extends Component  {
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}</h3>
-                    <p>Select class</p>
+                    <h5>Select a class</h5>
                     <Select
                         name='form-field-name'
                         value={value}
@@ -60,7 +72,8 @@ class Overview extends Component  {
 
 const mapStateToProps = state => {
     return {
-        teacher: state.teacher
+        teacher: state.teacher,
+        classes: state.classes
     }
 }
 

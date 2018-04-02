@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {  BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { loadSession } from '../redux/actions/teacher';
+import { fetchClass } from '../redux/actions/class';
 
 import Main from '../components/Main';
 import FlexExamples from '../components/FlexExamples';
@@ -15,11 +16,17 @@ class Routes extends Component  {
     state = { loading: true }
 
     componentWillMount () {
-        /* Checks to see if active session */
-        const classId = localStorage.getItem('classId');
-        // return this.props.loadSession(classId)
         return this.props.loadSession()
-        .then(() => this.setState({ loading: false }))
+        .then(res => {
+            if (res.type === 'LOGIN_SUCCESS') {
+                const currentClass = localStorage.getItem('currentClass')
+                return this.props.fetchClass(currentClass)
+                .then(res => {
+                    this.setState({ loading: false })
+                })
+                .catch(err => this.setState({ loading: false }))
+            }
+        })
     }
 
     render() {
@@ -53,4 +60,4 @@ class Routes extends Component  {
 }
 
 
-export default connect(null, { loadSession })(Routes);
+export default connect(null, { loadSession, fetchClass })(Routes);

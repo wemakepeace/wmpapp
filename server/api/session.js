@@ -11,29 +11,30 @@ const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 app.get('/', (req, res, next) => {
 
-    const teacherId = req.user.id;
-    const classId = req.user.class[0].id;
+    const id = req.user.id;
 
     return Teacher.findOne({
-        where: { id: teacherId },
-        include: [
-                {
-                    model: Class,
-                    as: 'class',
-                    where: { id: classId },
-                    limit: 1,
-                    include: [ AgeGroup ]
-                }
-            ]
+        where: { id },
+        include: [ Class ]
         })
-        .then(session => {
-            session = session.dataValues;
-            session.class = session.class[0].dataValues;
-            session.class.age_group = session.class.age_group.dataValues;
+        .then(teacher => {
+            let errorMessage;
+            if (!teacher){
+                errorMessage = ['No profile found.'];
+                return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+            }
 
+            teacher = teacher.dataValues;
+            teacher.classes = teacher.classes.map(_class => {
+                return {
+                    name: _class.dataValues.name,
+                    id: _class.dataValues.id
+                }
+            });
+            console.log('teacher', teacher)
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),
-                session: extractDataForFrontend(session, {})
+                teacher: extractDataForFrontend(teacher, {})
             })
         })
         .catch(error => {
@@ -45,3 +46,41 @@ app.get('/', (req, res, next) => {
 });
 
 module.exports = app;
+
+
+// return Teacher.findOne({
+//         where: { email },
+//         include: [ Class ]
+//         })
+//         .then(teacher => {
+//             let errorMessage;
+//             if (!teacher){
+//                 errorMessage = ['No profile found.'];
+//                 return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+//             }
+
+//             teacher = teacher.dataValues;
+//             teacher.classes = teacher.classes.map(_class => {
+//                 return {
+//                     name: _class.dataValues.name,
+//                     id: _class.dataValues.id
+//                 }
+//             });
+
+//             const hashTest = pbkdf2(password, teacher.salt);
+
+//             if (hashTest.passwordHash === teacher.password) {
+
+//                 const token = createToken(teacher.id);
+
+//                 res.send({
+//                     feedback: feedback(SUCCESS, ["ok"]),
+//                     token: token,
+//                     teacher: extractDataForFrontend(teacher, {})
+//                 });
+//             }
+//             else {
+//                 errorMessage = ["Username or password is incorrect."];
+//                 res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+//             }
+//     })
