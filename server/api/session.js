@@ -31,7 +31,7 @@ app.get('/', (req, res, next) => {
                     id: _class.dataValues.id
                 }
             });
-            console.log('teacher', teacher)
+
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),
                 teacher: extractDataForFrontend(teacher, {})

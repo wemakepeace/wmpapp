@@ -52,6 +52,7 @@ const login = credentials => {
                     dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {
+                    console.log('error', error)
                     const feedback = error.response.data.feedback;
 
                     dispatch({ type: LOGIN_ERROR, feedback })
@@ -73,41 +74,16 @@ const logout = () => {
     return (dispatch) => dispatch({ type: LOGOUT_SUCCESS });
 };
 
-// const loadSession = (classId) => {
-const loadSession = () => {
+const fetchTeacher = () => {
     return dispatch => {
-        // return axios.get(`/session/${classId}`)
-        return axios.get(`/session`)
+        return axios.get(`/teacher`)
             .then(response => response.data)
             .then(
-                ({ teacher, feedback }) =>  dispatch(loginSuccess(teacher, feedback)),
+                ({ teacher, feedback }) =>  dispatch({type: LOGIN_SUCCESS, teacher, feedback }),
                 (error) => dispatch(logout())
             )
     }
 };
-
-// const loadSession = (classId) => {
-// const loadSession = () => {
-//     return dispatch => {
-//         const currentClass = localStorage.getItem('currentClass');
-//         // return axios.get(`/session/${classId}`)
-//         let promises;
-//         if (currentClass) {
-//             promises = [
-//                 axios.get(`/session`),
-//                 axios.get(`/class/${currentClass}`)
-//             ]
-//         } else {
-//             promises = [axios.get(`/session`)]
-//         }
-//         return Promise.all(promises)
-//         .then(response => response.data)
-//         .then( res => {
-//             console.log('res', res)
-//         })
-//     }
-// };
-
 
 const updateTeacher = (data) => {
     return (dispatch) => {
@@ -164,7 +140,7 @@ export {
     createTeacher,
     login,
     logout,
-    loadSession,
+    fetchTeacher,
     updateTeacher,
     updateClass
 };

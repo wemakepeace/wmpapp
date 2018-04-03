@@ -6,7 +6,6 @@ const initialState = {};
 const classes = (state = initialState, action) => {
     switch(action.type) {
         case FETCH_CLASS:
-            console.log('action', action)
             return { ...state, list: { ...state.list, ...action._class }, currentClass: action.currentClass}
         case UPDATE_CLASS_SUCCESS:
             // return { ...state, classes: action.updatedClass }

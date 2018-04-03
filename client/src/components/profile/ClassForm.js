@@ -72,7 +72,7 @@ class ClassForm extends Component {
     render() {
         const { name, size, age_group, showFeedback } = this.state;
         const { feedback } = this.props;
-        console.log('this.state.age_group', this.state.age_group)
+
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>

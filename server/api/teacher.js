@@ -9,10 +9,51 @@ const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 
+// app.get('/', (req, res, next) => {
+//     Teacher.findAll()
+//         .then(result => res.send(result))
+// });
+
+
 app.get('/', (req, res, next) => {
-    Teacher.findAll()
-        .then(result => res.send(result))
+
+    const id = req.user.id;
+    console.log('id', id)
+
+    return Teacher.findOne({
+        where: { id },
+        include: [ Class ]
+        })
+        .then(teacher => {
+            let errorMessage;
+            if (!teacher){
+                errorMessage = ['No profile found.'];
+                return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+            }
+
+            teacher = teacher.dataValues;
+            teacher.classes = teacher.classes.map(_class => {
+                return {
+                    name: _class.dataValues.name,
+                    id: _class.dataValues.id
+                }
+            });
+
+            res.send({
+                feedback: feedback(SUCCESS, ['Valid session loaded.']),
+                teacher: extractDataForFrontend(teacher, {})
+            })
+        })
+        .catch(error => {
+            const defaultError = 'Something went wrong when loading your session. Please login again.';
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+
+            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        })
 });
+
+
+
 
 app.put('/', (req, res, next) => {
     const data = req.body;
