@@ -39,7 +39,7 @@ class PrivateRoute extends Component {
                 <Route {...newProps} render={ (newProps) => (
                     this.state.isAuth === true
                     ? <Component {...newProps} />
-                    : <NoAccess />
+                    : <NoAccess {...newProps} />
                 )}/>
             )
         }

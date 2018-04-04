@@ -1,33 +1,37 @@
-import {
-    UPDATE_ERROR,
-    UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
+import { UPDATE_ERROR  } from '../constants/teacher';
+import { UPDATE_CLASS_SUCCESS  } from '../constants/class';
+
 
 import { UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
 
 
 import axios from 'axios';
 
-const fetchClass = id => {
+const fetchClass = (id, shouldFetch) => {
     return dispatch => {
-        return axios.get(`/class/${id}`)
-            .then(response => response.data)
-            .then(
-                ({ _class, feedback}) => {
-                    let classObject = {};
-                    classObject[_class.id] = _class
+        if (shouldFetch) {
+            return axios.get(`/class/${id}`)
+                .then(response => response.data)
+                .then(
+                    ({ _class, feedback}) => {
+                        let classObject = {};
+                        classObject[_class.id] = _class
 
-                    localStorage.setItem('currentClass',  _class.id );
-                    return dispatch({
-                        type: FETCH_CLASS,
-                        _class: classObject,
-                        currentClass: _class.id
+                        localStorage.setItem('currentClass',  _class.id );
+                        return dispatch({
+                            type: FETCH_CLASS,
+                            _class: classObject,
+                            currentClass: _class.id
+                        })
+
+                    },
+                    (error) => {
+                        const feedback = error.response.data.feedback;
+                        dispatch({ type: UPDATE_CLASS_ERROR, feedback })
                     })
-
-                },
-                (error) => {
-                    const feedback = error.response.data.feedback;
-                    dispatch({ type: UPDATE_CLASS_ERROR, feedback })
-                })
+        } else {
+            dispatch({ type: FETCH_CLASS, currentClass: id })
+        }
     }
 }
 

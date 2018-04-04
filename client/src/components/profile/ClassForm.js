@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { Async } from 'react-select';
 
 
-import { updateClass } from '../../redux/actions/teacher';
+import { updateClass } from '../../redux/actions/class';
 
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
@@ -19,8 +19,6 @@ const fetchAgeGroups = () => {
             return { options: data }
         });
 }
-
-
 
 class ClassForm extends Component {
     state = {

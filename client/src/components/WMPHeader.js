@@ -13,7 +13,7 @@ const WMPHeader = ({ teacher, classes }) => {
                 </div>
             </div>
             <div className='logged-in'>
-                {teacher
+                {teacher && teacher.id
                     ? <div className='logged-in-inner'>
                          <span>Logged in as {teacher.firstName}<br /></span>
                         {classes && classes.currentClass

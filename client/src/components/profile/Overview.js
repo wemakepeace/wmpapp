@@ -16,10 +16,11 @@ class Overview extends Component  {
 
     onClassSelect = (selected) => {
         this.setState({ selected });
-        if (this.props.classes && this.props.classes.list[selected.value]) {
-            return
+
+        if (this.props.classes && this.props.classes.list && this.props.classes.list[selected.value]) {
+            this.props.fetchClass(selected.value, false)
         } else {
-            this.props.fetchClass(selected.value);
+            this.props.fetchClass(selected.value, true);
         }
     }
 
