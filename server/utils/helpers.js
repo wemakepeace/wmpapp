@@ -51,7 +51,8 @@ const valuesForFrontend = [
     'name',
     'size',
     'age_group',
-    'label'
+    'label',
+    'term'
 ];
 
 

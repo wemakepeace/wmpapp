@@ -27,7 +27,7 @@ const fetchClass = (id, shouldFetch) => {
                     },
                     (error) => {
                         const feedback = error.response.data.feedback;
-                        dispatch({ type: UPDATE_CLASS_ERROR, feedback })
+                        return dispatch({ type: UPDATE_CLASS_ERROR, feedback })
                     })
         } else {
             dispatch({ type: FETCH_CLASS, currentClass: id })

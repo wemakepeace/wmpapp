@@ -20,15 +20,15 @@ class Routes extends Component  {
         .then(res => {
             if (res.type === 'LOGIN_SUCCESS') {
                 const currentClass = localStorage.getItem('currentClass');
-
-                return this.props.fetchClass(currentClass)
-                .then(res => {
-                    this.setState({ loading: false });
-                })
-                .catch(err => this.setState({ loading: false }))
+                if (currentClass) {
+                    return this.props.fetchClass(currentClass, true)
+                    .then(res => {
+                        this.setState({ loading: false });
+                    })
+                    .catch(err => this.setState({ loading: false }))
+                }
             }
             this.setState({ loading: false });
-
         })
     }
 

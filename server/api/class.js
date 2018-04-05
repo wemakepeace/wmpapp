@@ -2,6 +2,8 @@ const app = require('express').Router();
 // const Teacher = require('../db/index').models.Teacher;
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
+const Term = require('../db/index').models.Term;
+
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
@@ -20,11 +22,13 @@ app.get('/:id', (req, res, next) => {
 
     Class.findOne({
         where: { id },
-        include: [ AgeGroup ]
+        include: [ AgeGroup, Term ]
     })
     .then(result => {
+        console.log('result', result)
         _result = result.dataValues;
         _result.age_group = result.age_group.dataValues;
+        _result.term = result.term.dataValues;
 
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
@@ -41,11 +45,8 @@ app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
 
-    Class.findOne({
-        where: { id }
-    })
+    Class.findOne({ id })
     .then(_class => {
-
         if (data.age_group.value !== _class.ageGroupId) {
             // update ageGroupId on class instance
             data.ageGroupId = data.age_group.value;
@@ -56,12 +57,19 @@ app.put('/', (req, res, next) => {
         }
 
         _class.save()
-            .then(updatedClass => {
-                updatedClass = updatedClass.dataValues;
+            .then(() => {
+                Class.findOne({
+                    where: { id },
+                    include: [ AgeGroup ]
+                })
+                .then(updatedClass => {
+                    updatedClass = updatedClass.dataValues;
+                    updatedClass.age_group = updatedClass.age_group.dataValues;
 
-                res.send({
-                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    updatedClass: extractDataForFrontend(updatedClass, {})
+                    res.send({
+                        feedback: feedback(SUCCESS, ['Your information has been saved.']),
+                        updatedClass: extractDataForFrontend(updatedClass, {})
+                    })
                 })
             })
             .catch(error => {

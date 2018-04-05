@@ -11,11 +11,19 @@ import { updateClass } from '../../redux/actions/class';
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 
-const fetchAgeGroups = () => {
-    return axios.get('/resources/agegroups')
+// const fetchAgeGroups = () => {
+//     return axios.get('/resources/agegroups')
+//         .then(response => response.data)
+//         .then(data => {
+
+//             return { options: data }
+//         });
+// };
+
+const fetchDataForSelectDropdown = (url) => {
+    return axios.get(`/resources/${url}`)
         .then(response => response.data)
         .then(data => {
-
             return { options: data }
         });
 }
@@ -25,18 +33,16 @@ class ClassForm extends Component {
         name: '',
         size: '',
         age_group: null,
-        requestedTerm: '',
+        term: '',
         languageProficiency: '',
         language: '',
         showFeedback: false,
         ageGroups: []
     }
 
-    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
+    onInputChange = (ev, key) => this.setState({ [key]: ev.target.value, showFeedback: false })
 
-    onSelectOptionChange = (value) => {
-        this.setState({ age_group: value });
-    }
+    onSelectOptionChange = (value, key) => this.setState({ [key] : value, showFeedback: false })
 
     componentDidMount() {
         const classes = this.props.classes.list;
@@ -52,6 +58,15 @@ class ClassForm extends Component {
 
             this.setState({ age_group });
         }
+        if(currentClass && currentClass.term ) {
+            const term = {
+                label: currentClass.term.term,
+                value: currentClass.term.id
+            }
+
+            this.setState({ term });
+        }
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -68,7 +83,7 @@ class ClassForm extends Component {
     }
 
     render() {
-        const { name, size, age_group, showFeedback } = this.state;
+        const { name, size, age_group, term, showFeedback } = this.state;
         const { feedback } = this.props;
 
         return (
@@ -109,15 +124,20 @@ class ClassForm extends Component {
                             <Async
                                 name='form-field-name'
                                 value={age_group && age_group.value}
-                                onChange={this.onSelectOptionChange}
-                                loadOptions={fetchAgeGroups}
+                                onChange={(value) => this.onSelectOptionChange(value, 'age_group')}
+                                loadOptions={() => fetchDataForSelectDropdown('agegroups')}
                             />
                         </span>
                     </div>
                     <div className='form-row'>
                         <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
-                        <span className=''>
-                            [DROPDOWN / CHECKBOXES]
+                        <span className='form-input-span'>
+                            <Async
+                                name='form-field-name'
+                                value={term && term.value}
+                                onChange={(value) => this.onSelectOptionChange(value, 'term')}
+                                loadOptions={() => fetchDataForSelectDropdown('terms')}
+                            />
                         </span>
                     </div>
                     <div className='form-row'>

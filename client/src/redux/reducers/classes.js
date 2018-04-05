@@ -10,7 +10,6 @@ const classes = (state = initialState, action) => {
             const classId = action.updatedClass.id;
             let newState = { ...state }
             newState.list[classId] = { ...action.updatedClass }
-            console.log('newState', newState)
             return newState
     }
     return state
