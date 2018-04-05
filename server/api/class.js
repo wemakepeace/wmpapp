@@ -25,14 +25,13 @@ app.get('/:id', (req, res, next) => {
         include: [ AgeGroup, Term ]
     })
     .then(result => {
-        console.log('result', result)
-        _result = result.dataValues;
-        _result.age_group = result.age_group.dataValues;
-        _result.term = result.term.dataValues;
+        result = result.dataValues;
+        result.age_group = result.age_group.dataValues;
+        result.term = result.term.dataValues;
 
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
-            _class: extractDataForFrontend(_result, {})
+            _class: extractDataForFrontend(result, {})
         });
     })
     .catch(error =>{
@@ -51,6 +50,10 @@ app.put('/', (req, res, next) => {
             // update ageGroupId on class instance
             data.ageGroupId = data.age_group.value;
         }
+        if (data.term.value !== _class.termId) {
+            // update termId on class instance
+            data.termId = data.term.value;
+        }
 
         for(var key in data) {
             _class[key] = data[key];
@@ -60,11 +63,12 @@ app.put('/', (req, res, next) => {
             .then(() => {
                 Class.findOne({
                     where: { id },
-                    include: [ AgeGroup ]
+                    include: [ AgeGroup, Term ]
                 })
                 .then(updatedClass => {
                     updatedClass = updatedClass.dataValues;
                     updatedClass.age_group = updatedClass.age_group.dataValues;
+                    updatedClass.term = updatedClass.term.dataValues;
 
                     res.send({
                         feedback: feedback(SUCCESS, ['Your information has been saved.']),
@@ -73,6 +77,7 @@ app.put('/', (req, res, next) => {
                 })
             })
             .catch(error => {
+                console.log('error', error)
                 const defaultError = ['Something went wrong when updating your profile.'];
                 const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
@@ -81,6 +86,7 @@ app.put('/', (req, res, next) => {
     })
     .catch(error => {
         // [TODO] make sure that the errors go through
+        console.log('error', error)
         const defaultError = ['Something went wrong when updating your profile.']
         const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 

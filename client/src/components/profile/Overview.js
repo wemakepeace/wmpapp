@@ -46,7 +46,12 @@ class Overview extends Component  {
 
     render() {
         const { selected, options } = this.state;
-        const { firstName, classes } = this.props.teacher;
+        const { firstName, lastName, classes } = this.props.teacher;
+        let currentClass;
+
+        if (this.props.classes && this.props.classes.list && this.props.classes.currentClass) {
+            currentClass = this.props.classes.list[this.props.classes.currentClass];
+        }
         const value = selected && selected.value;
 
         return (
@@ -60,11 +65,17 @@ class Overview extends Component  {
                         onChange={this.onClassSelect}
                         options={options}
                     />
-                    <p>We Make Peace offers a Peace Letter exchange program for students between age 10-12 years. This is an exciting chance for students to befriend a student from another country through letter exchanges.</p>
-
-                    <p>It is our aim to promote friendships across borders, enhance literacy and acceptance of diversity, to activate empathy and increase awareness of peace as a strong ideal for young people to aspire to.</p>
-
-                    <p>Over the years we have developed this program where students from different countries write letters with each other. Each student shares life experiences, art and learn from another student through three letters, all in the name of promoting friendship and non-violent communication. The Peace Letter program provides the participating students with a platform where they can express themselves freely while also learning about the life of a student from a different culture.</p>
+                    <p>
+                        <span>Teacher name: </span><span>{firstName + ' ' + lastName}</span>
+                    </p>
+                    {currentClass !== undefined
+                        ? <div className='class-overview'>
+                            <p><span>Class name: </span><span>{currentClass.name}</span></p>
+                            <p><span>Class size: </span><span>{currentClass.size}</span></p>
+                            <p><span>Age group: </span><span>{currentClass.age_group.name}</span></p>
+                            <p><span>Registered for term: </span><span>{currentClass.term.name}</span></p>
+                        </div>
+                        : null }
                 </div>
             </div>
         )

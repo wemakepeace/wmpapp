@@ -1,32 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { Button } from 'semantic-ui-react';
-import Select from 'react-select';
 import { Async } from 'react-select';
 
 
 import { updateClass } from '../../redux/actions/class';
+import { fetchDataForSelectDropdown } from '../../utils/helpers';
 
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 
-// const fetchAgeGroups = () => {
-//     return axios.get('/resources/agegroups')
-//         .then(response => response.data)
-//         .then(data => {
-
-//             return { options: data }
-//         });
-// };
-
-const fetchDataForSelectDropdown = (url) => {
-    return axios.get(`/resources/${url}`)
-        .then(response => response.data)
-        .then(data => {
-            return { options: data }
-        });
-}
 
 class ClassForm extends Component {
     state = {
@@ -36,8 +19,7 @@ class ClassForm extends Component {
         term: '',
         languageProficiency: '',
         language: '',
-        showFeedback: false,
-        ageGroups: []
+        showFeedback: false
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value, showFeedback: false })
@@ -50,17 +32,18 @@ class ClassForm extends Component {
 
         this.setState(currentClass);
 
-        if(currentClass && currentClass.age_group ) {
+        if (currentClass && currentClass.age_group ) {
             const age_group = {
-                label: currentClass.age_group.label,
+                label: currentClass.age_group.name,
                 value: currentClass.age_group.id
             }
 
             this.setState({ age_group });
         }
-        if(currentClass && currentClass.term ) {
+
+        if (currentClass && currentClass.term ) {
             const term = {
-                label: currentClass.term.term,
+                label: currentClass.term.name,
                 value: currentClass.term.id
             }
 
@@ -138,18 +121,6 @@ class ClassForm extends Component {
                                 onChange={(value) => this.onSelectOptionChange(value, 'term')}
                                 loadOptions={() => fetchDataForSelectDropdown('terms')}
                             />
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label-wide'>What language would you like your class to use in the Exchange?</label>
-                        <span className=''>
-                            [DROPDOWN]
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label-wide'>How proficient are your students in the selected language?</label>
-                        <span className=''>
-                            [SCALE]
                         </span>
                     </div>
                     <div className='form-row'>

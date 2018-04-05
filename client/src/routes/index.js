@@ -22,15 +22,12 @@ class Routes extends Component  {
                 const currentClass = localStorage.getItem('currentClass');
                 if (currentClass) {
                     return this.props.fetchClass(currentClass, true)
-                    .then(res => {
-                        this.setState({ loading: false });
-                    })
-                    .catch(err => this.setState({ loading: false }))
+                    .then(res => this.setState({ loading: false }))
                 }
             }
             this.setState({ loading: false });
-        })
-    }
+        });
+    };
 
     render() {
         const { match, history } = this.props;
@@ -59,8 +56,7 @@ class Routes extends Component  {
                 </Switch>
             </div>
         )
-    }
-}
-
+    };
+};
 
 export default connect(null, { fetchTeacher, fetchClass })(Routes);

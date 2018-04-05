@@ -10,7 +10,7 @@ app.get('/agegroups', (req, res, next) => {
         .then(age_groups => {
             const data = age_groups.map(group => {
                 return {
-                    label: group.dataValues.label,
+                    label: group.dataValues.name,
                     value: group.dataValues.id
                 }
             })
@@ -27,7 +27,7 @@ app.get('/terms', (req, res, next) => {
         .then(terms => {
             const data = terms.map(term => {
                 return {
-                    label: term.dataValues.term,
+                    label: term.dataValues.name,
                     value: term.dataValues.id
                 }
             })

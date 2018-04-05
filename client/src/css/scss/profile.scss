@@ -24,11 +24,18 @@
 
 
     .profile-form {
-        margin: auto;
+        margin: 0 auto;
+        margin-top: 10%;
 
         .profile-segment {
             margin: 10px;
             padding-bottom: 15px;
+
+            .class-overview {
+                margin: 20px 0;
+                padding: 10px;
+                border: 1px solid gainsboro;
+            }
 
             .form-row {
                 margin: 10px 0;
@@ -48,6 +55,8 @@
                 .form-input {
                     padding: 8px;
                 }
+
+
             }
         }
     }
