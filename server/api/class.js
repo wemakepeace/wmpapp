@@ -42,17 +42,23 @@ app.put('/', (req, res, next) => {
     const { id } = data;
 
     Class.findOne({
-        where: { id },
-        include: [ AgeGroup ]
+        where: { id }
     })
     .then(_class => {
+
+        if (data.age_group.value !== _class.ageGroupId) {
+            // update ageGroupId on class instance
+            data.ageGroupId = data.age_group.value;
+        }
+
         for(var key in data) {
             _class[key] = data[key];
         }
+
         _class.save()
             .then(updatedClass => {
                 updatedClass = updatedClass.dataValues;
-                updatedClass.age_group = updatedClass.age_group.dataValues;
+
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
                     updatedClass: extractDataForFrontend(updatedClass, {})
