@@ -52,7 +52,13 @@ const valuesForFrontend = [
     'size',
     'age_group',
     'label',
-    'term'
+    'term',
+    'school',
+    'address1',
+    'address2',
+    'zip',
+    'city',
+    'country'
 ];
 
 

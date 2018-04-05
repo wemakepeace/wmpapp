@@ -3,6 +3,7 @@ const app = require('express').Router();
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
+const School = require('../db/index').models.School;
 
 const conn = require('../db/conn');
 
@@ -22,12 +23,19 @@ app.get('/:id', (req, res, next) => {
 
     Class.findOne({
         where: { id },
-        include: [ AgeGroup, Term ]
+        include: [ AgeGroup, Term, School ]
     })
     .then(result => {
         result = result.dataValues;
-        result.age_group = result.age_group.dataValues;
-        result.term = result.term.dataValues;
+        if (result.age_group && result.age_group.dataValues) {
+            result.age_group = result.age_group.dataValues;
+        }
+        if (result.school && result.school.dataValues) {
+            result.school = result.school.dataValues
+        }
+        if (result.term && result.term.dataValues) {
+            result.term = result.term.dataValues;
+        }
 
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
@@ -63,16 +71,23 @@ app.put('/', (req, res, next) => {
             .then(() => {
                 Class.findOne({
                     where: { id },
-                    include: [ AgeGroup, Term ]
+                    include: [ AgeGroup, Term, School ]
                 })
-                .then(updatedClass => {
-                    updatedClass = updatedClass.dataValues;
-                    updatedClass.age_group = updatedClass.age_group.dataValues;
-                    updatedClass.term = updatedClass.term.dataValues;
+                .then(result => {
+                    result = result.dataValues;
+                    if (result.age_group && result.age_group.dataValues) {
+                        result.age_group = result.age_group.dataValues;
+                    }
+                    if (result.school && result.school.dataValues) {
+                        result.school = result.school.dataValues
+                    }
+                    if (result.term && result.term.dataValues) {
+                        result.term = result.term.dataValues;
+                    }
 
                     res.send({
                         feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                        updatedClass: extractDataForFrontend(updatedClass, {})
+                        updatedClass: extractDataForFrontend(result, {})
                     })
                 })
             })

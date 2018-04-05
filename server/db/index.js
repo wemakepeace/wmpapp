@@ -3,6 +3,7 @@ const Teacher = require('./models/Teacher');
 const Class = require('./models/Class');
 const AgeGroup = require('./models/AgeGroup');
 const Term = require('./models/Term');
+const School = require('./models/School');
 
 const ageGroupData = require('../constants/ageGroups');
 const termData = require('../constants/terms');
@@ -15,6 +16,9 @@ AgeGroup.hasMany(Class);
 
 Class.belongsTo(Term);
 Term.hasMany(Class);
+
+Class.belongsTo(School);
+School.hasMany(Class);
 
 const teachers = [
     {
@@ -41,6 +45,49 @@ const teachers = [
         email: 'cornstar88@m.com',
         password: 'z'
     }
+];
+
+const schools = [
+    {
+        name: 'Åse Barneskole',
+        address1: 'Åsemulen 1',
+        address2: '4A',
+        zip: '6017',
+        city: 'Ålesund',
+        country: 'NO'
+    },
+    {
+        name: 'PS 66',
+        address1: '44 Whyte Ave',
+        address2: '#16',
+        zip: '11211',
+        city: 'New York',
+        country: 'USA'
+    }
+];
+
+const classes = [
+    {
+        teacherId: 1,
+        name: '1A',
+        size: 30,
+        ageGroupId:2,
+        termId: 1,
+        schoolId: 1
+    },
+    {
+        teacherId: 1,
+        name: '1B',
+        size: 28,
+        ageGroupId: 1,
+        termId: 2,
+        schoolId: 2
+    },
+    {
+        teacherId: 2,
+        name: '1B',
+        size: 28
+    }
 ]
 
 const sync = () => conn.sync({ force: true });
@@ -54,18 +101,18 @@ const seed = () => {
             })
             return Promise.all(teacherPromises)
             .then(result => {
-                const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group))
-                const termPromises = termData.map(term => Term.create(term))
-                return Promise.all([...ageGroupPromises, ...termPromises])
+                const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
+                const termPromises = termData.map(term => Term.create(term));
+                const schoolPromises = schools.map(school => School.create(school));
+                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
             })
             .then(result => {
-                const classInstance1 = Class.create({teacherId: 1, name: '1A', size: 30, ageGroupId:2, termId: 1 });
-                const classInstance2 = Class.create({teacherId: 1, name: '1B', size: 28, ageGroupId: 1, termId: 2 });
-                return Promise.all([classInstance1, classInstance2])
+                const classPromises = classes.map(_class => Class.create(_class));
+                return Promise.all(classPromises);
             })
         })
         .catch((error) => {
-            console.log(error)
+            console.log('error===', error)
         })
 }
 
@@ -77,6 +124,7 @@ module.exports = {
         Teacher,
         Class,
         AgeGroup,
-        Term
+        Term,
+        School
     }
 }

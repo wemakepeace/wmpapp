@@ -1,5 +1,6 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
+const postcode = require('postcode-validator');
 
 const School = conn.define('school', {
      name: {
@@ -21,17 +22,17 @@ const School = conn.define('school', {
         type: conn.Sequelize.STRING,
         validate: {
             notEmpty: { msg: 'Zip code cannot be empty'},
-            isZip(value) {
-                if (value === '') {
-                    return
-                }
+            // isZip(value) {
+            //     if (value === '') {
+            //         return
+            //     }
 
-                const zipValid = postcode.validate(value, 'US');
+            //     const zipValid = postcode.validate(value, 'US');
 
-                if (!zipValid) {
-                    throw new Error('The zip code you entered is not valid')
-                }
-            }
+            //     if (!zipValid) {
+            //         throw new Error('The zip code you entered is not valid')
+            //     }
+            // }
         }
     },
     city: {
@@ -40,13 +41,12 @@ const School = conn.define('school', {
             notEmpty: { msg: 'Please fill out school address.'}
         }
     },
-    ,
     country: {
         type: Sequelize.STRING,
         validate: {
             notEmpty: { msg: 'Please fill out school address.'}
         }
-    },
+    }
 });
 
 
