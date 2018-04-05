@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { Async } from 'react-select';
+import countries from 'country-list';
 import WMPHeader from '../WMPHeader';
 
 
@@ -12,6 +13,30 @@ class SchoolForm extends Component {
         city: '',
         zip: '',
         country: ''
+    }
+
+    fetchCountries() {
+        let options;
+        return new Promise((resolve, reject) => {
+            const list = countries().getData()
+
+            options = list.map(el => {
+                return {
+                    label: el.name,
+                    value: el.code
+                }
+            })
+
+            if(options.length) {
+                resolve()
+            } else {
+                reject()
+            }
+        })
+        .then(res => {
+            console.log(options)
+            return { options: options }
+        })
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
@@ -76,11 +101,12 @@ class SchoolForm extends Component {
                     <div className='form-row'>
                         <label className='form-label'>Country</label>
                         <span className='form-input-span'>
-                            <input
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='country'
-                                onChange={(ev)=>this.onInputChange(ev, 'country')}/>
+                            {<Async
+                                name='form-field-name'
+                                value={'temp'}
+                                onChange={(value) => console.log(value)}
+                                loadOptions={this.fetchCountries}
+                            />}
                         </span>
                     </div>
                 </div>
@@ -89,4 +115,5 @@ class SchoolForm extends Component {
     }
 }
 
+// const mapStateToProps =
 export default SchoolForm;
