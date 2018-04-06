@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
 import countries from 'country-list';
+
 import WMPHeader from '../WMPHeader';
+import Feedback from '../Feedback';
+
+import { updateSchool } from '../../redux/actions/school';
+import { fetchClass } from '../../redux/actions/class';
 
 
 class SchoolForm extends Component {
@@ -40,31 +45,43 @@ class SchoolForm extends Component {
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
-    onSelectOptionChange = (value, key) => this.setState({ [key] : value, showFeedback: false })
+    onSelectOptionChange = (select, key) => this.setState({ [key] : select.value, showFeedback: false })
 
     onSubmit = () => {
         const data = this.state;
-        console.log('data', data)
-        // fetch new id from this.state.age_group
-        // this.props.updateClass(data);
+
+        this.props.updateSchool(data);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.feedback && nextProps.feedback.type) {
+            this.setState({ showFeedback: true });
+        }
     }
 
     componentDidMount() {
         if (this.props.classes && this.props.classes.currentClass) {
             const currentClass = this.props.classes.list[this.props.classes.currentClass];
-            const school = currentClass.school ? currentClass.school : {}
+            const school = currentClass.school ? currentClass.school : {};
+
             this.setState(school);
         }
     }
 
     render() {
-        console.log('this.state', this.state);
-        const { name, address1, address2, zip, city, country } = this.state;
+        const { name, address1, address2, zip, city, country, showFeedback } = this.state;
+        const { feedback } = this.props;
+
         return (
            <div className='profile-form'>
                 <div className='profile-segment'>
                     <h4> School Address</h4>
                     <p>This is the address that will be used in the Exchange for sending letters.</p>
+                    {
+                       showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null
+                    }
                     <div className='form-row'>
                         <label className='form-label'>School name</label>
                         <span className='form-input-span'>
@@ -127,7 +144,7 @@ class SchoolForm extends Component {
                             {<Async
                                 name='form-field-name'
                                 value={country}
-                                onChange={(value) => this.onSelectOptionChange(value, 'country')}
+                                onChange={(select) => this.onSelectOptionChange(select, 'country')}
                                 loadOptions={this.fetchCountries}
                             />}
                         </span>
@@ -146,7 +163,8 @@ class SchoolForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        classes: state.classes
+        classes: state.classes,
+        feedback: state.feedback
     }
 }
-export default connect(mapStateToProps)(SchoolForm);
+export default connect(mapStateToProps, { updateSchool, fetchClass })(SchoolForm);

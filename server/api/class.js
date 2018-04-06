@@ -1,5 +1,4 @@
 const app = require('express').Router();
-// const Teacher = require('../db/index').models.Teacher;
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
@@ -37,6 +36,7 @@ app.get('/:id', (req, res, next) => {
             result.term = result.term.dataValues;
         }
 
+        console.log('result', result)
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
             _class: extractDataForFrontend(result, {})

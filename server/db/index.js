@@ -62,7 +62,7 @@ const schools = [
         address2: '#16',
         zip: '11211',
         city: 'New York',
-        country: 'USA'
+        country: 'US'
     }
 ];
 
