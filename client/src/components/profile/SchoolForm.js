@@ -73,88 +73,86 @@ class SchoolForm extends Component {
         const { feedback } = this.props;
 
         return (
-           <div className='profile-form'>
-                <div className='profile-segment'>
-                    <h4> School Address</h4>
-                    <p>This is the address that will be used in the Exchange for sending letters.</p>
-                    {
-                       showFeedback && (feedback && feedback.type)
-                        ? <Feedback {...feedback} />
-                        : null
-                    }
-                    <div className='form-row'>
-                        <label className='form-label'>School name</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={name || ''}
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='name'
-                                onChange={(ev)=>this.onInputChange(ev, 'name')}/>
-                        </span>
-                    </div>
+            <div className='profile-segment'>
+                <h4> School Address</h4>
+                <p>This is the address that will be used in the Exchange for sending letters.</p>
+                {
+                   showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null
+                }
+                <div className='form-row'>
+                    <label className='form-label'>School name</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={name || ''}
+                            className='form-input'
+                            placeholder='. . . . . .'
+                            name='name'
+                            onChange={(ev)=>this.onInputChange(ev, 'name')}/>
+                    </span>
+                </div>
 
-                    <div className='form-row'>
-                        <label className='form-label'>Address</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={address1 || ''}
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='address1'
-                                onChange={(ev)=>this.onInputChange(ev, 'address1')}/>
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label'>Address</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={address2 || ''}
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='address1'
-                                onChange={(ev)=>this.onInputChange(ev, 'address2')}/>
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label'>City</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={city || ''}
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='city'
-                                onChange={(ev)=>this.onInputChange(ev, 'city')}/>
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label'>Zip code</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={zip || ''}
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='zip'
-                                onChange={(ev)=>this.onInputChange(ev, 'zip')}/>
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <label className='form-label'>Country</label>
-                        <span className='form-input-span'>
-                            {<Async
-                                name='form-field-name'
-                                value={country}
-                                onChange={(select) => this.onSelectOptionChange(select, 'country')}
-                                loadOptions={this.fetchCountries}
-                            />}
-                        </span>
-                    </div>
-                    <div className='form-row'>
-                        <Button
-                            className='large-custom-btn'
-                            size='large'
-                            onClick={()=>this.onSubmit()}>SAVE</Button>
-                    </div>
+                <div className='form-row'>
+                    <label className='form-label'>Address</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={address1 || ''}
+                            className='form-input'
+                            placeholder='. . . . . .'
+                            name='address1'
+                            onChange={(ev)=>this.onInputChange(ev, 'address1')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Address</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={address2 || ''}
+                            className='form-input'
+                            placeholder='. . . . . .'
+                            name='address1'
+                            onChange={(ev)=>this.onInputChange(ev, 'address2')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>City</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={city || ''}
+                            className='form-input'
+                            placeholder='. . . . . .'
+                            name='city'
+                            onChange={(ev)=>this.onInputChange(ev, 'city')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Zip code</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={zip || ''}
+                            className='form-input'
+                            placeholder='. . . . . .'
+                            name='zip'
+                            onChange={(ev)=>this.onInputChange(ev, 'zip')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Country</label>
+                    <span className='form-input-span'>
+                        {<Async
+                            name='form-field-name'
+                            value={country}
+                            onChange={(select) => this.onSelectOptionChange(select, 'country')}
+                            loadOptions={this.fetchCountries}
+                        />}
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <Button
+                        className='large-custom-btn'
+                        size='large'
+                        onClick={()=>this.onSubmit()}>SAVE</Button>
                 </div>
             </div>
         )

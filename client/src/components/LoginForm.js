@@ -28,7 +28,7 @@ class Login extends Component {
 
     render() {
         const { redirectToReferrer } = this.state;
-        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile' }};
+        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/exchange' }};
 
         if (redirectToReferrer === true || this.props.teacher.id) {
             return (

@@ -68,7 +68,8 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.3.0",
     "semantic-ui-react": "^0.78.3",
-    "sequelize": "^4.35.2",
+    "sequelize": "^4.37.6",
+    "sequelize-cli": "^4.0.0",
     "url-loader": "^1.0.1"
   }
 }

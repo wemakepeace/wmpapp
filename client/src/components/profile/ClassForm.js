@@ -27,7 +27,7 @@ class ClassForm extends Component {
 
     onSelectOptionChange = (value, key) => this.setState({ [key] : value, showFeedback: false })
 
-    componentDidMount() {
+    renderComponent = () => {
 
         if (this.props.classes && this.props.classes.list) {
             const classes = this.props.classes.list;
@@ -53,13 +53,21 @@ class ClassForm extends Component {
                 this.setState({ term });
             }
         }
-
     }
+
+    componentDidMount() {
+        return this.renderComponent();
+    }
+
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback && nextProps.feedback.type) {
             this.setState({ showFeedback: true });
         }
+
+        // if (nextProps.classes.currentClass !== this.props.classes.currentClass) {
+        //     return this.renderComponent();
+        // }
     }
 
     onSubmit = () => {
@@ -76,20 +84,20 @@ class ClassForm extends Component {
 
 
         return (
-           <div className='profile-form'>
-                <div className='profile-segment'>
+            <div className='profile-segment'>
+                <div>
+                    <h4>Class Information</h4>
+                    <p>This information will be used to facilitate the Exchange.</p>
                     {
-                        !this.props.classes || !this.props.classes.currentClass
-                        ? <SelectClass />
-                        : <div>
-                            <h4>Class Information</h4>
-                            <p>This information will be used to facilitate the Exchange.</p>
-                            {
-                                showFeedback && (feedback && feedback.type)
-                                ? <Feedback {...feedback} />
-                                : null
-                            }
-
+                        showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null
+                    }
+                    {
+                        !this.props.classes.currentClass
+                        ? <Button>Register new class</Button>
+                        :
+                        <div>
                             <div className='form-row'>
                                 <label className='form-label'>Class ID</label>
                                 <span className='form-input-span'>

@@ -8,7 +8,7 @@ import { fetchClass } from '../redux/actions/class';
 import Main from '../components/Main';
 import FlexExamples from '../components/FlexExamples';
 import MainMenu from '../components/MainMenu';
-import Profile from '../components/profile/Profile';
+import Exchange from '../components/profile';
 import Secret from '../components/Secret';
 import PrivateRoute from './PrivateRoute';
 
@@ -41,8 +41,8 @@ class Routes extends Component  {
                     <PrivateRoute
                         loading={this.state.loading}
                         key={4}
-                        exact path={match.url + 'profile'}
-                        component={Profile} />
+                        exact path={match.url + 'exchange'}
+                        component={Exchange} />
                     <PrivateRoute
                         loading={this.state.loading}
                         key={5}

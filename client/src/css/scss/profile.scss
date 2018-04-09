@@ -25,11 +25,15 @@
 
     .profile-form {
         margin: 0 auto;
-        margin-top: 10%;
+        margin-top: 3%;
 
         .profile-segment {
             margin: 10px;
             padding-bottom: 15px;
+
+            .profile-page-menu .item {
+                font-size: 0.8em;
+            }
 
             .class-overview {
                 margin: 20px 0;

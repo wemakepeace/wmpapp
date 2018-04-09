@@ -8,16 +8,10 @@ const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback')
 const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
-
-// app.get('/', (req, res, next) => {
-//     Teacher.findAll()
-//         .then(result => res.send(result))
-// });
-
-
 app.get('/', (req, res, next) => {
 
     const id = req.user.id;
+    console.log('req.user', req.user)
     console.log('id', id)
 
     return Teacher.findOne({
