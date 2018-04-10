@@ -132,7 +132,7 @@
 }
 
 .active-profile {
-    @include active($lightyellow, 10px)
+    @include active($lightyellow)
 }
 
 

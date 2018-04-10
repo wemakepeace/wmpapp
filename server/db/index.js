@@ -85,7 +85,7 @@ const classes = [
     },
     {
         teacherId: 2,
-        name: '1B',
+        name: '3F',
         size: 28
     }
 ]

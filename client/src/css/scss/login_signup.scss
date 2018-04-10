@@ -37,7 +37,7 @@
         }
 
         .active-main {
-            @include active(none, none)
+            @include active(none)
         }
 
         .second-a { background-color: $lightblue; }

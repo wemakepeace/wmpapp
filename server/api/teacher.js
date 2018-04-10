@@ -11,7 +11,6 @@ const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 app.get('/', (req, res, next) => {
 
     const id = req.user.id;
-    console.log('req.user', req.user)
     console.log('id', id)
 
     return Teacher.findOne({

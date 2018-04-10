@@ -23,10 +23,12 @@
     }
 }
 
-@mixin active($backgroundColor, $paddingBottom) {
+@mixin active($backgroundColor) {
     background-color: $backgroundColor;
     h3 {
-        border-bottom: 7px dotted #000 !important;
-        padding-bottom: $paddingBottom;
+        background-color: #000;
+        color: #fff;
+        padding: 3px 8px;
+
     }
 }

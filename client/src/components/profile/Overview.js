@@ -21,7 +21,6 @@ class Overview extends Component {
             currentClass = classes.list[classes.currentClass];
         }
 
-
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
@@ -31,7 +30,7 @@ class Overview extends Component {
                     <p>Once a class has been matched with another class you will be able to communicate with the other class' teacher through Messages.</p>
                 </div>
                 <div>
-                    [PROGRESS BAR FOR EXCHANGE PROGRESS]
+                    [PROGRESS BAR FOR EXCHANGE]
                 </div>
                 <div>
                     [NEXT STEPS]

@@ -7,7 +7,7 @@ import Overview from './Overview'
 import SchoolForm from './SchoolForm';
 import ClassProfile from './ClassProfile';
 import ClassForm from './ClassForm';
-import TeacherInfo from './TeacherInfo';
+import TeacherForm from './TeacherForm';
 
 class Main extends Component {
     state = { showTab: 'overview' }
@@ -32,8 +32,8 @@ class Main extends Component {
                                 <h3>OVERVIEW</h3>
                             </div>
                             <div
-                                className={`profile-menu-item ${this.getActiveClass('teacherinfo')}`}
-                                onClick={() => this.onViewChange('teacherinfo')}>
+                                className={`profile-menu-item ${this.getActiveClass('teacher')}`}
+                                onClick={() => this.onViewChange('teacher')}>
                                 <h3>TEACHER</h3>
                             </div>
                             {className
@@ -44,8 +44,8 @@ class Main extends Component {
                                         <h3>CLASS</h3>
                                     </div>
                                     <div
-                                        className={`profile-menu-item ${this.getActiveClass('teacher')}`}
-                                        onClick={() => this.onViewChange('teacher')}>
+                                        className={`profile-menu-item ${this.getActiveClass('exchange')}`}
+                                        onClick={() => this.onViewChange('exchange')}>
                                         <h3>EXCHANGE</h3>
                                     </div>
                                     <div
@@ -64,8 +64,8 @@ class Main extends Component {
                         <div className='profile-form-column'>
                         {   showTab === 'overview'
                             ? <Overview />
-                            : showTab === 'teacherinfo'
-                            ? <TeacherInfo onViewChange={this.onViewChange}/>
+                            : showTab === 'teacher'
+                            ? <TeacherForm />
                             : showTab === 'classprofile'
                             ? <ClassProfile />
                             : null

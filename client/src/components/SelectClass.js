@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 
-import { fetchClass } from '../redux/actions/class';
+import { fetchClass, removeClass } from '../redux/actions/class';
 
 
 class SelectClass extends Component  {
@@ -13,6 +13,10 @@ class SelectClass extends Component  {
 
     onClassSelect = (selected) => {
         this.setState({ selected });
+
+        if (selected === null) {
+            return this.props.removeClass()
+        }
 
         if (this.props.classes && this.props.classes.list && this.props.classes.list[selected.value]) {
             this.props.fetchClass(selected.value, false)
@@ -83,4 +87,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { fetchClass })(SelectClass);
+export default connect(mapStateToProps, { fetchClass, removeClass })(SelectClass);

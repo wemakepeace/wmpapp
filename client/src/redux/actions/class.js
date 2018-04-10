@@ -7,6 +7,13 @@ import { UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
 
 import axios from 'axios';
 
+const removeClass = () => {
+    return dispatch => {
+        return dispatch({ type: FETCH_CLASS, currentClass: null})
+    }
+}
+
+
 const fetchClass = (id, shouldFetch) => {
     return dispatch => {
         if (shouldFetch) {
@@ -62,5 +69,6 @@ const updateClassSuccess = (updatedClass, feedback) => {
 
 export {
     fetchClass,
+    removeClass,
     updateClass
 };

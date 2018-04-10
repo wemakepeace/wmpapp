@@ -36,7 +36,6 @@ app.get('/:id', (req, res, next) => {
             result.term = result.term.dataValues;
         }
 
-        console.log('result', result)
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
             _class: extractDataForFrontend(result, {})
@@ -52,7 +51,10 @@ app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
 
-    Class.findOne({ id })
+    Class.findOne({
+        where: { id },
+        include: [ AgeGroup, Term, School ]
+    })
     .then(_class => {
         if (data.age_group.value !== _class.ageGroupId) {
             // update ageGroupId on class instance
@@ -68,27 +70,21 @@ app.put('/', (req, res, next) => {
         }
 
         _class.save()
-            .then(() => {
-                Class.findOne({
-                    where: { id },
-                    include: [ AgeGroup, Term, School ]
-                })
-                .then(result => {
-                    result = result.dataValues;
-                    if (result.age_group && result.age_group.dataValues) {
-                        result.age_group = result.age_group.dataValues;
-                    }
-                    if (result.school && result.school.dataValues) {
-                        result.school = result.school.dataValues
-                    }
-                    if (result.term && result.term.dataValues) {
-                        result.term = result.term.dataValues;
-                    }
+        .then(result => {
+                result = result.dataValues;
+                if (result.age_group && result.age_group.dataValues) {
+                    result.age_group = result.age_group.dataValues;
+                }
+                if (result.school && result.school.dataValues) {
+                    result.school = result.school.dataValues
+                }
+                if (result.term && result.term.dataValues) {
+                    result.term = result.term.dataValues;
+                }
 
-                    res.send({
-                        feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                        updatedClass: extractDataForFrontend(result, {})
-                    })
+                res.send({
+                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
+                    updatedClass: extractDataForFrontend(result, {})
                 })
             })
             .catch(error => {

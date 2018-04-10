@@ -86,20 +86,20 @@ class ClassForm extends Component {
         return (
             <div className='profile-segment'>
                 <div>
-                    <h4>Class Information</h4>
-                    <p>This information will be used to facilitate the Exchange.</p>
                     {
-                        showFeedback && (feedback && feedback.type)
-                        ? <Feedback {...feedback} />
-                        : null
-                    }
-                    {
-                        !this.props.classes.currentClass
-                        ? <Button>Register new class</Button>
+                        !classes.currentClass
+                        ? <div className='container-center-content'>
+                            <Button
+                                onClick={()=> console.log('click')}
+                                size='massive'
+                                className='add-class'>Register New Class</Button>
+                        </div>
                         :
                         <div>
+                            <h4>Class Information</h4>
+                            <p>This information will be used to facilitate the Exchange.</p>
                             <div className='form-row'>
-                                <label className='form-label'>Class ID</label>
+                                <label className='form-label'>Class name</label>
                                 <span className='form-input-span'>
                                     <input
                                         value={name || ''}
@@ -135,6 +135,7 @@ class ClassForm extends Component {
                                 <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
                                 <span className='form-input-span'>
                                     <Async
+                                        className='select-country'
                                         name='form-field-name'
                                         value={term && term.value}
                                         onChange={(value) => this.onSelectOptionChange(value, 'term')}
@@ -149,6 +150,11 @@ class ClassForm extends Component {
                                     onClick={()=>this.onSubmit()}>SAVE</Button>
                             </div>
                         </div>
+                    }
+                    {
+                        showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null
                     }
                 </div>
             </div>
