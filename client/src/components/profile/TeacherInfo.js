@@ -6,10 +6,11 @@ import Select from 'react-select';
 import axios from 'axios';
 
 import SelectClass from '../SelectClass';
+import TeacherForm from './TeacherForm';
 import { fetchClass } from '../../redux/actions/class';
 
 
-class Overview extends Component {
+class TeacherInfo extends Component {
 
 
 
@@ -23,20 +24,31 @@ class Overview extends Component {
         }
 
 
-        console.log('this.props.onViewChange', this.props.onViewChange)
-
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}</h3>
-                    { this.props.teacher.classes
-                        ? <SelectClass />
-                        : <div>
-                            Go to <span className='link' onClick={() => this.props.onViewChange('profile')}>Profile & Settings</span> to register your class for a letter exchange.
-                        </div>
-                    }
                 </div>
-                <Button onClick={()=> console.log('click')}>Register new class</Button>
+
+                <TeacherForm />
+
+                <h3 className='segment-title'>Select Class Or Register New Class</h3>
+                <hr style={{margin: '30px 0'}}/>
+
+                    <div className='segment-container'>
+                        { this.props.teacher.classes
+                            ?   <div className='segment-half'>
+                                    <SelectClass />
+                                </div>
+                            : null
+                        }
+                        <div className={this.props.teacher.classes ? 'segment-half' : 'segment-full'}>
+                            <Button
+                                onClick={()=> console.log('click')}
+                                size='massive'
+                                className='add-class'>Register new class</Button>
+                        </div>
+                    </div>
             </div>
         )
 
@@ -50,7 +62,7 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { fetchClass })(Overview);
+export default connect(mapStateToProps, { fetchClass })(TeacherInfo);
 
 
                     // {currentClass !== undefined

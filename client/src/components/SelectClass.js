@@ -21,6 +21,16 @@ class SelectClass extends Component  {
         }
     }
 
+    setSelected = (props, options) => {
+        if(props.classes && props.classes.currentClass) {
+            const selected = options.find(option => {
+                return option.value === props.classes.currentClass
+            });
+
+            this.setState({ selected });
+        }
+    }
+
     componentDidMount() {
         const classes = this.props.teacher.classes;
         const options = classes.map(_class => {
@@ -32,12 +42,12 @@ class SelectClass extends Component  {
 
         this.setState({ options });
 
-        if(this.props.classes && this.props.classes.currentClass) {
-            const selected = options.find(option => {
-                return option.value === this.props.classes.currentClass
-            });
+        return this.setSelected(this.props, options)
+    }
 
-            this.setState({ selected });
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.classes && nextProps.classes.currentClass !== this.props.classes.currentClass) {
+            return this.setSelected(nextProps, this.state.options);
         }
     }
 
@@ -53,7 +63,7 @@ class SelectClass extends Component  {
 
 
         return (
-            <div>
+            <div className='select-class'>
                 <h5>Select a class</h5>
                 <Select
                     name='form-field-name'

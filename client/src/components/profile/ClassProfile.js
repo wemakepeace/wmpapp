@@ -10,12 +10,11 @@ import { fetchDataForSelectDropdown } from '../../utils/helpers';
 import WMPHeader from '../WMPHeader';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
-import TeacherForm from './TeacherForm';
 
 
-class Profile extends Component {
+class ClassProfile extends Component {
     state = {
-        activeItem: 'teacher'
+        activeItem: 'class'
     }
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
@@ -34,14 +33,11 @@ class Profile extends Component {
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <Menu pointing secondary className='profile-page-menu'>
-                          <Menu.Item  name='teacher' active={activeItem === 'teacher'} onClick={this.handleItemClick} />
-                          <Menu.Item name='school' active={activeItem === 'school'} onClick={this.handleItemClick} />
                           <Menu.Item name='class' active={activeItem === 'class'} onClick={this.handleItemClick} />
+                          <Menu.Item name='school address' active={activeItem === 'school address'} onClick={this.handleItemClick} />
                         </Menu>
                         {
-                            activeItem === 'teacher'
-                            ? <TeacherForm />
-                            : activeItem === 'school'
+                            activeItem === 'school address'
                             ? <SchoolForm />
                             : activeItem === 'class'
                             ? <ClassForm />
@@ -61,4 +57,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { updateClass })(Profile);
+export default connect(mapStateToProps, { updateClass })(ClassProfile);

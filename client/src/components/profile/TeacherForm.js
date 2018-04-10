@@ -115,7 +115,6 @@ class TeacherForm extends Component {
                         onClick={()=>this.onSubmit()}>SAVE</Button>
                 </div>
             </div>
-
         )
     }
 }

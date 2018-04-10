@@ -27,11 +27,11 @@ class ClassForm extends Component {
 
     onSelectOptionChange = (value, key) => this.setState({ [key] : value, showFeedback: false })
 
-    renderComponent = () => {
+    renderComponent = (props) => {
 
-        if (this.props.classes && this.props.classes.list) {
-            const classes = this.props.classes.list;
-            const currentClass = classes[this.props.classes.currentClass];
+        if (props.classes && props.classes.list) {
+            const classes = props.classes.list;
+            const currentClass = classes[props.classes.currentClass];
 
             this.setState(currentClass);
 
@@ -56,7 +56,7 @@ class ClassForm extends Component {
     }
 
     componentDidMount() {
-        return this.renderComponent();
+        return this.renderComponent(this.props);
     }
 
 
@@ -65,9 +65,9 @@ class ClassForm extends Component {
             this.setState({ showFeedback: true });
         }
 
-        // if (nextProps.classes.currentClass !== this.props.classes.currentClass) {
-        //     return this.renderComponent();
-        // }
+        if (nextProps.classes.currentClass !== this.props.classes.currentClass) {
+            return this.renderComponent(nextProps);
+        }
     }
 
     onSubmit = () => {

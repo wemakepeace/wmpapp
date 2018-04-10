@@ -2,7 +2,7 @@
 
 .profile-menu-column {
     flex: 1.5;
-    display: flex;
+    // display: flex;
     justify-content: space-between;
 
     .profile-menu-item {
@@ -26,9 +26,9 @@
     .profile-form {
         margin: 0 auto;
         margin-top: 3%;
+        margin-bottom: 3%;
 
         .profile-segment {
-            margin: 10px;
             padding-bottom: 15px;
 
             .profile-page-menu .item {
@@ -59,8 +59,35 @@
                 .form-input {
                     padding: 8px;
                 }
+            }
+        }
 
+        h3.segment-title {
+            text-align: center;
+        }
 
+        .segment-container {
+            display: flex;
+
+            .segment-half {
+               width: 50%;
+                display: flex;
+
+                .select-class, button.ui.button.add-class {
+                    margin: auto;
+                    text-align: center;
+                }
+                .select-class {
+                   width: 70%;
+                }
+            }
+
+            .segment-half:first-child {
+                border-right: 1px solid lightgray;
+            }
+
+            .segment-full {
+               margin: auto;
             }
         }
     }
@@ -93,7 +120,8 @@
 
         .profile-menu-item {
             display: flex;
-            flex: 1;
+            // flex: 1;
+            height: 90px;
             border-bottom: 1px dotted #000;
         }
     }

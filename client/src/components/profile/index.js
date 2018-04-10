@@ -4,20 +4,19 @@ import { Redirect } from 'react-router-dom';
 
 import WMPHeader from '../WMPHeader';
 import SchoolForm from './SchoolForm';
-import Profile from './Profile';
+import ClassProfile from './ClassProfile';
 import ClassForm from './ClassForm';
-import TeacherForm from './TeacherForm';
-import Overview from './Overview';
+import TeacherInfo from './TeacherInfo';
 
 class Main extends Component {
-    state = { showTab: 'overview' }
+    state = { showTab: 'teacherinfo' }
 
     onViewChange = (showTab) => this.setState({ showTab })
 
     getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : '';
 
     render() {
-
+        const { className } = this.props;
         const { showTab } = this.state;
 
         return (
@@ -27,14 +26,14 @@ class Main extends Component {
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <div
-                                className={`profile-menu-item ${this.getActiveClass('overview')}`}
-                                onClick={() => this.onViewChange('overview')}>
-                                <h3>OVERVIEW</h3>
+                                className={`profile-menu-item ${this.getActiveClass('teacherinfo')}`}
+                                onClick={() => this.onViewChange('teacherinfo')}>
+                                <h3>TEACHER INFORMATION</h3>
                             </div>
                             <div
-                                className={`profile-menu-item ${this.getActiveClass('profile')}`}
-                                onClick={() => this.onViewChange('profile')}>
-                                <h3>PROFILE & SETTINGS</h3>
+                                className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
+                                onClick={() => this.onViewChange('classprofile')}>
+                                <h3>CLASS DETAILS {className} </h3>
                             </div>
                             <div
                                 className={`profile-menu-item ${this.getActiveClass('teacher')}`}
@@ -53,15 +52,11 @@ class Main extends Component {
                             </div>
                         </div>
                         <div className='profile-form-column'>
-                        {   showTab === 'overview'
-                            ? <Overview onViewChange={this.onViewChange}/>
-                            : showTab === 'profile'
-                            ? <Profile />
-                            : showTab === 'class'
-                            ? <ClassForm />
-                            : showTab === 'school'
-                            ? <SchoolForm />
-                            : <TeacherForm />
+                        {   showTab === 'teacherinfo'
+                            ? <TeacherInfo onViewChange={this.onViewChange}/>
+                            : showTab === 'classprofile'
+                            ? <ClassProfile />
+                            : null
                         }
                         </div>
                     </div>
@@ -73,10 +68,14 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => {
+    const className = state.classes && state.classes.currentClass
+        ? state.classes.list[state.classes.currentClass].name
+        : ''
     return {
-        teacher: state.teacher
+        teacher: state.teacher,
+        className
     }
 }
 
-export default Main;
+export default connect(mapStateToProps)(Main);
 

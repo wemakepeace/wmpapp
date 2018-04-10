@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import SelectClass from './SelectClass';
 
 const WMPHeader = ({ teacher, classes }) => {
     return (
@@ -16,9 +17,11 @@ const WMPHeader = ({ teacher, classes }) => {
                 {teacher && teacher.id
                     ? <div className='logged-in-inner'>
                          <span>Logged in as {teacher.firstName}<br /></span>
-                        {classes && classes.currentClass
-                            ? <span> Class {classes.list[classes.currentClass].name}</span>
-                        : null}
+                        {
+                            teacher.classes
+                            ? <SelectClass />
+                            : null
+                        }
                     </div>
                     : null}
             </div>
