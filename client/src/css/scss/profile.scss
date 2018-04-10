@@ -35,11 +35,13 @@
                 font-size: 0.8em;
             }
 
-            .class-overview {
-                margin: 20px 0;
-                padding: 10px;
-                border: 1px solid gainsboro;
-            }
+            // .class-overview {
+            //     margin: 20px 0;
+            //     padding: 10px;
+            //     border: 1px solid gainsboro;
+            // }
+
+
 
             .form-row {
                 margin: 10px 0;
@@ -62,32 +64,68 @@
             }
         }
 
+
         h3.segment-title {
             text-align: center;
         }
 
-        .segment-container {
+        // .segment-container {
+        //     display: flex;
+
+        //     .segment-half {
+        //        width: 50%;
+        //         display: flex;
+
+        //         .select-class, button.ui.button.add-class {
+        //             margin: auto;
+        //             text-align: center;
+        //         }
+        //         .select-class {
+        //            width: 70%;
+        //         }
+        //     }
+
+        //     .segment-half:first-child {
+        //         border-right: 1px solid lightgray;
+        //     }
+
+        //     .segment-full {
+        //        margin: auto;
+        //     }
+        // }
+        .container-center-content {
             display: flex;
 
-            .segment-half {
-               width: 50%;
-                display: flex;
+            .add-class {
+                margin: auto;
+            }
+        }
 
-                .select-class, button.ui.button.add-class {
-                    margin: auto;
-                    text-align: center;
-                }
-                .select-class {
-                   width: 70%;
-                }
+        .div-display-inline-block {
+           display: inline-block;
+           margin-right: 20px;
+        }
+
+        .div-display-inline-block:last-child {
+            margin-right: 0px
+        }
+
+        .class-overview {
+            // display: inline-block;
+            display: flex;
+            justify-content: flex-start;
+
+            label, span {
+                display: block;
             }
 
-            .segment-half:first-child {
-                border-right: 1px solid lightgray;
+            span {
+               display: block;
+               margin-left: 12px;
             }
 
-            .segment-full {
-               margin: auto;
+            label {
+                font-weight: bold;
             }
         }
     }

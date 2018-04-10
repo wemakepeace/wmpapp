@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import WMPHeader from '../WMPHeader';
+import Overview from './Overview'
 import SchoolForm from './SchoolForm';
 import ClassProfile from './ClassProfile';
 import ClassForm from './ClassForm';
 import TeacherInfo from './TeacherInfo';
 
 class Main extends Component {
-    state = { showTab: 'teacherinfo' }
+    state = { showTab: 'overview' }
 
     onViewChange = (showTab) => this.setState({ showTab })
 
@@ -26,33 +27,44 @@ class Main extends Component {
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <div
+                                className={`profile-menu-item ${this.getActiveClass('overview')}`}
+                                onClick={() => this.onViewChange('overview')}>
+                                <h3>OVERVIEW</h3>
+                            </div>
+                            <div
                                 className={`profile-menu-item ${this.getActiveClass('teacherinfo')}`}
                                 onClick={() => this.onViewChange('teacherinfo')}>
-                                <h3>TEACHER INFORMATION</h3>
+                                <h3>TEACHER</h3>
                             </div>
-                            <div
-                                className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
-                                onClick={() => this.onViewChange('classprofile')}>
-                                <h3>CLASS DETAILS {className} </h3>
-                            </div>
-                            <div
-                                className={`profile-menu-item ${this.getActiveClass('teacher')}`}
-                                onClick={() => this.onViewChange('teacher')}>
-                                <h3>EXCHANGE</h3>
-                            </div>
-                            <div
-                                className={`profile-menu-item ${this.getActiveClass('class')}`}
-                                onClick={() => this.onViewChange('class')}>
-                                <h3>MATERIALS</h3>
-                            </div>
-                            <div
-                                className={`profile-menu-item ${this.getActiveClass('school')}`}
-                                onClick={() => this.onViewChange('school')}>
-                                <h3>MESSAGES</h3>
-                            </div>
+                            {className
+                                ? <div>
+                                    <div
+                                        className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
+                                        onClick={() => this.onViewChange('classprofile')}>
+                                        <h3>CLASS</h3>
+                                    </div>
+                                    <div
+                                        className={`profile-menu-item ${this.getActiveClass('teacher')}`}
+                                        onClick={() => this.onViewChange('teacher')}>
+                                        <h3>EXCHANGE</h3>
+                                    </div>
+                                    <div
+                                        className={`profile-menu-item ${this.getActiveClass('class')}`}
+                                        onClick={() => this.onViewChange('class')}>
+                                        <h3>MATERIALS</h3>
+                                    </div>
+                                    <div
+                                        className={`profile-menu-item ${this.getActiveClass('school')}`}
+                                        onClick={() => this.onViewChange('school')}>
+                                        <h3>MESSAGES</h3>
+                                    </div>
+                                </div>
+                                : '' }
                         </div>
                         <div className='profile-form-column'>
-                        {   showTab === 'teacherinfo'
+                        {   showTab === 'overview'
+                            ? <Overview />
+                            : showTab === 'teacherinfo'
                             ? <TeacherInfo onViewChange={this.onViewChange}/>
                             : showTab === 'classprofile'
                             ? <ClassProfile />

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import countries from 'country-list';
 
 const fetchDataForSelectDropdown = (url) => {
     return axios.get(`/resources/${url}`)
@@ -8,6 +9,12 @@ const fetchDataForSelectDropdown = (url) => {
         });
 }
 
+const getCountryName = (code) => {
+    return countries().getName(code);
+}
+
+
 export {
-    fetchDataForSelectDropdown
+    fetchDataForSelectDropdown,
+    getCountryName
 }
