@@ -3,9 +3,12 @@ import { UPDATE_SCHOOL_SUCCESS, UPDATE_SCHOOL_ERROR } from '../constants/school'
 
 
 const updateSchool = data => {
-    console.log('hittin')
+    if (data.id === "") {
+        data.id = null;
+    }
+
     return dispatch => {
-        return axios.put('/school', { data })
+        return axios.post('/school', { data })
         .then(response => {
             return response.data
         })

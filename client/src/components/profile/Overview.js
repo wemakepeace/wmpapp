@@ -54,14 +54,20 @@ class Overview extends Component {
                                 </div>
                                 <div className=''>
                                     <span>{currentClass.size}</span>
-                                    <span>{currentClass.age_group.name}</span>
-                                    <span>{currentClass.term.name}</span>
+                                    { currentClass.age_group
+                                        ? <span>{currentClass.age_group.name}</span>
+                                        : <span>Not defined yet.</span>
+                                    }
+                                    { currentClass.term
+                                        ? <span>{currentClass.term.name}</span>
+                                        : <span>Not defined yet.</span>
+                                    }
                                 </div>
                             </div>
                         </div>
                         : null
                     }
-                    {currentClass && currentClass.school
+                    {currentClass && currentClass.school && currentClass.school.name
                         ? <div className='div-display-inline-block'>
                             <div className='class-overview'>
                                 <div className=''>

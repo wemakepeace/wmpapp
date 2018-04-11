@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import Overview from './Overview'
 import SchoolForm from './SchoolForm';
-import ClassProfile from './ClassProfile';
 import ClassForm from './ClassForm';
 import TeacherForm from './TeacherForm';
 
@@ -36,13 +35,14 @@ class Main extends Component {
                                 onClick={() => this.onViewChange('teacher')}>
                                 <h3>TEACHER</h3>
                             </div>
+                            <div
+                                className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
+                                onClick={() => this.onViewChange('classprofile')}>
+                                <h3>CLASS</h3>
+                            </div>
                             {className
                                 ? <div>
-                                    <div
-                                        className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
-                                        onClick={() => this.onViewChange('classprofile')}>
-                                        <h3>CLASS</h3>
-                                    </div>
+
                                     <div
                                         className={`profile-menu-item ${this.getActiveClass('exchange')}`}
                                         onClick={() => this.onViewChange('exchange')}>
@@ -67,7 +67,7 @@ class Main extends Component {
                             : showTab === 'teacher'
                             ? <TeacherForm />
                             : showTab === 'classprofile'
-                            ? <ClassProfile />
+                            ? <ClassForm />
                             : null
                         }
                         </div>

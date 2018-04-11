@@ -73,6 +73,8 @@ class ClassForm extends Component {
     submitAllData = (schoolData) => {
         let classData = this.state;
         classData.id = this.props.classes.currentClass;
+        schoolData.classId = this.props.classes.currentClass;
+
         return this.props.updateSchool(schoolData)
         .then(res => {
             this.props.updateClass(classData);
@@ -84,72 +86,73 @@ class ClassForm extends Component {
         const { name, size, age_group, term, showFeedback } = this.state;
         const { feedback, classes } = this.props;
 
-
         return (
-            <div className='profile-segment'>
-                <div>
-                { !classes.currentClass
-                    ? <div className='container-center-content'>
-                        <Button
-                            onClick={()=> console.log('click')}
-                            size='massive'
-                            className='add-class'>Register New Class</Button>
-                    </div>
-                    :
+            <div className='profile-form'>
+                <div className='profile-segment'>
                     <div>
-                        <h4>Class Information</h4>
-                        <p>This information will be used to facilitate the Exchange.</p>
-                        <div className='form-row'>
-                            <label className='form-label'>Class name</label>
-                            <span className='form-input-span'>
-                                <input
-                                    value={name || ''}
-                                    className='form-input'
-                                    placeholder='. . . . . .'
-                                    name='name'
-                                    onChange={(ev)=>this.onInputChange(ev, 'name')}/>
-                            </span>
+                    {/* !classes.currentClass
+                        ? <div className='container-center-content'>
+                            <Button
+                                onClick={()=> console.log('click')}
+                                size='massive'
+                                className='add-class'>Register New Class</Button>
                         </div>
-                        <div className='form-row'>
-                            <label className='form-label'>Class size</label>
-                            <span className='form-input-span'>
-                                <input
-                                    value={size || ''}
-                                    className='form-input'
-                                    placeholder='. . . . . .'
-                                    name='size'
-                                    onChange={(ev)=>this.onInputChange(ev, 'size')}/>
-                            </span>
+                        :*/}
+                        <div>
+                            <h4>Class Information</h4>
+                            <p>This information will be used to facilitate the Exchange.</p>
+                            <div className='form-row'>
+                                <label className='form-label'>Class name</label>
+                                <span className='form-input-span'>
+                                    <input
+                                        value={name || ''}
+                                        className='form-input'
+                                        placeholder='. . . . . .'
+                                        name='name'
+                                        onChange={(ev)=>this.onInputChange(ev, 'name')}/>
+                                </span>
+                            </div>
+                            <div className='form-row'>
+                                <label className='form-label'>Class size</label>
+                                <span className='form-input-span'>
+                                    <input
+                                        value={size || ''}
+                                        className='form-input'
+                                        placeholder='. . . . . .'
+                                        name='size'
+                                        onChange={(ev)=>this.onInputChange(ev, 'size')}/>
+                                </span>
+                            </div>
+                            <div className='form-row'>
+                                <label className='form-label'>Age Group</label>
+                                <span className='form-input-span'>
+                                    <Async
+                                        name='form-field-name'
+                                        value={age_group && age_group.value}
+                                        onChange={(value) => this.onSelectOptionChange(value, 'age_group')}
+                                        loadOptions={() => fetchDataForSelectDropdown('agegroups')}
+                                    />
+                                </span>
+                            </div>
+                            <div className='form-row'>
+                                <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
+                                <span className='form-input-span'>
+                                    <Async
+                                        className='select-country'
+                                        name='form-field-name'
+                                        value={term && term.value}
+                                        onChange={(value) => this.onSelectOptionChange(value, 'term')}
+                                        loadOptions={() => fetchDataForSelectDropdown('terms')}
+                                    />
+                                </span>
+                            </div>
+                            <SchoolForm submitAllData={this.submitAllData}/>
                         </div>
-                        <div className='form-row'>
-                            <label className='form-label'>Age Group</label>
-                            <span className='form-input-span'>
-                                <Async
-                                    name='form-field-name'
-                                    value={age_group && age_group.value}
-                                    onChange={(value) => this.onSelectOptionChange(value, 'age_group')}
-                                    loadOptions={() => fetchDataForSelectDropdown('agegroups')}
-                                />
-                            </span>
-                        </div>
-                        <div className='form-row'>
-                            <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
-                            <span className='form-input-span'>
-                                <Async
-                                    className='select-country'
-                                    name='form-field-name'
-                                    value={term && term.value}
-                                    onChange={(value) => this.onSelectOptionChange(value, 'term')}
-                                    loadOptions={() => fetchDataForSelectDropdown('terms')}
-                                />
-                            </span>
-                        </div>
-                        <SchoolForm submitAllData={this.submitAllData}/>
+                        {/*}*/}
+                        { showFeedback && (feedback && feedback.type)
+                            ? <Feedback {...feedback} />
+                            : null }
                     </div>
-                    }
-                    { showFeedback && (feedback && feedback.type)
-                        ? <Feedback {...feedback} />
-                        : null }
                 </div>
             </div>
         )

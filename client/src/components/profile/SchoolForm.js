@@ -67,7 +67,7 @@ class SchoolForm extends Component {
         const { feedback } = this.props;
 
         return (
-            <div className='profile-segment'>
+            <div className='profile-segment school-form'>
                 <h4> School Address</h4>
                 <p>This is the address that will be used in the Exchange for sending letters.</p>
                 <div className='form-row'>

@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const setToken = (token) => {
     localStorage.setItem('token', token);
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 };
 
 const createTeacher = data => {
@@ -43,6 +43,7 @@ const createTeacherSuccess = (teacher, feedback) => {
 };
 
 const login = credentials => {
+
     return dispatch => {
         return axios.post('/public/login', credentials )
             .then(response => response.data)

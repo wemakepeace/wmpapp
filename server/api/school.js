@@ -1,31 +1,41 @@
 const app = require('express').Router();
 const School = require('../db/index').models.School;
+const Class = require('../db/index').models.Class;
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { feedback } = require('../utils/feedback');
 
-app.put('/', (req, res) => {
+app.post('/', (req, res) => {
     const { id } = req.body.data;
     const { data } = req.body;
 
-    console.log('id', id)
-    School.findOne({ id })
+    School.findById(id)
     .then(school => {
 
-        for (var key in data) {
-            school[key] = data[key]
+        if (school) {
+
+            for (var key in data) {
+                school[key] = data[key]
+            }
+
+            return school.save()
+        } else {
+            return School.create(data)
         }
-
-        school.save()
-        .then(updatedSchool => {
-
+    })
+    .then(schoolInstance => {
+        /** Set schoolId to class instance **/
+        Class.findById(data.classId)
+        .then(_class => _class.setSchool(schoolInstance))
+        .then(() => {
             res.send({
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                updatedSchool: extractDataForFrontend(updatedSchool.dataValues, {})
+                updatedSchool: extractDataForFrontend(schoolInstance.dataValues, {})
             })
-
         })
     })
+    // [TODO] handle error
+    .catch(error => console.log('error', error))
 })
 
 module.exports = app;

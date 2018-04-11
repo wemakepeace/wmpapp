@@ -1,9 +1,5 @@
 import { UPDATE_ERROR  } from '../constants/teacher';
-import { UPDATE_CLASS_SUCCESS  } from '../constants/class';
-
-
-import { UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
-
+import { UPDATE_CLASS_SUCCESS, UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
 
 import axios from 'axios';
 
@@ -29,15 +25,14 @@ const fetchClass = (id, shouldFetch) => {
                             type: FETCH_CLASS,
                             _class: classObject,
                             currentClass: _class.id
-                        })
-
+                        });
                     },
                     (error) => {
                         const feedback = error.response.data.feedback;
-                        return dispatch({ type: UPDATE_CLASS_ERROR, feedback })
+                        return dispatch({ type: UPDATE_CLASS_ERROR, feedback });
                     })
         } else {
-            dispatch({ type: FETCH_CLASS, currentClass: id })
+            dispatch({ type: FETCH_CLASS, currentClass: id });
         }
     }
 }
@@ -49,12 +44,11 @@ const updateClass = (data) => {
             .then(response => response.data)
             .then(
                 ({ updatedClass, feedback }) => {
-                    console.log('updatedClass', updatedClass)
-                    dispatch(updateClassSuccess(updatedClass, feedback))
+                    dispatch(updateClassSuccess(updatedClass, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: UPDATE_ERROR, feedback })
+                    dispatch({ type: UPDATE_ERROR, feedback });
                 })
     }
 };

@@ -68,7 +68,7 @@ class SelectClass extends Component  {
 
         return (
             <div className='select-class'>
-                <h5>Select a class</h5>
+                <h5>Class</h5>
                 <Select
                     name='form-field-name'
                     value={value}

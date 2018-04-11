@@ -8,10 +8,15 @@ const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback')
 const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
+const jwt = require('jsonwebtoken');
+
 app.get('/', (req, res, next) => {
 
-    const id = req.user.id;
-    console.log('id', id)
+    /* Have to verify that this is secure .... */
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const secret = process.env.SECRET;
+    const decoded =  jwt.decode(token, secret);
+    const id = decoded.id;
 
     return Teacher.findOne({
         where: { id },

@@ -2,7 +2,6 @@
 
 .profile-menu-column {
     flex: 1.5;
-    // display: flex;
     justify-content: space-between;
 
     .profile-menu-item {
@@ -35,14 +34,6 @@
                 font-size: 0.8em;
             }
 
-            // .class-overview {
-            //     margin: 20px 0;
-            //     padding: 10px;
-            //     border: 1px solid gainsboro;
-            // }
-
-
-
             .form-row {
                 margin: 10px 0;
 
@@ -64,35 +55,14 @@
             }
         }
 
+        .school-form {
+            margin-top: 40px;
+        }
 
         h3.segment-title {
             text-align: center;
         }
 
-        // .segment-container {
-        //     display: flex;
-
-        //     .segment-half {
-        //        width: 50%;
-        //         display: flex;
-
-        //         .select-class, button.ui.button.add-class {
-        //             margin: auto;
-        //             text-align: center;
-        //         }
-        //         .select-class {
-        //            width: 70%;
-        //         }
-        //     }
-
-        //     .segment-half:first-child {
-        //         border-right: 1px solid lightgray;
-        //     }
-
-        //     .segment-full {
-        //        margin: auto;
-        //     }
-        // }
         .container-center-content {
             display: flex;
 
@@ -111,7 +81,6 @@
         }
 
         .class-overview {
-            // display: inline-block;
             display: flex;
             justify-content: flex-start;
 

@@ -24,21 +24,21 @@ app.get('/:id', (req, res, next) => {
         where: { id },
         include: [ AgeGroup, Term, School ]
     })
-    .then(result => {
-        result = result.dataValues;
-        if (result.age_group && result.age_group.dataValues) {
-            result.age_group = result.age_group.dataValues;
+    .then(_class => {
+        _class = _class.dataValues;
+        if (_class.age_group && _class.age_group.dataValues) {
+            _class.age_group = _class.age_group.dataValues;
         }
-        if (result.school && result.school.dataValues) {
-            result.school = result.school.dataValues
+        if (_class.school && _class.school.dataValues) {
+            _class.school = _class.school.dataValues
         }
-        if (result.term && result.term.dataValues) {
-            result.term = result.term.dataValues;
+        if (_class.term && _class.term.dataValues) {
+            _class.term = _class.term.dataValues;
         }
 
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
-            _class: extractDataForFrontend(result, {})
+            _class: extractDataForFrontend(_class, {})
         });
     })
     .catch(error =>{
@@ -51,16 +51,12 @@ app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
 
-    Class.findOne({ id })
+    Class.findById(id)
     .then(_class => {
-        if (data.age_group.value !== _class.ageGroupId) {
-            // update ageGroupId on class instance
+        if (data.age_group && (data.age_group.value !== _class.ageGroupId)) {
             data.ageGroupId = data.age_group.value;
         }
-        // console.log('data.term.value', data.term.value)
-        if (data.term.value !== _class.termId) {
-            // update termId on class instance
-            // console.log('setting new termId')
+        if (data.term && (data.term.value !== _class.termId)) {
             data.termId = data.term.value;
         }
 
@@ -68,59 +64,31 @@ app.put('/', (req, res, next) => {
             _class[key] = data[key];
         }
 
-        // console.log('_class before save', _class)
         _class.save()
-        // .then(() => {
-        //     Class.findOne({ id })
-        //     .then(_class => {
-        //          _class.getTerm()
-        //          .then(term => console.log('term', term))
-        //     })
-        // })
-        .then(result => {
-                Promise.all([result.getTerm(), result.getAge_group(), result.getSchool()])
+        .then(updatedClass => {
+                Promise.all([updatedClass.getTerm(), updatedClass.getAge_group(), updatedClass.getSchool()])
                 .then(([term, age_group, school]) => {
-                    result = result.dataValues;
-                    // console.log('term', term)
-                    // console.log('age_group', age_group)
-                    result.age_group = age_group.dataValues;
-                    result.term = term.dataValues;
-                    result.school = school.dataValues;
+                    updatedClass = updatedClass.dataValues;
 
-                    console.log('result', result)
+                    if (term && term.dataValues) {
+                        updatedClass.term = term.dataValues;
+                    }
+
+                    if (age_group && age_group.dataValues) {
+                        updatedClass.age_group = age_group.dataValues;
+                    }
+
+                    if (school && school.dataValues) {
+                        updatedClass.school = school.dataValues;
+                    }
 
                     res.send({
                         feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                        updatedClass: extractDataForFrontend(result, {})
+                        updatedClass: extractDataForFrontend(updatedClass, {})
                     })
                 })
-
-                // .then(term => term.dataValues)
-                // .then(_term => {
-                //     result.dataValues.term = _term
-                // })
-                // .then(() => {
-                //     result.getAge_group()
-                //     .then(age_group_data => age_group_data.dataValues )
-                //     .then(age_group => {
-                //         // console.log('age_group',age_group)
-                //         // console.log('result', result)
-                //         result.age_group = age_group
-                //         // console.log('result.dataValues', result.dataValues)
-                //     })
-                // })
-                // .then(() => {
-                    // if (result.age_group && result.age_group.dataValues) {
-                    //     result.age_group = result.age_group;
-                    // }
-                    // if (result.school && result.school.dataValues) {
-                    //     result.school = result.school
-                    // }
-                    // if (result.term && result.term.dataValues) {
-                    //     result.term = result.term;
-                    // }
-
-                // })
+                // [TODO] handle error
+                .catch(error => console.log(error))
             })
             .catch(error => {
                 console.log('error', error)
