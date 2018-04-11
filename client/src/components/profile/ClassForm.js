@@ -5,11 +5,14 @@ import { Async } from 'react-select';
 
 
 import { updateClass } from '../../redux/actions/class';
+import { updateSchool } from '../../redux/actions/school';
+
 import { fetchDataForSelectDropdown } from '../../utils/helpers';
 
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 import SelectClass from '../SelectClass';
+import SchoolForm from './SchoolForm';
 
 
 class ClassForm extends Component {
@@ -20,10 +23,12 @@ class ClassForm extends Component {
         term: '',
         languageProficiency: '',
         language: '',
-        showFeedback: false
+        showFeedback: false,
+        school: {}
     }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value, showFeedback: false })
+
 
     onSelectOptionChange = (value, key) => this.setState({ [key] : value, showFeedback: false })
 
@@ -70,15 +75,25 @@ class ClassForm extends Component {
         }
     }
 
+    submitAllData = (schoolData) => {
+        let classData = this.state;
+        classData.id = this.props.classes.currentClass;
+        return this.props.updateSchool(schoolData)
+        .then(res => {
+            this.props.updateClass(classData);
+        });
+    }
+
     onSubmit = () => {
-        const data = this.state;
-        data.id = this.props.classes.currentClass;
+        const classData = this.state;
+        classData.id = this.props.classes.currentClass;
         // fetch new id from this.state.age_group
-        this.props.updateClass(data);
+        this.props.updateClass(classData);
     }
 
     render() {
 
+        console.log('this.state', this.state)
         const { name, size, age_group, term, showFeedback } = this.state;
         const { feedback, classes } = this.props;
 
@@ -143,12 +158,7 @@ class ClassForm extends Component {
                                     />
                                 </span>
                             </div>
-                            <div className='form-row'>
-                                <Button
-                                    className='large-custom-btn'
-                                    size='large'
-                                    onClick={()=>this.onSubmit()}>SAVE</Button>
-                            </div>
+                            <SchoolForm submitAllData={this.submitAllData}/>
                         </div>
                     }
                     {
@@ -170,4 +180,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { updateClass })(ClassForm);
+export default connect(mapStateToProps, { updateClass, updateSchool })(ClassForm);

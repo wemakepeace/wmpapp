@@ -19,6 +19,7 @@ class SchoolForm extends Component {
         address2: '',
         city: '',
         zip: '',
+        state: '',
         country: '',
         showFeedback: false
     }
@@ -42,16 +43,15 @@ class SchoolForm extends Component {
         })
     }
 
-
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     onSelectOptionChange = (select, key) => this.setState({ [key] : select.value, showFeedback: false })
 
-    onSubmit = () => {
+    sendDataToParent = () => {
         const data = this.state;
-
-        this.props.updateSchool(data);
+        return this.props.submitAllData(data);
     }
+
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback && nextProps.feedback.type) {
@@ -69,25 +69,22 @@ class SchoolForm extends Component {
     }
 
     render() {
-        const { name, address1, address2, zip, city, country, showFeedback } = this.state;
+        // console.log('this.props.fetchSchoolData', this.props.fetchSchoolData)
+        // console.log('this.props.fetchSchoolData()', this.props.fetchSchoolData())
+        const { name, address1, address2, zip, city, state, country, showFeedback } = this.state;
         const { feedback } = this.props;
 
         return (
             <div className='profile-segment'>
                 <h4> School Address</h4>
                 <p>This is the address that will be used in the Exchange for sending letters.</p>
-                {
-                   showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null
-                }
                 <div className='form-row'>
                     <label className='form-label'>School name</label>
                     <span className='form-input-span'>
                         <input
                             value={name || ''}
                             className='form-input'
-                            placeholder='. . . . . .'
+                            placeholder=''
                             name='name'
                             onChange={(ev)=>this.onInputChange(ev, 'name')}/>
                     </span>
@@ -99,7 +96,7 @@ class SchoolForm extends Component {
                         <input
                             value={address1 || ''}
                             className='form-input'
-                            placeholder='. . . . . .'
+                            placeholder=''
                             name='address1'
                             onChange={(ev)=>this.onInputChange(ev, 'address1')}/>
                     </span>
@@ -110,7 +107,7 @@ class SchoolForm extends Component {
                         <input
                             value={address2 || ''}
                             className='form-input'
-                            placeholder='. . . . . .'
+                            placeholder=''
                             name='address1'
                             onChange={(ev)=>this.onInputChange(ev, 'address2')}/>
                     </span>
@@ -121,9 +118,20 @@ class SchoolForm extends Component {
                         <input
                             value={city || ''}
                             className='form-input'
-                            placeholder='. . . . . .'
+                            placeholder=''
                             name='city'
                             onChange={(ev)=>this.onInputChange(ev, 'city')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>State</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={state || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='state'
+                            onChange={(ev)=>this.onInputChange(ev, 'state')}/>
                     </span>
                 </div>
                 <div className='form-row'>
@@ -132,7 +140,7 @@ class SchoolForm extends Component {
                         <input
                             value={zip || ''}
                             className='form-input'
-                            placeholder='. . . . . .'
+                            placeholder=''
                             name='zip'
                             onChange={(ev)=>this.onInputChange(ev, 'zip')}/>
                     </span>
@@ -152,8 +160,11 @@ class SchoolForm extends Component {
                     <Button
                         className='large-custom-btn'
                         size='large'
-                        onClick={()=>this.onSubmit()}>SAVE</Button>
+                        onClick={()=>this.sendDataToParent()}>SAVE</Button>
                 </div>
+                {showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null}
             </div>
         )
     }

@@ -54,6 +54,7 @@ const schools = [
         address2: '4A',
         zip: '6017',
         city: 'Ålesund',
+        state: null,
         country: 'NO'
     },
     {
@@ -61,7 +62,8 @@ const schools = [
         address1: '44 Whyte Ave',
         address2: '#16',
         zip: '11211',
-        city: 'New York',
+        city: 'Brooklyn',
+        state: 'NY',
         country: 'US'
     }
 ];

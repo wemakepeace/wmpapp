@@ -41,6 +41,9 @@ const School = conn.define('school', {
             notEmpty: { msg: 'Please fill out school address.'}
         }
     },
+    state: {
+        type: Sequelize.STRING
+    },
     country: {
         type: Sequelize.STRING,
         validate: {

@@ -58,6 +58,7 @@ const valuesForFrontend = [
     'address2',
     'zip',
     'city',
+    'state',
     'country'
 ];
 
