@@ -4,12 +4,6 @@ import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
 import countries from 'country-list';
 
-import WMPHeader from '../WMPHeader';
-import Feedback from '../Feedback';
-
-import { updateSchool } from '../../redux/actions/school';
-import { fetchClass } from '../../redux/actions/class';
-
 
 class SchoolForm extends Component {
     state = {
@@ -69,8 +63,6 @@ class SchoolForm extends Component {
     }
 
     render() {
-        // console.log('this.props.fetchSchoolData', this.props.fetchSchoolData)
-        // console.log('this.props.fetchSchoolData()', this.props.fetchSchoolData())
         const { name, address1, address2, zip, city, state, country, showFeedback } = this.state;
         const { feedback } = this.props;
 
@@ -162,9 +154,6 @@ class SchoolForm extends Component {
                         size='large'
                         onClick={()=>this.sendDataToParent()}>SAVE</Button>
                 </div>
-                {showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null}
             </div>
         )
     }
@@ -176,4 +165,4 @@ const mapStateToProps = state => {
         feedback: state.feedback
     }
 }
-export default connect(mapStateToProps, { updateSchool, fetchClass })(SchoolForm);
+export default connect(mapStateToProps)(SchoolForm);

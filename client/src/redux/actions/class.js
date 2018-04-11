@@ -49,6 +49,7 @@ const updateClass = (data) => {
             .then(response => response.data)
             .then(
                 ({ updatedClass, feedback }) => {
+                    console.log('updatedClass', updatedClass)
                     dispatch(updateClassSuccess(updatedClass, feedback))
                 },
                 (error) => {

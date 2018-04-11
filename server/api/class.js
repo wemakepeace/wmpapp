@@ -51,17 +51,16 @@ app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
 
-    Class.findOne({
-        where: { id },
-        include: [ AgeGroup, Term, School ]
-    })
+    Class.findOne({ id })
     .then(_class => {
         if (data.age_group.value !== _class.ageGroupId) {
             // update ageGroupId on class instance
             data.ageGroupId = data.age_group.value;
         }
+        // console.log('data.term.value', data.term.value)
         if (data.term.value !== _class.termId) {
             // update termId on class instance
+            // console.log('setting new termId')
             data.termId = data.term.value;
         }
 
@@ -69,23 +68,59 @@ app.put('/', (req, res, next) => {
             _class[key] = data[key];
         }
 
+        // console.log('_class before save', _class)
         _class.save()
+        // .then(() => {
+        //     Class.findOne({ id })
+        //     .then(_class => {
+        //          _class.getTerm()
+        //          .then(term => console.log('term', term))
+        //     })
+        // })
         .then(result => {
-                result = result.dataValues;
-                if (result.age_group && result.age_group.dataValues) {
-                    result.age_group = result.age_group.dataValues;
-                }
-                if (result.school && result.school.dataValues) {
-                    result.school = result.school.dataValues
-                }
-                if (result.term && result.term.dataValues) {
-                    result.term = result.term.dataValues;
-                }
+                Promise.all([result.getTerm(), result.getAge_group(), result.getSchool()])
+                .then(([term, age_group, school]) => {
+                    result = result.dataValues;
+                    // console.log('term', term)
+                    // console.log('age_group', age_group)
+                    result.age_group = age_group.dataValues;
+                    result.term = term.dataValues;
+                    result.school = school.dataValues;
 
-                res.send({
-                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    updatedClass: extractDataForFrontend(result, {})
+                    console.log('result', result)
+
+                    res.send({
+                        feedback: feedback(SUCCESS, ['Your information has been saved.']),
+                        updatedClass: extractDataForFrontend(result, {})
+                    })
                 })
+
+                // .then(term => term.dataValues)
+                // .then(_term => {
+                //     result.dataValues.term = _term
+                // })
+                // .then(() => {
+                //     result.getAge_group()
+                //     .then(age_group_data => age_group_data.dataValues )
+                //     .then(age_group => {
+                //         // console.log('age_group',age_group)
+                //         // console.log('result', result)
+                //         result.age_group = age_group
+                //         // console.log('result.dataValues', result.dataValues)
+                //     })
+                // })
+                // .then(() => {
+                    // if (result.age_group && result.age_group.dataValues) {
+                    //     result.age_group = result.age_group;
+                    // }
+                    // if (result.school && result.school.dataValues) {
+                    //     result.school = result.school
+                    // }
+                    // if (result.term && result.term.dataValues) {
+                    //     result.term = result.term;
+                    // }
+
+                // })
             })
             .catch(error => {
                 console.log('error', error)
