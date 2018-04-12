@@ -5,7 +5,6 @@ const fetchDataForSelectDropdown = (url) => {
     return axios.get(`/resources/${url}`)
         .then(response => response.data)
         .then(data => {
-            console.log('data', data)
             return { options: data }
         });
 }
