@@ -51,6 +51,9 @@ class SchoolForm extends Component {
         if (nextProps.feedback && nextProps.feedback.type) {
             this.setState({ showFeedback: true });
         }
+        if (nextProps.classes.currentClass !== this.props.classes.currentClass) {
+            this.setState(nextProps.classes.list[nextProps.classes.currentClass].school);
+        }
     }
 
     componentDidMount() {

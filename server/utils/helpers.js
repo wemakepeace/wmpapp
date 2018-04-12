@@ -52,6 +52,7 @@ const valuesForFrontend = [
     'size',
     'age_group',
     'label',
+    'value',
     'term',
     'school',
     'address1',

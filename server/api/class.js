@@ -27,13 +27,23 @@ app.get('/:id', (req, res, next) => {
     .then(_class => {
         _class = _class.dataValues;
         if (_class.age_group && _class.age_group.dataValues) {
-            _class.age_group = _class.age_group.dataValues;
+            const age_groupFormatted = {
+                label: _class.age_group.dataValues.name,
+                value: _class.age_group.dataValues.id
+            }
+            _class.age_group = age_groupFormatted;
         }
+
+        if (_class.term && _class.term.dataValues) {
+            const termFormatted = {
+                label: _class.term.dataValues.name,
+                value: _class.term.dataValues.id
+            }
+            _class.term = termFormatted;
+        }
+
         if (_class.school && _class.school.dataValues) {
             _class.school = _class.school.dataValues
-        }
-        if (_class.term && _class.term.dataValues) {
-            _class.term = _class.term.dataValues;
         }
 
         res.send({

@@ -12,17 +12,38 @@ import Feedback from '../Feedback';
 import SelectClass from '../SelectClass';
 import SchoolForm from './SchoolForm';
 
+// state = {
+//     class: {},
+//     school: {}
+// }
+
 
 class ClassForm extends Component {
-    state = {
-        name: '',
-        size: '',
-        age_group: null,
-        term: '',
-        languageProficiency: '',
-        language: '',
-        showFeedback: false
+    constructor(props) {
+        super(props);
+        this.state = this.getDefaultState(props)
     }
+
+    // state = {
+    //     name: '',
+    //     size: '',
+    //     age_group: null,
+    //     term: '',
+    //     languageProficiency: '',
+    //     language: '',
+    //     showFeedback: false
+    // }
+
+    // onInputChange = (ev, key, objName) => {
+    //     this.setState({
+    //         [objName]: {
+    //             ...this.state[objName],
+    //             [key]: ev.target.value
+    //         },
+    //         showFeedback: false
+    //     });
+    //     // this.setState({ _class[name]: ev.target.value, showFeedback: false })
+    // }
 
     onInputChange = (ev, key) => this.setState({ [key]: ev.target.value, showFeedback: false })
 
@@ -35,29 +56,35 @@ class ClassForm extends Component {
         }
     }
 
-    renderComponent = props => {
-        if (props.classes && props.classes.list) {
+
+    // updateState = ({ classes }) => {
+    // const { currentClass, list } = classes;
+
+
+    getDefaultState = props => {
+
+        let defaultState = {
+                name: '',
+                size: '',
+                age_group: null,
+                term: '',
+                languageProficiency: '',
+                language: '',
+                showFeedback: false
+            };
+
+        if (props.classes && props.classes.list && props.classes.currentClass) {
             const classes = props.classes.list;
             const currentClass = classes[props.classes.currentClass];
 
-            this.setState(currentClass);
+            defaultState = currentClass;
 
-            if (currentClass && currentClass.age_group ) {
-                const age_group = this.createSelectObject(currentClass.age_group.name, currentClass.age_group.id)
-
-                this.setState({ age_group });
-            }
-
-            if (currentClass && currentClass.term ) {
-                const term = this.createSelectObject(currentClass.term.name, currentClass.term.id);
-
-                this.setState({ term });
-            }
         }
+        return defaultState;
     }
 
     componentDidMount() {
-        return this.renderComponent(this.props);
+        // return this.getDefaultState(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -66,7 +93,8 @@ class ClassForm extends Component {
         }
 
         if (nextProps.classes.currentClass !== this.props.classes.currentClass) {
-            return this.renderComponent(nextProps);
+            const newState = this.getDefaultState(nextProps);
+            this.setState(newState);
         }
     }
 
