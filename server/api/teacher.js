@@ -32,8 +32,8 @@ app.get('/', (req, res, next) => {
             teacher = teacher.dataValues;
             teacher.classes = teacher.classes.map(_class => {
                 return {
-                    name: _class.dataValues.name,
-                    id: _class.dataValues.id
+                    label: _class.dataValues.name,
+                    value: _class.dataValues.id
                 }
             });
 

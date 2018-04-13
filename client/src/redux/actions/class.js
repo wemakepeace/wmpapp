@@ -1,14 +1,17 @@
 import { UPDATE_ERROR  } from '../constants/teacher';
-import { UPDATE_CLASS_SUCCESS, UPDATE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
+import { SAVE_CLASS_SUCCESS, SAVE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
+
+/* is this a good approach ? */
+import { createOrUpdateSchool } from './school';
 
 import axios from 'axios';
 
 const removeClass = () => {
     return dispatch => {
-        return dispatch({ type: FETCH_CLASS, currentClass: null})
+        localStorage.removeItem('currentClass');
+        return dispatch({ type: FETCH_CLASS, currentClass: null});
     }
 }
-
 
 const fetchClass = (id, shouldFetch) => {
     return dispatch => {
@@ -29,7 +32,7 @@ const fetchClass = (id, shouldFetch) => {
                     },
                     (error) => {
                         const feedback = error.response.data.feedback;
-                        return dispatch({ type: UPDATE_CLASS_ERROR, feedback });
+                        return dispatch({ type: SAVE_CLASS_ERROR, feedback });
                     })
         } else {
             dispatch({ type: FETCH_CLASS, currentClass: id });
@@ -37,26 +40,73 @@ const fetchClass = (id, shouldFetch) => {
     }
 }
 
+const removeCurrentClass = () => {
+    return dispatch => {
+        return dispatch({ type: FETCH_CLASS, currentClass: null })
+    }
+}
 
-const updateClass = (data) => {
-    return (dispatch) => {
-        return axios.put('/class', data)
+const createClass = (data) => {
+    console.log('data', data)
+    return dispatch => {
+        return axios.post('/class', data)
+            .then(response => response.data)
+            .then(_class => {
+
+            })
+    }
+}
+
+const saveClass = (data) => {
+    // if (data.id) {
+        // update class
+    return dispatch => {
+        return axios.post('/class', data)
             .then(response => response.data)
             .then(
-                ({ updatedClass, feedback }) => {
-                    dispatch(updateClassSuccess(updatedClass, feedback));
+                ({ _class, feedback }) => {
+                    console.log('_class', _class)
+                    dispatch(SaveClassSuccess(_class, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
                     dispatch({ type: UPDATE_ERROR, feedback });
                 })
     }
-};
+    // } else {
+    //     // create class
+    //     return axios.post('/class', data)
+    //         .then(response => response.data)
+    //         .then(
+    //             ({ updatedClass, feedback }) => {
+    //                 dispatch(updateClassSuccess(updatedClass, feedback));
+    //             },
+    //             (error) => {
+    //                 const feedback = error.response.data.feedback;
+    //                 dispatch({ type: UPDATE_ERROR, feedback });
+    //             })
+    // }
+}
 
-const updateClassSuccess = (updatedClass, feedback) => {
+// const updateClass = (data) => {
+//     return dispatch => {
+//         return axios.put('/class', data)
+//             .then(response => response.data)
+//             .then(
+//                 ({ updatedClass, feedback }) => {
+//                     dispatch(updateClassSuccess(updatedClass, feedback));
+//                 },
+//                 (error) => {
+//                     const feedback = error.response.data.feedback;
+//                     dispatch({ type: UPDATE_ERROR, feedback });
+//                 })
+//     }
+// };
+
+const SaveClassSuccess = (_class, feedback) => {
     return {
-        type: UPDATE_CLASS_SUCCESS,
-        updatedClass,
+        type: SAVE_CLASS_SUCCESS,
+        _class,
         feedback
     }
 };
@@ -65,5 +115,7 @@ const updateClassSuccess = (updatedClass, feedback) => {
 export {
     fetchClass,
     removeClass,
-    updateClass
+    createClass,
+    saveClass,
+    removeCurrentClass
 };

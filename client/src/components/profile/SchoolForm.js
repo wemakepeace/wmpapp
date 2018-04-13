@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
 import countries from 'country-list';
 
@@ -34,8 +33,8 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
 
     return (
         <div>
-            <h4> School Address</h4>
-            <p>This is the address that will be used in the Exchange for sending letters.</p>
+            <h4> School Mailing Address</h4>
+            <p>This address will be used when sending letters to your class.</p>
             <div className='form-row'>
                 <label className='form-label'>School name</label>
                 <span className='form-input-span'>
@@ -109,15 +108,10 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
                     {<Async
                         name='form-field-name'
                         value={country}
-                        onChange={(select) =>  onLocalSelectOptionChange(select, 'country')}
+                        onChange={(select) => onLocalSelectOptionChange(select, 'country')}
                         loadOptions={fetchCountries}
                     />}
                 </span>
-            </div>
-            <div className='form-row'>
-                <Button
-                    className='large-custom-btn'
-                    size='large'>SAVE</Button>
             </div>
         </div>
     )

@@ -12,7 +12,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
     return (
         <div>
             <h4>Class Information</h4>
-            <p>This information will be used to facilitate the Exchange.</p>
+            <p>Please fill in information about your class.</p>
             <div className='form-row'>
                 <label className='form-label'>Class name</label>
                 <span className='form-input-span'>
@@ -47,7 +47,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
                 </span>
             </div>
             <div className='form-row'>
-                <label className='form-label-wide'>When would you like to participate in the Exchange Program?</label>
+                <label className='form-label-wide'>When would you like your class to participate in the Exchange Program?</label>
                 <span className='form-input-span'>
                     <Async
                         className='select-country'

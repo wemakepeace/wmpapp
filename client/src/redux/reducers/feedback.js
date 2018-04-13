@@ -8,7 +8,7 @@ import {
     UPDATE_ERROR,
     UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
 
-import { UPDATE_CLASS_SUCCESS } from '../constants/class'
+import { SAVE_CLASS_SUCCESS } from '../constants/class'
 import { UPDATE_SCHOOL_SUCCESS } from '../constants/school';
 ;
 
@@ -19,7 +19,7 @@ const feedback = (state = initialState, action) => {
         case CREATE_TEACHER_SUCCESS:
         case LOGIN_SUCCESS:
         case UPDATE_TEACHER_SUCCESS:
-        case UPDATE_CLASS_SUCCESS:
+        case SAVE_CLASS_SUCCESS:
         case CREATE_TEACHER_ERROR:
         case LOGIN_ERROR:
         case UPDATE_ERROR:

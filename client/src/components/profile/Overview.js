@@ -13,7 +13,7 @@ import { getCountryName } from '../../utils/helpers';
 class Overview extends Component {
 
     render() {
-        const { firstName, lastName } = this.props.teacher;
+        const { firstName, lastName, email, phone } = this.props.teacher;
         const { classes } = this.props;
         let currentClass;
 
@@ -25,8 +25,8 @@ class Overview extends Component {
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>
-                    <p>You can edit your personal profile and manage all your enrolled classes throught this portal.</p>
-                    <p>Select an existing class in the top right corner or register a new class, and use the left side menu to navigate.</p>
+                    <p>You can edit your teacher profile and manage all your enrolled classes through this portal.</p>
+                    <p>Select an existing class in the top right corner or register a new class. Use the left side menu to navigate.</p>
                     <p>Once a class has been matched with another class you will be able to communicate with the other class' teacher through Messages.</p>
                 </div>
                 <div>
@@ -44,6 +44,21 @@ class Overview extends Component {
                         </div>
                         : null
                     }
+                    <div className='div-display-inline-block'>
+                        <div className='class-overview'>
+                            <div className=''>
+                                <label>Teacher</label>
+                                <label>Email</label>
+                                <label>Phone</label>
+                            </div>
+                            <div className=''>
+                                <span>{firstName} {lastName}</span>
+                                <span>{email}</span>
+                                <span>{phone}</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {currentClass !== undefined
                         ? <div className='div-display-inline-block'>
                             <div className='class-overview'>
@@ -55,11 +70,11 @@ class Overview extends Component {
                                 <div className=''>
                                     <span>{currentClass.size}</span>
                                     { currentClass.age_group
-                                        ? <span>{currentClass.age_group.name}</span>
+                                        ? <span>{currentClass.age_group.label}</span>
                                         : <span>Not defined yet.</span>
                                     }
                                     { currentClass.term
-                                        ? <span>{currentClass.term.name}</span>
+                                        ? <span>{currentClass.term.label}</span>
                                         : <span>Not defined yet.</span>
                                     }
                                 </div>

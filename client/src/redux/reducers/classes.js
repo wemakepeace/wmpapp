@@ -1,4 +1,4 @@
-import { UPDATE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
+import { SAVE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
 import { UPDATE_SCHOOL_SUCCESS } from '../constants/school';
 import { LOGOUT_SUCCESS } from '../constants/teacher';
 
@@ -8,10 +8,13 @@ const classes = (state = initialState, action) => {
     switch(action.type) {
         case FETCH_CLASS:
             return { ...state, list: { ...state.list, ...action._class }, currentClass: action.currentClass }
-        case UPDATE_CLASS_SUCCESS:
-            const classId = action.updatedClass.id;
+        case SAVE_CLASS_SUCCESS:
+            const classId = action._class.id;
             let newState = { ...state }
-            newState.list[classId] = { ...action.updatedClass }
+
+            newState.list[classId] = { ...action._class }
+            newState.currentClass = action._class.id;
+
             return newState
         case UPDATE_SCHOOL_SUCCESS:
             const list = state.list;

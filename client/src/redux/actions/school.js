@@ -2,9 +2,23 @@ import axios from 'axios';
 import { UPDATE_SCHOOL_SUCCESS, UPDATE_SCHOOL_ERROR } from '../constants/school';
 
 
-const updateSchool = data => {
+const createSchool = (data) => {
+    console.log('data', data)
+    return dispatch => {
+        return axios.post('/school', data)
+            .then(response => response.data)
+            .then(x => console.log(x))
+    }
+};
+
+
+const createOrUpdateSchool = data => {
     if (data.id === "") {
         data.id = null;
+    }
+
+    if (data.country) {
+        data.country = data.country.value;
     }
 
     return dispatch => {
@@ -31,5 +45,5 @@ const updateSchool = data => {
 }
 
 export {
-    updateSchool
+    createOrUpdateSchool
 }

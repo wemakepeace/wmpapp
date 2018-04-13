@@ -57,65 +57,80 @@ app.get('/:id', (req, res, next) => {
     })
 });
 
-app.put('/', (req, res, next) => {
+// create update class and school instances
+app.post('/', (req, res, next) => {
     const data = req.body;
-    const { id } = data;
+    console.log('data', data)
+    // data.termId = data.term.value;
+    // data.ageGroupId = data.age_group.value;
+    // get term value, set as termId to class
+    // get age_group value, set as age_groupId to class
 
-    Class.findById(id)
-    .then(_class => {
-        if (data.age_group && (data.age_group.value !== _class.ageGroupId)) {
-            data.ageGroupId = data.age_group.value;
-        }
-        if (data.term && (data.term.value !== _class.termId)) {
-            data.termId = data.term.value;
-        }
+    Class.findById(data.id)
+        .then(_class => {
+            if (!_class) {
+                return Class.create(data);
+            } else {
+                if (data.age_group && (data.age_group.value !== _class.ageGroupId)) {
+                    data.ageGroupId = data.age_group.value;
+                }
+                if (data.term && (data.term.value !== _class.termId)) {
+                    data.termId = data.term.value;
+                }
 
-        for(var key in data) {
-            _class[key] = data[key];
-        }
+                for (var key in data) {
+                    _class[key] = data[key];
+                }
 
-        _class.save()
-        .then(updatedClass => {
-                Promise.all([updatedClass.getTerm(), updatedClass.getAge_group(), updatedClass.getSchool()])
-                .then(([term, age_group, school]) => {
-                    updatedClass = updatedClass.dataValues;
+            return _class.save()
+            }
+        })
+        .then(_class => {
+            Promise.all([
+                _class.getTerm(),
+                _class.getAge_group(),
+                _class.getSchool()
+            ])
+            .then(([term, age_group, school]) => {
+                _class = _class.dataValues;
 
-                    if (term && term.dataValues) {
-                        updatedClass.term = term.dataValues;
+                if (term && term.dataValues) {
+                    const termFormatted = {
+                        label: term.dataValues.name,
+                        value: term.dataValues.id
                     }
+                    _class.term = termFormatted;
+                }
 
-                    if (age_group && age_group.dataValues) {
-                        updatedClass.age_group = age_group.dataValues;
+                if (age_group && age_group.dataValues) {
+                    const age_groupFormatted = {
+                        label: age_group.dataValues.name,
+                        value: age_group.dataValues.id
                     }
+                    _class.age_group = age_groupFormatted;
+                }
 
-                    if (school && school.dataValues) {
-                        updatedClass.school = school.dataValues;
-                    }
+                if (school && school.dataValues) {
+                    _class.school = school.dataValues;
+                }
 
-                    res.send({
-                        feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                        updatedClass: extractDataForFrontend(updatedClass, {})
-                    })
+                console.log('created or updated class', _class)
+
+                res.send({
+                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
+                    _class: extractDataForFrontend(_class, {})
                 })
-                // [TODO] handle error
-                .catch(error => console.log(error))
             })
-            .catch(error => {
-                console.log('error', error)
-                const defaultError = ['Something went wrong when updating your profile.'];
-                const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+        })
+        .catch(error => {
+            console.log('error', error)
+            const defaultError = ['Something went wrong when saving your information.'];
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-                res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
-            })
-    })
-    .catch(error => {
-        // [TODO] make sure that the errors go through
-        console.log('error', error)
-        const defaultError = ['Something went wrong when updating your profile.']
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        })
+})
 
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
-    })
-});
+// update class and school instances
 
 module.exports = app;

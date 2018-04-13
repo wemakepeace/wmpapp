@@ -26,7 +26,11 @@ app.post('/', (req, res) => {
     .then(schoolInstance => {
         /** Set schoolId to class instance **/
         Class.findById(data.classId)
-        .then(_class => _class.setSchool(schoolInstance))
+        .then(_class => {
+            if (_class) {
+                 _class.setSchool(schoolInstance)
+            }
+        })
         .then(() => {
             res.send({
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),

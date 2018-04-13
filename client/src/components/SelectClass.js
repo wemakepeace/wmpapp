@@ -12,59 +12,52 @@ class SelectClass extends Component  {
     }
 
     onClassSelect = (selected) => {
-        this.setState({ selected });
 
         if (selected === null) {
-            return this.props.removeClass()
+            this.setState({selected})
+            return this.props.removeClass();
         }
 
-        if (this.props.classes && this.props.classes.list && this.props.classes.list[selected.value]) {
-            this.props.fetchClass(selected.value, false)
-        } else {
-            this.props.fetchClass(selected.value, true);
-        }
+        const fetchClassFromServer = this.props.classes && this.props.classes.list && this.props.classes.list[selected.value] ? false : true
+
+        this.props.fetchClass(selected.value, fetchClassFromServer);
     }
 
-    setSelected = (props, options) => {
-        if(props.classes && props.classes.currentClass) {
-            const selected = options.find(option => {
-                return option.value === props.classes.currentClass
+    setSelected = (classes, options) => {
+
+        let selected = null;
+        if(classes && classes.currentClass) {
+            selected = options.find(option => {
+                return option.value === classes.currentClass
             });
-
-            this.setState({ selected });
         }
+
+        if (selected) {
+            this.setState({ selected, options });
+        } else {
+            this.setState({ options });
+        }
+
     }
+
 
     componentDidMount() {
-        const classes = this.props.teacher.classes;
-        const options = classes.map(_class => {
-            return {
-                label: _class.name,
-                value: _class.id
-            }
-        });
+        const classes = this.props.classes;
+        const options = this.props.teacher.classes;
 
-        this.setState({ options });
-
-        return this.setSelected(this.props, options)
+        this.setSelected(classes, options)
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.classes && nextProps.classes.currentClass !== this.props.classes.currentClass) {
-            return this.setSelected(nextProps, this.state.options);
-        }
+        const classes = nextProps.classes;
+        const options = nextProps.teacher.classes || [];
+
+        this.setSelected(classes, options);
     }
 
     render() {
         const { selected, options } = this.state;
-        let currentClass;
-
-        if (this.props.classes && this.props.classes.currentClass) {
-            currentClass = this.props.classes.list[this.props.classes.currentClass];
-        }
-
         const value = selected && selected.value;
-
 
         return (
             <div className='select-class'>

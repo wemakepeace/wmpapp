@@ -48,11 +48,6 @@ class TeacherForm extends Component {
                 <div className='profile-segment'>
                     <h4>Teacher Information</h4>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
-                    {
-                        showFeedback && (feedback && feedback.type)
-                        ? <Feedback {...feedback} />
-                        : null
-                    }
                     <div className='form-row'>
                         <label className='form-label'>First name</label>
                         <span className='form-input-span'>
@@ -115,6 +110,9 @@ class TeacherForm extends Component {
                             size='large'
                             onClick={()=>this.onSubmit()}>SAVE</Button>
                     </div>
+                    { showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null }
                 </div>
             </div>
         )

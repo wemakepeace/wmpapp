@@ -3,6 +3,8 @@ import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
+import { SAVE_CLASS_SUCCESS } from '../constants/class';
+
 
 const initialState = {};
 
@@ -16,6 +18,13 @@ const teacher = (state = initialState, action) => {
             return {}
         case UPDATE_TEACHER_SUCCESS:
             return {...state, ...action.teacher }
+        case SAVE_CLASS_SUCCESS:
+            const { id, name } = action._class;
+            console.log('id, name', id, name)
+            console.log('state', state)
+            return {
+                ...state,
+                classes: state.classes.concat([ { label: name, value: id }])}
     }
     return state
 }
