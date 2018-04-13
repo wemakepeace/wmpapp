@@ -35,11 +35,10 @@ class SelectClass extends Component  {
         if (selected) {
             this.setState({ selected, options });
         } else {
+            // why does it not rerender?
             this.setState({ options });
         }
-
     }
-
 
     componentDidMount() {
         const classes = this.props.classes;

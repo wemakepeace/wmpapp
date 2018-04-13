@@ -60,29 +60,55 @@ app.get('/:id', (req, res, next) => {
 // create update class and school instances
 app.post('/', (req, res, next) => {
     const data = req.body;
-    console.log('data', data)
-    // data.termId = data.term.value;
-    // data.ageGroupId = data.age_group.value;
-    // get term value, set as termId to class
-    // get age_group value, set as age_groupId to class
+    const schoolData = data.school;
+
+    if (data.age_group) {
+        data.ageGroupId = data.age_group.value
+    }
+
+    if (data.term) {
+        data.termId = data.term.value
+    }
+
+    if (schoolData && schoolData.country) {
+        schoolData.country = schoolData.country.value;
+    }
 
     Class.findById(data.id)
         .then(_class => {
+            /** If class does not exist **/
+            /** Create class, school and add schoolId to class **/
+
             if (!_class) {
-                return Class.create(data);
+                return Class.create(data)
+                .then(_class => {
+                    return School.create(schoolData)
+                    .then(school => {
+                        _class.setSchool(school.dataValues.id)
+                        return _class
+                    })
+                })
             } else {
-                if (data.age_group && (data.age_group.value !== _class.ageGroupId)) {
-                    data.ageGroupId = data.age_group.value;
-                }
-                if (data.term && (data.term.value !== _class.termId)) {
-                    data.termId = data.term.value;
-                }
-
-                for (var key in data) {
-                    _class[key] = data[key];
+                const classPromise = () => {
+                    for (var key in data) {
+                        _class[key] = data[key];
+                    }
+                    return _class.save()
                 }
 
-            return _class.save()
+                const schoolPromise = () => {
+                    return _class.getSchool()
+                    .then(school => {
+                        for (var key in schoolData) {
+                            school[key] = schoolData[key];
+                        }
+
+                        return school.save()
+                    })
+                 }
+
+                return Promise.all([classPromise(), schoolPromise()])
+                .then(([updatedClass, updatedSchool]) => updatedClass)
             }
         })
         .then(_class => {
@@ -114,8 +140,6 @@ app.post('/', (req, res, next) => {
                     _class.school = school.dataValues;
                 }
 
-                console.log('created or updated class', _class)
-
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
                     _class: extractDataForFrontend(_class, {})
@@ -129,8 +153,6 @@ app.post('/', (req, res, next) => {
 
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
         })
-})
-
-// update class and school instances
+});
 
 module.exports = app;

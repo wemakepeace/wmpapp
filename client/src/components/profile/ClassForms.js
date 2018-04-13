@@ -86,42 +86,13 @@ class ClassForms extends Component {
 
     submitData = () => {
 
-        // if (!this.state.newClass) {
-            let classData = this.state;
-            let schoolData = this.state.school;
-            classData.id = this.props.classes.currentClass;
-            classData.teacherId = this.props.teacher.id;
-            schoolData.classId = this.props.classes.currentClass;
-
-
-            // consolidate to one call
-            // saveClass
-            // if class and school has ids,
-                // the class already exists do an update
-            // else
-                // create a new class and new school address
-
-            this.props.saveClass(classData);
-            // return this.props.createOrUpdateSchool(schoolData)
-            // .then(res => {
-            //     this.props.saveClass(classData);
-            // });
-        // } else {
-            // create new class and school
-            // class belongsto school, so we need schoolId for class
-            //
-            // return this.props.createOrUpdateSchool(this.state.school)
-        //     .then(res => {
-        //         console.log('res', res)
-        //         this.state.schoolId = res.id;
-        //         this.props.createClass(this.state);
-        //     })
-
-        // }
+        let classData = this.state;
+        classData.id = this.props.classes.currentClass;
+        classData.teacherId = this.props.teacher.id;
+        this.props.saveClass(classData);
     }
 
     createNewClass = () => {
-        console.log('hei')
         this.props.removeCurrentClass();
         localStorage.removeItem('currentClass');
         this.setState({ newClass: true})
