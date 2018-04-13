@@ -33,6 +33,9 @@ class SelectClass extends Component  {
         }
 
         if (selected) {
+            console.log('hittn here too')
+            console.log('selected', selected)
+            console.log('options', options)
             this.setState({ selected, options });
         } else {
             // why does it not rerender?
@@ -49,8 +52,8 @@ class SelectClass extends Component  {
 
     componentWillReceiveProps(nextProps) {
         const classes = nextProps.classes;
-        const options = nextProps.teacher.classes || [];
-
+        const options = nextProps.teacher.classes;
+        console.log('hiitttin', classes)
         this.setSelected(classes, options);
     }
 
