@@ -20,35 +20,23 @@ const teacher = (state = initialState, action) => {
             return {...state, ...action.teacher }
         case SAVE_CLASS_SUCCESS:
             const { id, name } = action._class;
+            let classExists = false;
 
-            console.log('state.classes', state.classes)
-            let classExists = false
             let updatedClassArray = state.classes.map(_class => {
                 if (_class.value === id) {
-
                     classExists = true;
-
-                    return {
-                        label: name,
-                        value: id
-                    }
+                    return { label: name, value: id }
                 }
                 return _class
-            })
+            });
 
-            console.log('updatedClassArray before checking', updatedClassArray)
             if (classExists === false) {
-                updatedClassArray = updatedClassArray.concat([{ label: name, value: id }])
+                updatedClassArray = updatedClassArray.concat([{ label: name, value: id }]);
             }
-            console.log('updatedClassArray', updatedClassArray)
 
-            return {
-                ...state,
-                classes: updatedClassArray
-            }
+            return { ...state, classes: updatedClassArray }
     }
-    return state
+    return state;
 }
-
 
 export default teacher;

@@ -6,13 +6,6 @@ import { createOrUpdateSchool } from './school';
 
 import axios from 'axios';
 
-const removeClass = () => {
-    return dispatch => {
-        localStorage.removeItem('currentClass');
-        return dispatch({ type: FETCH_CLASS, currentClass: null});
-    }
-}
-
 const fetchClass = (id, shouldFetch) => {
     return dispatch => {
         if (shouldFetch) {
@@ -41,6 +34,8 @@ const fetchClass = (id, shouldFetch) => {
 }
 
 const removeCurrentClass = () => {
+    console.log('running')
+    localStorage.removeItem('currentClass');
     return dispatch => {
         return dispatch({ type: FETCH_CLASS, currentClass: null })
     }
@@ -114,7 +109,6 @@ const SaveClassSuccess = (_class, feedback) => {
 
 export {
     fetchClass,
-    removeClass,
     createClass,
     saveClass,
     removeCurrentClass

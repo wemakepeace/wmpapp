@@ -63,7 +63,7 @@ class Main extends Component {
                         </div>
                         <div className='profile-form-column'>
                         {   showTab === 'overview'
-                            ? <Overview />
+                            ? <Overview onViewChange={this.onViewChange} />
                             : showTab === 'teacher'
                             ? <TeacherForm />
                             : showTab === 'classprofile'
@@ -82,7 +82,7 @@ class Main extends Component {
 const mapStateToProps = state => {
     const className = state.classes && state.classes.currentClass
         ? state.classes.list[state.classes.currentClass].name
-        : ''
+        : '';
     return {
         teacher: state.teacher,
         className

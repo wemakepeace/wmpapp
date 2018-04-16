@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 
-import { fetchClass, removeClass } from '../redux/actions/class';
+import { fetchClass, removeCurrentClass } from '../redux/actions/class';
 
 
 class SelectClass extends Component  {
@@ -15,7 +15,7 @@ class SelectClass extends Component  {
 
         if (selected === null) {
             this.setState({selected})
-            return this.props.removeClass();
+            return this.props.removeCurrentClass();
         }
 
         const fetchClassFromServer = this.props.classes && this.props.classes.list && this.props.classes.list[selected.value] ? false : true
@@ -25,22 +25,16 @@ class SelectClass extends Component  {
 
     setSelected = (classes, options) => {
 
-        let selected = null;
+        let selected = '';
+
         if(classes && classes.currentClass) {
             selected = options.find(option => {
                 return option.value === classes.currentClass
             });
         }
 
-        if (selected) {
-            console.log('hittn here too')
-            console.log('selected', selected)
-            console.log('options', options)
-            this.setState({ selected, options });
-        } else {
-            // why does it not rerender?
-            this.setState({ options });
-        }
+        this.setState({ selected, options });
+
     }
 
     componentDidMount() {
@@ -53,7 +47,7 @@ class SelectClass extends Component  {
     componentWillReceiveProps(nextProps) {
         const classes = nextProps.classes;
         const options = nextProps.teacher.classes;
-        console.log('hiitttin', classes)
+
         this.setSelected(classes, options);
     }
 
@@ -82,4 +76,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { fetchClass, removeClass })(SelectClass);
+export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(SelectClass);
