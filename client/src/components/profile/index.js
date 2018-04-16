@@ -8,21 +8,42 @@ import SchoolForm from './SchoolForm';
 import ClassFormsContainer from './ClassFormsContainer';
 import TeacherForm from './TeacherForm';
 
-class Main extends Component {
-    state = { showTab: 'overview' }
+import { removeCurrentClass } from '../../redux/actions/class';
 
-    onViewChange = (showTab) => this.setState({ showTab })
+
+class Main extends Component {
+    state = {
+        showTab: 'overview',
+        newClass: false
+    }
+
+    onViewChange = (showTab, newClass) => {
+        if (showTab === 'classforms' && newClass) {
+            this.createNewClass();
+        }
+
+        this.setState({ showTab });
+    }
+
+    createNewClass = () => {
+        this.props.removeCurrentClass();
+        localStorage.removeItem('currentClass');
+        this.setState({ newClass: true})
+    }
+
 
     getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : '';
 
     render() {
-        const { className } = this.props;
-        const { showTab } = this.state;
+        const { className, history } = this.props;
+        const { showTab, newClass } = this.state;
 
         return (
             <div className='page-container profile'>
                 <div className='page-content'>
-                    <WMPHeader />
+                    <WMPHeader
+                        history={history}
+                        onViewChange={this.onViewChange} />
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <div
@@ -35,14 +56,13 @@ class Main extends Component {
                                 onClick={() => this.onViewChange('teacher')}>
                                 <h3>TEACHER</h3>
                             </div>
-                            <div
-                                className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
-                                onClick={() => this.onViewChange('classprofile')}>
-                                <h3>CLASS</h3>
-                            </div>
-                            {className
+                            { newClass || className
                                 ? <div>
-
+                                    <div
+                                        className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
+                                        onClick={() => this.onViewChange('classforms')}>
+                                        <h3>CLASS</h3>
+                                    </div>
                                     <div
                                         className={`profile-menu-item ${this.getActiveClass('exchange')}`}
                                         onClick={() => this.onViewChange('exchange')}>
@@ -63,11 +83,13 @@ class Main extends Component {
                         </div>
                         <div className='profile-form-column'>
                         {   showTab === 'overview'
-                            ? <Overview onViewChange={this.onViewChange} />
+                            ? <Overview redirectTo={this.onViewChange} />
                             : showTab === 'teacher'
                             ? <TeacherForm />
-                            : showTab === 'classprofile'
-                            ? <ClassFormsContainer />
+                            : showTab === 'classforms'
+                            ? <ClassFormsContainer
+                                showComponent={newClass}
+                                redirectTo={this.onViewChange} />
                             : null
                         }
                         </div>
@@ -89,5 +111,5 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Main);
+export default connect(mapStateToProps, { removeCurrentClass })(Main);
 

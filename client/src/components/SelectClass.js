@@ -56,15 +56,14 @@ class SelectClass extends Component  {
         const value = selected && selected.value;
 
         return (
-            <div className='select-class'>
-                <h5>Class</h5>
                 <Select
+                    className='header-menu-item select-class'
                     name='form-field-name'
                     value={value}
+                    placeholder='Select Class...'
                     onChange={this.onClassSelect}
                     options={options}
                 />
-            </div>
         )
     }
 }

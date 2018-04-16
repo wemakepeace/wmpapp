@@ -10,11 +10,12 @@ import TeacherForm from './TeacherForm';
 import { fetchClass, removeCurrentClass } from '../../redux/actions/class';
 import { getCountryName } from '../../utils/helpers';
 
-const Overview = ({ onViewChange, teacher, classes, removeCurrentClass }) => {
+const Overview = ({ redirectTo, teacher, classes, removeCurrentClass }) => {
 
     const initiateNewClass = () => {
+        const newClass = true;
         removeCurrentClass();
-        return onViewChange('classprofile')
+        return redirectTo('classforms', newClass);
     }
 
 
@@ -30,9 +31,9 @@ const Overview = ({ onViewChange, teacher, classes, removeCurrentClass }) => {
         <div className='profile-form'>
             <div className='profile-segment'>
                 <h3>{`Welcome, ${firstName}`}!</h3>
-                <p>You can edit your teacher profile and manage all your enrolled classes through this portal.</p>
-                <p>Select an existing class in the top right corner or register a new class. Use the left side menu to navigate.</p>
-                <p>Once a class has been matched with another class you will be able to communicate with the other class' teacher through Messages.</p>
+                <p>Here you can edit your teacher profile, register a new class and manage all your enrolled classes.</p>
+                <p>Select an existing class in the top right corner or register a new class. Use the left side menu to navigate the portal.</p>
+                <p>Once a class has been matched you will be able to communicate with the other class' teacher through Messages.</p>
             </div>
             <div>
                 [PROGRESS BAR FOR EXCHANGE]

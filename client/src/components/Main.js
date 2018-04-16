@@ -20,11 +20,12 @@ class Main extends Component {
     render() {
 
         const { showForm } = this.state;
+        const { history } = this.props;
 
         return (
             <div className='page-container login-signup'>
                 <div className='page-content'>
-                    <WMPHeader />
+                    <WMPHeader history={history} />
                     <div>
                         <div className='login-signup-container'>
                             <div className='second'>

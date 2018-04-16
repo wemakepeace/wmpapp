@@ -36,78 +36,39 @@ const fetchClass = (id, shouldFetch) => {
 }
 
 const removeCurrentClass = () => {
-    console.log('running')
     localStorage.removeItem('currentClass');
     return dispatch => {
         return dispatch({ type: FETCH_CLASS, currentClass: null })
     }
 }
 
-const createClass = (data) => {
-    console.log('data', data)
-    return dispatch => {
-        return axios.post('/class', data)
-            .then(response => response.data)
-            .then(_class => {
 
-            })
-    }
-}
+/** Will create class if class id does not exist **/
+/** Will update class otherwise **/
 
 const saveClass = (data) => {
-    // if (data.id) {
-        // update class
     return dispatch => {
         return axios.post('/class', data)
             .then(response => response.data)
             .then(
                 ({ _class, feedback }) => {
                     console.log('_class', _class)
-                    dispatch(SaveClassSuccess(_class, feedback));
+                    dispatch(saveClassSuccess(_class, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
                     dispatch({ type: UPDATE_ERROR, feedback });
                 })
     }
-    // } else {
-    //     // create class
-    //     return axios.post('/class', data)
-    //         .then(response => response.data)
-    //         .then(
-    //             ({ updatedClass, feedback }) => {
-    //                 dispatch(updateClassSuccess(updatedClass, feedback));
-    //             },
-    //             (error) => {
-    //                 const feedback = error.response.data.feedback;
-    //                 dispatch({ type: UPDATE_ERROR, feedback });
-    //             })
-    // }
 }
 
-// const updateClass = (data) => {
-//     return dispatch => {
-//         return axios.put('/class', data)
-//             .then(response => response.data)
-//             .then(
-//                 ({ updatedClass, feedback }) => {
-//                     dispatch(updateClassSuccess(updatedClass, feedback));
-//                 },
-//                 (error) => {
-//                     const feedback = error.response.data.feedback;
-//                     dispatch({ type: UPDATE_ERROR, feedback });
-//                 })
-//     }
-// };
-
-const SaveClassSuccess = (_class, feedback) => {
+const saveClassSuccess = (_class, feedback) => {
     return {
         type: SAVE_CLASS_SUCCESS,
         _class,
         feedback
     }
 };
-
 
 
 const createOrUpdateSchool = data => {
@@ -144,7 +105,6 @@ const createOrUpdateSchool = data => {
 
 export {
     fetchClass,
-    createClass,
     saveClass,
     removeCurrentClass,
     createOrUpdateSchool

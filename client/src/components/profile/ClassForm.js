@@ -11,7 +11,6 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
 
     return (
         <div>
-            <h4>Class Information</h4>
             <p>Please fill in information about your class.</p>
             <div className='form-row'>
                 <label className='form-label'>Class name</label>

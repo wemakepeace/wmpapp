@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
-
-import {
-    saveClass,
-    createClass,
-    removeCurrentClass,
-    createOrUpdateSchool } from '../../redux/actions/class';
+import { Redirect } from 'react-router-dom';
 
 import Feedback from '../Feedback';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
+
+import { saveClass, createOrUpdateSchool } from '../../redux/actions/class';
 
 class ClassFormsContainer extends Component {
     constructor(props) {
@@ -64,8 +61,7 @@ class ClassFormsContainer extends Component {
                 state: '',
                 country: ''
             },
-            showFeedback: false,
-            newClass: false
+            showFeedback: false
         }
 
         if (classes && classes.list && classes.currentClass) {
@@ -83,40 +79,31 @@ class ClassFormsContainer extends Component {
 
         if (currentClass !== previousCurrentClass) {
             const newState = this.getDefaultState(classes);
-            this.setState(newState);
+            this.setState({...newState, showFeedback: true});
         }
     }
 
     submitData = () => {
-
         let classData = this.state;
         classData.id = this.props.classes.currentClass;
         classData.teacherId = this.props.teacher.id;
         this.props.saveClass(classData);
     }
 
-    createNewClass = () => {
-        this.props.removeCurrentClass();
-        localStorage.removeItem('currentClass');
-        this.setState({ newClass: true})
-    }
-
     render() {
-        const { feedback, classes } = this.props;
+        const { feedback, classes, showComponent } = this.props;
         const { currentClass } = classes;
-        const { showFeedback, newClass } = this.state;
+        const { showFeedback } = this.state;
 
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
-                { !currentClass && !newClass
-                    ? <div className='container-center-content'>
-                        <Button
-                            onClick={this.createNewClass}
-                            size='massive'
-                            className='add-class'>Register New Class</Button>
-                    </div>
-                    : <div>
+                { showComponent || currentClass
+                    ? <div>
+
+                        {currentClass
+                            ? <h3>Information and Settings for Class {classes.list[currentClass].name}</h3>
+                            : <h3> Register New Class </h3>}
                         <ClassForm
                             classData={this.state}
                             onInputChange={this.onInputChange.bind(this)}
@@ -136,6 +123,7 @@ class ClassFormsContainer extends Component {
                             ? <Feedback {...feedback} />
                             : null }
                     </div>
+                     : <span>{this.props.redirectTo('overview')}</span>
                 }
                 </div>
             </div>
@@ -151,12 +139,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = () => {
-    return {
-        updateClass, createOrUpdateSchool, createClass, removeCurrentClass
-    }
-}
-
-export default connect(mapStateToProps, { saveClass, createOrUpdateSchool, createClass, removeCurrentClass })(ClassFormsContainer);
+export default connect(mapStateToProps, { saveClass, createOrUpdateSchool })(ClassFormsContainer);
 
 

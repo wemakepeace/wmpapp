@@ -1,6 +1,12 @@
 @import '../partials/_colors';
 @import '../partials/_mixins';
 
+/** TEMP: remove before production **/
+.ui.menu {
+    margin-bottom: 0;
+}
+
+
 body {
     background-color: $lightgray !important;
 }
@@ -24,7 +30,6 @@ input:focus, textarea:focus, select:focus{
 
 .page-container {
     display: flex !important;
-    // height: 86vh;
     width: 100%;
 
     .page-content {
@@ -72,19 +77,49 @@ input:focus, textarea:focus, select:focus{
     }
     .logged-in {
         flex: 1;
-        padding: 15px;
         font-size: 15px;
         color: white;
 
         .logged-in-inner {
-            width: 230px;
             float: right;
             font-size: 1.3em;
             line-height: 1.3em;
-            padding: 4px 12px;
-            border: 2px solid white;
+            padding: 13px;
+            display: flex;
+            font-size: 1.7rem;
+
+
+            span.header-menu-item {
+                padding: 8px 20px;
+                border-right: 1px solid #fff;
+                cursor: pointer;
+            }
+
+            span.header-menu-item.logout {
+               border-right: none;
+            }
+
+
+            span.header-menu-item:hover {
+               text-decoration: underline;
+            }
+
+            .header-menu-item.select-class {
+                display: inline-block;
+                margin: 0px;
+                width: 180px;
+
+                h5 {
+                    display: inline-block;
+                }
+
+                .Select.is-clearable.is-searchable.Select--single {
+                    display: inline-block;
+                }
+            }
         }
     }
+
 }
 
 
