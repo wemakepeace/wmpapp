@@ -2,9 +2,9 @@ import { UPDATE_ERROR  } from '../constants/teacher';
 import {
     SAVE_CLASS_SUCCESS,
     SAVE_CLASS_ERROR,
-    FETCH_CLASS,
-    UPDATE_SCHOOL_SUCCESS,
-    UPDATE_SCHOOL_ERROR } from '../constants/class';
+    FETCH_CLASS } from '../constants/class';
+
+import { FETCH_DATA_ERROR } from '../constants/global';
 
 import axios from 'axios';
 
@@ -27,7 +27,7 @@ const fetchClass = (id, shouldFetch) => {
                     },
                     (error) => {
                         const feedback = error.response.data.feedback;
-                        return dispatch({ type: SAVE_CLASS_ERROR, feedback });
+                        return dispatch({ type: FETCH_DATA_ERROR, feedback });
                     })
         } else {
             dispatch({ type: FETCH_CLASS, currentClass: id });
@@ -70,42 +70,8 @@ const saveClassSuccess = (_class, feedback) => {
     }
 };
 
-
-const createOrUpdateSchool = data => {
-    if (data.id === "") {
-        data.id = null;
-    }
-
-    if (data.country) {
-        data.country = data.country.value;
-    }
-
-    return dispatch => {
-        return axios.post('/school', { data })
-        .then(response => {
-            return response.data
-        })
-        .then(
-                ({ updatedSchool, feedback }) => {
-                    const currentClassId = localStorage.getItem('currentClass');
-                    dispatch({
-                        type: UPDATE_SCHOOL_SUCCESS,
-                        currentClassId: currentClassId,
-                        updatedSchool,
-                        feedback
-                    });
-                },
-                (error) => {
-                    console.log('error', error)
-                    // dispatch({type: UPDATE_SCHOOL_ERROR, 'some data '})
-                }
-        )
-    }
-}
-
 export {
     fetchClass,
     saveClass,
-    removeCurrentClass,
-    createOrUpdateSchool
+    removeCurrentClass
 };

@@ -31,11 +31,11 @@ class Main extends Component {
         this.setState({ newClass: true})
     }
 
-
     getActiveClass = (item) => this.state.showTab === item ? 'active-profile' : '';
 
     render() {
         const { className, history } = this.props;
+        const currentClass = this.props.classes.currentClass;
         const { showTab, newClass } = this.state;
 
         return (
@@ -56,28 +56,32 @@ class Main extends Component {
                                 onClick={() => this.onViewChange('teacher')}>
                                 <h3>TEACHER</h3>
                             </div>
-                            { newClass || className
+                            { newClass || currentClass
                                 ? <div>
                                     <div
-                                        className={`profile-menu-item ${this.getActiveClass('classprofile')}`}
+                                        className={`profile-menu-item ${this.getActiveClass('classforms')}`}
                                         onClick={() => this.onViewChange('classforms')}>
                                         <h3>CLASS</h3>
                                     </div>
-                                    <div
-                                        className={`profile-menu-item ${this.getActiveClass('exchange')}`}
-                                        onClick={() => this.onViewChange('exchange')}>
-                                        <h3>EXCHANGE</h3>
-                                    </div>
-                                    <div
-                                        className={`profile-menu-item ${this.getActiveClass('class')}`}
-                                        onClick={() => this.onViewChange('class')}>
-                                        <h3>MATERIALS</h3>
-                                    </div>
-                                    <div
-                                        className={`profile-menu-item ${this.getActiveClass('school')}`}
-                                        onClick={() => this.onViewChange('school')}>
-                                        <h3>MESSAGES</h3>
-                                    </div>
+                                    { currentClass
+                                        ? <div>
+                                            <div
+                                                className={`profile-menu-item ${this.getActiveClass('exchange')}`}
+                                                onClick={() => this.onViewChange('exchange')}>
+                                                <h3>EXCHANGE</h3>
+                                            </div>
+                                            <div
+                                                className={`profile-menu-item ${this.getActiveClass('materials')}`}
+                                                onClick={() => this.onViewChange('materials')}>
+                                                <h3>MATERIALS</h3>
+                                            </div>
+                                            <div
+                                                className={`profile-menu-item ${this.getActiveClass('school')}`}
+                                                onClick={() => this.onViewChange('school')}>
+                                                <h3>MESSAGES</h3>
+                                            </div>
+                                        </div>
+                                        : null }
                                 </div>
                                 : '' }
                         </div>
@@ -107,7 +111,8 @@ const mapStateToProps = state => {
         : '';
     return {
         teacher: state.teacher,
-        className
+        className,
+        classes: state.classes
     }
 }
 

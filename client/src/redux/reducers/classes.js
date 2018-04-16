@@ -1,4 +1,6 @@
-import { SAVE_CLASS_SUCCESS, FETCH_CLASS, UPDATE_SCHOOL_SUCCESS } from '../constants/class';
+import {
+    FETCH_CLASS,
+    SAVE_CLASS_SUCCESS  } from '../constants/class';
 import { LOGOUT_SUCCESS } from '../constants/teacher';
 
 const initialState = {};
@@ -15,10 +17,6 @@ const classes = (state = initialState, action) => {
             newState.currentClass = action._class.id;
 
             return newState
-        case UPDATE_SCHOOL_SUCCESS:
-            const list = state.list;
-            list[action.currentClassId].school = action.updatedSchool;
-            return { ...state, list }
         case LOGOUT_SUCCESS:
             return {}
     }

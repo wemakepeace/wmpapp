@@ -1,7 +1,7 @@
 import {
-    CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
+    CREATE_TEACHER_SUCCESS,
     UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
 import { SAVE_CLASS_SUCCESS } from '../constants/class';
 

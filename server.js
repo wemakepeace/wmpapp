@@ -55,14 +55,12 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
 
 const publicRoutes = require('./server/api/public');
-const schoolRoutes = require('./server/api/school');
 const teacherRoutes = require('./server/api/teacher');
 const classRoutes = require('./server/api/class');
 const resources = require('./server/api/resources');
 
 app.use('/public', publicRoutes);
 app.use('/resources', resources);
-app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
 app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
 

@@ -8,7 +8,7 @@ import Feedback from '../Feedback';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
 
-import { saveClass, createOrUpdateSchool } from '../../redux/actions/class';
+import { saveClass, removeCurrentClass } from '../../redux/actions/class';
 
 class ClassFormsContainer extends Component {
     constructor(props) {
@@ -70,6 +70,13 @@ class ClassFormsContainer extends Component {
         return defaultState;
     }
 
+    submitData = () => {
+        let classData = this.state;
+        classData.id = this.props.classes.currentClass;
+        classData.teacherId = this.props.teacher.id;
+        this.props.saveClass(classData);
+    }
+
     componentWillReceiveProps({ feedback, classes, school }) {
         const previousCurrentClass = this.props.classes.currentClass;
         const { currentClass, list } = classes;
@@ -81,13 +88,6 @@ class ClassFormsContainer extends Component {
             const newState = this.getDefaultState(classes);
             this.setState({...newState, showFeedback: true});
         }
-    }
-
-    submitData = () => {
-        let classData = this.state;
-        classData.id = this.props.classes.currentClass;
-        classData.teacherId = this.props.teacher.id;
-        this.props.saveClass(classData);
     }
 
     render() {
@@ -139,6 +139,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { saveClass, createOrUpdateSchool })(ClassFormsContainer);
+export default connect(mapStateToProps, { saveClass, removeCurrentClass })(ClassFormsContainer);
 
 

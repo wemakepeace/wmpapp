@@ -3,10 +3,14 @@ const School = require('../db/index').models.School;
 const Class = require('../db/index').models.Class;
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { extractDataForFrontend } = require('../utils/helpers');
+const { extractSequelizeErrorMessages } = require('../utils/feedback');
 const { feedback } = require('../utils/feedback');
 
 app.post('/', (req, res) => {
-    const { id } = req.body.data;
+    // const { id } = req.body.data;
+    console.log('hitting here!!!!')
+
+    const id = 1011;
     const { data } = req.body;
 
     School.findById(id)
@@ -38,8 +42,14 @@ app.post('/', (req, res) => {
             })
         })
     })
-    // [TODO] handle error
-    .catch(error => console.log('error', error))
+    .catch(error =>{
+        // [TODO] handle error
+        console.log('error', error);
+        const defaultError = 'Something went wrong when loading your session school.';
+        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+
+        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+    })
 })
 
 module.exports = app;

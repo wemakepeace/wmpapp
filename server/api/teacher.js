@@ -43,7 +43,7 @@ app.get('/', (req, res, next) => {
             })
         })
         .catch(error => {
-            const defaultError = 'Something went wrong when loading your session. Please login again.';
+            const defaultError = 'Something went wrong when loading your session. Please login.';
             const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
@@ -57,7 +57,7 @@ app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
 
-    Teacher.findOne({ id })
+    Teacher.findById(id)
     .then(teacher => {
         teacher.firstName = data.firstName;
         teacher.lastName = data.lastName;

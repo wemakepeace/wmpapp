@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
+
+import Feedback from './Feedback';
+
 import { login, logout } from '../redux/actions/teacher';
 
-
-// passes match and history to component
 
 class Login extends Component {
     state = {
         redirectToReferrer: false,
         email: '',
         password: '',
+        showFeedback: false
     }
 
     onChange = (ev, key) => this.setState({ [key]: ev.target.value })
@@ -24,10 +26,17 @@ class Login extends Component {
         if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
             this.setState({redirectToReferrer: true })
         }
+
+        if (nextProps.feedback && nextProps.feedback.type) {
+            this.setState({ showFeedback: true });
+        }
     }
 
+
     render() {
-        const { redirectToReferrer } = this.state;
+        const { redirectToReferrer, showFeedback } = this.state;
+        const { feedback } = this.props;
+
         const { from } = this.props.location && this.props.location.state || { from: { pathname: '/exchange' }};
 
         if (redirectToReferrer === true || this.props.teacher.id) {
@@ -57,6 +66,10 @@ class Login extends Component {
                     className='large-custom-btn'
                     size='large'
                     onClick={this.onSubmit}>LOGIN</Button>
+
+                { showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null }
             </div>
         )
     }
@@ -64,7 +77,8 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        teacher: state.teacher
+        teacher: state.teacher,
+        feedback: state.feedback
     }
 }
 

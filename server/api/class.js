@@ -53,7 +53,11 @@ app.get('/:id', (req, res, next) => {
     })
     .catch(error =>{
         // [TODO] handle error
-        console.log(error);
+        console.log('error', error);
+        const defaultError = 'Something went wrong when loading your session.';
+        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+
+        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     })
 });
 
@@ -148,7 +152,7 @@ app.post('/', (req, res, next) => {
         })
         .catch(error => {
             console.log('error', error)
-            const defaultError = ['Something went wrong when saving your information.'];
+            const defaultError = 'Something went wrong when saving your information.';
             const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
