@@ -3,14 +3,17 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
 
-import { saveClass, createClass, removeCurrentClass } from '../../redux/actions/class';
-import { createOrUpdateSchool } from '../../redux/actions/school';
+import {
+    saveClass,
+    createClass,
+    removeCurrentClass,
+    createOrUpdateSchool } from '../../redux/actions/class';
 
 import Feedback from '../Feedback';
 import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
 
-class ClassForms extends Component {
+class ClassFormsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = this.getDefaultState(props.classes);
@@ -154,6 +157,6 @@ const mapDispatchToProps = () => {
     }
 }
 
-export default connect(mapStateToProps, { saveClass, createOrUpdateSchool, createClass, removeCurrentClass })(ClassForms);
+export default connect(mapStateToProps, { saveClass, createOrUpdateSchool, createClass, removeCurrentClass })(ClassFormsContainer);
 
 

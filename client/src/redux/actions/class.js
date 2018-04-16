@@ -1,8 +1,10 @@
 import { UPDATE_ERROR  } from '../constants/teacher';
-import { SAVE_CLASS_SUCCESS, SAVE_CLASS_ERROR, FETCH_CLASS } from '../constants/class';
-
-/* is this a good approach ? */
-import { createOrUpdateSchool } from './school';
+import {
+    SAVE_CLASS_SUCCESS,
+    SAVE_CLASS_ERROR,
+    FETCH_CLASS,
+    UPDATE_SCHOOL_SUCCESS,
+    UPDATE_SCHOOL_ERROR } from '../constants/class';
 
 import axios from 'axios';
 
@@ -107,9 +109,43 @@ const SaveClassSuccess = (_class, feedback) => {
 };
 
 
+
+const createOrUpdateSchool = data => {
+    if (data.id === "") {
+        data.id = null;
+    }
+
+    if (data.country) {
+        data.country = data.country.value;
+    }
+
+    return dispatch => {
+        return axios.post('/school', { data })
+        .then(response => {
+            return response.data
+        })
+        .then(
+                ({ updatedSchool, feedback }) => {
+                    const currentClassId = localStorage.getItem('currentClass');
+                    dispatch({
+                        type: UPDATE_SCHOOL_SUCCESS,
+                        currentClassId: currentClassId,
+                        updatedSchool,
+                        feedback
+                    });
+                },
+                (error) => {
+                    console.log('error', error)
+                    // dispatch({type: UPDATE_SCHOOL_ERROR, 'some data '})
+                }
+        )
+    }
+}
+
 export {
     fetchClass,
     createClass,
     saveClass,
-    removeCurrentClass
+    removeCurrentClass,
+    createOrUpdateSchool
 };

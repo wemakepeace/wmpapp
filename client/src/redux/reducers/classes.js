@@ -1,5 +1,4 @@
-import { SAVE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
-import { UPDATE_SCHOOL_SUCCESS } from '../constants/school';
+import { SAVE_CLASS_SUCCESS, FETCH_CLASS, UPDATE_SCHOOL_SUCCESS } from '../constants/class';
 import { LOGOUT_SUCCESS } from '../constants/teacher';
 
 const initialState = {};

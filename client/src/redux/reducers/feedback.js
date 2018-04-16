@@ -8,8 +8,7 @@ import {
     UPDATE_ERROR,
     UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
 
-import { SAVE_CLASS_SUCCESS } from '../constants/class'
-import { UPDATE_SCHOOL_SUCCESS } from '../constants/school';
+import { SAVE_CLASS_SUCCESS, UPDATE_SCHOOL_SUCCESS } from '../constants/class'
 ;
 
 const initialState = {};

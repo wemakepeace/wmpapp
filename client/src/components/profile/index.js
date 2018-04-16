@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import Overview from './Overview'
 import SchoolForm from './SchoolForm';
-import ClassForms from './ClassForms';
+import ClassFormsContainer from './ClassFormsContainer';
 import TeacherForm from './TeacherForm';
 
 class Main extends Component {
@@ -67,7 +67,7 @@ class Main extends Component {
                             : showTab === 'teacher'
                             ? <TeacherForm />
                             : showTab === 'classprofile'
-                            ? <ClassForms />
+                            ? <ClassFormsContainer />
                             : null
                         }
                         </div>

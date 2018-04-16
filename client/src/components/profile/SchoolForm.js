@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Async } from 'react-select';
 import countries from 'country-list';
 
-
 const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
     const { id, name, address1, address2, city, zip, state, country } = schoolData;
 
