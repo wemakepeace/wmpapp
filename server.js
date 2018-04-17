@@ -5,10 +5,6 @@ const bodyparser = require('body-parser');
 const open = require('open');
 const { seed, models } = require('./server/db/index.js');
 
-const webpack =  require('webpack');
-const config =  require('./webpack.config');
-const compiler = webpack(config);
-
 const passport = require('passport');
 const passportJWT = require("passport-jwt");
 const ExtractJwt = passportJWT.ExtractJwt;
@@ -37,12 +33,16 @@ passport.use(strategy);
 const app = express();
 app.use(passport.initialize());
 
-app.use(require('webpack-hot-middleware')(compiler));
+const webpack =  require('webpack');
+const config =  require('./webpack.config');
+const compiler = webpack(config);
+
 app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true,
+    watch: true,
     publicPath: config.output.publicPath,
     serverSideRender: true
 }));
+app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
@@ -72,6 +72,9 @@ const port = process.env.PORT || 3000;
 
 app.set('port', port);
 
+console.log('running server.js')
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 
-seed();
+// if (!process.env.RUNNING) {
+    seed();
+// }

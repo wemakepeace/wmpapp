@@ -11,6 +11,7 @@ const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const jwt = require('jsonwebtoken');
 
 app.get('/', (req, res, next) => {
+    console.log('teacher rorehifd')
 
     /* Have to verify that this is secure .... */
     const token = req.headers.authorization.split('Bearer ')[1];

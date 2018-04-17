@@ -80,15 +80,10 @@ module.exports = {
     devServer: {
         hot: true,
         inline: true,
+        progress: true,
         historyApiFallback: true,
         host: 'localhost', // Defaults to `localhost`
         port: 3000, // Defaults to 8080
-        proxy: {
-            '^/api/*': {
-                target: 'http://localhost:8080/api/',
-                secure: false
-            }
-        }
     },
     plugins: [
         new webpack.ProvidePlugin({ // to enable jquery
