@@ -21,6 +21,12 @@ class ResetPassword extends Component {
         // this.props.loadProfessional();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.feedback) {
+            this.setState({ showFeedback: true });
+        }
+    }
+
     render() {
         const { feedback } = this.props;
         const { showFeedback } = this.state;
@@ -63,7 +69,9 @@ class ResetPassword extends Component {
 };
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        feedback: state.feedback
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {

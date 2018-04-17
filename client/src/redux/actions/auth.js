@@ -3,6 +3,8 @@ import {
     LOGOUT_SUCCESS,
     LOGIN_ERROR  } from '../constants/teacher';
 
+import { SEND_FEEDBACK } from '../constants/shared';
+
 import axios from 'axios';
 
 import { setToken } from '../../utils/helpers';
@@ -47,11 +49,13 @@ const sendResetPasswordLink = email => {
         return axios.post('/public/reset', email)
             .then(
                 (response) => {
-                      console.log(response)
-                    // dispatch(sendForgotPasswordLinkSuccess(response.data.feedback));
+                      console.log('response', response)
+                      const feedback = response.data.feedback;
+                      dispatch({ type: SEND_FEEDBACK, feedback })
                 },
                 (error) => {
-                    // dispatch(sendForgotPasswordLinkError(error.response.data.feedback));
+                    const feedback =  error.response.data.feedback;
+                    dispatch({ type: SEND_FEEDBACK, feedback })
                 })
     }
 }

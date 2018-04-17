@@ -132,10 +132,9 @@ app.post('/reset', (req, res, next) => {
             })
             .then(user => {
                 if (!user) {
-                    let defaultError = 'No user found for this e-mail address.'
+                    let defaultError = ['No user found for this e-mail address.']
 
-                    res.status(401).send({ feedback: feedback(ERROR, [defaultError])})
-                    return next('error has occured');
+                    return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
                 }
 
                 user.resetPasswordToken = token;
@@ -143,11 +142,11 @@ app.post('/reset', (req, res, next) => {
 
                 user.save()
                 .then( res => {
-                    console.log('res', res)
                     done(null, token, res.dataValues)
                 })
                 .catch(err => {
-                    next(err)
+                    let defaultError = ['Something went wrong. Please try submitting your email again.']
+                    return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
                 });
             });
         },
@@ -158,21 +157,16 @@ app.post('/reset', (req, res, next) => {
                 subject: 'Reset password  | We Make Peace',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/exchange/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
-            console.log('smtpTransport.sendMail',smtpTransport.sendMail)
             smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
                 if (error) {
+                    const defaultError = ['Something went wrong. Please try again.'];
                     res.status(500).send({
-                        feedback: {
-                            type: 'error',
-                            messages: ['Something went wrong. Please try again.']
-                        }
+                        feedback: feedback(ERROR, defaultError)
                     })
                  } else {
+                    const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.']
                     res.send({
-                        feedback: {
-                            type: 'success',
-                            messages: ['An e-mail has been sent to ' + user.email + ' with further instructions.']
-                        }
+                        feedback: feedback(SUCCESS, defaultMessage)
                     })
                 }
                 done(err, 'done');

@@ -11,10 +11,12 @@ import {
 import { SAVE_CLASS_SUCCESS } from '../constants/class'
 ;
 
-import { FETCH_DATA_ERROR } from '../constants/global';
+import { FETCH_DATA_ERROR, SEND_FEEDBACK } from '../constants/shared';
 
 const initialState = {};
 
+
+// NTS maybe consolidate all these to SEND_FEEDBACK
 const feedback = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_TEACHER_SUCCESS:
@@ -25,6 +27,7 @@ const feedback = (state = initialState, action) => {
         case LOGIN_ERROR:
         case UPDATE_ERROR:
         case FETCH_DATA_ERROR:
+        case SEND_FEEDBACK:
             return action.feedback
         case CLEAR_FEEDBACK:
         case LOGOUT_SUCCESS:

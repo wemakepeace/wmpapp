@@ -4,7 +4,7 @@ import {
     SAVE_CLASS_ERROR,
     FETCH_CLASS } from '../constants/class';
 
-import { FETCH_DATA_ERROR } from '../constants/global';
+import { FETCH_DATA_ERROR } from '../constants/shared';
 
 import axios from 'axios';
 
