@@ -9,11 +9,9 @@ import {
     UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
 import axios from 'axios';
+import { setToken } from '../../utils/helpers';
 
-const setToken = (token) => {
-    localStorage.setItem('token', token);
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-};
+import { login, logout, sendResetPasswordLink } from './auth';
 
 const createTeacher = data => {
     return dispatch => {
@@ -42,39 +40,6 @@ const createTeacherSuccess = (teacher, feedback) => {
     }
 };
 
-const login = credentials => {
-
-    return dispatch => {
-        return axios.post('/public/login', credentials )
-            .then(response => response.data)
-            .then(
-                ({ teacher, token, feedback }) => {
-                    setToken(token);
-                    dispatch(loginSuccess(teacher, feedback));
-                },
-                (error) => {
-                    console.log('error', error)
-                    const feedback = error.response.data.feedback;
-
-                    dispatch({ type: LOGIN_ERROR, feedback })
-                })
-    }
-};
-
-const loginSuccess = (teacher, feedback) => {
-    return {
-        type: LOGIN_SUCCESS,
-        teacher,
-        feedback
-    }
-};
-
-const logout = () => {
-    localStorage.clear();
-    axios.defaults.headers.common['Authorization'] = null;
-    return (dispatch) => dispatch({ type: LOGOUT_SUCCESS });
-};
-
 const fetchTeacher = () => {
     return dispatch => {
         return axios.get(`/teacher`)
@@ -101,7 +66,6 @@ const updateTeacher = (data) => {
     }
 };
 
-
 const updateTeacherSuccess = (teacher, feedback) => {
     return {
         type: UPDATE_TEACHER_SUCCESS,
@@ -121,8 +85,9 @@ const updateClassSuccess = (updatedClass, feedback) => {
 
 export {
     createTeacher,
+    fetchTeacher,
+    updateTeacher,
     login,
     logout,
-    fetchTeacher,
-    updateTeacher
+    sendResetPasswordLink
 };

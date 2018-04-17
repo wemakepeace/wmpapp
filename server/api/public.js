@@ -106,4 +106,87 @@ app.post('/login', (req, res) => {
     });
 });
 
+/*** Reset Password API ***/
+
+const async = require('async');
+const crypto = require('crypto');
+const { sendEmail, smtpTransport } = require('../utils/smpt');
+
+
+app.post('/reset', (req, res, next) => {
+    console.log('email', req.body.email)
+    const { email } = req.body;
+
+    async.waterfall([
+        function(done) {
+            crypto.randomBytes(20, function(err, buf) {
+                const token = buf.toString('hex');
+                done(err, token);
+            })
+        },
+        function(token, done) {
+            Teacher.findOne({
+                where: {
+                    email: email,
+                }
+            })
+            .then(user => {
+                if (!user) {
+                    let defaultError = 'No user found for this e-mail address.'
+
+                    res.status(401).send({ feedback: feedback(ERROR, [defaultError])})
+                    return next('error has occured');
+                }
+
+                user.resetPasswordToken = token;
+                user.resetPasswordExpires = Date.now() + 3600000;
+
+                user.save()
+                .then( res => {
+                    console.log('res', res)
+                    done(null, token, res.dataValues)
+                })
+                .catch(err => {
+                    next(err)
+                });
+            });
+        },
+        function(token, user, done) {
+            const mailOptionsRequestResetPw = {
+                to: user.email,
+                from: 'tempwmp@gmail.com',
+                subject: 'Reset password  | We Make Peace',
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/exchange/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            };
+            console.log('smtpTransport.sendMail',smtpTransport.sendMail)
+            smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
+                if (error) {
+                    res.status(500).send({
+                        feedback: {
+                            type: 'error',
+                            messages: ['Something went wrong. Please try again.']
+                        }
+                    })
+                 } else {
+                    res.send({
+                        feedback: {
+                            type: 'success',
+                            messages: ['An e-mail has been sent to ' + user.email + ' with further instructions.']
+                        }
+                    })
+                }
+                done(err, 'done');
+            });
+        }],
+        function(err) {
+            if (err) {
+                console.log('error hitting down here', err);
+                return next(err);
+            }
+            res.redirect('/')
+        })
+});
+
+
+
 module.exports = app;

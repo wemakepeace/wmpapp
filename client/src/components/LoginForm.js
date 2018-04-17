@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Link } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
 
 import Feedback from './Feedback';
@@ -62,6 +62,7 @@ class Login extends Component {
                         type='password'
                         onChange={(ev) => this.onChange(ev, 'password')}/>
                 </div>
+                <Link to='/reset'>Forgot password?</Link>
                 <Button
                     className='large-custom-btn'
                     size='large'

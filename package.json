@@ -42,16 +42,17 @@
     "webpack-hot-middleware": "^2.21.2"
   },
   "dependencies": {
+    "async": "^2.6.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "country-list": "^1.1.0",
-    "crypto": "^1.0.1",
     "csprng": "^0.1.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.2.0",
     "jwt-decode": "^2.2.0",
+    "nodemailer": "^4.6.4",
     "normalize.css": "^8.0.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",

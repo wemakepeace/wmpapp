@@ -56,7 +56,9 @@ const Teacher = conn.define('teacher', {
     },
     password: {
         type: Sequelize.STRING,
-    }
+    },
+    resetPasswordToken: Sequelize.STRING,
+    resetPasswordExpires: Sequelize.DATE,
 });
 
 
