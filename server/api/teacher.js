@@ -1,7 +1,6 @@
 const app = require('express').Router();
 const Teacher = require('../db/index').models.Teacher;
 const Class = require('../db/index').models.Class;
-// const AgeGroup = require('../db/index').models.AgeGroup;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
