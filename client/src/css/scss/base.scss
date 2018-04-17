@@ -94,15 +94,29 @@ input:focus, textarea:focus, select:focus{
                 padding: 8px 20px;
                 border-right: 1px solid #fff;
                 cursor: pointer;
+                margin: auto;
             }
 
-            span.header-menu-item.logout {
+            span.header-menu-item.no-border {
                border-right: none;
+            }
+
+            span.header-menu-item.no-border.select-class-label {
+                padding-right: 0px !important;
+                cursor: none;
+            }
+
+            span.header-menu-item.select-class-item {
+                padding-left: 13px;
             }
 
 
             span.header-menu-item:hover {
                text-decoration: underline;
+            }
+
+            span.header-menu-item.no-border.select-class-label:hover {
+                text-decoration: none;
             }
 
             .header-menu-item.select-class {

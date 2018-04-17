@@ -11,7 +11,6 @@ const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback')
 const { extractSessionData, extractDataForFrontend } = require('../utils/helpers');
 const { pbkdf2, saltHashPassword } = require('../utils/security');
 
-
 const createToken = (id, classId) => {
     const secret = process.env.SECRET;
     const payload = { id: id };
@@ -71,6 +70,10 @@ app.post('/login', (req, res) => {
                 return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
             }
 
+            teacher.destroyTokens();
+
+            console.log('teacher.getFullname()', teacher.getFullname())
+
             teacher = teacher.dataValues;
             teacher.classes = teacher.classes.map(_class => {
                 return {
@@ -84,6 +87,7 @@ app.post('/login', (req, res) => {
             if (hashTest.passwordHash === teacher.password) {
 
                 const token = createToken(teacher.id);
+
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
@@ -114,7 +118,6 @@ const { sendEmail, smtpTransport } = require('../utils/smpt');
 
 
 app.post('/reset', (req, res, next) => {
-    console.log('email', req.body.email)
     const { email } = req.body;
 
     async.waterfall([
@@ -155,16 +158,21 @@ app.post('/reset', (req, res, next) => {
                 to: user.email,
                 from: 'tempwmp@gmail.com',
                 subject: 'Reset password  | We Make Peace',
-                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/exchange/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/public/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
             smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
                 if (error) {
+
                     const defaultError = ['Something went wrong. Please try again.'];
+
                     res.status(500).send({
                         feedback: feedback(ERROR, defaultError)
                     })
+
                  } else {
+
                     const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.']
+
                     res.send({
                         feedback: feedback(SUCCESS, defaultMessage)
                     })
@@ -182,5 +190,67 @@ app.post('/reset', (req, res, next) => {
 });
 
 
+app.get('/reset/:token', (req, res, next) => {
+    Teacher.findOne({
+        where: {
+            resetPasswordToken: req.params.token,
+            resetPasswordExpires: { $gt: Date.now() }
+        }
+    })
+    .then(user => {
+        if (user) {
+            return res.redirect(`/#/reset/${req.params.token}`)
+        } else {
+            return res.end(`<div style='width: 500px;margin:100 auto 0 auto;text-align:center'><h1>The reset password link has expired</h1><p>Please navigate to www.myOosa.com/forgot to try again.</p></div>`)
+        }
+    });
+});
+
+
+app.post('/reset/:token', (req, res, next) => {
+    const { password1, password2 } = req.body;
+
+    Teacher.findOne({
+        where: {
+            resetPasswordToken: req.params.token,
+            resetPasswordExpires: { $gt: Date.now() }
+        }
+    })
+    .then(user => {
+        console.log(user)
+        if (!user) {
+            let defaultError = ['The reset password link has expired.']
+
+            return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
+        }
+
+        if (password1 !== password2) {
+            return res.status(500).send({
+                feedback: feedback(ERROR, ['Your passwords are not matching.'])
+            })
+        }
+
+        if (!password1 || password1.length < 8) {
+            return res.status(500).send({
+                feedback: feedback(ERROR, ['Your password must be at least 8 characters.'])
+            })
+        }
+
+        user.password = password1;
+
+        user.save()
+        .then(updatedUser => {
+
+            updatedUser.destroyTokens();
+
+            res.send({
+                user:updatedUser,
+                feedback: feedback(SUCCESS, ['Your password has been reset.'])
+            })
+        })
+        .catch(error => console.log('error', error))
+
+    })
+})
 
 module.exports = app;

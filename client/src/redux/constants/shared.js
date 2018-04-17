@@ -1,2 +1,2 @@
-export const FETCH_DATA_ERROR = 'FETCH_DATA_ERROR';
 export const SEND_FEEDBACK = 'SEND_FEEDBACK';
+export const CLEAR_FEEDBACK = 'CLEAR_FEEDBACK';

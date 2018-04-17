@@ -3,15 +3,16 @@ import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     LOGIN_ERROR,
-    CREATE_CLASS_PROFILE_ERROR,
-    UPDATE_ERROR,
     UPDATE_TEACHER_SUCCESS,
     UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
+import { SEND_FEEDBACK } from '../constants/shared';
+
 import axios from 'axios';
+
 import { setToken } from '../../utils/helpers';
 
-import { login, logout, sendResetPasswordLink } from './auth';
+import { login, logout, sendResetPasswordLink, resetPassword } from './auth';
 
 const createTeacher = data => {
     return dispatch => {
@@ -26,7 +27,7 @@ const createTeacher = data => {
                 (error) => {
                     // TODO handle error messages
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: CREATE_CLASS_PROFILE_ERROR, feedback});
+                    dispatch({ type: SEND_FEEDBACK, feedback});
                 }
             )
     }
@@ -45,7 +46,7 @@ const fetchTeacher = () => {
         return axios.get(`/teacher`)
             .then(response => response.data)
             .then(
-                ({ teacher, feedback }) =>  dispatch({type: LOGIN_SUCCESS, teacher, feedback }),
+                ({ teacher, feedback }) => dispatch({type: LOGIN_SUCCESS, teacher, feedback }),
                 (error) => dispatch(logout())
             )
     }
@@ -61,7 +62,7 @@ const updateTeacher = (data) => {
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: UPDATE_ERROR, feedback })
+                    dispatch({ type: SEND_FEEDBACK, feedback })
                 })
     }
 };
@@ -89,5 +90,6 @@ export {
     updateTeacher,
     login,
     logout,
-    sendResetPasswordLink
+    sendResetPasswordLink,
+    resetPassword
 };

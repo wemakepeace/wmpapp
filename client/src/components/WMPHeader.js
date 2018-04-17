@@ -10,7 +10,7 @@ import { removeCurrentClass } from '../redux/actions/class';
 const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurrentClass }) => {
 
     const onLogout = () => {
-        logout();
+        logout(teacher.id);
         history.push('/');
     }
 
@@ -19,8 +19,6 @@ const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurr
         removeCurrentClass();
         return onViewChange('classforms', newClass);
     }
-
-    const showDropDown = false;
 
     return (
         <div className='title-container'>
@@ -34,8 +32,13 @@ const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurr
             <div className='logged-in'>
                 {teacher && teacher.id
                     ? <div className='logged-in-inner'>
-                        {teacher.classes
-                            ? <span className='header-menu-item'>
+                        {teacher.classes && teacher.classes.length
+                            ? <span
+                                icon='arrow right'
+                                className='header-menu-item no-border select-class-label'>Select Class</span>
+                            : null}
+                        {teacher.classes && teacher.classes.length
+                            ? <span className='header-menu-item select-class-item'>
                                 <SelectClass />
                             </span>
                             : null}
@@ -43,7 +46,7 @@ const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurr
                             className='header-menu-item'
                             onClick={initiateNewClass}>Register New Class</span>
                          <span
-                            className='header-menu-item logout'
+                            className='header-menu-item no-border'
                             onClick={onLogout}>Log out</span>
                     </div>
                     : null}

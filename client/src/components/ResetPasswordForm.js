@@ -1,24 +1,23 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+import { Redirect, Link } from 'react-router-dom';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
 import Feedback from './Feedback';
 
-import { sendResetPasswordLink } from '../redux/actions/teacher';
+import { resetPassword } from '../redux/actions/teacher';
 
-class ResetPassword extends Component {
+class ResetPasswordForm extends Component {
     state = {
-        email: '',
+        password1: '',
+        password2: '',
         showFeedback: false
     }
 
     onInputChange = (ev, type) => this.setState({[type]: ev.target.value})
 
     onForgotPassword = () => {
-        this.props.sendResetPasswordLink({ email: this.state.email });
-    }
-
-    componentDidMount () {
-        // this.props.loadProfessional();
+        const token = this.props.match.params.token
+        this.props.resetPassword(this.state, token)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,10 +46,18 @@ class ResetPassword extends Component {
                             <Segment stacked>
                                 <Form.Input
                                     fluid
-                                    icon='mail'
+                                    icon='lock'
                                     iconPosition='left'
-                                    placeholder='E-mail address'
-                                    onChange={ (ev) => this.onInputChange(ev, 'email')}
+                                    placeholder='New password'
+                                    type='password'
+                                    onChange={ (ev) => this.onInputChange(ev, 'password1')}
+                                /><Form.Input
+                                    fluid
+                                    icon='lock'
+                                    iconPosition='left'
+                                    placeholder='Confirm new password'
+                                    type='password'
+                                    onChange={ (ev) => this.onInputChange(ev, 'password2')}
                                 />
                                 <Button
                                     className='large-custom-btn'
@@ -62,6 +69,14 @@ class ResetPassword extends Component {
                     { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }
+                    { showFeedback && (feedback && (feedback.type === 'success'))
+                    ? <Button
+                        name='Go to Portal'
+                        as={Link}
+                        className='large-custom-btn'
+                        size='large'
+                        to='/exchange' />
+                    : null }
                 </Grid.Column>
             </Grid>
         )
@@ -70,12 +85,9 @@ class ResetPassword extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        feedback: state.feedback
+        feedback: state.feedback,
+        teacher: state.teacher
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-};
-
-export default connect(mapStateToProps, { sendResetPasswordLink })(ResetPassword);
+export default connect(mapStateToProps, { resetPassword })(ResetPasswordForm);

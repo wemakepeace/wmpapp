@@ -49,9 +49,6 @@ app.get('/', (req, res, next) => {
         })
 });
 
-
-
-
 app.put('/', (req, res, next) => {
     const data = req.body;
     const { id } = data;
@@ -87,5 +84,12 @@ app.put('/', (req, res, next) => {
         res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
     })
 });
+
+app.post('/logout', (req, res, next) => {
+    const { id } = req.body;
+    Teacher.findById(id)
+    .then(user => user.destroyTokens())
+})
+
 
 module.exports = app;

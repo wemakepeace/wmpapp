@@ -44,6 +44,12 @@ const teachers = [
         lastName: 'Flakes',
         email: 'cornstar88@m.com',
         password: 'z'
+    },
+    {
+        firstName: 'Corny',
+        lastName: 'Flakes',
+        email: 'kris.alnes@gmail.com',
+        password: 'z'
     }
 ];
 

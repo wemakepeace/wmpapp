@@ -1,10 +1,5 @@
-import { UPDATE_ERROR  } from '../constants/teacher';
-import {
-    SAVE_CLASS_SUCCESS,
-    SAVE_CLASS_ERROR,
-    FETCH_CLASS } from '../constants/class';
-
-import { FETCH_DATA_ERROR } from '../constants/shared';
+import { SAVE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
+import { SEND_FEEDBACK } from '../constants/shared';
 
 import axios from 'axios';
 
@@ -27,7 +22,7 @@ const fetchClass = (id, shouldFetch) => {
                     },
                     (error) => {
                         const feedback = error.response.data.feedback;
-                        return dispatch({ type: FETCH_DATA_ERROR, feedback });
+                        return dispatch({ type: SEND_FEEDBACK, feedback });
                     })
         } else {
             dispatch({ type: FETCH_CLASS, currentClass: id });
@@ -57,7 +52,7 @@ const saveClass = (data) => {
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: UPDATE_ERROR, feedback });
+                    dispatch({ type: SEND_FEEDBACK, feedback });
                 })
     }
 }

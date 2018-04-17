@@ -4,7 +4,7 @@ const phone = require('phone');
 
 const { saltHashPassword } = require('../../utils/security');
 
-const Teacher = conn.define('teacher', {
+let Teacher = conn.define('teacher', {
     firstName: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -58,9 +58,19 @@ const Teacher = conn.define('teacher', {
         type: Sequelize.STRING,
     },
     resetPasswordToken: Sequelize.STRING,
-    resetPasswordExpires: Sequelize.DATE,
-});
+    resetPasswordExpires: Sequelize.DATE
+})
 
+Teacher.prototype.getFullname = function() {
+    return this.firstName + ' ' + this.lastName;
+}
+
+Teacher.prototype.destroyTokens = function() {
+    this.updateAttributes({
+        resetPasswordExpires: null,
+        resetPasswordToken: null
+    });
+};
 
 // May want to make this async since node is single threaded
 Teacher.beforeCreate((teacher, options) => {
@@ -74,6 +84,7 @@ Teacher.beforeCreate((teacher, options) => {
 
 
 Teacher.beforeUpdate((teacher, options) => {
+    console.log('heeeeeeere')
     if(options.fields.indexOf('password') > -1) {
         const hashedPw = saltHashPassword(teacher.password);
         teacher.salt = hashedPw.salt;
