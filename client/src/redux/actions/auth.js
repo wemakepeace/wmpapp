@@ -51,7 +51,7 @@ const logout = (id) => {
 
 const sendResetPasswordLink = email => {
     return dispatch => {
-        return axios.post('/public/reset', email)
+        return axios.post('/public/resetrequest', email)
             .then(
                 (response) => {
                       const feedback = response.data.feedback;
@@ -64,9 +64,28 @@ const sendResetPasswordLink = email => {
     }
 }
 
-const resetPassword = (data, token) => {
+const resetPasswordWithToken = (data, token) => {
     return dispatch => {
         return axios.post(`/public/reset/${token}`, data)
+        .then(
+            (response) => {
+                const credentials = {
+                    email: response.data.user.email,
+                    password: data.password1
+                }
+
+                const feedback = response.data.feedback.messages
+                dispatch(login(credentials, feedback))
+            },
+            (error) => {
+                const feedback = error.response.data.feedback;
+                dispatch({ type: SEND_FEEDBACK, feedback })
+            })
+    }
+}
+const changePassword = (data) => {
+    return dispatch => {
+        return axios.put('/teacher/changepassword', data)
         .then(
             (response) => {
                 const credentials = {
@@ -88,5 +107,6 @@ export {
     login,
     logout,
     sendResetPasswordLink,
-    resetPassword
+    resetPasswordWithToken,
+    changePassword
 }

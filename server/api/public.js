@@ -114,7 +114,7 @@ const crypto = require('crypto');
 const { sendEmail, smtpTransport } = require('../utils/smpt');
 
 
-app.post('/reset', (req, res, next) => {
+app.post('/resetrequest', (req, res, next) => {
     const { email } = req.body;
 
     async.waterfall([

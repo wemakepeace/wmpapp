@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
 import Feedback from './Feedback';
 
-import { resetPassword } from '../redux/actions/teacher';
+import { resetPasswordWithToken } from '../redux/actions/teacher';
 
 class ResetPasswordForm extends Component {
     state = {
@@ -17,7 +17,7 @@ class ResetPasswordForm extends Component {
 
     onForgotPassword = () => {
         const token = this.props.match.params.token
-        this.props.resetPassword(this.state, token)
+        this.props.resetPasswordWithToken(this.state, token)
     }
 
 
@@ -91,4 +91,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, { resetPassword })(ResetPasswordForm);
+export default connect(mapStateToProps, { resetPasswordWithToken })(ResetPasswordForm);

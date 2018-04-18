@@ -12,7 +12,7 @@ import axios from 'axios';
 
 import { setToken } from '../../utils/helpers';
 
-import { login, logout, sendResetPasswordLink, resetPassword } from './auth';
+import { login, logout, sendResetPasswordLink, resetPasswordWithToken, changePassword } from './auth';
 
 const createTeacher = data => {
     return dispatch => {
@@ -92,5 +92,6 @@ export {
     login,
     logout,
     sendResetPasswordLink,
-    resetPassword
+    resetPasswordWithToken,
+    changePassword
 };

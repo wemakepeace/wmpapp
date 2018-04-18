@@ -84,7 +84,6 @@ Teacher.beforeCreate((teacher, options) => {
 
 
 Teacher.beforeUpdate((teacher, options) => {
-    console.log('heeeeeeere')
     if(options.fields.indexOf('password') > -1) {
         const hashedPw = saltHashPassword(teacher.password);
         teacher.salt = hashedPw.salt;

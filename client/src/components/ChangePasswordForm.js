@@ -5,22 +5,20 @@ import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'seman
 
 import Feedback from './Feedback';
 
-// import { resetPassword } from '../redux/actions/teacher';
+import { changePassword } from '../redux/actions/teacher';
 
 class ChangePasswordForm extends Component {
     state = {
         oldPassword: '',
         password1: '',
         password2: '',
-        showFeedback: false,
-
+        showFeedback: false
     }
 
     onInputChange = (ev, type) => this.setState({[type]: ev.target.value})
 
-    onForgotPassword = () => {
-        // const token = this.props.match.params.token
-        // this.props.resetPassword(this.state, token)
+    onChangePassword = () => {
+        this.props.changePassword(this.state)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -71,7 +69,7 @@ class ChangePasswordForm extends Component {
                                 <Button
                                     className='large-custom-btn'
                                     fluid size='large'
-                                    onClick={this.onForgotPassword}>Change Password</Button>
+                                    onClick={this.onChangePassword}>Change Password</Button>
                             </Segment>
                         </Form>
                     }
@@ -99,4 +97,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(ChangePasswordForm);
+export default connect(mapStateToProps, { changePassword })(ChangePasswordForm);
