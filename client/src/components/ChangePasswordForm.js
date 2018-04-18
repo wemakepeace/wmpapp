@@ -2,24 +2,26 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
+
 import Feedback from './Feedback';
 
-import { resetPassword } from '../redux/actions/teacher';
+// import { resetPassword } from '../redux/actions/teacher';
 
-class ResetPasswordForm extends Component {
+class ChangePasswordForm extends Component {
     state = {
+        oldPassword: '',
         password1: '',
         password2: '',
-        showFeedback: false
+        showFeedback: false,
+
     }
 
     onInputChange = (ev, type) => this.setState({[type]: ev.target.value})
 
     onForgotPassword = () => {
-        const token = this.props.match.params.token
-        this.props.resetPassword(this.state, token)
+        // const token = this.props.match.params.token
+        // this.props.resetPassword(this.state, token)
     }
-
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback) {
@@ -37,10 +39,7 @@ class ResetPasswordForm extends Component {
                 style={{ height: '100%' }}
                 verticalAlign='middle'>
                 <Grid.Column style={{ maxWidth: 450 }}>
-                    <Header as='h2' textAlign='center'>
-                        <Image src='../../../assets/logos/WMPlogo_transparent.png' />
-                                {' '}Reset Password
-                    </Header>
+                    <Header as='h2' textAlign='center'>Change Password</Header>
                     {   feedback && feedback.type === 'SUCCESS'
                     ?   null
                     :   <Form size='large'>
@@ -49,10 +48,19 @@ class ResetPasswordForm extends Component {
                                     fluid
                                     icon='lock'
                                     iconPosition='left'
+                                    placeholder='Current password'
+                                    type='password'
+                                    onChange={ (ev) => this.onInputChange(ev, 'oldPassword')}
+                                />
+                                <Form.Input
+                                    fluid
+                                    icon='lock'
+                                    iconPosition='left'
                                     placeholder='New password'
                                     type='password'
                                     onChange={ (ev) => this.onInputChange(ev, 'password1')}
-                                /><Form.Input
+                                />
+                                <Form.Input
                                     fluid
                                     icon='lock'
                                     iconPosition='left'
@@ -63,7 +71,7 @@ class ResetPasswordForm extends Component {
                                 <Button
                                     className='large-custom-btn'
                                     fluid size='large'
-                                    onClick={this.onForgotPassword}>Reset Password</Button>
+                                    onClick={this.onForgotPassword}>Change Password</Button>
                             </Segment>
                         </Form>
                     }
@@ -91,4 +99,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, { resetPassword })(ResetPasswordForm);
+export default connect(mapStateToProps)(ChangePasswordForm);

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-
+import { Link } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 import ClassMenu from './ClassMenu';
+import ChangePasswordForm from '../ChangePasswordForm';
 
 import { updateTeacher } from '../../redux/actions/teacher';
 
@@ -15,12 +16,15 @@ class TeacherForm extends Component {
         email: '',
         phone: '',
         password: '',
-        showFeedback: false
+        showFeedback: false,
+        showChangePwForm: false
     }
 
     onInputChange = (ev, key) => {
         this.setState({ [key]: ev.target.value, showFeedback: false })
     }
+
+    onChangePasswordClick = () => this.setState({ showChangePwForm: true })
 
     onSubmit = () => {
         const data = this.state;
@@ -40,8 +44,12 @@ class TeacherForm extends Component {
 
 
     render() {
-        const { firstName, lastName, email, phone, password, showFeedback } = this.state;
+        const { firstName, lastName, email, phone, password, showFeedback, showChangePwForm } = this.state;
         const { feedback } = this.props;
+
+        if (showChangePwForm) {
+            return (<ChangePasswordForm />)
+        }
 
         return (
             <div className='profile-form'>
@@ -93,27 +101,27 @@ class TeacherForm extends Component {
                         </span>
                     </div>
                     <div className='form-row'>
-                        <label className='form-label'>Password</label>
-                        <span className='form-input-span'>
-                            <input
-                                value={password || ''}
-                                type='password'
-                                className='form-input'
-                                placeholder='. . . . . .'
-                                name='password'
-                                onChange={(ev)=>this.onInputChange(ev, 'password')}/>
-                        </span>
-                    </div>
-                    <div className='form-row'>
                         <Button
                             className='large-custom-btn'
                             size='large'
                             onClick={()=>this.onSubmit()}>SAVE</Button>
                     </div>
-                    { showFeedback && (feedback && feedback.type)
-                        ? <Feedback {...feedback} />
-                        : null }
+
+
+
                 </div>
+                <div className='profile-segment'>
+                    <h4>Security Settings</h4>
+                    <div className='form-row'>
+                        <span onClick={this.onChangePasswordClick}>Change password</span>
+                    </div>
+                    <div className='form-row'>
+                        <Link to='/delete'>Delete Account</Link>
+                    </div>
+                </div>
+                { showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null }
             </div>
         )
     }

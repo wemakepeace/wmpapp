@@ -61,6 +61,7 @@ const updateTeacher = (data) => {
                     dispatch(updateTeacherSuccess(teacher, feedback));
                 },
                 (error) => {
+                    console.log('error', error)
                     const feedback = error.response.data.feedback;
                     dispatch({ type: SEND_FEEDBACK, feedback })
                 })

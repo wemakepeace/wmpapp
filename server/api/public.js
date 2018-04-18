@@ -71,10 +71,8 @@ app.post('/login', (req, res) => {
             }
 
             teacher.destroyTokens();
-
-            console.log('teacher.getFullname()', teacher.getFullname())
-
             teacher = teacher.dataValues;
+
             teacher.classes = teacher.classes.map(_class => {
                 return {
                     name: _class.dataValues.name,
@@ -87,7 +85,6 @@ app.post('/login', (req, res) => {
             if (hashTest.passwordHash === teacher.password) {
 
                 const token = createToken(teacher.id);
-
 
                 res.send({
                     feedback: feedback(SUCCESS, ["ok"]),
@@ -135,7 +132,7 @@ app.post('/reset', (req, res, next) => {
             })
             .then(user => {
                 if (!user) {
-                    let defaultError = ['No user found for this e-mail address.']
+                    let defaultError = ['No user found for this e-mail address.'];
 
                     return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
                 }
@@ -148,7 +145,7 @@ app.post('/reset', (req, res, next) => {
                     done(null, token, res.dataValues)
                 })
                 .catch(err => {
-                    let defaultError = ['Something went wrong. Please try submitting your email again.']
+                    let defaultError = ['Something went wrong. Please try submitting your email again.'];
                     return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
                 });
             });
@@ -171,7 +168,7 @@ app.post('/reset', (req, res, next) => {
 
                  } else {
 
-                    const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.']
+                    const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.'];
 
                     res.send({
                         feedback: feedback(SUCCESS, defaultMessage)
@@ -201,7 +198,7 @@ app.get('/reset/:token', (req, res, next) => {
         if (user) {
             return res.redirect(`/#/reset/${req.params.token}`)
         } else {
-            return res.end(`<div style='width: 500px;margin:100 auto 0 auto;text-align:center'><h1>The reset password link has expired</h1><p>Please navigate to www.myOosa.com/forgot to try again.</p></div>`)
+            return res.end(`<div style='width: 500px;margin:100 auto 0 auto;text-align:center'><h1>The reset password link is not valid.</h1><p>Please navigate to www.portal.wemakepeace.com/#/reset to try again.</p></div>`)
         }
     });
 });
@@ -217,13 +214,14 @@ app.post('/reset/:token', (req, res, next) => {
         }
     })
     .then(user => {
-        console.log(user)
+
         if (!user) {
-            let defaultError = ['The reset password link has expired.']
+            let defaultError = ['The reset password link has expired.'];
 
             return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
         }
 
+        /** Uncomment for validations
         if (password1 !== password2) {
             return res.status(500).send({
                 feedback: feedback(ERROR, ['Your passwords are not matching.'])
@@ -234,7 +232,7 @@ app.post('/reset/:token', (req, res, next) => {
             return res.status(500).send({
                 feedback: feedback(ERROR, ['Your password must be at least 8 characters.'])
             })
-        }
+        } **/
 
         user.password = password1;
 
@@ -243,13 +241,29 @@ app.post('/reset/:token', (req, res, next) => {
 
             updatedUser.destroyTokens();
 
+            const mailOptionsVerifyPwChange = {
+                to : updatedUser.email,
+                from: 'tempmywmp@gmail.com',
+                firstName: updatedUser.firstName,
+                subject : "Your password has been changed",
+                html : "Hello " + updatedUser.firstName + ",<br> This is a confirmation that the password for your We Make Peace portal account " + updatedUser.email + " has been changed."
+            }
+
+            sendEmail(res, mailOptionsVerifyPwChange)
+
             res.send({
                 user:updatedUser,
                 feedback: feedback(SUCCESS, ['Your password has been reset.'])
             })
         })
-        .catch(error => console.log('error', error))
+        .catch(error => {
+            console.log('error', error)
 
+            const defaultError = ['Internal server error. Please try resetting your password  again.'];
+            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+
+            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        });
     })
 })
 

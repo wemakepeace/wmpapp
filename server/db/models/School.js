@@ -12,7 +12,7 @@ const School = conn.define('school', {
     address1: {
         type: Sequelize.STRING,
         validate: {
-            notEmpty: { msg: 'Please fill out school address.'}
+            notEmpty: { msg: 'Please fill out address.'}
         }
     },
     address2: {
@@ -21,7 +21,7 @@ const School = conn.define('school', {
     zip: {
         type: conn.Sequelize.STRING,
         validate: {
-            notEmpty: { msg: 'Zip code cannot be empty'},
+            notEmpty: { msg: 'Please fill out zip code.'},
             // isZip(value) {
             //     if (value === '') {
             //         return
@@ -38,7 +38,7 @@ const School = conn.define('school', {
     city: {
         type: Sequelize.STRING,
         validate: {
-            notEmpty: { msg: 'Please fill out school address.'}
+            notEmpty: { msg: 'Please fill out city.'}
         }
     },
     state: {
@@ -47,7 +47,7 @@ const School = conn.define('school', {
     country: {
         type: Sequelize.STRING,
         validate: {
-            notEmpty: { msg: 'Please fill out school address.'}
+            notEmpty: { msg: 'Please fill out country.'}
         }
     }
 });
