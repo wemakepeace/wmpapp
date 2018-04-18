@@ -48,7 +48,6 @@ class Login extends Component {
 
         return (
             <div className='login-form'>
-
                 <div className='form-row'>
                     <input
                         placeholder='USERNAME'

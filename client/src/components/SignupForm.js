@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import Feedback from './Feedback';
 
 import { createTeacher } from '../redux/actions/teacher';
 
@@ -11,7 +12,8 @@ class Signup extends Component {
         lastName: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        showFeedback: false
     }
 
     onChange = (ev, key) => this.setState({[key]: ev.target.value})
@@ -25,10 +27,18 @@ class Signup extends Component {
         if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
             this.props.history.push('/exchange')
         }
+
+        if (nextProps.feedback && nextProps.feedback.type) {
+            this.setState({ showFeedback: true });
+        }
     }
 
 
     render() {
+
+        const { feedback } = this.props;
+        const { showFeedback } = this.state;
+
         return (
             <div className='signup-form'>
                 <div className='form-row'>
@@ -67,6 +77,9 @@ class Signup extends Component {
                     className='large-custom-btn'
                     size='large'
                     onClick={()=>this.onSubmit()}>SIGN UP</Button>
+                { showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null }
             </div>
         )
     }
@@ -74,7 +87,8 @@ class Signup extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        teacher: state.teacher
+        teacher: state.teacher,
+        feedback: state.feedback
     }
 }
 

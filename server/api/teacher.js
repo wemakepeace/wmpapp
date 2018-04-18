@@ -5,6 +5,8 @@ const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
+const { pbkdf2, saltHashPassword, createToken, decodeToken } = require('../utils/security');
+const { sendEmail, smtpTransport } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 const jwt = require('jsonwebtoken');
@@ -13,9 +15,7 @@ app.get('/', (req, res, next) => {
 
     /* Have to verify that this is secure .... */
     const token = req.headers.authorization.split('Bearer ')[1];
-    const secret = process.env.SECRET;
-    const decoded =  jwt.decode(token, secret);
-    const id = decoded.id;
+    const id = decodeToken(token);
 
     return Teacher.findOne({
         where: { id },
@@ -54,19 +54,19 @@ app.put('/', (req, res, next) => {
     const { id } = data;
 
     Teacher.findById(id)
-    .then(teacher => {
-        teacher.firstName = data.firstName;
-        teacher.lastName = data.lastName;
-        teacher.email = data.email;
-        teacher.phone = data.phone;
-        teacher.password = data.password;
-        teacher.save()
-            .then(updatedTeacher => {
-                updatedTeacher =  updatedTeacher.dataValues;
+    .then(user => {
+
+        for (var key in data) {
+            user[key] = data[key];
+        }
+
+        user.save()
+            .then(updatedUser => {
+                updatedUser =  updatedUser.dataValues;
 
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    teacher: extractDataForFrontend(updatedTeacher, {})
+                    teacher: extractDataForFrontend(updatedUser, {})
                 })
             })
             .catch(error => {
@@ -85,26 +85,14 @@ app.put('/', (req, res, next) => {
     })
 });
 
-const { pbkdf2, saltHashPassword } = require('../utils/security');
-const { sendEmail, smtpTransport } = require('../utils/smpt');
 
-const createToken = (id, classId) => {
-    const secret = process.env.SECRET;
-    const payload = { id: id };
-
-    return jwt.sign(payload, secret, { expiresIn: '30m' });
-}
-
-
+const { validatePassword } = require('../utils/security');
 
 app.put('/changepassword', (req, res, next) => {
 
-    const { password1, password2, oldPassword } = req.body;
-
+    const { password, confirmPassword, oldPassword } = req.body;
     const token = req.headers.authorization.split('Bearer ')[1];
-    const secret = process.env.SECRET;
-    const decoded =  jwt.decode(token, secret);
-    const id = decoded.id;
+    const id = decodeToken(token);
 
     Teacher.findById(id)
         .then(user => {
@@ -112,23 +100,19 @@ app.put('/changepassword', (req, res, next) => {
             const hashTest = pbkdf2(oldPassword, user.salt);
 
             if (hashTest.passwordHash === user.password) {
-                if (password1 !== password2) {
+
+                let errorMessage = validatePassword(password, confirmPassword);
+
+                if (errorMessage) {
                     return res.status(500).send({
-                        feedback: feedback(ERROR, ['Your passwords are not matching.'])
-                    })
+                        feedback: feedback(ERROR, errorMessage)
+                    });
                 }
 
-                if (!password1 || password1.length < 8) {
-                    return res.status(500).send({
-                        feedback: feedback(ERROR, ['Your password must be at least 8 characters.'])
-                    })
-                }
-
-                user.password = password1;
+                user.password = password;
 
                 user.save()
                 .then(updatedUser => {
-                    console.log('updatedUser', updatedUser)
 
                     updatedUser.destroyTokens();
 
@@ -162,22 +146,6 @@ app.put('/changepassword', (req, res, next) => {
                 res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
             }
         })
-
-
-
-
-    // check if current password matches that of the record
-    // if yes
-        // check if password1 and password2 are matching
-        // if yes
-            // check if password is more than 8 char long
-            // if yes
-                // save
-                // send user back and log in from FE
-            // else
-                // throw error
-
-
 });
 
 

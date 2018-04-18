@@ -102,8 +102,8 @@ class ClassFormsContainer extends Component {
                     ? <div>
 
                         {currentClass
-                            ? <h3>Information and Settings for Class {classes.list[currentClass].name}</h3>
-                            : <h3> Register New Class </h3>}
+                            ? <h2>Information and Settings for Class {classes.list[currentClass].name}</h2>
+                            : <h2> Register New Class </h2>}
                         <ClassForm
                             classData={this.state}
                             onInputChange={this.onInputChange.bind(this)}

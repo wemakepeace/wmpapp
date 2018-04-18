@@ -10,12 +10,12 @@ import { changePassword } from '../redux/actions/teacher';
 class ChangePasswordForm extends Component {
     state = {
         oldPassword: '',
-        password1: '',
-        password2: '',
+        password: '',
+        confirmPassword: '',
         showFeedback: false
     }
 
-    onInputChange = (ev, type) => this.setState({[type]: ev.target.value})
+    onInputChange = (ev, type) => this.setState({[type]: ev.target.value, showFeedback: false })
 
     onChangePassword = () => {
         this.props.changePassword(this.state)
@@ -29,63 +29,52 @@ class ChangePasswordForm extends Component {
 
     render() {
         const { feedback } = this.props;
-        const { showFeedback } = this.state;
+        const { showFeedback, oldPassword, password, confirmPassword } = this.state;
 
         return (
-            <Grid
-                textAlign='center'
-                style={{ height: '100%' }}
-                verticalAlign='middle'>
-                <Grid.Column style={{ maxWidth: 450 }}>
-                    <Header as='h2' textAlign='center'>Change Password</Header>
-                    {   feedback && feedback.type === 'SUCCESS'
-                    ?   null
-                    :   <Form size='large'>
-                            <Segment stacked>
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='Current password'
-                                    type='password'
-                                    onChange={ (ev) => this.onInputChange(ev, 'oldPassword')}
-                                />
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='New password'
-                                    type='password'
-                                    onChange={ (ev) => this.onInputChange(ev, 'password1')}
-                                />
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='Confirm new password'
-                                    type='password'
-                                    onChange={ (ev) => this.onInputChange(ev, 'password2')}
-                                />
-                                <Button
-                                    className='large-custom-btn'
-                                    fluid size='large'
-                                    onClick={this.onChangePassword}>Change Password</Button>
-                            </Segment>
-                        </Form>
-                    }
-                    { showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null }
-                    { showFeedback && (feedback && (feedback.type === 'success'))
-                    ? <Button
-                        name='Go to Portal'
-                        as={Link}
-                        className='large-custom-btn'
-                        size='large'
-                        to='/exchange' />
-                    : null }
-                </Grid.Column>
-            </Grid>
+                <div className='profile-segment'>
+                <p>Password must be at least 8 characters long.</p>
+                    <div className='form-row'>
+                        <label className='form-label'>Current password</label>
+                        <span className='form-input-span'>
+                            <input
+                                value={oldPassword || ''}
+                                className='form-input'
+                                type='password'
+                                placeholder='Please type current password'
+                                name='oldPassword'
+                                onChange={(ev)=>this.onInputChange(ev, 'oldPassword')}/>
+                        </span>
+                    </div>
+                    <div className='form-row'>
+                        <label className='form-label'>New password</label>
+                        <span className='form-input-span'>
+                            <input
+                                value={password || ''}
+                                className='form-input'
+                                type='password'
+                                placeholder=''
+                                name='password'
+                                onChange={(ev)=>this.onInputChange(ev, 'password')}/>
+                        </span>
+                    </div>
+                    <div className='form-row'>
+                        <label className='form-label'>Confirm new password</label>
+                        <span className='form-input-span'>
+                            <input
+                                value={confirmPassword || ''}
+                                className='form-input'
+                                type='password'
+                                placeholder=''
+                                name='confirmPassword'
+                                onChange={(ev)=>this.onInputChange(ev, 'confirmPassword')}/>
+                        </span>
+                    </div>
+                        <Button
+                            className='large-custom-btn'
+                            size='large'
+                            onClick={this.onChangePassword}>Change Password</Button>
+                </div>
         )
     };
 };

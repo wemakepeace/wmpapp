@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
 import ClassMenu from './ClassMenu';
-import ChangePasswordForm from '../ChangePasswordForm';
+import Settings from './Settings';
 
 import { updateTeacher } from '../../redux/actions/teacher';
+import { clearFeedback } from '../../redux/actions/shared';
 
 class TeacherForm extends Component {
     state = {
@@ -24,12 +25,17 @@ class TeacherForm extends Component {
         this.setState({ [key]: ev.target.value, showFeedback: false })
     }
 
-    onChangePasswordClick = () => this.setState({ showChangePwForm: true })
+    onChangePasswordClick = () => {
+        this.props.clearFeedback();
+        this.setState({ showChangePwForm: !this.state.showChangePwForm })
+    }
 
     onSubmit = () => {
         const data = this.state;
         data.className = this.props.teacher.classes.name;
         this.props.updateTeacher(data);
+        this.setState({ showChangePwForm: false })
+
     }
 
     componentDidMount() {
@@ -47,14 +53,10 @@ class TeacherForm extends Component {
         const { firstName, lastName, email, phone, password, showFeedback, showChangePwForm } = this.state;
         const { feedback } = this.props;
 
-        if (showChangePwForm) {
-            return (<ChangePasswordForm />)
-        }
-
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
-                    <h4>Teacher Information</h4>
+                    <h2>Teacher Information</h2>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
                     <div className='form-row'>
                         <label className='form-label'>First name</label>
@@ -104,21 +106,13 @@ class TeacherForm extends Component {
                         <Button
                             className='large-custom-btn'
                             size='large'
-                            onClick={()=>this.onSubmit()}>SAVE</Button>
-                    </div>
-
-
-
-                </div>
-                <div className='profile-segment'>
-                    <h4>Security Settings</h4>
-                    <div className='form-row'>
-                        <span onClick={this.onChangePasswordClick}>Change password</span>
-                    </div>
-                    <div className='form-row'>
-                        <Link to='/delete'>Delete Account</Link>
+                            onClick={()=>this.onSubmit()}>Save</Button>
                     </div>
                 </div>
+                <Settings
+                    showChangePwForm={showChangePwForm}
+                    onChangePasswordClick={this.onChangePasswordClick}/>
+
                 { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }
@@ -134,4 +128,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { updateTeacher })(TeacherForm);
+export default connect(mapStateToProps, { updateTeacher, clearFeedback })(TeacherForm);

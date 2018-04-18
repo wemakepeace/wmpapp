@@ -3,13 +3,11 @@ const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
 const School = require('../db/index').models.School;
-
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
-
 
 app.get('/', (req, res, next) => {
     Class.findAll()
@@ -66,17 +64,11 @@ app.post('/', (req, res, next) => {
     const data = req.body;
     const schoolData = data.school;
 
-    if (data.age_group) {
-        data.ageGroupId = data.age_group.value
-    }
+    if (data.age_group) data.ageGroupId = data.age_group.value;
 
-    if (data.term) {
-        data.termId = data.term.value
-    }
+    if (data.term) data.termId = data.term.value;
 
-    if (schoolData && schoolData.country) {
-        schoolData.country = schoolData.country.value;
-    }
+    if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
 
     Class.findById(data.id)
         .then(_class => {

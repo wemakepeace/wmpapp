@@ -9,28 +9,23 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractSessionData, extractDataForFrontend } = require('../utils/helpers');
-const { pbkdf2, saltHashPassword } = require('../utils/security');
-
-const createToken = (id, classId) => {
-    const secret = process.env.SECRET;
-    const payload = { id: id };
-
-    return jwt.sign(payload, secret, { expiresIn: '30m' });
-}
+const {
+    pbkdf2,
+    saltHashPassword,
+    createToken,
+    validatePassword } = require('../utils/security');
 
 app.post('/create', (req, res, next) => {
     let userData = req.body.data;
+    const { password, confirmPassword } = userData;
 
-     /* uncomment for pw validations
-    if(userData.password !== userData.confirmPassword) {
-       return res.status(500).send({
-            feedback: feedback(ERROR, ['Your passwords are not matching.'])
+    let errorMessage = validatePassword(password, confirmPassword);
+
+    if (errorMessage) {
+        return res.status(500).send({
+            feedback: feedback(ERROR, errorMessage)
         });
-    } else if (!userData.password || userData.password.length < 8) {
-       return res.status(500).send({
-            feedback: feedback(ERROR, ['Your password must be at least 8 characters long.'])
-        });
-    }*/
+    }
 
     return Teacher.create(userData)
         .then(teacher => {
@@ -222,16 +217,12 @@ app.post('/reset/:token', (req, res, next) => {
         }
 
         /** Uncomment for validations
-        if (password1 !== password2) {
-            return res.status(500).send({
-                feedback: feedback(ERROR, ['Your passwords are not matching.'])
-            })
-        }
+        let errorMessage = validatePassword(password, confirmPassword);
 
-        if (!password1 || password1.length < 8) {
+        if (errorMessage) {
             return res.status(500).send({
-                feedback: feedback(ERROR, ['Your password must be at least 8 characters.'])
-            })
+                feedback: feedback(ERROR, errorMessage)
+            });
         } **/
 
         user.password = password1;

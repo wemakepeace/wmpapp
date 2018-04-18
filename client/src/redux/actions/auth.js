@@ -90,7 +90,7 @@ const changePassword = (data) => {
             (response) => {
                 const credentials = {
                     email: response.data.user.email,
-                    password: data.password1
+                    password: data.password
                 }
 
                 const feedback = response.data.feedback.messages

@@ -32,7 +32,7 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
 
     return (
         <div>
-            <h4> School Mailing Address</h4>
+            <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
             <div className='form-row'>
                 <label className='form-label'>School name</label>
