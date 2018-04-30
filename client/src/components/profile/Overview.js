@@ -27,7 +27,6 @@ const Overview = ({ redirectTo, teacher, classes, removeCurrentClass, match }) =
         currentClass = classes.list[classes.currentClass];
     }
 
-    // console.log('match', match)
     return (
         <div className='profile-form'>
             <div className='profile-segment'>

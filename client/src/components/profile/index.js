@@ -3,12 +3,8 @@ import { connect } from 'react-redux';
 import { Redirect, Link, Route } from 'react-router-dom';
 
 import WMPHeader from '../WMPHeader';
-import Overview from './Overview'
-import SchoolForm from './SchoolForm';
-import ClassFormsContainer from './ClassFormsContainer';
-import TeacherForm from './TeacherForm';
-
 import TabContent from './TabContent';
+import Overview from './Overview'
 
 import { removeCurrentClass } from '../../redux/actions/class';
 
@@ -17,16 +13,6 @@ class Main extends Component {
     state = {
         newClass: false
     }
-
-    // onViewChange = (showTab, newClass) => {
-    //     if (showTab === 'classforms' && newClass) {
-    //         this.createNewClass();
-    //     }
-    //     // find a way to add the showTabCategory to the router
-    //     // add a way to extract the showTab to componentdidmount
-    //     this.props.history.push(`/exchange/${showTab}`)
-    //     // this.setState({ showTab });
-    // }
 
     createNewClass = () => {
         this.props.removeCurrentClass();
@@ -38,11 +24,11 @@ class Main extends Component {
         return this.props.location.pathname.indexOf(item) > -1 ? 'active-profile' : '';
     }
 
-
     render() {
+        console.log('here')
         const { className, history, match } = this.props;
         const currentClass = this.props.classes.currentClass;
-        const { showTab, newClass } = this.state;
+        const { newClass } = this.state;
 
         return (
             <div className='page-container profile'>
@@ -54,7 +40,7 @@ class Main extends Component {
                         <div className='profile-menu-column'>
                             <Link to={`${match.url}/overview`}>
                                 <div
-                                    className={`profile-menu-item ${this.getActiveClass('overview')}`}
+                                    className={`profile-menu-item ${this.getActiveClass('')}`}
                                     >
                                     <h3>OVERVIEW</h3>
                                 </div>
@@ -99,6 +85,7 @@ class Main extends Component {
                                 : '' }
                         </div>
                         <div className='profile-form-column'>
+                            <Route exact path={`${match.path}`} component={Overview} />
                             <Route
                                 path={`${match.path}/:tab`}
                                 component={TabContent}/>

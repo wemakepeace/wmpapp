@@ -37,10 +37,10 @@ class MainMenu extends Component {
                     onClick={this.handleItemClick}>Flex Examples</Menu.Item>
                 <Menu.Item
                     as={Link}
-                    to='/exchange'
-                    name='exchange'
-                    active={activeItem === 'exchange'}
-                    onClick={this.handleItemClick} >Exchange</Menu.Item>
+                    to='/profile'
+                    name='profile'
+                    active={activeItem === 'profile'}
+                    onClick={this.handleItemClick} >Profile</Menu.Item>
                 <Menu.Item
                     as={Link}
                     to='secret'
