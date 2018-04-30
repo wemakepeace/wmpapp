@@ -45,7 +45,7 @@ class Routes extends Component  {
                     <PrivateRoute
                         loading={this.state.loading}
                         key={4}
-                        exact path={match.url + 'exchange'}
+                        path={match.url + 'exchange'}
                         component={Exchange} />
                     <PrivateRoute
                         loading={this.state.loading}
