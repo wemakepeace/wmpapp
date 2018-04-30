@@ -101,6 +101,7 @@ app.put('/changepassword', (req, res, next) => {
 
             if (hashTest.passwordHash === user.password) {
 
+                /*** UNCOMMENT for validations
                 let errorMessage = validatePassword(password, confirmPassword);
 
                 if (errorMessage) {
@@ -108,6 +109,7 @@ app.put('/changepassword', (req, res, next) => {
                         feedback: feedback(ERROR, errorMessage)
                     });
                 }
+                ***/
 
                 user.password = password;
 

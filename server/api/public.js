@@ -19,6 +19,7 @@ app.post('/create', (req, res, next) => {
     let userData = req.body.data;
     const { password, confirmPassword } = userData;
 
+    /*** UNCOMMENT for validations
     let errorMessage = validatePassword(password, confirmPassword);
 
     if (errorMessage) {
@@ -26,6 +27,7 @@ app.post('/create', (req, res, next) => {
             feedback: feedback(ERROR, errorMessage)
         });
     }
+    ***/
 
     return Teacher.create(userData)
         .then(teacher => {
