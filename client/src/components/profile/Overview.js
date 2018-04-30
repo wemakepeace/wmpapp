@@ -10,14 +10,13 @@ import TeacherForm from './TeacherForm';
 import { fetchClass, removeCurrentClass } from '../../redux/actions/class';
 import { getCountryName } from '../../utils/helpers';
 
-const Overview = ({ redirectTo, teacher, classes, removeCurrentClass, match }) => {
+const Overview = ({ teacher, classes, removeCurrentClass, match, history }) => {
 
     const initiateNewClass = () => {
         const newClass = true;
         removeCurrentClass();
-        return redirectTo('classforms', newClass);
+        history.push('/profile/class');
     }
-
 
     const { firstName, lastName, email, phone } = teacher;
 

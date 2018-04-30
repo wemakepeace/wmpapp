@@ -25,7 +25,7 @@ class Main extends Component {
     }
 
     render() {
-        console.log('here')
+
         const { className, history, match } = this.props;
         const currentClass = this.props.classes.currentClass;
         const { newClass } = this.state;
@@ -85,10 +85,11 @@ class Main extends Component {
                                 : '' }
                         </div>
                         <div className='profile-form-column'>
-                            <Route exact path={`${match.path}`} component={Overview} />
+                            <Route exact path={`${match.path}`} component={Overview} history={history}/>
                             <Route
                                 path={`${match.path}/:tab`}
-                                component={TabContent}/>
+                                component={TabContent}
+                                history={history} />
                         </div>
                     </div>
                 </div>

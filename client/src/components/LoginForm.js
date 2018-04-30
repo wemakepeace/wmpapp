@@ -37,7 +37,7 @@ class Login extends Component {
         const { redirectToReferrer, showFeedback } = this.state;
         const { feedback } = this.props;
 
-        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/exchange' }};
+        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile' }};
 
         if (redirectToReferrer === true || this.props.teacher.id) {
             return (

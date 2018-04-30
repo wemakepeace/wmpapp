@@ -98,8 +98,7 @@ class ClassFormsContainer extends Component {
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
-                { showComponent || currentClass
-                    ? <div>
+                <div>
 
                         {currentClass
                             ? <h2>Information and Settings for Class {classes.list[currentClass].name}</h2>
@@ -123,8 +122,6 @@ class ClassFormsContainer extends Component {
                             ? <Feedback {...feedback} />
                             : null }
                     </div>
-                     : <span>{this.props.redirectTo('overview')}</span>
-                }
                 </div>
             </div>
         )

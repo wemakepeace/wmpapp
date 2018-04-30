@@ -17,7 +17,7 @@ const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurr
     const initiateNewClass = () => {
         const newClass = true;
         removeCurrentClass();
-        return onViewChange('classforms', newClass);
+        history.push('/profile/class');
     }
 
     return (

@@ -8,7 +8,7 @@ import Teacher from './TeacherForm';
 
 
 
-const TabContent = ({ match }) => {
+const TabContent = ({ match, history }) => {
 
     const components = {
         overview: Overview,
@@ -19,7 +19,7 @@ const TabContent = ({ match }) => {
     const Component = components[match.params.tab];
 
     return (
-        <Component />
+        <Component history={history} />
     );
 
 }
