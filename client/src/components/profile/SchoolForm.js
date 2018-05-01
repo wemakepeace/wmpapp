@@ -5,22 +5,30 @@ import countries from 'country-list';
 
 import SchoolList from './SchoolAddressesList';
 
-const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange, autoFillForm }) => {
-    const {
-        id,
-        name,
-        address1,
-        address2,
-        city,
-        zip,
-        state,
-        country } = schoolData;
+class SchoolForm extends Component {
+    state = {
+        id: '',
+        name: '',
+        address1: '',
+        address2: '',
+        city: '',
+        zip: '',
+        state: '',
+        country: ''
+    }
 
-    const onLocalInputChange = (ev, key) => onInputChange(key, ev.target.value, 'school')
+    onLocalInputChange = (ev, key) => {
+        this.props.onInputChange(key, ev.target.value, 'school')
+        this.setState({[key]: ev.target.value});
+    }
 
-    const onLocalSelectOptionChange = (value, key) => onSelectOptionChange(key, value, 'school')
+    onLocalSelectOptionChange = (value, key) => {
+        this.props.onSelectOptionChange(key, value, 'school');
+        console.log(key, value)
+        this.setState({ [key] : value });
+    }
 
-    const fetchCountries = () => {
+    fetchCountries = () => {
         let options;
 
         return new Promise((resolve, reject) => {
@@ -40,91 +48,102 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange, autoFillF
         })
     }
 
-    return (
-        <div>
-            <h2> School Mailing Address</h2>
-            <p>This address will be used when sending letters to your class.</p>
-            <SchoolList autoFillForm={autoFillForm}/>
-            <div className='form-row'>
-                <label className='form-label'>School name</label>
-                <span className='form-input-span'>
-                    <input
-                        value={name || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='name'
-                        onChange={(ev)=> onLocalInputChange(ev, 'name')}/>
-                </span>
-            </div>
+    componentWillMount() {
+        this.setState(this.props.schoolData)
+    }
 
-            <div className='form-row'>
-                <label className='form-label'>Address</label>
-                <span className='form-input-span'>
-                    <input
-                        value={address1 || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='address1'
-                        onChange={(ev)=> onLocalInputChange(ev, 'address1')}/>
-                </span>
+    componentWillReceiveProps(newProps) {
+        this.setState(newProps)
+    }
+
+    render() {
+        const { name, address1, address2, city, zip, state, country } = this.state;
+        return (
+            <div>
+                <h2> School Mailing Address</h2>
+                <p>This address will be used when sending letters to your class.</p>
+                <SchoolList autoFillForm={this.props.autoFillForm}/>
+                <div className='form-row'>
+                    <label className='form-label'>School name</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={name || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='name'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'name')}/>
+                    </span>
+                </div>
+
+                <div className='form-row'>
+                    <label className='form-label'>Address</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={address1 || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='address1'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'address1')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Address</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={address2 || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='address1'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'address2')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>City</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={city || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='city'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'city')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>State</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={state || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='state'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'state')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Zip code</label>
+                    <span className='form-input-span'>
+                        <input
+                            value={zip || ''}
+                            className='form-input'
+                            placeholder=''
+                            name='zip'
+                            onChange={(ev)=> this.onLocalInputChange(ev, 'zip')}/>
+                    </span>
+                </div>
+                <div className='form-row'>
+                    <label className='form-label'>Country</label>
+                    <span className='form-input-span'>
+                        {<Async
+                            name='form-field-name'
+                            value={country}
+                            onChange={(select) => this.onLocalSelectOptionChange(select, 'country')}
+                            loadOptions={this.fetchCountries}
+                        />}
+                    </span>
+                </div>
             </div>
-            <div className='form-row'>
-                <label className='form-label'>Address</label>
-                <span className='form-input-span'>
-                    <input
-                        value={address2 || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='address1'
-                        onChange={(ev)=> onLocalInputChange(ev, 'address2')}/>
-                </span>
-            </div>
-            <div className='form-row'>
-                <label className='form-label'>City</label>
-                <span className='form-input-span'>
-                    <input
-                        value={city || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='city'
-                        onChange={(ev)=> onLocalInputChange(ev, 'city')}/>
-                </span>
-            </div>
-            <div className='form-row'>
-                <label className='form-label'>State</label>
-                <span className='form-input-span'>
-                    <input
-                        value={state || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='state'
-                        onChange={(ev)=> onLocalInputChange(ev, 'state')}/>
-                </span>
-            </div>
-            <div className='form-row'>
-                <label className='form-label'>Zip code</label>
-                <span className='form-input-span'>
-                    <input
-                        value={zip || ''}
-                        className='form-input'
-                        placeholder=''
-                        name='zip'
-                        onChange={(ev)=> onLocalInputChange(ev, 'zip')}/>
-                </span>
-            </div>
-            <div className='form-row'>
-                <label className='form-label'>Country</label>
-                <span className='form-input-span'>
-                    {<Async
-                        name='form-field-name'
-                        value={country}
-                        onChange={(select) => onLocalSelectOptionChange(select, 'country')}
-                        loadOptions={fetchCountries}
-                    />}
-                </span>
-            </div>
-        </div>
-    )
+        )
+    }
 }
 
 export default SchoolForm;

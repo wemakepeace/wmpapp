@@ -14,7 +14,7 @@ import { fetchTeacher } from '../../redux/actions/teacher';
 class ClassFormsContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = this.getDefaultState(props.classes);
+        this.state = this.getDefaultState(props.classes, props.schools);
     }
 
     onInputChange = (key, value, objName) => {
@@ -43,7 +43,7 @@ class ClassFormsContainer extends Component {
         }
     }
 
-    getDefaultState = (classes) => {
+    getDefaultState = (classes, schools) => {
         let defaultState = {
             id: '',
             name: '',
@@ -66,32 +66,33 @@ class ClassFormsContainer extends Component {
         }
 
         if (classes && classes.list && classes.currentClass) {
-            return { ...classes.list[classes.currentClass], showFeedback: false };
+            defaultState = {
+                ...classes.list[classes.currentClass],
+                showFeedback: false
+            };
+
+            if (schools && schools[classes.currentClass]) {
+                defaultState.schools = schools[classes.currentClass]
+            }
         }
         return defaultState;
     }
 
     submitData = () => {
         let classData = this.state;
-        // classData.id = this.props.classes.currentClass;
         classData.teacherId = this.props.teacher.id;
-        // console.log('classData', classData)
+
         this.props.saveClass(classData)
-        // .then(() => {
-            // console.log('hitting here')
-            // this.props.fetchTeacher()
-        // });
     }
 
     autoFillForm = (id) => {
-        console.log(id)
         const school = this.props.teacher.schools[id];
         this.setState({ school });
 
     }
 
 
-    componentWillReceiveProps({ feedback, classes, school }) {
+    componentWillReceiveProps({ feedback, classes, schools }) {
         const previousCurrentClass = this.props.classes.currentClass;
         const { currentClass, list } = classes;
         if (feedback && feedback.type) {
@@ -99,7 +100,7 @@ class ClassFormsContainer extends Component {
         }
 
         if (currentClass !== previousCurrentClass) {
-            const newState = this.getDefaultState(classes);
+            const newState = this.getDefaultState(classes, schools);
             this.setState({...newState, showFeedback: true});
         }
     }
@@ -123,6 +124,7 @@ class ClassFormsContainer extends Component {
                             onSelectOptionChange={this.onSelectOptionChange}
                         />
                         <SchoolForm
+                            getSchoolData={this.getSchoolData}
                             schoolData={this.state.school}
                             autoFillForm={this.autoFillForm}
                             onInputChange={this.onInputChange.bind(this)}
@@ -146,8 +148,9 @@ class ClassFormsContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         teacher: state.teacher,
-        feedback: state.feedback,
-        classes: state.classes
+        schools: state.teacher.schools,
+        classes: state.classes,
+        feedback: state.feedback
     }
 }
 

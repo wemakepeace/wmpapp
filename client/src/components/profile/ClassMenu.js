@@ -16,12 +16,4 @@ const ClassMenu = ({ classes }) => {
     )
 }
 
-
-// class ClassMenu extends Component {
-//     return (
-
-//     )
-
-// }
-
 export default ClassMenu;

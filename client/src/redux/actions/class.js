@@ -10,8 +10,8 @@ const fetchClass = (id, shouldFetch) => {
                 .then(response => response.data)
                 .then(
                     ({ _class, feedback}) => {
-                        console.log(_class);
                         localStorage.setItem('currentClass',  _class.id );
+
                         return dispatch({
                             type: FETCH_CLASS,
                             _class: _class,
@@ -46,8 +46,6 @@ const saveClass = (data) => {
             .then(response => response.data)
             .then(
                 ({ _class, _school, feedback }) => {
-                    console.log('_class', _class)
-                    console.log('_school', _school)
                     return dispatch(saveClassSuccess(_class, _school, feedback));
                 },
                 (error) => {

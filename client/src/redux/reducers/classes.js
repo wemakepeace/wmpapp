@@ -16,7 +16,6 @@ const classes = (state = initialState, action) => {
 
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
-            console.log('action._class', action._class)
             let newState = { ...state }
 
             newState.list[classId] = { ...action._class }

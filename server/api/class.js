@@ -14,7 +14,6 @@ app.get('/', (req, res, next) => {
         .then(result => res.send(result))
 });
 
-
 app.get('/:id', (req, res, next) => {
     const { id } = req.params;
 
@@ -43,7 +42,7 @@ app.get('/:id', (req, res, next) => {
         if (_class.school && _class.school.dataValues) {
             _class.school = _class.school.dataValues
         }
-        console.log(_class);
+
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
             _class: extractDataForFrontend(_class, {})
@@ -61,48 +60,22 @@ app.get('/:id', (req, res, next) => {
 
 // create update class and school instances
 app.post('/', (req, res, next) => {
-    const data = req.body;
-    const schoolData = data.school;
+    const classData = req.body;
+    const schoolData = classData.school;
 
-    if (data.age_group) data.ageGroupId = data.age_group.value;
+    if (classData.age_group) classData.ageGroupId = classData.age_group.value;
 
-    if (data.term) data.termId = data.term.value;
+    if (classData.term) classData.termId = classData.term.value;
 
     if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
 
-    Class.findById(data.id)
+    Class.findById(classData.id)
         .then(_class => {
-            /** If class does not exist **/
-            /** Create class, school and add schoolId to class **/
-
-            // if (!_class) {
-            //     return Class.create(data)
-            //     .then(_class => {
-            //         /* If there is no schoolData.id, create a new school instance*/
-            //         if (schoolData.id === null) {
-            //             return School.create(schoolData)
-            //             .then(school => {
-            //                 _class.setSchool(school.dataValues.id)
-            //                 return _class
-            //             })
-            //         } else {
-            //             School.findById(schoolData.id)
-            //             .then(_school => {
-            //                 schoolData.id = _school.id;
-            //                 for (var key in schoolData) {
-            //                     school[key] = schoolData[key];
-            //                 }
-            //                 return _school.save()
-            //             })
-            //         }
-
-            //     })
-            // } else {
 
             const classPromise = () => {
                 /* Create classInstance if class does not exist yet */
                 if (!_class) {
-                    return Class.create(data)
+                    return Class.create(classData)
                         .then(_class => _class)
                 /* Update existing class */
                 } else {
@@ -111,8 +84,8 @@ app.post('/', (req, res, next) => {
                         _class.schoolId = schoolData.id;
                     }
 
-                    for (var key in data) {
-                        _class[key] = data[key];
+                    for (var key in classData) {
+                        _class[key] = classData[key];
                     }
                 }
 
@@ -121,7 +94,7 @@ app.post('/', (req, res, next) => {
 
 
             const schoolPromise = () => {
-                console.log('BEING CALLED============')
+
                 return School.findById(_class.id)
                 .then(school => {
                     /* Create schoolInstance if school does not exist */
@@ -157,21 +130,19 @@ app.post('/', (req, res, next) => {
                         .catch(err => console.log(err))
                     }
                 })
-                .then(res => {
-                    console.log('res===========', res)
-                    return res
-                })
+                .then(res => res)
+                .catch(err => console.log(err))
             }
 
+            /* Update or create class and school */
             return Promise.all([classPromise(), schoolPromise()])
             .then(([updatedClass, updatedSchool]) => {
-                console.log('updatedSchool', updatedSchool)
+
                 return { updatedClass, updatedSchool }
             })
         })
         .then(({ updatedClass, updatedSchool})  => {
-            console.log('updatedClass', updatedClass)
-            console.log('updatedSchool', updatedSchool)
+
             return Promise.all([
                 updatedClass.getTerm(),
                 updatedClass.getAge_group(),
@@ -186,6 +157,7 @@ app.post('/', (req, res, next) => {
                         label: term.dataValues.name,
                         value: term.dataValues.id
                     }
+
                     updatedClass.term = termFormatted;
                 }
 
@@ -194,13 +166,13 @@ app.post('/', (req, res, next) => {
                         label: age_group.dataValues.name,
                         value: age_group.dataValues.id
                     }
+
                     updatedClass.age_group = age_groupFormatted;
                 }
 
                 if (updatedSchool ) {
                     updatedClass.school = updatedSchool;
                 }
-
 
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
@@ -217,7 +189,5 @@ app.post('/', (req, res, next) => {
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
         })
 });
-
-
 
 module.exports = app;
