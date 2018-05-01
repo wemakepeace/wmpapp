@@ -46,7 +46,10 @@ const fetchTeacher = () => {
         return axios.get(`/teacher`)
             .then(response => response.data)
             .then(
-                ({ teacher, feedback }) => dispatch({type: LOGIN_SUCCESS, teacher, feedback }),
+                ({ teacher, feedback }) => {
+
+                    return dispatch({type: LOGIN_SUCCESS, teacher, feedback })
+                },
                 (error) => dispatch(logout())
             )
     }

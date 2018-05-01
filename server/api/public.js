@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { conn } = require('../db/index.js');
 const Teacher = require('../db/index').models.Teacher;
 const Class = require('../db/index').models.Class;
+const School = require('../db/index').models.School;
 const AgeGroup = require('../db/index').models.AgeGroup;
 
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
@@ -58,7 +59,10 @@ app.post('/login', (req, res) => {
 
     return Teacher.findOne({
         where: { email },
-        include: [ Class ]
+        include: [ {
+                model: Class,
+                include: [ School ]
+            }]
         })
         .then(teacher => {
             let errorMessage;
@@ -69,14 +73,26 @@ app.post('/login', (req, res) => {
 
             teacher.destroyTokens();
             teacher = teacher.dataValues;
+            teacher.schools = [];
+
+            let schoolIds = [];
 
             teacher.classes = teacher.classes.map(_class => {
+
+                const schoolId = _class.school.dataValues.id || null;
+
+                if (schoolIds.indexOf(schoolId) < 0) {
+                    schoolIds.push(schoolId);
+                    teacher.schools.push(_class.school.dataValues);
+                }
+
                 return {
                     name: _class.dataValues.name,
                     id: _class.dataValues.id
                 }
             });
 
+            console.log('teacher', teacher)
             const hashTest = pbkdf2(password, teacher.salt);
 
             if (hashTest.passwordHash === teacher.password) {

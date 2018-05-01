@@ -14,9 +14,12 @@ const login = (credentials, specialFeedback) => {
             .then(
                 ({ teacher, token, feedback }) => {
                     setToken(token);
+
                     if (specialFeedback) {
                         feedback.messages = specialFeedback;
                     }
+                    console.log('teacher', teacher)
+
                     dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {

@@ -40,7 +40,7 @@ class Main extends Component {
                         <div className='profile-menu-column'>
                             <Link to={`${match.url}/overview`}>
                                 <div
-                                    className={`profile-menu-item ${this.getActiveClass('')}`}
+                                    className={`profile-menu-item ${this.getActiveClass('overview')}`}
                                     >
                                     <h3>OVERVIEW</h3>
                                 </div>
@@ -55,7 +55,7 @@ class Main extends Component {
                                 ? <div>
                                     <Link to={`${match.url}/class`}>
                                         <div
-                                            className={`profile-menu-item ${this.getActiveClass('classforms')}`}>
+                                            className={`profile-menu-item ${this.getActiveClass('class')}`}>
                                             <h3>CLASS</h3>
                                         </div>
                                     </Link>
@@ -85,7 +85,10 @@ class Main extends Component {
                                 : '' }
                         </div>
                         <div className='profile-form-column'>
-                            <Route exact path={`${match.path}`} component={Overview} history={history}/>
+                            <Route
+                                exact path={`${match.path}`}
+                                component={Overview}
+                                history={history}/>
                             <Route
                                 path={`${match.path}/:tab`}
                                 component={TabContent}

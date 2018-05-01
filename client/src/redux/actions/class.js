@@ -10,13 +10,11 @@ const fetchClass = (id, shouldFetch) => {
                 .then(response => response.data)
                 .then(
                     ({ _class, feedback}) => {
-                        let classObject = {};
-                        classObject[_class.id] = _class
 
                         localStorage.setItem('currentClass',  _class.id );
                         return dispatch({
                             type: FETCH_CLASS,
-                            _class: classObject,
+                            _class: _class,
                             currentClass: _class.id
                         });
                     },

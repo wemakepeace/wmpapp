@@ -60,7 +60,8 @@ const valuesForFrontend = [
     'zip',
     'city',
     'state',
-    'country'
+    'country',
+    'schools'
 ];
 
 
@@ -72,12 +73,17 @@ const isObject = (obj) => {
 };
 
 const extractDataForFrontend = (data, result) => {
-
     valuesForFrontend.map(key => {
         if (data.hasOwnProperty(key)) {
             if (isObject(data[key])) {
                 // it is an object, call recursively
                 result[key] = extractDataForFrontend(data[key], {});
+            } else if (Array.isArray(data[key]) && data[key][0].hasOwnProperty('id')) {
+                result[key] = data[key].reduce((collection, _key, index) => {
+                    const id = _key.id;
+                    collection[id] = extractDataForFrontend(data[key][index], {})
+                    return collection
+                }, {})
             } else {
                 result[key] = data[key];
             }
@@ -85,9 +91,10 @@ const extractDataForFrontend = (data, result) => {
           return;
         }
     })
-
+    console.log(result)
     return result;
 };
+
 
 module.exports = {
     extractSessionData,

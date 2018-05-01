@@ -1,6 +1,7 @@
 const app = require('express').Router();
 const Teacher = require('../db/index').models.Teacher;
 const Class = require('../db/index').models.Class;
+const School = require('../db/index').models.School;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
@@ -19,7 +20,10 @@ app.get('/', (req, res, next) => {
 
     return Teacher.findOne({
         where: { id },
-        include: [ Class ]
+        include: [ {
+                model: Class,
+                include: [ School ]
+            }]
         })
         .then(teacher => {
             let errorMessage;
@@ -29,7 +33,19 @@ app.get('/', (req, res, next) => {
             }
 
             teacher = teacher.dataValues;
+            teacher.schools = [];
+
+            let schoolIds = [];
+
             teacher.classes = teacher.classes.map(_class => {
+
+                const schoolId = _class.school.dataValues.id || null;
+
+                if (schoolIds.indexOf(schoolId) < 0) {
+                    schoolIds.push(schoolId);
+                    teacher.schools.push(_class.school.dataValues);
+                }
+
                 return {
                     label: _class.dataValues.name,
                     value: _class.dataValues.id
@@ -42,6 +58,7 @@ app.get('/', (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log('error', error)
             const defaultError = 'Something went wrong when loading your session. Please login.';
             const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
