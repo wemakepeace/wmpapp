@@ -3,42 +3,61 @@ import { connect } from 'react-redux';
 import { Async } from 'react-select';
 import countries from 'country-list';
 
-import { Form, Radio } from 'semantic-ui-react'
+import { Form, Radio, Dropdown } from 'semantic-ui-react'
+import Select from 'react-select';
+
+
+
 
 class SchoolList extends Component {
-    state = {}
+    state = {
+        value: null
+    }
+
+
 
     handleChange = (e, { value }) => this.setState({ value })
 
+    onSelect = (value) => {
+
+        // if (value === null) {
+            this.setState({ value })
+            // return this.props.removeCurrentClass();
+        // }
+
+        // const fetchClassFromServer = this.props.classes && this.props.classes.list && this.props.classes.list[selected.value] ? false : true
+
+        // this.props.fetchClass(selected.value, fetchClassFromServer);
+    }
+
     render() {
         const { schools } = this.props;
-        console.log('this.state', this.state)
-        return (
-            <div>
-            {
-                Object.keys(schools).map(school => {
-                    const schoolData = schools[school];
-                   return (
-                        <Form>
-                            <Form.Field>
-                                <Radio
-                                    label='Select address'
-                                    name='radioGroup'
-                                    value={schoolData.id}
-                                    checked={this.state.value === schoolData.id}
-                                    onChange={this.handleChange}
-                                />
-                                <ul>
-                                    <li>{schoolData.name}</li>
-                                    <li>{schoolData.address1} {schoolData.address2}</li>
-                                    <li>{schoolData.city} {schoolData.zip}</li>
-                                    <li>{schoolData.state} {schoolData.country}</li>
-                                </ul>
-                            </Form.Field>
-                        </Form>
-                    )
-                })
+        const { value } = this.state;
+
+        const schoolAddressOptions = [];
+        let option = {};
+
+        for (var school in schools) {
+            option = {
+                label: schools[school].name,
+                value: schools[school].id
             }
+
+            schoolAddressOptions.push(option)
+        }
+
+        return (
+            <div style={{margin: '50px 0'}}>
+                <label className='form-label'>Fill in with existing address</label>
+                <Select
+                    className='header-menu-item select-class'
+                    name='form-field-name'
+                    value={value}
+                    placeholder='Select address'
+                    onChange={this.onSelect}
+                    options={schoolAddressOptions}
+                />
+
             </div>
         )
     }
