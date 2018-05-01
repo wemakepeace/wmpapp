@@ -82,7 +82,7 @@ const extractDataForFrontend = (data, result) => {
                 result[key] = data[key].reduce((collection, _key, index) => {
                     const id = _key.id;
                     collection[id] = extractDataForFrontend(data[key][index], {})
-                    return collection
+                    return collection;
                 }, {})
             } else {
                 result[key] = data[key];
@@ -91,7 +91,6 @@ const extractDataForFrontend = (data, result) => {
           return;
         }
     })
-    console.log(result)
     return result;
 };
 

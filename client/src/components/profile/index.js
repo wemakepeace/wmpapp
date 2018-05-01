@@ -102,12 +102,12 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => {
-    const className = state.classes && state.classes.currentClass
-        ? state.classes.list[state.classes.currentClass].name
-        : '';
+    // const className = state.classes && state.classes.currentClass
+        // ? state.classes.list[state.classes.currentClass].name
+        // : '';
     return {
         teacher: state.teacher,
-        className,
+        // className,
         classes: state.classes
     }
 }

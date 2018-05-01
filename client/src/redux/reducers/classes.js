@@ -8,7 +8,7 @@ const initialState = {};
 const classes = (state = initialState, action) => {
     switch(action.type) {
         case FETCH_CLASS:
-            return { ...state, list: { ...state.list, ...action._class }, currentClass: action.currentClass }
+            return { ...state, list: { ...state.list, [action._class.id] : action._class }, currentClass: action.currentClass }
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
             let newState = { ...state }

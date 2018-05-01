@@ -43,7 +43,7 @@ app.get('/:id', (req, res, next) => {
         if (_class.school && _class.school.dataValues) {
             _class.school = _class.school.dataValues
         }
-
+        console.log(_class);
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
             _class: extractDataForFrontend(_class, {})

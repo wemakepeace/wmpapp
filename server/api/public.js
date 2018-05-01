@@ -92,7 +92,6 @@ app.post('/login', (req, res) => {
                 }
             });
 
-            console.log('teacher', teacher)
             const hashTest = pbkdf2(password, teacher.salt);
 
             if (hashTest.passwordHash === teacher.password) {

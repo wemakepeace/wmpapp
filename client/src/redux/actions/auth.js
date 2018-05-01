@@ -18,7 +18,6 @@ const login = (credentials, specialFeedback) => {
                     if (specialFeedback) {
                         feedback.messages = specialFeedback;
                     }
-                    console.log('teacher', teacher)
 
                     dispatch(loginSuccess(teacher, feedback));
                 },

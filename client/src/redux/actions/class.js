@@ -10,7 +10,7 @@ const fetchClass = (id, shouldFetch) => {
                 .then(response => response.data)
                 .then(
                     ({ _class, feedback}) => {
-
+                        console.log(_class);
                         localStorage.setItem('currentClass',  _class.id );
                         return dispatch({
                             type: FETCH_CLASS,

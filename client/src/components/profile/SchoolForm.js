@@ -3,8 +3,18 @@ import { connect } from 'react-redux';
 import { Async } from 'react-select';
 import countries from 'country-list';
 
+import SchoolList from './SchoolAddressesList';
+
 const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
-    const { id, name, address1, address2, city, zip, state, country } = schoolData;
+    const {
+        id,
+        name,
+        address1,
+        address2,
+        city,
+        zip,
+        state,
+        country } = schoolData;
 
     const onLocalInputChange = (ev, key) => onInputChange(key, ev.target.value, 'school')
 
@@ -12,6 +22,7 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
 
     const fetchCountries = () => {
         let options;
+
         return new Promise((resolve, reject) => {
             const list = countries().getData()
 
@@ -29,11 +40,11 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
         })
     }
 
-
     return (
         <div>
             <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
+            <SchoolList />
             <div className='form-row'>
                 <label className='form-label'>School name</label>
                 <span className='form-input-span'>
