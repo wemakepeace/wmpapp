@@ -33,24 +33,33 @@ app.get('/', (req, res, next) => {
             }
 
             teacher = teacher.dataValues;
-            teacher.schools = [];
+            // console.log('teacher', teacher)
+            // console.log('teacher.classes', teacher.classes)
 
-            let schoolIds = [];
+            if (teacher.classes) {
+                teacher.schools = [];
 
-            teacher.classes = teacher.classes.map(_class => {
+                let schoolIds = [];
 
-                const schoolId = _class.school.dataValues.id || null;
+                teacher.classes = teacher.classes.map(_class => {
+                    _class = _class.dataValues;
+                    // console.log('typeof _class.school', Array.isArray(_class.school))
+                    // console.log('_class.school.dataValues' ,_class.school.dataValues)
+                    const schoolId = !_class.school
+                        ? null
+                        : _class.school.dataValues.id;
 
-                if (schoolIds.indexOf(schoolId) < 0) {
-                    schoolIds.push(schoolId);
-                    teacher.schools.push(_class.school.dataValues);
-                }
+                    if (schoolId && schoolIds.indexOf(schoolId) < 0) {
+                        schoolIds.push(schoolId);
+                        teacher.schools.push(_class.school.dataValues);
+                    }
 
-                return {
-                    label: _class.dataValues.name,
-                    value: _class.dataValues.id
-                }
-            });
+                    return {
+                        label: _class.name,
+                        value: _class.id
+                    }
+                });
+            }
 
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),

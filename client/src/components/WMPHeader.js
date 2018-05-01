@@ -65,3 +65,21 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, { logout, removeCurrentClass })(WMPHeader);
 
+
+// case FETCH_CLASS:
+// let _class = {}
+
+// if (action._class && action._class.id) {
+//     _class = {
+//         [action._class.id]: action._class
+//     }
+// }
+
+// return {
+//     ...state,
+//     list: {
+//         ...state.list,
+//         ..._class,
+//         currentClass: action.currentClass
+//     }
+// }

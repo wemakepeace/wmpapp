@@ -23,6 +23,7 @@ const fetchClass = (id, shouldFetch) => {
                         return dispatch({ type: SEND_FEEDBACK, feedback });
                     })
         } else {
+            localStorage.setItem('currentClass',  id);
             dispatch({ type: FETCH_CLASS, currentClass: id });
         }
     }
@@ -44,21 +45,23 @@ const saveClass = (data) => {
         return axios.post('/class', data)
             .then(response => response.data)
             .then(
-                ({ _class, feedback }) => {
+                ({ _class, _school, feedback }) => {
                     console.log('_class', _class)
-                    dispatch(saveClassSuccess(_class, feedback));
+                    console.log('_school', _school)
+                    return dispatch(saveClassSuccess(_class, _school, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: SEND_FEEDBACK, feedback });
+                    return dispatch({ type: SEND_FEEDBACK, feedback });
                 })
     }
 }
 
-const saveClassSuccess = (_class, feedback) => {
+const saveClassSuccess = (_class, _school, feedback) => {
     return {
         type: SAVE_CLASS_SUCCESS,
         _class,
+        _school,
         feedback
     }
 };

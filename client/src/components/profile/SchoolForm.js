@@ -5,7 +5,7 @@ import countries from 'country-list';
 
 import SchoolList from './SchoolAddressesList';
 
-const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
+const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange, autoFillForm }) => {
     const {
         id,
         name,
@@ -44,7 +44,7 @@ const SchoolForm = ({ schoolData, onInputChange, onSelectOptionChange }) => {
         <div>
             <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
-            <SchoolList />
+            <SchoolList autoFillForm={autoFillForm}/>
             <div className='form-row'>
                 <label className='form-label'>School name</label>
                 <span className='form-input-span'>

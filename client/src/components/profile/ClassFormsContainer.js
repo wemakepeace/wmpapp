@@ -9,6 +9,7 @@ import SchoolForm from './SchoolForm';
 import ClassForm from './ClassForm';
 
 import { saveClass, removeCurrentClass } from '../../redux/actions/class';
+import { fetchTeacher } from '../../redux/actions/teacher';
 
 class ClassFormsContainer extends Component {
     constructor(props) {
@@ -72,10 +73,23 @@ class ClassFormsContainer extends Component {
 
     submitData = () => {
         let classData = this.state;
-        classData.id = this.props.classes.currentClass;
+        // classData.id = this.props.classes.currentClass;
         classData.teacherId = this.props.teacher.id;
-        this.props.saveClass(classData);
+        // console.log('classData', classData)
+        this.props.saveClass(classData)
+        // .then(() => {
+            // console.log('hitting here')
+            // this.props.fetchTeacher()
+        // });
     }
+
+    autoFillForm = (id) => {
+        console.log(id)
+        const school = this.props.teacher.schools[id];
+        this.setState({ school });
+
+    }
+
 
     componentWillReceiveProps({ feedback, classes, school }) {
         const previousCurrentClass = this.props.classes.currentClass;
@@ -91,7 +105,7 @@ class ClassFormsContainer extends Component {
     }
 
     render() {
-        const { feedback, classes, showComponent } = this.props;
+        const { feedback, classes, showComponent, teacher } = this.props;
         const { currentClass } = classes;
         const { showFeedback } = this.state;
 
@@ -110,6 +124,7 @@ class ClassFormsContainer extends Component {
                         />
                         <SchoolForm
                             schoolData={this.state.school}
+                            autoFillForm={this.autoFillForm}
                             onInputChange={this.onInputChange.bind(this)}
                             onSelectOptionChange={this.onSelectOptionChange}/>
                         <div className='form-row'>
@@ -136,6 +151,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { saveClass, removeCurrentClass })(ClassFormsContainer);
+const toBeDispatched = {
+    saveClass, removeCurrentClass, fetchTeacher
+}
+
+export default connect(mapStateToProps, toBeDispatched )(ClassFormsContainer);
 
 
