@@ -45,8 +45,8 @@ const saveClass = (data) => {
         return axios.post('/class', data)
             .then(response => response.data)
             .then(
-                ({ _class, _school, feedback }) => {
-                    return dispatch(saveClassSuccess(_class, _school, feedback));
+                ({ _class, school, feedback }) => {
+                    return dispatch(saveClassSuccess(_class, school, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
@@ -55,11 +55,11 @@ const saveClass = (data) => {
     }
 }
 
-const saveClassSuccess = (_class, _school, feedback) => {
+const saveClassSuccess = (_class, school, feedback) => {
     return {
         type: SAVE_CLASS_SUCCESS,
         _class,
-        _school,
+        school,
         feedback
     }
 };

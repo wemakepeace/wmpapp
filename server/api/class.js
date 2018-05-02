@@ -69,57 +69,23 @@ app.post('/', (req, res, next) => {
 
     if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
 
-    // Class.findById(classData.id)
-    //     .then(_class => {
-
     const classPromise = () => {
-        /* Create classInstance if class does not exist yet */
         if (classData.id === null) {
-            let _class = {}
-            for (var key in classData) {
-                _class[key] = classData[key];
-            }
-
-            return Class.create(_class)
-                // .then(_class => _class)
-        /* Update existing class */
+            return Class.create(classData)
         } else {
-            Class.findById(classData.id)
-                .then(_class => {
-
-                if (_class.schoolId !== schoolData.id) {
-                    _class.schoolId = schoolData.id;
-                }
-
-                for (var key in classData) {
-                    _class[key] = classData[key];
-                }
-                return _class.save()
-            })
+            return Class.findById(classData.id)
+            .then(_class => updateClass(_class, classData, schoolData))
+            .catch(err => console.log(err))
         }
     }
-
 
     const schoolPromise = () => {
 
         if (schoolData.id === null) {
-            /* Create schoolInstance if school does not exist */
-            return createSchool(schoolData)
+            return School.create(schoolData)
         } else {
             return School.findById(schoolData.id)
-            .then(school => {
-
-                /* Update current school */
-                if (school) {
-                    for (var key in schoolData) {
-                        school[key] = schoolData[key];
-                    }
-
-                    return school.save()
-
-                }
-            })
-            .then(res => res)
+            .then(school => updateSchool(school, schoolData))
             .catch(err => console.log(err))
         }
     }
@@ -164,7 +130,7 @@ app.post('/', (req, res, next) => {
             res.send({
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),
                 _class: extractDataForFrontend(updatedClass, {}),
-                _school: extractDataForFrontend(updatedSchool, {})
+                school: extractDataForFrontend(updatedSchool, {})
             })
         })
         .catch(error => {
@@ -180,14 +146,23 @@ app.post('/', (req, res, next) => {
 
 /* Update or Create helper methods */
 
-const createSchool = (data) => {
-    return School.create(data)
-        .then(school => {
-            return school
-        })
-        .catch(err => console.log(err))
+const updateSchool = (school, schoolData) => {
+    for (var key in schoolData) {
+        school[key] = schoolData[key];
+    }
+    return school.save()
 }
 
+const updateClass = (_class, classData, schoolData) => {
+    if (_class.schoolId !== schoolData.id) {
+        _class.schoolId = schoolData.id;
+    }
+
+    for (var key in classData) {
+        _class[key] = classData[key];
+    }
+    return _class.save()
+}
 
 
 module.exports = app;

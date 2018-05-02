@@ -7,8 +7,8 @@ import SchoolAddressDropdown from './SchoolAddressDropdown';
 
 
 const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillForm }) => {
-    const { name, size, age_group, term } = classData;
-    const { schoolName, address1, address2, city, zip, state, country } = classData.school;
+    const { name, size, age_group, term, schoolId } = classData;
+    const { id, schoolName, address1, address2, city, zip, state, country } = classData.school;
 
     const onLocalInputChange = (ev, key, objName) => onInputChange(key, ev.target.value, objName)
 
@@ -86,7 +86,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
             <div>
                 <h2> School Mailing Address</h2>
                 <p>This address will be used when sending letters to your class.</p>
-                <SchoolAddressDropdown autoFillForm={autoFillForm}/>
+                <SchoolAddressDropdown schoolId={id} autoFillForm={autoFillForm}/>
                 <div className='form-row'>
                     <label className='form-label'>School name</label>
                     <span className='form-input-span'>

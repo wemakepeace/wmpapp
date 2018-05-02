@@ -36,7 +36,7 @@ const teacher = (state = initialState, action) => {
             if (classExists === false) {
                 updatedClassArray = updatedClassArray.concat([{ label: name, value: id }]);
             }
-            let schools = {...state.schools, [action._school.id] : action._school }
+            let schools = {...state.schools, [action.school.id] : action.school }
 
             return { ...state, classes: updatedClassArray, schools }
     }

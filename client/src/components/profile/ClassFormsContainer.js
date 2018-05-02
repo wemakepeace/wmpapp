@@ -82,7 +82,7 @@ class ClassFormsContainer extends Component {
     submitData = () => {
         let classData = this.state;
         classData.teacherId = this.props.teacher.id;
-        console.log('classData', classData)
+
         this.props.saveClass(classData);
     }
 

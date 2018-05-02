@@ -12,11 +12,23 @@ class SchoolAddressDropdown extends Component {
         this.props.autoFillForm(value.value)
     }
 
+    componentDidMount() {
+        const { schoolId } = this.props;
+        this.setState({ value: schoolId });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { schoolId } = nextProps;
+        this.setState({ value: schoolId });
+    }
+
     render() {
         const { schools } = this.props;
         const { value } = this.state;
+
         const schoolAddressOptions = [];
         let option = {};
+
 
         for (var school in schools) {
             option = {
