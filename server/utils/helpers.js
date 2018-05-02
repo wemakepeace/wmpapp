@@ -55,6 +55,7 @@ const valuesForFrontend = [
     'value',
     'term',
     'school',
+    'schoolName',
     'address1',
     'address2',
     'zip',

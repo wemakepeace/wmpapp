@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 
-class SchoolList extends Component {
+class SchoolAddressDropdown extends Component {
     state = {
         value: null
     }
@@ -20,7 +20,7 @@ class SchoolList extends Component {
 
         for (var school in schools) {
             option = {
-                label: schools[school].name,
+                label: schools[school].schoolName,
                 value: schools[school].id
             }
 
@@ -49,4 +49,4 @@ const mapStateToProps = (state) => {
         schools: state.teacher.schools
     }
 }
-export default connect(mapStateToProps)(SchoolList);
+export default connect(mapStateToProps)(SchoolAddressDropdown);

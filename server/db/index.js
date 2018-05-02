@@ -55,7 +55,7 @@ const teachers = [
 
 const schools = [
     {
-        name: 'Åse Barneskole',
+        schoolName: 'Åse Barneskole',
         address1: 'Åsemulen 1',
         address2: '4A',
         zip: '6017',
@@ -64,7 +64,7 @@ const schools = [
         country: 'NO'
     },
     {
-        name: 'PS 66',
+        schoolName: 'PS 66',
         address1: '44 Whyte Ave',
         address2: '#16',
         zip: '11211',

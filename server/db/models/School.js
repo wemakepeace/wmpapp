@@ -3,7 +3,7 @@ const Sequelize = conn.Sequelize;
 const postcode = require('postcode-validator');
 
 const School = conn.define('school', {
-     name: {
+     schoolName: {
         type: Sequelize.STRING,
         validate: {
             notEmpty: { msg: 'Please fill out school name.'}

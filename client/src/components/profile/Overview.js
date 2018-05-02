@@ -87,14 +87,14 @@ const Overview = ({ teacher, classes, removeCurrentClass, match, history }) => {
                     </div>
                     : null
                 }
-                {currentClass && currentClass.school && currentClass.school.name
+                {currentClass && currentClass.school && currentClass.school.schoolName
                     ? <div className='div-display-inline-block'>
                         <div className='class-overview'>
                             <div className=''>
                                 <label>School Address</label>
                             </div>
                             <div className=''>
-                                <span>{currentClass.school.name}</span>
+                                <span>{currentClass.school.schoolName}</span>
                                 <span>{currentClass.school.address1} {currentClass.school.address2}</span>
                                 <span>{currentClass.school.zip} {currentClass.school.city}</span>
                                 <span>{getCountryName(currentClass.school.country)}</span>
