@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 class SchoolAddressDropdown extends Component {
     state = {
-        value: null
+        value: 'newaddress'
     }
 
     onSelect = (value) => {
@@ -14,12 +14,16 @@ class SchoolAddressDropdown extends Component {
 
     componentDidMount() {
         const { schoolId } = this.props;
-        this.setState({ value: schoolId });
+        if (schoolId) {
+            this.setState({ value: schoolId });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         const { schoolId } = nextProps;
-        this.setState({ value: schoolId });
+        if (schoolId) {
+            this.setState({ value: schoolId });
+        }
     }
 
     render() {
@@ -30,7 +34,9 @@ class SchoolAddressDropdown extends Component {
         let option = {};
 
 
+
         for (var school in schools) {
+            // console.log('schools[school]', schools[school])
             option = {
                 label: schools[school].schoolName,
                 value: schools[school].id
@@ -38,10 +44,11 @@ class SchoolAddressDropdown extends Component {
 
             schoolAddressOptions.push(option);
         }
+        schoolAddressOptions.push({ label: 'New Address', value: 'newaddress' })
 
         return (
             <div style={{margin: '50px 0'}}>
-                <label className='form-label'>Fill in with existing address</label>
+                <label className='form-label'>Fill in form with existing address in drobdown below or fill in manually.</label>
                 <Select
                     className='header-menu-item select-class'
                     name='form-field-name'
@@ -49,6 +56,8 @@ class SchoolAddressDropdown extends Component {
                     placeholder='Select address'
                     onChange={this.onSelect}
                     options={schoolAddressOptions}
+                    clearable={false}
+                    searchable={false}
                 />
             </div>
         )

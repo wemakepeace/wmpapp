@@ -44,8 +44,10 @@ class ClassFormsContainer extends Component {
                 showFeedback: false
             };
 
-            if (schools && schools[classes.currentClass]) {
-                defaultState.schools = schools[classes.currentClass]
+
+            if (schools && classes.currentClass) {
+                defaultState.schools = classes.list[classes.currentClass].schoolId;
+                console.log('defaultState.schools', defaultState.schools)
             }
         }
         return defaultState;
@@ -87,23 +89,26 @@ class ClassFormsContainer extends Component {
     }
 
     autoFillForm = (id) => {
-        const school = this.props.teacher.schools[id];
-        this.setState({ school });
+        if (id === 'newaddress') {
+            this.setState({ school: { id: null } });
+        } else {
+            const school = this.props.teacher.schools[id];
+            this.setState({ school });
+        }
     }
 
 
     componentWillReceiveProps({ feedback, classes, schools }) {
         const previousCurrentClass = this.props.classes.currentClass;
         const { currentClass, list } = classes;
+
         if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
+        const newState = this.getDefaultStateOrProps(classes, schools);
 
-        if (currentClass !== previousCurrentClass) {
-            const newState = this.getDefaultStateOrProps(classes, schools);
+        this.setState({...newState, showFeedback: true});
 
-            this.setState({...newState, showFeedback: true});
-        }
     }
 
     render() {

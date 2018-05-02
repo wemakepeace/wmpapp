@@ -80,7 +80,7 @@ app.post('/', (req, res, next) => {
     }
 
     const schoolPromise = () => {
-
+        console.log('schoolData', schoolData)
         if (schoolData.id === null) {
             return School.create(schoolData)
         } else {

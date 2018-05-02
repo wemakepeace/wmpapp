@@ -8,6 +8,7 @@ import SchoolAddressDropdown from './SchoolAddressDropdown';
 
 const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillForm }) => {
     const { name, size, age_group, term, schoolId } = classData;
+
     const { id, schoolName, address1, address2, city, zip, state, country } = classData.school;
 
     const onLocalInputChange = (ev, key, objName) => onInputChange(key, ev.target.value, objName)
@@ -67,6 +68,8 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                         value={age_group && age_group.value}
                         onChange={(select) => onLocalSelectOptionChange(select, 'age_group')}
                         loadOptions={() => fetchDataForSelectDropdown('agegroups')}
+                        clearable={false}
+                        searchable={false}
                     />
                 </span>
             </div>
@@ -79,6 +82,8 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                         value={term && term.value}
                         onChange={(value) => onLocalSelectOptionChange(value, 'term')}
                         loadOptions={() => fetchDataForSelectDropdown('terms')}
+                        clearable={false}
+                        searchable={false}
                     />
                 </span>
             </div>
@@ -87,6 +92,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                 <h2> School Mailing Address</h2>
                 <p>This address will be used when sending letters to your class.</p>
                 <SchoolAddressDropdown schoolId={id} autoFillForm={autoFillForm}/>
+
                 <div className='form-row'>
                     <label className='form-label'>School name</label>
                     <span className='form-input-span'>

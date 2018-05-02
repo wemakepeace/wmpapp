@@ -63,6 +63,8 @@ class SelectClass extends Component  {
                 placeholder='Browse'
                 onChange={this.onClassSelect}
                 options={options}
+                clearable={false}
+                searchable={false}
             />
         )
     }
