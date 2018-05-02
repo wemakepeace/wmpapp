@@ -74,8 +74,15 @@ app.post('/', (req, res, next) => {
 
             const classPromise = () => {
                 /* Create classInstance if class does not exist yet */
+                console.log('_class', _class)
                 if (!_class) {
-                    return Class.create(classData)
+                    let classDataWithoutId = {}
+                    for (var key in classData) {
+                        if (key !== 'id') {
+                            classDataWithoutId[key] = classData[key]
+                        }
+                    }
+                    return Class.create(classDataWithoutId)
                         .then(_class => _class)
                 /* Update existing class */
                 } else {
@@ -95,53 +102,37 @@ app.post('/', (req, res, next) => {
 
             const schoolPromise = () => {
 
-                return School.findById(_class.id)
-                .then(school => {
-                    /* Create schoolInstance if school does not exist */
-                    if (schoolData.id === null) {
-                        return School.create(schoolData)
-                        .then(schoolInstance => {
-                            _class.setSchool(schoolInstance.dataValues.id)
-                            return schoolInstance
-                        })
-                        .catch(err => console.log(err))
-
-
-                    /* Update current school */
-                    } else if (schoolData.id === school.id) {
-                        for (var key in schoolData) {
-                            school[key] = schoolData[key];
-                        }
-
-                        return school.save()
-
-                    /* Update other school */
-                    } else {
-                        return School.findById(schoolData.id)
-                        .then(_school => {
-                            schoolData.id = _school.id;
+                if (schoolData.id === null) {
+                    return createSchool(schoolData)
+                } else {
+                    return School.findById(schoolData.id)
+                    .then(school => {
+                        /* Create schoolInstance if school does not exist */
+                        /* Update current school */
+                        if (school) {
                             for (var key in schoolData) {
-                                _school[key] = schoolData[key];
+                                school[key] = schoolData[key];
                             }
 
-                            return _school.save()
-                        })
-                        .then(school => school)
-                        .catch(err => console.log(err))
-                    }
-                })
-                .then(res => res)
-                .catch(err => console.log(err))
+                            return school.save()
+
+                        }
+                    })
+                    .then(res => res)
+                    .catch(err => console.log(err))
+                }
             }
 
             /* Update or create class and school */
             return Promise.all([classPromise(), schoolPromise()])
-            .then(([updatedClass, updatedSchool]) => {
 
+            .then(([updatedClass, updatedSchool]) => {
                 return { updatedClass, updatedSchool }
             })
         })
         .then(({ updatedClass, updatedSchool})  => {
+
+            updatedClass.setSchool(updatedSchool.dataValues.id);
 
             return Promise.all([
                 updatedClass.getTerm(),
@@ -189,5 +180,18 @@ app.post('/', (req, res, next) => {
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
         })
 });
+
+
+/* Update or Create helper methods */
+
+const createSchool = (data) => {
+    return School.create(data)
+        .then(school => {
+            return school
+        })
+        .catch(err => console.log(err))
+}
+
+
 
 module.exports = app;

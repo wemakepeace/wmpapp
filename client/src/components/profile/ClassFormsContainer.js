@@ -13,12 +13,12 @@ import { fetchTeacher } from '../../redux/actions/teacher';
 class ClassFormsContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = this.getDefaultState(props.classes, props.schools);
+        this.state = this.getDefaultStateOrProps(props.classes, props.schools);
     }
 
-    getDefaultState = (classes, schools) => {
+    getDefaultStateOrProps = (classes, schools) => {
         let defaultState = {
-            id: '',
+            id: null,
             name: '',
             size: '',
             age_group: null,
@@ -26,7 +26,7 @@ class ClassFormsContainer extends Component {
             languageProficiency: '',
             language: '',
             school: {
-                id: '',
+                id: null,
                 schoolName: '',
                 address1: '',
                 address2: '',
@@ -82,7 +82,7 @@ class ClassFormsContainer extends Component {
     submitData = () => {
         let classData = this.state;
         classData.teacherId = this.props.teacher.id;
-
+        console.log('classData', classData)
         this.props.saveClass(classData);
     }
 
@@ -100,7 +100,7 @@ class ClassFormsContainer extends Component {
         }
 
         if (currentClass !== previousCurrentClass) {
-            const newState = this.getDefaultState(classes, schools);
+            const newState = this.getDefaultStateOrProps(classes, schools);
 
             this.setState({...newState, showFeedback: true});
         }
@@ -114,8 +114,7 @@ class ClassFormsContainer extends Component {
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
-                <div>
-
+                    <div>
                         {currentClass
                             ? <h2>Information and Settings for Class {classes.list[currentClass].name}</h2>
                             : <h2> Register New Class </h2>}
@@ -125,7 +124,6 @@ class ClassFormsContainer extends Component {
                             onSelectOptionChange={this.onSelectOptionChange}
                             autoFillForm={this.autoFillForm}
                         />
-
                         <div className='form-row'>
                             <Button
                                 className='large-custom-btn'

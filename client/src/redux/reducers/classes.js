@@ -17,9 +17,13 @@ const classes = (state = initialState, action) => {
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
             let newState = { ...state }
-
+            if (!newState.list) {
+                newState.list = {};
+            }
+            console.log('classId', classId)
+            console.log('newState', newState)
             newState.list[classId] = { ...action._class }
-            newState.currentClass = action._class.id || null;
+            newState.currentClass = classId || null;
 
             return newState
         case LOGOUT_SUCCESS:

@@ -9,7 +9,7 @@ const Class = conn.define('class', {
         }
     },
     size: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         validate: {
             notEmpty: { msg: 'Please fill out class size.'}
         }

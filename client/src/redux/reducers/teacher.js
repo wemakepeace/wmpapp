@@ -23,7 +23,7 @@ const teacher = (state = initialState, action) => {
             let classExists = false;
             let updatedClassArray = [];
 
-            if (state && state.classes) {
+            if (state && state.classes && state.classes.length) {
                 updatedClassArray = state.classes.map(_class => {
                     if (_class.value === id) {
                         classExists = true;
