@@ -69,107 +69,102 @@ app.post('/', (req, res, next) => {
 
     if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
 
-    Class.findById(classData.id)
-        .then(_class => {
+    // Class.findById(classData.id)
+    //     .then(_class => {
 
-            const classPromise = () => {
-                /* Create classInstance if class does not exist yet */
-                console.log('_class', _class)
-                if (!_class) {
-                    let classDataWithoutId = {}
-                    for (var key in classData) {
-                        if (key !== 'id') {
-                            classDataWithoutId[key] = classData[key]
-                        }
-                    }
-                    return Class.create(classDataWithoutId)
-                        .then(_class => _class)
-                /* Update existing class */
-                } else {
+    const classPromise = () => {
+        /* Create classInstance if class does not exist yet */
+        if (classData.id === null) {
+            let _class = {}
+            for (var key in classData) {
+                _class[key] = classData[key];
+            }
 
-                    if (_class.schoolId !== schoolData.id) {
-                        _class.schoolId = schoolData.id;
-                    }
+            return Class.create(_class)
+                // .then(_class => _class)
+        /* Update existing class */
+        } else {
+            Class.findById(classData.id)
+                .then(_class => {
 
-                    for (var key in classData) {
-                        _class[key] = classData[key];
-                    }
+                if (_class.schoolId !== schoolData.id) {
+                    _class.schoolId = schoolData.id;
                 }
 
+                for (var key in classData) {
+                    _class[key] = classData[key];
+                }
                 return _class.save()
-            }
-
-
-            const schoolPromise = () => {
-
-                if (schoolData.id === null) {
-                    return createSchool(schoolData)
-                } else {
-                    return School.findById(schoolData.id)
-                    .then(school => {
-                        /* Create schoolInstance if school does not exist */
-                        /* Update current school */
-                        if (school) {
-                            for (var key in schoolData) {
-                                school[key] = schoolData[key];
-                            }
-
-                            return school.save()
-
-                        }
-                    })
-                    .then(res => res)
-                    .catch(err => console.log(err))
-                }
-            }
-
-            /* Update or create class and school */
-            return Promise.all([classPromise(), schoolPromise()])
-
-            .then(([updatedClass, updatedSchool]) => {
-                return { updatedClass, updatedSchool }
             })
-        })
-        .then(({ updatedClass, updatedSchool})  => {
+        }
+    }
 
-            updatedClass.setSchool(updatedSchool.dataValues.id);
 
-            return Promise.all([
-                updatedClass.getTerm(),
-                updatedClass.getAge_group(),
-                updatedClass.getSchool()
-            ])
-            .then(([term, age_group, school]) => {
-                updatedClass = updatedClass.dataValues;
-                updatedSchool = updatedSchool.dataValues;
+    const schoolPromise = () => {
 
-                if (term && term.dataValues) {
-                    const termFormatted = {
-                        label: term.dataValues.name,
-                        value: term.dataValues.id
+        if (schoolData.id === null) {
+            /* Create schoolInstance if school does not exist */
+            return createSchool(schoolData)
+        } else {
+            return School.findById(schoolData.id)
+            .then(school => {
+
+                /* Update current school */
+                if (school) {
+                    for (var key in schoolData) {
+                        school[key] = schoolData[key];
                     }
 
-                    updatedClass.term = termFormatted;
+                    return school.save()
+
+                }
+            })
+            .then(res => res)
+            .catch(err => console.log(err))
+        }
+    }
+
+    /* Update or create class and school */
+    return Promise.all([classPromise(), schoolPromise()])
+    .then(([updatedClass, updatedSchool]) => {
+
+        updatedClass.setSchool(updatedSchool.dataValues.id);
+
+        return Promise.all([
+            updatedClass.getTerm(),
+            updatedClass.getAge_group(),
+            updatedClass.getSchool()
+        ])
+        .then(([term, age_group, school]) => {
+            updatedClass = updatedClass.dataValues;
+            updatedSchool = updatedSchool.dataValues;
+
+            if (term && term.dataValues) {
+                const termFormatted = {
+                    label: term.dataValues.name,
+                    value: term.dataValues.id
                 }
 
-                if (age_group && age_group.dataValues) {
-                    const age_groupFormatted = {
-                        label: age_group.dataValues.name,
-                        value: age_group.dataValues.id
-                    }
+                updatedClass.term = termFormatted;
+            }
 
-                    updatedClass.age_group = age_groupFormatted;
+            if (age_group && age_group.dataValues) {
+                const age_groupFormatted = {
+                    label: age_group.dataValues.name,
+                    value: age_group.dataValues.id
                 }
 
-                if (updatedSchool ) {
-                    updatedClass.school = updatedSchool;
-                }
+                updatedClass.age_group = age_groupFormatted;
+            }
 
-                res.send({
-                    feedback: feedback(SUCCESS, ['Your information has been saved.']),
-                    _class: extractDataForFrontend(updatedClass, {}),
-                    _school: extractDataForFrontend(updatedSchool, {})
-                })
+            if (updatedSchool ) {
+                updatedClass.school = updatedSchool;
+            }
+
+            res.send({
+                feedback: feedback(SUCCESS, ['Your information has been saved.']),
+                _class: extractDataForFrontend(updatedClass, {}),
+                _school: extractDataForFrontend(updatedSchool, {})
             })
         })
         .catch(error => {
@@ -179,6 +174,7 @@ app.post('/', (req, res, next) => {
 
             res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
         })
+    })
 });
 
 

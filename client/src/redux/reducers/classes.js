@@ -17,11 +17,11 @@ const classes = (state = initialState, action) => {
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
             let newState = { ...state }
+
             if (!newState.list) {
                 newState.list = {};
             }
-            console.log('classId', classId)
-            console.log('newState', newState)
+
             newState.list[classId] = { ...action._class }
             newState.currentClass = classId || null;
 
