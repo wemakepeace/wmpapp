@@ -4,6 +4,7 @@ const Class = require('./models/Class');
 const AgeGroup = require('./models/AgeGroup');
 const Term = require('./models/Term');
 const School = require('./models/School');
+const Exchange = require('./models/Exchange');
 
 const ageGroupData = require('../constants/ageGroups');
 const termData = require('../constants/terms');
@@ -19,6 +20,9 @@ Term.hasMany(Class);
 
 Class.belongsTo(School);
 School.hasMany(Class);
+
+Class.belongsTo(Exchange);
+Exchange.hasMany(Class);
 
 const teachers = [
     {
@@ -56,8 +60,7 @@ const teachers = [
 const schools = [
     {
         schoolName: 'Åse Barneskole',
-        address1: 'Åsemulen 1',
-        address2: '4A',
+        address1: 'Åsegjerdet 24',
         zip: '6017',
         city: 'Ålesund',
         state: null,
@@ -65,12 +68,29 @@ const schools = [
     },
     {
         schoolName: 'PS 66',
-        address1: '44 Whyte Ave',
-        address2: '#16',
-        zip: '11211',
-        city: 'Brooklyn',
-        state: 'NY',
+        address1: '101 Groton Long Point Rd',
+        zip: '06340',
+        city: 'Groton',
+        state: 'CT',
         country: 'US'
+    },
+    {
+        schoolName: 'Lerstad Barneskole',
+        address1: 'Kyrkjehaugen 2',
+        address2: '',
+        zip: '6014',
+        city: 'Ålesund',
+        state: 'Møre og Romsdal',
+        country: 'NO'
+    },
+    {
+        schoolName: 'Enghaveskolen',
+        address1: 'Roesskovsvej 125',
+        address2: '',
+        zip: '5200',
+        city: 'Odense',
+        state: '',
+        country: 'DK'
     }
 ];
 
@@ -81,22 +101,47 @@ const classes = [
         size: 30,
         ageGroupId:2,
         termId: 1,
-        schoolId: 1
+        schoolId: 1,
+        exchangeId: 2
     },
     {
         teacherId: 1,
         name: '1B',
         size: 28,
         ageGroupId: 1,
-        termId: 2,
-        schoolId: 2
+        termId: 1,
+        schoolId: 1
     },
     {
         teacherId: 2,
         name: '3F',
-        size: 28
+        size: 28,
+        ageGroupId: 1,
+        termId: 1,
+        exchangeId:1,
+        schoolId: 2
+    },
+    {
+        teacherId: 2,
+        name: '4E',
+        size: 28,
+        termId: 1,
+        ageGroupId: 1,
+        exchangeId:3,
+        schoolId: 3
+    },
+    {
+        teacherId: 4,
+        name: '4E',
+        size: 28,
+        termId: 2,
+        ageGroupId: 1,
+        exchangeId: 4,
+        schoolId: 4
     }
 ]
+
+
 
 const sync = () => conn.sync({ force: true });
 
@@ -112,7 +157,11 @@ const seed = () => {
                 const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
                 const termPromises = termData.map(term => Term.create(term));
                 const schoolPromises = schools.map(school => School.create(school));
-                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
+                let exchangePromises = [];
+                for (let i = 0; i < 4; i++) {
+                  exchangePromises.push(Exchange.create({ status: 'initiated' }))
+                }
+                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises, exchangePromises]);
             })
             .then(result => {
                 const classPromises = classes.map(_class => Class.create(_class));
@@ -133,6 +182,7 @@ module.exports = {
         Class,
         AgeGroup,
         Term,
-        School
+        School,
+        Exchange
     }
 }

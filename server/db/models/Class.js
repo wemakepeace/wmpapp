@@ -13,7 +13,9 @@ const Class = conn.define('class', {
         validate: {
             notEmpty: { msg: 'Please fill out class size.'}
         }
-    }
+    },
+    verifyExchangeToken: Sequelize.STRING,
+    verifyExchangeTokenExpires: Sequelize.DATE
 });
 
 

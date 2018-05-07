@@ -42,6 +42,7 @@
     "webpack-hot-middleware": "^2.21.2"
   },
   "dependencies": {
+    "@google/maps": "^0.4.6",
     "async": "^2.6.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
@@ -49,11 +50,15 @@
     "csprng": "^0.1.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
+    "google-distance": "^1.0.1",
+    "install": "^0.11.0",
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.2.0",
     "jwt-decode": "^2.2.0",
+    "node-geocoder": "^3.22.0",
     "nodemailer": "^4.6.4",
     "normalize.css": "^8.0.0",
+    "npm": "^6.0.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -73,6 +78,7 @@
     "semantic-ui-react": "^0.78.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "zipcodes": "^6.0.0"
   }
 }

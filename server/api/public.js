@@ -87,8 +87,8 @@ app.post('/login', (req, res) => {
                 }
 
                 return {
-                    name: _class.dataValues.name,
-                    id: _class.dataValues.id
+                    label: _class.dataValues.name,
+                    value: _class.dataValues.id
                 }
             });
 

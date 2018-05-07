@@ -62,7 +62,9 @@ const valuesForFrontend = [
     'city',
     'state',
     'country',
-    'schools'
+    'schools',
+    'exchange',
+    'status'
 ];
 
 

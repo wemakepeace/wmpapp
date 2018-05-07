@@ -5,7 +5,6 @@ import { Redirect, Link, Route } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import TabContent from './TabContent';
 import Overview from './Overview'
-
 import { removeCurrentClass } from '../../redux/actions/class';
 
 

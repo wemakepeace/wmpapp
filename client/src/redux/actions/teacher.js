@@ -47,7 +47,6 @@ const fetchTeacher = () => {
             .then(response => response.data)
             .then(
                 ({ teacher, feedback }) => {
-
                     return dispatch({type: LOGIN_SUCCESS, teacher, feedback })
                 },
                 (error) => dispatch(logout())

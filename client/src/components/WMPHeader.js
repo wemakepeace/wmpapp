@@ -32,12 +32,12 @@ const WMPHeader = ({ teacher, classes, logout, history, onViewChange, removeCurr
             <div className='logged-in'>
                 {teacher && teacher.id
                     ? <div className='logged-in-inner'>
-                        {teacher.classes && teacher.classes.length
+                        {teacher.classes && teacher.classes
                             ? <span
                                 icon='arrow right'
                                 className='header-menu-item no-border select-class-label'>Select Class</span>
                             : null}
-                        {teacher.classes && teacher.classes.length
+                        {teacher.classes && teacher.classes
                             ? <span className='header-menu-item select-class-item'>
                                 <SelectClass />
                             </span>
@@ -64,22 +64,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, { logout, removeCurrentClass })(WMPHeader);
-
-
-// case FETCH_CLASS:
-// let _class = {}
-
-// if (action._class && action._class.id) {
-//     _class = {
-//         [action._class.id]: action._class
-//     }
-// }
-
-// return {
-//     ...state,
-//     list: {
-//         ...state.list,
-//         ..._class,
-//         currentClass: action.currentClass
-//     }
-// }

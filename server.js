@@ -58,11 +58,13 @@ const publicRoutes = require('./server/api/public');
 const teacherRoutes = require('./server/api/teacher');
 const classRoutes = require('./server/api/class');
 const resources = require('./server/api/resources');
+const exchangeRoutes = require('./server/api/exchange');
 
 app.use('/public', publicRoutes);
 app.use('/resources', resources);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
 app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
+app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeRoutes);
 
 app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));

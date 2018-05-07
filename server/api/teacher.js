@@ -33,8 +33,9 @@ app.get('/', (req, res, next) => {
             }
 
             teacher = teacher.dataValues;
-            // console.log('teacher', teacher)
-            // console.log('teacher.classes', teacher.classes)
+            console.log('teacher', teacher)
+
+
 
             if (teacher.classes) {
                 teacher.schools = [];
@@ -43,8 +44,6 @@ app.get('/', (req, res, next) => {
 
                 teacher.classes = teacher.classes.map(_class => {
                     _class = _class.dataValues;
-                    // console.log('typeof _class.school', Array.isArray(_class.school))
-                    // console.log('_class.school.dataValues' ,_class.school.dataValues)
                     const schoolId = !_class.school
                         ? null
                         : _class.school.dataValues.id;
@@ -59,6 +58,7 @@ app.get('/', (req, res, next) => {
                         value: _class.id
                     }
                 });
+
             }
 
             res.send({

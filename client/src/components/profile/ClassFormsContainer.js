@@ -99,6 +99,7 @@ class ClassFormsContainer extends Component {
 
 
     componentWillReceiveProps({ feedback, classes, schools }) {
+        console.log('componentWillReceiveProps', this.state)
         const previousCurrentClass = this.props.classes.currentClass;
         const { currentClass, list } = classes;
 
@@ -107,7 +108,10 @@ class ClassFormsContainer extends Component {
         }
         const newState = this.getDefaultStateOrProps(classes, schools);
 
-        this.setState({...newState, showFeedback: true});
+        /* do not update state if feedback type is error type */
+        if (feedback && feedback.type !== 'error') {
+            this.setState({...newState, showFeedback: true});
+        }
 
     }
 

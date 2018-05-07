@@ -3,6 +3,7 @@ const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
 const School = require('../db/index').models.School;
+const Exchange = require('../db/index').models.Exchange;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
@@ -19,7 +20,7 @@ app.get('/:id', (req, res, next) => {
 
     Class.findOne({
         where: { id },
-        include: [ AgeGroup, Term, School ]
+        include: [ AgeGroup, Term, School, Exchange ]
     })
     .then(_class => {
         _class = _class.dataValues;
@@ -43,18 +44,19 @@ app.get('/:id', (req, res, next) => {
             _class.school = _class.school.dataValues
         }
 
+        if (_class.exchange) {
+            _class.exchange = _class.exchange.dataValues;
+        }
+
+        console.log('_class', _class)
         res.send({
             feedback: feedback(SUCCESS, ['Class fetched.']),
             _class: extractDataForFrontend(_class, {})
         });
     })
-    .catch(error =>{
-        // [TODO] handle error
-        console.log('error', error);
+    .catch(error => {
         const defaultError = 'Something went wrong when loading your session.';
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        return sendError(500, error, defaultError, res);
     })
 });
 
@@ -72,10 +74,17 @@ app.post('/', (req, res, next) => {
     const classPromise = () => {
         if (classData.id === null) {
             return Class.create(classData)
+            .catch(error => {
+                const defaultError = 'Something went wrong when saving your information.';
+                return sendError(500, error, defaultError, res);
+            })
         } else {
             return Class.findById(classData.id)
             .then(_class => updateClass(_class, classData, schoolData))
-            .catch(err => console.log(err))
+            .catch(error => {
+                const defaultError = 'Something went wrong when saving your information.';
+                return sendError(500, error, defaultError, res);
+            })
         }
     }
 
@@ -83,10 +92,17 @@ app.post('/', (req, res, next) => {
         console.log('schoolData', schoolData)
         if (schoolData.id === null) {
             return School.create(schoolData)
+            .catch(error => {
+                const defaultError = 'Something went wrong when saving your information.';
+                return sendError(500, error, defaultError, res);
+            })
         } else {
             return School.findById(schoolData.id)
             .then(school => updateSchool(school, schoolData))
-            .catch(err => console.log(err))
+            .catch(error => {
+                const defaultError = 'Something went wrong when saving your information.';
+                return sendError(500, error, defaultError, res);
+            })
         }
     }
 
@@ -127,6 +143,7 @@ app.post('/', (req, res, next) => {
                 updatedClass.school = updatedSchool;
             }
 
+            console.log('updatedSchool', updatedSchool)
             res.send({
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),
                 _class: extractDataForFrontend(updatedClass, {}),
@@ -134,11 +151,8 @@ app.post('/', (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log('error', error)
             const defaultError = 'Something went wrong when saving your information.';
-            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+            return sendError(500, error, defaultError, res);
         })
     })
 });
@@ -147,10 +161,16 @@ app.post('/', (req, res, next) => {
 /* Update or Create helper methods */
 
 const updateSchool = (school, schoolData) => {
+
     for (var key in schoolData) {
         school[key] = schoolData[key];
     }
+
     return school.save()
+    .then( res => {
+        console.log('res', res)
+        return res
+    })
 }
 
 const updateClass = (_class, classData, schoolData) => {
@@ -164,5 +184,11 @@ const updateClass = (_class, classData, schoolData) => {
     return _class.save()
 }
 
+
+const sendError = (errorCode, error, defaultError, res) => {
+    console.log('error', error)
+    const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+    res.status(errorCode).send({ feedback: feedback(ERROR, errorMessages) });
+}
 
 module.exports = app;

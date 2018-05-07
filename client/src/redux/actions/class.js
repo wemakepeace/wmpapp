@@ -10,7 +10,7 @@ const fetchClass = (id, shouldFetch) => {
                 .then(response => response.data)
                 .then(
                     ({ _class, feedback}) => {
-                        localStorage.setItem('currentClass',  _class.id );
+                        localStorage.setItem('currentClass', _class.id);
 
                         return dispatch({
                             type: FETCH_CLASS,
@@ -41,6 +41,7 @@ const removeCurrentClass = () => {
 /** Will update class otherwise **/
 
 const saveClass = (data) => {
+    console.log('data in action', data)
     return dispatch => {
         return axios.post('/class', data)
             .then(response => response.data)
