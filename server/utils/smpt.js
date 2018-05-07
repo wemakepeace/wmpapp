@@ -11,7 +11,7 @@ const smtpTransport = nodemailer.createTransport({
     }
 });
 
- const sendEmail = (res, mailOptions, ) => {
+ const sendEmail = (res, mailOptions) => {
     return smtpTransport.sendMail(mailOptions, function(error, response){
          if (error) {
             console.log(error);

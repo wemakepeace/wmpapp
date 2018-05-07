@@ -15,8 +15,16 @@ const Class = conn.define('class', {
         }
     },
     verifyExchangeToken: Sequelize.STRING,
-    verifyExchangeTokenExpires: Sequelize.DATE
+    verifyExchangeTokenExpires: Sequelize.DATE,
+    role: Sequelize.STRING
 });
 
 
 module.exports = Class;
+
+/*
+    Attribute role can be either A or B.
+    A Teacher user with role A will initiate the letter exchanging process.
+    A Teacher user with role B will wait for letter batch from Teacher A's class,
+    and write letters upon receiving letters.
+*/

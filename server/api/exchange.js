@@ -1,4 +1,7 @@
 const app = require('express').Router();
+const countries = require('country-list');
+const async = require('async');
+
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
@@ -8,13 +11,15 @@ const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
+const { sendEmail } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
-const countries = require('country-list');
+
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GOOGLEKEY,
     Promise: Promise
 });
+
 
 app.post('/', (req, res, next) => {
     const { classId } = req.body;
@@ -25,20 +30,14 @@ app.post('/', (req, res, next) => {
     .then(_class => {
         _class = _class.dataValues;
         _class.school = _class.school.dataValues;
-        let classData = extractClassData(_class);
-        // console.log('classData', classData)
-        return googleMapsClient.geocode({ address: classData.address })
-            .asPromise()
-            .then((response) => {
+        let classData = extractClassAddress(_class);
 
-                _class.location = response.json.results[0].geometry.location
-                return _class
-            })
-            .catch((err) => {
-                // [TODO] handle error
-                console.log(err);
-            })
+        return getCoordinates(classData)
+        .then(({ location }) => {
+            _class.location = location;
+            return _class
         })
+    })
     .then(_class => {
 
         Exchange.findAll({
@@ -47,85 +46,71 @@ app.post('/', (req, res, next) => {
             },
             include: [{
                 model: Class,
-                where: { id: { $notIn: _class.id }},
+                where: {
+                    id: { $notIn: _class.id },
+                    teacherId: { $notIn: _class.teacherId },
+                    schoolId: { $notIn: _class.schoolId }
+                },
                 include: [ School ]
             }]
         })
         .then(exchanges => {
 
             let matchingClasses = exchanges.filter(exchange => {
-                // console.log('exchange.classes[0]', exchange.classes[0])
-                // console.log('_class', _class)
-                if (exchange.classes[0].termId !== _class.termId) {
-                    return
-                }
-                if (exchange.classes[0].ageGroupId !== _class.ageGroupId) {
-                    return
-                }
-                if (exchange.classes[0].schoolId === _class.schoolId) {
-                    return
-                }
+                const { termId, ageGroupId, schoolId } = exchange.classes[0];
+
+                if (termId !== _class.termId) return
+
+                if (ageGroupId !== _class.ageGroupId) return
+
+                if (schoolId === _class.schoolId) return
+
                 return  exchange
-            })
-
-            const classDataCollection = matchingClasses.map(match => {
-                const data = match.dataValues.classes[0].dataValues;
-                return extractClassData(data)
             });
-            // if more than one class
-            if (matchingClasses.length > 1) {
 
-                Promise.all(classDataCollection.map(data => {
-                    // '1600 Amphitheatre Parkway, Mountain View, CA'
-                    return googleMapsClient.geocode({address: data.address})
-                    .asPromise()
-                    .then((response) => {
 
-                        data.location = response.json.results[0].geometry.location
-                        return data
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-                }))
-                .then(dataWithCoords => {
-                    dataWithCoords.map(x => console.log('x', x))
-                    let matchClass;
-                    console.log('_class', _class)
-                    console.log('dataWithCoords', dataWithCoords)
+            /* If matches are found */
+            if (matchingClasses.length) {
+                const classDataCollection = matchingClasses.map(match => {
+                    const data = match.dataValues.classes[0].dataValues;
+                    return extractClassAddress(data);
+                });
 
-                    if (dataWithCoords.length) {
-                        const _classCoords = _class.location;
-                        matchClass = dataWithCoords.reduce((result, curr) => {
-                            const currCoords = curr.location;
-                            const distance =  calculateDistance(_classCoords, currCoords);
-                            console.log('distance', distance)
-                            if (distance > result.distance) {
-                                result.id = curr.id;
-                                result.distance = distance;
-                            }
-                            return result
-                        }, { id: null, distance: 0})
-                    }
-                    console.log('matchClass', matchClass)
-                    res.send(matchClass)
-                })
+                const classCoords = _class.location;
+
+                return findFurthestMatch(classCoords, classDataCollection)
+
+            } else {
+                return 'No matches found.'
             }
-                // create verify tokens for both classes
-                // update Class instances with tokens
-                // send that match back with verify token and message
-                // send email to other teacher
-
-            // console.log('matchingClasses', matchingClasses)
-            // res.send('to be continued')
+        })
+        .then(result => {
+            // const matchingClassId = id;
+        // async:
+            // find Exchange
+                // setClass _class
+            // find teacher for matchClass
+                // set role as A
+                // create token and expiration
+                // get email for teacherA
+            // find teacher for _class
+                // set role as B
+                // create token and expiration
+                // get email for teacherB
+            // send email to teacherA with token
+            // send email to teacherB with token
+            console.log('result', result)
+            console.log('_class', _class)
+            res.send(result)
         })
     })
+    // end of findAll exchanges call
     .catch(err => console.log(err))
+});
 
 
 
-                // update Exchange instance with classAId and classBId
-
+    // update Exchange instance with classAId and classBId
     // find all classes with matching term
     // find all classes with matching age group
     // make sure class is not from same school
@@ -140,82 +125,38 @@ app.post('/', (req, res, next) => {
 
 
 
-});
 
 module.exports = app;
 
-const extractClassData = (_class) => {
-    let data;
-    const zip = _class.school.zip
-    const countryCode =  _class.school.country;
-    const address1 = _class.school.address1;
-    const city = _class.school.city;
-    const country = countries().getName(countryCode);
-    const address = `${address1}, ${city}, ${country}`;
+const extractClassAddress = (_class) => {
+    const { zip, country, address1, city } = _class.school;
+    const countryName = countries().getName(country);
+    const address = `${address1}, ${city}, ${countryName}`;
 
-    data = {
+    const data = {
         id: _class.id,
         address: address
     }
+
     return data
 }
 
-const getCoords = (match) => {
-     let matchClass = match.dataValues.classes[0].dataValues;
-
-    // Using promise
-
-    const zip = matchClass.school.zip
-    const countryCode =  matchClass.school.country;
-    const address1 = matchClass.school.address1;
-    const city = matchClass.school.city;
-    const country = countries().getName(countryCode);
-    const address = `${address1}, ${city}, ${country}`
-
-    // '1600 Amphitheatre Parkway, Mountain View, CA'
-    googleMapsClient.geocode({address: address})
+const getCoordinates = (data) => {
+    return googleMapsClient.geocode({ address: data.address })
     .asPromise()
     .then((response) => {
-        matchClass.location = response.json.results[0].geometry.location
-        console.log('matchClass.location', matchClass.location);
-        return matchClass
+        return {
+            id: data.id,
+            location: response.json.results[0].geometry.location
+        }
     })
     .catch((err) => {
+        // [TODO] handle error
         console.log(err);
     });
 }
 
-
-const findMatchFn = (schoolDetails) => {
-    return (dispatch)=> {
-        return axios.get(`/api/class/${schoolDetails.semester}`)
-        .then(response => {
-            const classes = response.data;
-            const lat = schoolDetails.coordinates[ 0 ];
-            const lng = schoolDetails.coordinates[ 1 ];
-            let longest = 0;
-            let match = classes.reduce( (match, currClass) => {
-                const currDistance = distance(lat, lng, currClass.coordinates[0], currClass.coordinates[1]);
-                if (currDistance > longest) {
-                    longest = currDistance;
-                    match = currClass;
-                }
-
-                match.latlng = match.coordinates;
-                return match;
-            });
-
-            const matchLat = match.latlng[ 0 ];
-            const matchLng = match.latlng[ 1 ];
-
-            dispatch(fetchCountryCode(matchLat, matchLng, "matchClass"));
-            return dispatch(matchFound(match));
-        });
-    };
-}
-
 /* helper fn that calculates distance between coordinates */
-// const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const calculateDistance = (location1, location2) => {
     const radlat1 = Math.PI * location1.lat / 180
     const radlat2 = Math.PI * location2.lat / 180
@@ -229,3 +170,97 @@ const findMatchFn = (schoolDetails) => {
     dist = dist * 60 * 1.1515
     return dist * 1.609344;
 }
+
+const findFurthestMatch = (classCoords, collection) => {
+    return Promise.all(collection.map(data => getCoordinates(data)))
+        .then(dataWithCoords => {
+
+            const matchClass = dataWithCoords.reduce((result, curr) => {
+                const currCoords = curr.location;
+                const distance =  calculateDistance(classCoords, currCoords);
+
+                if (distance > result.distance) {
+                    result.id = curr.id;
+                    result.distance = distance;
+                }
+                return result
+            }, { id: null, distance: 0 })
+
+
+            return { matchClass }
+    })
+}
+
+
+// app.post('/resetrequest', (req, res, next) => {
+//     const { email } = req.body;
+
+//     async.waterfall([
+//         function(done) {
+//             crypto.randomBytes(20, function(err, buf) {
+//                 const token = buf.toString('hex');
+//                 done(err, token);
+//             })
+//         },
+//         function(token, done) {
+//             Teacher.findOne({
+//                 where: {
+//                     email: email,
+//                 }
+//             })
+//             .then(user => {
+//                 if (!user) {
+//                     let defaultError = ['No user found for this e-mail address.'];
+
+//                     return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
+//                 }
+
+//                 user.resetPasswordToken = token;
+//                 user.resetPasswordExpires = Date.now() + 3600000;
+
+//                 user.save()
+//                 .then( res => {
+//                     done(null, token, res.dataValues)
+//                 })
+//                 .catch(err => {
+//                     let defaultError = ['Something went wrong. Please try submitting your email again.'];
+//                     return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
+//                 });
+//             });
+//         },
+//         function(token, user, done) {
+//             const mailOptionsRequestResetPw = {
+//                 to: user.email,
+//                 from: 'tempwmp@gmail.com',
+//                 subject: 'Reset password  | We Make Peace',
+//                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/public/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+//             };
+//             smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
+//                 if (error) {
+
+//                     const defaultError = ['Something went wrong. Please try again.'];
+
+//                     res.status(500).send({
+//                         feedback: feedback(ERROR, defaultError)
+//                     })
+
+//                  } else {
+
+//                     const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.'];
+
+//                     res.send({
+//                         feedback: feedback(SUCCESS, defaultMessage)
+//                     })
+//                 }
+//                 done(err, 'done');
+//             });
+//         }],
+//         function(err) {
+//             if (err) {
+//                 console.log('error hitting down here', err);
+//                 return next(err);
+//             }
+//             res.redirect('/')
+//         })
+// });
+

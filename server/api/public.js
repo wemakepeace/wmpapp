@@ -1,5 +1,7 @@
 const app = require('express').Router();
 const jwt = require('jsonwebtoken');
+const async = require('async');
+const crypto = require('crypto');
 
 const { conn } = require('../db/index.js');
 const Teacher = require('../db/index').models.Teacher;
@@ -7,9 +9,11 @@ const Class = require('../db/index').models.Class;
 const School = require('../db/index').models.School;
 const AgeGroup = require('../db/index').models.AgeGroup;
 
+
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
 const { extractSessionData, extractDataForFrontend } = require('../utils/helpers');
+const { sendEmail, smtpTransport } = require('../utils/smpt');
 const {
     pbkdf2,
     saltHashPassword,
@@ -120,11 +124,6 @@ app.post('/login', (req, res) => {
 });
 
 /*** Reset Password API ***/
-
-const async = require('async');
-const crypto = require('crypto');
-const { sendEmail, smtpTransport } = require('../utils/smpt');
-
 
 app.post('/resetrequest', (req, res, next) => {
     const { email } = req.body;

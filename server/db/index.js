@@ -97,15 +97,6 @@ const schools = [
 const classes = [
     {
         teacherId: 1,
-        name: '1A',
-        size: 30,
-        ageGroupId:2,
-        termId: 1,
-        schoolId: 1,
-        exchangeId: 2
-    },
-    {
-        teacherId: 1,
         name: '1B',
         size: 28,
         ageGroupId: 1,
@@ -113,13 +104,22 @@ const classes = [
         schoolId: 1
     },
     {
+        teacherId: 1,
+        name: '1A',
+        size: 30,
+        ageGroupId:1,
+        termId: 1,
+        schoolId: 1,
+        exchangeId: 2
+    },
+    {
         teacherId: 2,
         name: '3F',
         size: 28,
         ageGroupId: 1,
         termId: 1,
-        exchangeId:1,
-        schoolId: 2
+        schoolId: 2,
+        exchangeId:1
     },
     {
         teacherId: 2,
@@ -127,17 +127,17 @@ const classes = [
         size: 28,
         termId: 1,
         ageGroupId: 1,
-        exchangeId:3,
-        schoolId: 3
+        schoolId: 3,
+        exchangeId:3
     },
     {
         teacherId: 4,
         name: '4E',
         size: 28,
-        termId: 2,
+        termId: 1,
         ageGroupId: 1,
-        exchangeId: 4,
-        schoolId: 4
+        schoolId: 4,
+        exchangeId: 4
     }
 ]
 

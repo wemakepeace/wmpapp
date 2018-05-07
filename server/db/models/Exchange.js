@@ -7,6 +7,14 @@ const Exchange = conn.define('exchange', {
         validate: {
             notEmpty: { msg: '.....'}
         }
+    },
+    teacherAVerfified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+    teacherBVerfified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     }
 });
 
