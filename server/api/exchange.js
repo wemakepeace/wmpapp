@@ -46,39 +46,27 @@ app.post('/', (req, res, next) => {
             },
             include: [{
                 model: Class,
+                as: 'classA',
                 where: {
-                    id: { $notIn: _class.id },
-                    teacherId: { $notIn: _class.teacherId },
-                    schoolId: { $notIn: _class.schoolId }
+                    teacherId: { $ne: _class.teacherId },
+                    schoolId: { $ne: _class.schoolId },
+                    termId: { $eq: _class.termId },
+                    ageGroupId: { $eq: _class.ageGroupId }
                 },
                 include: [ School ]
             }]
         })
-        .then(exchanges => {
-
-            let matchingClasses = exchanges.filter(exchange => {
-                const { termId, ageGroupId, schoolId } = exchange.classes[0];
-
-                if (termId !== _class.termId) return
-
-                if (ageGroupId !== _class.ageGroupId) return
-
-                if (schoolId === _class.schoolId) return
-
-                return  exchange
-            });
-
-
+        .then(matches => {
             /* If matches are found */
-            if (matchingClasses.length) {
-                const classDataCollection = matchingClasses.map(match => {
-                    const data = match.dataValues.classes[0].dataValues;
+            if (matches.length) {
+                const matchDataCollection = matches.map(match => {
+                    const data = match.dataValues.classA.dataValues;
                     return extractClassAddress(data);
                 });
 
                 const classCoords = _class.location;
 
-                return findFurthestMatch(classCoords, classDataCollection)
+                return findFurthestMatch(classCoords, matchDataCollection)
 
             } else {
                 return 'No matches found.'
@@ -101,6 +89,7 @@ app.post('/', (req, res, next) => {
             // send email to teacherB with token
             console.log('result', result)
             console.log('_class', _class)
+
             res.send(result)
         })
     })

@@ -20,7 +20,7 @@ app.get('/:id', (req, res, next) => {
 
     Class.findOne({
         where: { id },
-        include: [ AgeGroup, Term, School, Exchange ]
+        include: [ AgeGroup, Term, School ]
     })
     .then(_class => {
         _class = _class.dataValues;
@@ -44,15 +44,25 @@ app.get('/:id', (req, res, next) => {
             _class.school = _class.school.dataValues
         }
 
-        if (_class.exchange) {
-            _class.exchange = _class.exchange.dataValues;
-        }
+        return _class
+    })
+    .then(_class => {
+        Exchange.findOne({
+            where: {
+                $or: [{ classAId: _class.id }, { classBId: _class.id }]
+            }
+        })
+        .then(exchange => {
 
-        console.log('_class', _class)
-        res.send({
-            feedback: feedback(SUCCESS, ['Class fetched.']),
-            _class: extractDataForFrontend(_class, {})
-        });
+            if (exchange) {
+                _class.exchange = exchange.dataValues;
+            }
+
+            res.send({
+                feedback: feedback(SUCCESS, ['Class fetched.']),
+                _class: extractDataForFrontend(_class, {})
+            });
+        })
     })
     .catch(error => {
         const defaultError = 'Something went wrong when loading your session.';

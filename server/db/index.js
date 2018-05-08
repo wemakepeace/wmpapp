@@ -21,8 +21,8 @@ Term.hasMany(Class);
 Class.belongsTo(School);
 School.hasMany(Class);
 
-Class.belongsTo(Exchange);
-Exchange.hasMany(Class);
+Exchange.belongsTo(Class, { as:  'classA' }); // creates classAId on Exchange
+Exchange.belongsTo(Class, { as:  'classB' }); // creates classBId on Exchange
 
 const teachers = [
     {
@@ -91,6 +91,15 @@ const schools = [
         city: 'Odense',
         state: '',
         country: 'DK'
+    },
+    {
+        schoolName: 'Trinity Primary and Preschool',
+        address1: 'P.O Box 6391',
+        address2: '',
+        zip: '',
+        city: 'Uganda',
+        state: 'Bukoto-Mukalazi Zone Kampala',
+        country: 'DK'
     }
 ];
 
@@ -109,8 +118,7 @@ const classes = [
         size: 30,
         ageGroupId:1,
         termId: 1,
-        schoolId: 1,
-        exchangeId: 2
+        schoolId: 2
     },
     {
         teacherId: 2,
@@ -118,8 +126,7 @@ const classes = [
         size: 28,
         ageGroupId: 1,
         termId: 1,
-        schoolId: 2,
-        exchangeId:1
+        schoolId: 2
     },
     {
         teacherId: 2,
@@ -127,8 +134,7 @@ const classes = [
         size: 28,
         termId: 1,
         ageGroupId: 1,
-        schoolId: 3,
-        exchangeId:3
+        schoolId: 3
     },
     {
         teacherId: 4,
@@ -136,11 +142,36 @@ const classes = [
         size: 28,
         termId: 1,
         ageGroupId: 1,
-        schoolId: 4,
-        exchangeId: 4
+        schoolId: 4
+    },
+    {
+        teacherId: 5,
+        name: '5G',
+        size: 28,
+        termId: 1,
+        ageGroupId: 1,
+        schoolId: 5
     }
 ]
 
+const exchanges = [
+    {
+        status: 'initiated',
+        classAId: 2
+    },
+    {
+        status: 'initiated',
+        classAId: 3
+    },
+    {
+        status: 'initiated',
+        classAId: 4
+    },
+    {
+        status: 'pending',
+        classAId: 5,
+        classBId: 6
+    }]
 
 
 const sync = () => conn.sync({ force: true });
@@ -157,15 +188,17 @@ const seed = () => {
                 const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
                 const termPromises = termData.map(term => Term.create(term));
                 const schoolPromises = schools.map(school => School.create(school));
-                let exchangePromises = [];
-                for (let i = 0; i < 4; i++) {
-                  exchangePromises.push(Exchange.create({ status: 'initiated' }))
-                }
-                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises, exchangePromises]);
+
+                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
             })
             .then(result => {
-                const classPromises = classes.map(_class => Class.create(_class));
+                const classPromises = classes.map((_class, i) => Class.create(_class));
+
                 return Promise.all(classPromises);
+            })
+            .then(() => {
+                const exchangePromises = exchanges.map(exchange => Exchange.create(exchange));
+                return Promise.all(exchangePromises);
             })
         })
         .catch((error) => {

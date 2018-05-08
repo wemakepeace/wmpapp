@@ -20,8 +20,8 @@ const School = conn.define('school', {
     },
     zip: {
         type: conn.Sequelize.STRING,
-        validate: {
-            notEmpty: { msg: 'Please fill out zip code.'},
+        // validate: {
+            // notEmpty: { msg: 'Please fill out zip code.'},
             // isZip(value) {
             //     if (value === '') {
             //         return
@@ -33,7 +33,7 @@ const School = conn.define('school', {
             //         throw new Error('The zip code you entered is not valid')
             //     }
             // }
-        }
+        // }
     },
     city: {
         type: Sequelize.STRING,
