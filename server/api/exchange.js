@@ -28,13 +28,13 @@ app.post('/', (req, res, next) => {
         include: [ School ]
     })
     .then(_class => {
-        _class = _class.dataValues;
-        _class.school = _class.school.dataValues;
-        let classData = extractClassAddress(_class);
+        // _class = _class.dataValues;
+        _class.dataValues.school = _class.dataValues.school.dataValues;
+        let classData = extractClassAddress(_class.dataValues);
 
         return getCoordinates(classData)
         .then(({ location }) => {
-            _class.location = location;
+            _class.dataValues.location = location;
             return _class
         })
     })
@@ -48,10 +48,10 @@ app.post('/', (req, res, next) => {
                 model: Class,
                 as: 'classA',
                 where: {
-                    teacherId: { $ne: _class.teacherId },
-                    schoolId: { $ne: _class.schoolId },
-                    termId: { $eq: _class.termId },
-                    ageGroupId: { $eq: _class.ageGroupId }
+                    teacherId: { $ne: _class.dataValues.teacherId },
+                    schoolId: { $ne: _class.dataValues.schoolId },
+                    termId: { $eq: _class.dataValues.termId },
+                    ageGroupId: { $eq: _class.dataValues.ageGroupId }
                 },
                 include: [ School ]
             }]
@@ -64,15 +64,31 @@ app.post('/', (req, res, next) => {
                     return extractClassAddress(data);
                 });
 
-                const classCoords = _class.location;
+                const classCoords = _class.dataValues.location;
 
                 return findFurthestMatch(classCoords, matchDataCollection)
+                    .then(result => {
+                        console.log('result', result)
+                        return matches.find(match => {
+                            console.log('match.dataValues.classA.dataValues.id',match.dataValues.classA.dataValues.id)
+                            return match.dataValues.classA.dataValues.id === result.id
+                        })
+                    })
 
             } else {
                 return 'No matches found.'
             }
         })
-        .then(result => {
+        .then(exchange => {
+            console.log('exchange', exchange)
+            console.log('_class', _class)
+            exchange.setClassB(_class)
+            // _class.setExchange(exchange, {as: 'classB'})
+            .then(x => {
+                console.log('x', x)
+            })
+            // console.log(matches)
+
             // const matchingClassId = id;
         // async:
             // find Exchange
@@ -87,10 +103,8 @@ app.post('/', (req, res, next) => {
                 // get email for teacherB
             // send email to teacherA with token
             // send email to teacherB with token
-            console.log('result', result)
-            console.log('_class', _class)
 
-            res.send(result)
+            res.send(exchange)
         })
     })
     // end of findAll exchanges call
@@ -175,8 +189,7 @@ const findFurthestMatch = (classCoords, collection) => {
                 return result
             }, { id: null, distance: 0 })
 
-
-            return { matchClass }
+            return matchClass
     })
 }
 
