@@ -87,27 +87,28 @@ app.post('/', (req, res, next) => {
                                     crypto.randomBytes(20),
                                     crypto.randomBytes(20)
                                 ])
-                                    .then(([buf1, buf2]) => {
+                                .then(([buf1, buf2]) => {
 
-                                        const tokenA = buf1.toString('hex');
-                                        const tokenB = buf2.toString('hex');
+                                    const tokenA = buf1.toString('hex');
+                                    const tokenB = buf2.toString('hex');
 
-                                        const classA = exchange.dataValues.classA;
-                                        const classB = exchange.dataValues.classB;
+                                    const classA = exchange.dataValues.classA;
+                                    const classB = exchange.dataValues.classB;
 
-                                        const date = new Date();
-                                        const expires = date.setDate(date.getDate() + 7);
+                                    const date = new Date();
+                                    const expires = date.setDate(date.getDate() + 7);
 
-                                        classA.verifyExchangeToken = tokenA;
-                                        classB.verifyExchangeToken = tokenB;
-                                        classA.verifyExchangeTokenExpires = expires;
-                                        classB.verifyExchangeTokenExpires = expires;
+                                    classA.verifyExchangeToken = tokenA;
+                                    classB.verifyExchangeToken = tokenB;
+                                    classA.verifyExchangeTokenExpires = expires;
+                                    classB.verifyExchangeTokenExpires = expires;
+                                    exchange.status = 'pending';
 
-                                        return Promise.all([classA.save(), classB.save()])
-                                    })
+                                    return Promise.all([classA.save({ transaction: t }), classB.save({ transaction: t }), exchange.save({ transaction: t })])
+                                })
                             }, { transaction: t })
-                            .then(([ classA, classB ]) => {
-
+                            .then(([ classA, classB, exchange ]) => {
+                                console.log('exchange saved', exchange)
                                 /* send email with verification token to both teachers */
                                 const classAEmail = classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = classB.dataValues.teacher.dataValues.email;
