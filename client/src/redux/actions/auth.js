@@ -7,9 +7,9 @@ import axios from 'axios';
 import { setToken } from '../../utils/helpers';
 
 
-const login = (credentials, specialFeedback) => {
+const login = (data, specialFeedback) => {
     return dispatch => {
-        return axios.post('/public/login', credentials )
+        return axios.post('/public/login', data )
             .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {

@@ -20,3 +20,13 @@ const Exchange = conn.define('exchange', {
 
 
 module.exports = Exchange;
+
+/*
+    Exchange statuses
+    - initiated
+    - pending
+    - confirmed
+    - cancelled
+    - completed
+
+*/

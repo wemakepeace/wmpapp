@@ -58,8 +58,7 @@ app.post('/create', (req, res, next) => {
 
 app.post('/login', (req, res) => {
 
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
     return Teacher.findOne({
         where: { email },

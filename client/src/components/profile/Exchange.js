@@ -66,7 +66,8 @@ class Exchange extends Component {
                 <div className='profile-segment'>
                     <ProgressBar percent={this.state.percent}/>
                 </div>
-                {showClass.exchange
+                { /*showClass.exchange*/
+                    false
                 ? <div className='profile-segment'>
                     <div className=''>
                         <h5 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h5>

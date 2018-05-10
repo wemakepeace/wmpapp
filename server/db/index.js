@@ -151,6 +151,15 @@ const classes = [
         termId: 1,
         ageGroupId: 1,
         schoolId: 5
+    },
+    // class that will not find  match
+    {
+        teacherId: 1,
+        name: 'xx',
+        size: 28,
+        termId: 2,
+        ageGroupId: 2,
+        schoolId: 5
     }
 ]
 

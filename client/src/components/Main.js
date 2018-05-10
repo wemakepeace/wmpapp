@@ -41,7 +41,7 @@ class Main extends Component {
                                 </div>
                             </div>
                             <div className='first'>
-                            { showForm === 'signup' ? <SignupForm {...this.props}/> : <LoginForm /> }
+                            { showForm === 'signup' ? <SignupForm {...this.props}/> : <LoginForm {...this.props} /> }
                             </div>
                         </div>
                     </div>

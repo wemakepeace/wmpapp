@@ -1,11 +1,12 @@
 const app = require('express').Router();
 const countries = require('country-list');
-const async = require('async');
+const crypto = require('crypto');
 
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
 const School = require('../db/index').models.School;
+const Teacher = require('../db/index').models.Teacher;
 const Exchange = require('../db/index').models.Exchange;
 const conn = require('../db/conn');
 
@@ -22,13 +23,14 @@ const googleMapsClient = require('@google/maps').createClient({
 
 
 app.post('/', (req, res, next) => {
+
     const { classId } = req.body;
+
     Class.findOne({
         where: { id: classId },
-        include: [ School ]
+        include: [ School, Teacher ]
     })
     .then(_class => {
-        // _class = _class.dataValues;
         _class.dataValues.school = _class.dataValues.school.dataValues;
         let classData = extractClassAddress(_class.dataValues);
 
@@ -40,7 +42,7 @@ app.post('/', (req, res, next) => {
     })
     .then(_class => {
 
-        Exchange.findAll({
+        return Exchange.findAll({
             where: {
                 status: 'initiated'
             },
@@ -53,7 +55,7 @@ app.post('/', (req, res, next) => {
                     termId: { $eq: _class.dataValues.termId },
                     ageGroupId: { $eq: _class.dataValues.ageGroupId }
                 },
-                include: [ School ]
+                include: [ School, Teacher ]
             }]
         })
         .then(matches => {
@@ -68,28 +70,93 @@ app.post('/', (req, res, next) => {
 
                 return findFurthestMatch(classCoords, matchDataCollection)
                     .then(result => {
-                        console.log('result', result)
                         return matches.find(match => {
-                            console.log('match.dataValues.classA.dataValues.id',match.dataValues.classA.dataValues.id)
                             return match.dataValues.classA.dataValues.id === result.id
                         })
                     })
+                    .then(exchange => {
+                        return conn.transaction((t) => {
+                            return exchange.setClassB(_class, { transaction: t })
+                                .then(exchange => {
+                                    exchange.dataValues.classB = _class;
+                                    return exchange
+                                }, { transaction: t })
+                            .then(exchange => {
+                            /* create verification token and expiration */
+                                return Promise.all([
+                                    crypto.randomBytes(20),
+                                    crypto.randomBytes(20)
+                                ])
+                                    .then(([buf1, buf2]) => {
 
+                                        const tokenA = buf1.toString('hex');
+                                        const tokenB = buf2.toString('hex');
+
+                                        const classA = exchange.dataValues.classA;
+                                        const classB = exchange.dataValues.classB;
+
+                                        const date = new Date();
+                                        const expires = date.setDate(date.getDate() + 7);
+
+                                        classA.verifyExchangeToken = tokenA;
+                                        classB.verifyExchangeToken = tokenB;
+                                        classA.verifyExchangeTokenExpires = expires;
+                                        classB.verifyExchangeTokenExpires = expires;
+
+                                        return Promise.all([classA.save(), classB.save()])
+                                    })
+                            }, { transaction: t })
+                            .then(([ classA, classB ]) => {
+
+                                /* send email with verification token to both teachers */
+                                const classAEmail = classA.dataValues.teacher.dataValues.email;
+                                const classBEmail = classB.dataValues.teacher.dataValues.email;
+                                const tokenA = classA.dataValues.verifyExchangeToken;
+                                const classAId = classA.dataValues.id;
+
+                                const host = req.get('host');
+                                const link = 'http://' + host + '/#/';
+
+                                // should be replaced with template...
+                                const mailOptions = {
+                                    to: classAEmail,
+                                    from: 'tempwmp@gmail.com',
+                                    subject: 'Verify Exchange Participation | We Make Peace',
+                                    text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
+                                };
+
+                                return sendEmail(res, mailOptions)
+                                .then(() => {
+                                    // console.log('xx', xx)
+                                    // console.log('classB', classB)
+                                    // classB.dataValues.exchange = exchange.dataValues;
+                                    return classB
+                                })
+                            }, { transaction: t })
+                            .then(_class => {
+                                // console.log('xxx', xxx)
+                                const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
+
+                                // console.log('_class', _class)
+                                console.log('exchange',exchange)
+                                return {
+                                    feedback: feedback(SUCCESS, [feedbackMsg]),
+                                    _class
+                                }
+                            }, { transaction: t })
+                        })
+                    })
+                    // .then(result => {
+                    //     // console.log('result', result)
+                    //     return result
+                    // })
             } else {
-                return 'No matches found.'
+                /* if no match is found initiate new Exchange instance */
+                return initiateNewExchange(_class)
             }
         })
-        .then(exchange => {
-            console.log('exchange', exchange)
-            console.log('_class', _class)
-            exchange.setClassB(_class)
-            // _class.setExchange(exchange, {as: 'classB'})
-            .then(x => {
-                console.log('x', x)
-            })
-            // console.log(matches)
+        .catch(err => console.log('ERRRRR', err))
 
-            // const matchingClassId = id;
         // async:
             // find Exchange
                 // setClass _class
@@ -104,13 +171,36 @@ app.post('/', (req, res, next) => {
             // send email to teacherA with token
             // send email to teacherB with token
 
-            res.send(exchange)
-        })
+    })
+    .then(({ _class }) => {
+        console.log('_class.dataValues', _class.dataValues)
+        // console.log('exchange', exchange)
+        res.send(_class.dataValues)
     })
     // end of findAll exchanges call
-    .catch(err => console.log(err))
+    .catch(err => console.log('Err', err))
 });
 
+
+const initiateNewExchange = (_class) => {
+    return Exchange.create({ status: 'initiated' })
+    .then(exchange => {
+        return exchange.setClassA(_class)
+        .then(exchange => {
+            console.log('New Exchange instance created:', exchange)
+
+            const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
+
+            _class.dataValues.exchange = exchange;
+
+            return {
+                feedback: feedback(SUCCESS, [feedbackMsg]),
+                _class
+            }
+        })
+    })
+    .catch(err => console.log(err))
+}
 
 
     // update Exchange instance with classAId and classBId
@@ -126,6 +216,34 @@ app.post('/', (req, res, next) => {
         // create an Exchange instance and set classId to classAId
         // and send email to teacher and send message to UI
 
+/* Verify email exchange verification link click */
+// app.get('/verify', (req, res, next) => {
+//     if ((req.protocol + "://" + req.get('host')) == ("http://" + host)) {
+//         console.log("Domain is matched. Information is from Authentic email");
+
+//         // find user based on req.query.id
+//         // if token exists on user
+//             // verify exchange
+
+//         if (req.query.token == rand) {
+//             models.Professional.update(
+//                   { verified: true },
+//                   { where: { id: req.query.id } }
+//             )
+//             .then( result => {
+//                 return res.redirect(`/login/true`)
+//             })
+//             .catch(next => {
+//                 res.end("<h1>Something went wrong when verifying your email address.</h1>")
+//             })
+//         } else {
+//             console.log("email is not verified");
+//             res.end("<h1>Bad Request</h1>");
+//         }
+//     } else {
+//         res.end("<h1>Request is from unknown source");
+//     }
+// });
 
 
 
@@ -194,75 +312,91 @@ const findFurthestMatch = (classCoords, collection) => {
 }
 
 
-// app.post('/resetrequest', (req, res, next) => {
-//     const { email } = req.body;
 
-//     async.waterfall([
-//         function(done) {
-//             crypto.randomBytes(20, function(err, buf) {
-//                 const token = buf.toString('hex');
-//                 done(err, token);
-//             })
-//         },
-//         function(token, done) {
-//             Teacher.findOne({
-//                 where: {
-//                     email: email,
-//                 }
-//             })
-//             .then(user => {
-//                 if (!user) {
-//                     let defaultError = ['No user found for this e-mail address.'];
 
-//                     return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
-//                 }
+// /* Verify User Email */
+// let rand, host;
 
-//                 user.resetPasswordToken = token;
-//                 user.resetPasswordExpires = Date.now() + 3600000;
+// /* Send account verification email */
+// app.get('/send', (req, res) => {
+//     rand = crypto.randomBytes(20).toString('hex')
+//     host = req.get('host');
+//     const link = 'http://' + req.get('host') + '/professional/verify?token=' + rand + '&id=' + req.query.professionalId;
+//    const mailOptionsVerifyAccount = {
+//         to : req.query.to,
+//         professionalId: req.query.professionalId,
+//         firstName: req.query.firstName,
+//         subject : "Hello " + req.query.firstName + "! Please confirm your Email account",
+//         html : "Hello " + req.query.firstName + ",<br> Thank you for joining Oosa. Please click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
+//     }
 
-//                 user.save()
-//                 .then( res => {
-//                     done(null, token, res.dataValues)
-//                 })
-//                 .catch(err => {
-//                     let defaultError = ['Something went wrong. Please try submitting your email again.'];
-//                     return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
-//                 });
-//             });
-//         },
-//         function(token, user, done) {
-//             const mailOptionsRequestResetPw = {
-//                 to: user.email,
-//                 from: 'tempwmp@gmail.com',
-//                 subject: 'Reset password  | We Make Peace',
-//                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' + 'Please click on the following link, or paste this into your browser to complete the process:\n\n' + 'http://' + req.headers.host + '/public/reset/' + token + '\n\n' + 'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-//             };
-//             smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
-//                 if (error) {
-
-//                     const defaultError = ['Something went wrong. Please try again.'];
-
-//                     res.status(500).send({
-//                         feedback: feedback(ERROR, defaultError)
-//                     })
-
-//                  } else {
-
-//                     const defaultMessage = ['An e-mail has been sent to ' + user.email + ' with further instructions.'];
-
-//                     res.send({
-//                         feedback: feedback(SUCCESS, defaultMessage)
-//                     })
-//                 }
-//                 done(err, 'done');
-//             });
-//         }],
-//         function(err) {
-//             if (err) {
-//                 console.log('error hitting down here', err);
-//                 return next(err);
-//             }
-//             res.redirect('/')
-//         })
+//     return sendEmail(res, mailOptionsVerifyAccount);
 // });
 
+//  Verify email route
+// app.get('/verify', (req, res, next) => {
+//     if ((req.protocol + "://" + req.get('host')) == ("http://" + host)) {
+//         console.log("Domain is matched. Information is from Authentic email");
+//          if (req.query.token == rand) {
+//             models.Professional.update(
+//                   { verified: true },
+//                   { where: { id: req.query.id } }
+//             )
+//             .then( result => {
+//                 return res.redirect(`/login/true`)
+//             })
+//             .catch(next => {
+//                 res.end("<h1>Something went wrong when verifying your email address.</h1>")
+//             })
+//         } else {
+//             console.log("email is not verified");
+//             res.end("<h1>Bad Request</h1>");
+//         }
+//     } else {
+//         res.end("<h1>Request is from unknown source");
+//     }
+// });
+
+
+
+
+
+
+
+
+
+
+/* async.waterfall([
+    function(done) {
+        crypto.randomBytes(20, function(err, buf) {
+            const token = buf.toString('hex');
+            done(err, token);
+        })
+    },
+    function(token, done) {
+        Teacher.findOne({
+            where: {
+                email: email,
+            }
+        })
+        .then(user => {
+            if (!user) {
+                let defaultError = ['No user found for this e-mail address.'];
+
+                return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
+            }
+
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000;
+
+            user.save()
+            .then( res => {
+                done(null, token, res.dataValues)
+            })
+            .catch(err => {
+                let defaultError = ['Something went wrong. Please try submitting your email again.'];
+                return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
+            });
+        });
+    },
+*/

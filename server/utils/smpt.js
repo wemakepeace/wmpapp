@@ -11,17 +11,22 @@ const smtpTransport = nodemailer.createTransport({
     }
 });
 
- const sendEmail = (res, mailOptions) => {
-    return smtpTransport.sendMail(mailOptions, function(error, response){
-         if (error) {
-            console.log(error);
-            res.end("error");
-         } else {
-            console.log("Message sent: " + response.message);
-            res.end("sent");
-        }
-    });
+const sendEmail = (res, mailOptions) => {
+    return smtpTransport.sendMail(mailOptions);
 };
+
+//  const sendEmail = (res, mailOptions) => {
+//     return smtpTransport.sendMail(mailOptions, function(error, response){
+//          if (error) {
+//             console.log(error);
+//             res.end("error");
+//          } else {
+//             // console.log('response from smpt transport', response)
+//             // console.log("Message sent: " + response.message);
+//             res.end("sent");
+//         }
+//     });
+// };
 
 module.exports = {
     sendEmail,
