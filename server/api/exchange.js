@@ -15,7 +15,6 @@ const { extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
-
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GOOGLEKEY,
     Promise: Promise
@@ -76,9 +75,6 @@ app.post('/', (req, res, next) => {
                     .then(exchange => {
                         return conn.transaction((t) => {
                             return exchange.setClassB(_class, { transaction: t })
-                                .then(exchange => {
-                                    return exchange
-                                }, { transaction: t })
                             .then(exchange => {
                             /* create verification token and expiration */
                                 return Promise.all([
@@ -102,28 +98,40 @@ app.post('/', (req, res, next) => {
                                     classB.verifyExchangeTokenExpires = expires;
                                     exchange.status = 'pending';
 
-                                    return Promise.all([classA.save({ transaction: t }), classB.save({ transaction: t }), exchange.save({ transaction: t })])
+                                    return Promise.all([
+                                        classA.save({ transaction: t }),
+                                        classB.save({ transaction: t }),
+                                        exchange.save({ transaction: t })
+                                    ])
                                 })
                             }, { transaction: t })
                             .then(([ classA, classB, exchange ]) => {
                                 /* send email with verification token to both teachers */
                                 const classAEmail = classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = classB.dataValues.teacher.dataValues.email;
+
                                 const tokenA = classA.dataValues.verifyExchangeToken;
-                                const classAId = classA.dataValues.id;
+                                const tokenB = classB.dataValues.verifyExchangeToken;
 
                                 const host = req.get('host');
-                                const link = 'http://' + host + '/#/';
 
-                                // should be replaced with template...
-                                const mailOptions = {
-                                    to: classAEmail,
+                                const sendEmailTo = (res, recipient, token) => {
+                                    const link = 'http://' + host + '/#/';
+
+                                    const mailOptions = {
+                                    to: recipient,
                                     from: 'tempwmp@gmail.com',
                                     subject: 'Verify Exchange Participation | We Make Peace',
                                     text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
-                                };
+                                    };
 
-                                return sendEmail(res, mailOptions)
+                                    return sendEmail(res, mailOptions, { transaction: t })
+                                }
+
+                                return Promise.all([
+                                    sendEmailTo(res, classAEmail, tokenA, { transaction: t }),
+                                    sendEmailTo(res, classBEmail, tokenB, { transaction: t }),
+                                ])
                                 .then(() => {
                                     return { classB, exchange }
                                 })
@@ -145,26 +153,10 @@ app.post('/', (req, res, next) => {
             }
         })
         .catch(err => console.log('ERRRRR', err))
-
-        // async:
-            // find Exchange
-                // setClass _class
-            // find teacher for matchClass
-                // set role as A
-                // create token and expiration
-                // get email for teacherA
-            // find teacher for _class
-                // set role as B
-                // create token and expiration
-                // get email for teacherB
-            // send email to teacherA with token
-            // send email to teacherB with token
-
     })
     .then(({ _class, exchange, feedback }) => {
         res.send({ _class, exchange, feedback })
     })
-    // end of findAll exchanges call
     .catch(err => console.log('Err', err))
 });
 
@@ -174,11 +166,8 @@ const initiateNewExchange = (_class) => {
     .then(exchange => {
         return exchange.setClassA(_class)
         .then(exchange => {
-            console.log('New Exchange instance created:', exchange)
 
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
-
-            // _class.dataValues.exchange = exchange;
 
             return {
                 feedback: feedback(SUCCESS, [feedbackMsg]),
