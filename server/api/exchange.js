@@ -21,7 +21,6 @@ const googleMapsClient = require('@google/maps').createClient({
     Promise: Promise
 });
 
-
 app.post('/', (req, res, next) => {
 
     const { classId } = req.body;
@@ -78,7 +77,6 @@ app.post('/', (req, res, next) => {
                         return conn.transaction((t) => {
                             return exchange.setClassB(_class, { transaction: t })
                                 .then(exchange => {
-                                    exchange.dataValues.classB = _class;
                                     return exchange
                                 }, { transaction: t })
                             .then(exchange => {
@@ -93,7 +91,7 @@ app.post('/', (req, res, next) => {
                                     const tokenB = buf2.toString('hex');
 
                                     const classA = exchange.dataValues.classA;
-                                    const classB = exchange.dataValues.classB;
+                                    const classB = _class;
 
                                     const date = new Date();
                                     const expires = date.setDate(date.getDate() + 7);
@@ -108,7 +106,6 @@ app.post('/', (req, res, next) => {
                                 })
                             }, { transaction: t })
                             .then(([ classA, classB, exchange ]) => {
-                                console.log('exchange saved', exchange)
                                 /* send email with verification token to both teachers */
                                 const classAEmail = classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = classB.dataValues.teacher.dataValues.email;
@@ -128,29 +125,20 @@ app.post('/', (req, res, next) => {
 
                                 return sendEmail(res, mailOptions)
                                 .then(() => {
-                                    // console.log('xx', xx)
-                                    // console.log('classB', classB)
-                                    // classB.dataValues.exchange = exchange.dataValues;
-                                    return classB
+                                    return { classB, exchange }
                                 })
                             }, { transaction: t })
-                            .then(_class => {
-                                // console.log('xxx', xxx)
+                            .then(({ classB, exchange }) => {
                                 const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
-                                // console.log('_class', _class)
-                                console.log('exchange',exchange)
                                 return {
                                     feedback: feedback(SUCCESS, [feedbackMsg]),
-                                    _class
+                                    _class: classB,
+                                    exchange
                                 }
                             }, { transaction: t })
                         })
                     })
-                    // .then(result => {
-                    //     // console.log('result', result)
-                    //     return result
-                    // })
             } else {
                 /* if no match is found initiate new Exchange instance */
                 return initiateNewExchange(_class)
@@ -173,10 +161,8 @@ app.post('/', (req, res, next) => {
             // send email to teacherB with token
 
     })
-    .then(({ _class }) => {
-        console.log('_class.dataValues', _class.dataValues)
-        // console.log('exchange', exchange)
-        res.send(_class.dataValues)
+    .then(({ _class, exchange, feedback }) => {
+        res.send({ _class, exchange, feedback })
     })
     // end of findAll exchanges call
     .catch(err => console.log('Err', err))
@@ -192,11 +178,12 @@ const initiateNewExchange = (_class) => {
 
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
 
-            _class.dataValues.exchange = exchange;
+            // _class.dataValues.exchange = exchange;
 
             return {
                 feedback: feedback(SUCCESS, [feedbackMsg]),
-                _class
+                _class,
+                exchange
             }
         })
     })
