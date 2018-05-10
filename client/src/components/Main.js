@@ -9,7 +9,7 @@ import WMPHeader from './WMPHeader';
 
 class Main extends Component {
     state = {
-        showForm: 'signup',
+        showForm: 'login',
         message: ''
     }
 
@@ -30,14 +30,14 @@ class Main extends Component {
                         <div className='login-signup-container'>
                             <div className='second'>
                                 <div
-                                    className={`second-a ${this.getActiveClass('signup')}`}
-                                    onClick={()=> this.toggleForm('signup')}>
-                                    <h3>SIGNUP</h3>
-                                </div>
-                                <div
                                     className={`second-b ${this.getActiveClass('login')}`}
                                     onClick={()=> this.toggleForm('login')}>
                                     <h3>LOGIN</h3>
+                                </div>
+                                <div
+                                    className={`second-a ${this.getActiveClass('signup')}`}
+                                    onClick={()=> this.toggleForm('signup')}>
+                                    <h3>SIGNUP</h3>
                                 </div>
                             </div>
                             <div className='first'>

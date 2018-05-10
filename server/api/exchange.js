@@ -76,46 +76,30 @@ app.post('/', (req, res, next) => {
                         return conn.transaction((t) => {
                             return exchange.setClassB(_class, { transaction: t })
                             .then(exchange => {
+                                exchange.dataValues.classB = _class
                             /* create verification token and expiration */
-                                return Promise.all([
-                                    crypto.randomBytes(20),
-                                    crypto.randomBytes(20)
-                                ])
-                                .then(([buf1, buf2]) => {
-
-                                    const tokenA = buf1.toString('hex');
-                                    const tokenB = buf2.toString('hex');
-
-                                    const classA = exchange.dataValues.classA;
-                                    const classB = _class;
-
+                                return Promise.all([crypto.randomBytes(20, { transaction: t }) ])
+                                .then(([ buf ]) => {
+                                    const token = buf.toString('hex');
                                     const date = new Date();
                                     const expires = date.setDate(date.getDate() + 7);
 
-                                    classA.verifyExchangeToken = tokenA;
-                                    classB.verifyExchangeToken = tokenB;
-                                    classA.verifyExchangeTokenExpires = expires;
-                                    classB.verifyExchangeTokenExpires = expires;
+                                    exchange.verifyExchangeToken = token;
+                                    exchange.verifyExchangeTokenExpires = expires;
                                     exchange.status = 'pending';
 
-                                    return Promise.all([
-                                        classA.save({ transaction: t }),
-                                        classB.save({ transaction: t }),
-                                        exchange.save({ transaction: t })
-                                    ])
+                                    return exchange.save({ transaction: t })
                                 })
                             }, { transaction: t })
-                            .then(([ classA, classB, exchange ]) => {
+                            .then(( exchange ) => {
                                 /* send email with verification token to both teachers */
-                                const classAEmail = classA.dataValues.teacher.dataValues.email;
-                                const classBEmail = classB.dataValues.teacher.dataValues.email;
+                                const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
+                                const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
+                                const token = exchange.dataValues.verifyExchangeToken;
 
-                                const tokenA = classA.dataValues.verifyExchangeToken;
-                                const tokenB = classB.dataValues.verifyExchangeToken;
 
-                                const host = req.get('host');
-
-                                const sendEmailTo = (res, recipient, token) => {
+                                const generateEmail = (res, recipient, token) => {
+                                    const host = req.get('host');
                                     const link = 'http://' + host + '/#/';
 
                                     const mailOptions = {
@@ -129,19 +113,18 @@ app.post('/', (req, res, next) => {
                                 }
 
                                 return Promise.all([
-                                    sendEmailTo(res, classAEmail, tokenA, { transaction: t }),
-                                    sendEmailTo(res, classBEmail, tokenB, { transaction: t }),
+                                    generateEmail(res, classAEmail, token, { transaction: t }),
+                                    generateEmail(res, classBEmail, token, { transaction: t }),
                                 ])
                                 .then(() => {
-                                    return { classB, exchange }
+                                    return { exchange }
                                 })
                             }, { transaction: t })
-                            .then(({ classB, exchange }) => {
+                            .then(({ exchange }) => {
                                 const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
                                 return {
                                     feedback: feedback(SUCCESS, [feedbackMsg]),
-                                    _class: classB,
                                     exchange
                                 }
                             }, { transaction: t })
@@ -167,11 +150,12 @@ const initiateNewExchange = (_class) => {
         return exchange.setClassA(_class)
         .then(exchange => {
 
+            exchange.dataValues.classA = _class;
+
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
 
             return {
                 feedback: feedback(SUCCESS, [feedbackMsg]),
-                _class,
                 exchange
             }
         })

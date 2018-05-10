@@ -4,12 +4,13 @@ import thunk from 'redux-thunk';
 import teacher from './reducers/teacher';
 import feedback from './reducers/feedback';
 import classes from './reducers/classes';
-
+import exchange from './reducers/exchange';
 
 const combinedReducers = combineReducers({
     teacher,
     classes,
-    feedback
+    feedback,
+    exchange
 });
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

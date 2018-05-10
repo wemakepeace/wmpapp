@@ -5,6 +5,7 @@ import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import SelectClass from '../SelectClass';
+import Feedback from '../Feedback';
 
 import { initiateExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
@@ -29,7 +30,8 @@ const ProgressBar = ({ percent }) => (
 
 class Exchange extends Component {
     state = {
-        percent: 20
+        percent: 20,
+        showFeedback: true
     }
 
     onStartExchangeClick = (id) => {
@@ -42,6 +44,8 @@ class Exchange extends Component {
         const { teacher, classes } = this.props;
         const { firstName, lastName, email, phone } = teacher;
         let showClass, country, school;
+        const { feedback } = this.props;
+        const { showFeedback } = this.state;
 
         if (classes && classes.list && classes.currentClass) {
             showClass = classes.list[classes.currentClass];
@@ -89,6 +93,9 @@ class Exchange extends Component {
                             className='add-class'>START EXCHANGE</Button>
                     </div>
                 </div>}
+                 { showFeedback && (feedback && feedback.type)
+                    ? <Feedback {...feedback} />
+                    : null }
             </div>
         )
     }
@@ -97,7 +104,8 @@ class Exchange extends Component {
 const mapStateToProps = state => {
     return {
         teacher: state.teacher,
-        classes: state.classes
+        classes: state.classes,
+        feedback: state.feedback
     }
 }
 

@@ -15,7 +15,9 @@ const Exchange = conn.define('exchange', {
     teacherBVerfified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
-    }
+    },
+    verifyExchangeToken: Sequelize.STRING,
+    verifyExchangeTokenExpires: Sequelize.DATE
 });
 
 
