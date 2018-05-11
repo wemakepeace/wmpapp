@@ -4,6 +4,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 const Term = require('../db/index').models.Term;
 const School = require('../db/index').models.School;
 const Exchange = require('../db/index').models.Exchange;
+const Teacher = require('../db/index').models.Teacher;
 const conn = require('../db/conn');
 
 const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
@@ -54,23 +55,28 @@ app.get('/:id', (req, res, next) => {
             include: [
                 {
                     model: Class,
-                    as: 'classA'
+                    as: 'classA',
+                    include: [ School, Teacher ]
                 },
                 {
                     model: Class,
-                    as: 'classB'
+                    as: 'classB',
+                    include: [ School, Teacher ]
                 }]
         })
         .then(exchange => {
             let _exchange;
-
             if (exchange) {
                 _exchange = exchange.dataValues
-                if (_exchange.classA) {
-                    _exchange.classA = exchange.classA.dataValues
+                if (exchange.dataValues.classA) {
+                    _exchange.classA = exchange.dataValues.classA.dataValues
+                    _exchange.classA.school = exchange.dataValues.classA.school.dataValues;
+                    _exchange.classA.teacher = exchange.dataValues.classA.teacher.dataValues;
                 }
-                if (_exchange.classB) {
-                    _exchange.classB = exchange.classB.dataValues
+                if (exchange.dataValues.classB) {
+                    _exchange.classB = exchange.dataValues.classB.dataValues
+                    _exchange.classB.school = exchange.dataValues.classB.school.dataValues;
+                    _exchange.classB.teacher = exchange.dataValues.classB.teacher.dataValues;
                 }
             }
 

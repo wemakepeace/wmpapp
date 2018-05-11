@@ -148,9 +148,18 @@ const classes = [
         teacherId: 2,
         name: '4E',
         size: 28,
-        termId: 1,
-        ageGroupId: 1,
+        termId: 2,
+        ageGroupId: 2,
         schoolId: 3
+    },
+    // class that will match with xx
+    {
+        teacherId: 3,
+        name: 'yy',
+        size: 28,
+        termId: 2,
+        ageGroupId: 2,
+        schoolId: 1
     },
     // class that will not find  match
     {
@@ -185,6 +194,14 @@ const exchanges = [
     {
         status: 'initiated',
         classAId: 5
+    },
+    {
+        status: 'initiated',
+        classAId: 7
+    },
+    {
+        status: 'initiated',
+        classAId: 6
     }
 ]
 

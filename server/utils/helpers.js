@@ -70,7 +70,8 @@ const valuesForFrontend = [
     'verifyExchangeToken',
     'status',
     'classAId',
-    'classBId'
+    'classBId',
+    'teacher'
 ];
 
 // const exchangeData = [

@@ -29,7 +29,7 @@ app.post('/', (req, res, next) => {
         include: [ School, Teacher ]
     })
     .then(_class => {
-        _class.dataValues.school = _class.dataValues.school.dataValues;
+        // _class.dataValues.school = _class.dataValues.school;
         let classData = extractClassAddress(_class.dataValues);
 
         return getCoordinates(classData)
@@ -57,6 +57,7 @@ app.post('/', (req, res, next) => {
             }]
         })
         .then(matches => {
+            // console.log('matches', matches)
             /* If matches are found */
             if (matches.length) {
                 const matchDataCollection = matches.map(match => {
@@ -77,6 +78,7 @@ app.post('/', (req, res, next) => {
                             return exchange.setClassB(_class, { transaction: t })
                             .then(exchange => {
                                 exchange.dataValues.classB = _class
+                                // exchange.classB = _class
                             /* create verification token and expiration */
                                 return Promise.all([crypto.randomBytes(20, { transaction: t }) ])
                                 .then(([ buf ]) => {
@@ -93,6 +95,7 @@ app.post('/', (req, res, next) => {
                             }, { transaction: t })
                             .then(( exchange ) => {
                                 /* send email with verification token to both teachers */
+                                console.log('exchange', exchange)
                                 const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
                                 const token = exchange.dataValues.verifyExchangeToken;
@@ -121,6 +124,7 @@ app.post('/', (req, res, next) => {
                                 })
                             }, { transaction: t })
                             .then(({ exchange }) => {
+                                console.log('exchange inside match found', exchange)
                                 const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
                                 return {
@@ -142,14 +146,17 @@ app.post('/', (req, res, next) => {
         let _exchange;
         if (exchange) {
             _exchange = exchange.dataValues
-            if (exchange.classA) {
-                _exchange.classA = exchange.classA.dataValues
+            if (exchange.dataValues.classA) {
+                _exchange.classA = exchange.dataValues.classA.dataValues
+                _exchange.classA.school = exchange.dataValues.classA.school.dataValues;
+                _exchange.classA.teacher = exchange.dataValues.classA.teacher.dataValues;
             }
-            if (exchange.classB) {
-                _exchange.classB = exchange.classB.dataValues
+            if (exchange.dataValues.classB) {
+                _exchange.classB = exchange.dataValues.classB.dataValues
+                _exchange.classB.school = exchange.dataValues.classB.school.dataValues;
+                _exchange.classB.teacher = exchange.dataValues.classB.teacher.dataValues;
             }
         }
-
 
         res.send({
             _class: extractDataForFrontend(_class, {}),
@@ -167,7 +174,7 @@ const initiateNewExchange = (_class) => {
         return exchange.setClassA(_class)
         .then(exchange => {
 
-            exchange.classA = _class;
+            exchange.dataValues.classA = _class;
 
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
 
@@ -228,7 +235,7 @@ const initiateNewExchange = (_class) => {
 module.exports = app;
 
 const extractClassAddress = (_class) => {
-    const { zip, country, address1, city } = _class.school;
+    const { zip, country, address1, city } = _class.school.dataValues;
     const countryName = countries().getName(country);
     const address = `${address1}, ${city}, ${countryName}`;
 
