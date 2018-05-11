@@ -50,17 +50,34 @@ app.get('/:id', (req, res, next) => {
         Exchange.findOne({
             where: {
                 $or: [{ classAId: _class.id }, { classBId: _class.id }]
-            }
+            },
+            include: [
+                {
+                    model: Class,
+                    as: 'classA'
+                },
+                {
+                    model: Class,
+                    as: 'classB'
+                }]
         })
         .then(exchange => {
+            let _exchange;
 
             if (exchange) {
-                _class.exchange = exchange.dataValues;
+                _exchange = exchange.dataValues
+                if (_exchange.classA) {
+                    _exchange.classA = exchange.classA.dataValues
+                }
+                if (_exchange.classB) {
+                    _exchange.classB = exchange.classB.dataValues
+                }
             }
 
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
-                _class: extractDataForFrontend(_class, {})
+                _class: extractDataForFrontend(_class, {}),
+                exchange: extractDataForFrontend(_exchange, {})
             });
         })
     })

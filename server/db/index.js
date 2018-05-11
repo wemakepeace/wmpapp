@@ -106,35 +106,11 @@ const schools = [
 const classes = [
     {
         teacherId: 1,
-        name: '1B',
-        size: 28,
-        ageGroupId: 1,
-        termId: 1,
-        schoolId: 1
-    },
-    {
-        teacherId: 1,
         name: '1A',
         size: 30,
         ageGroupId:1,
         termId: 1,
         schoolId: 2
-    },
-    {
-        teacherId: 2,
-        name: '3F',
-        size: 28,
-        ageGroupId: 1,
-        termId: 1,
-        schoolId: 2
-    },
-    {
-        teacherId: 2,
-        name: '4E',
-        size: 28,
-        termId: 1,
-        ageGroupId: 1,
-        schoolId: 3
     },
     {
         teacherId: 4,
@@ -152,6 +128,30 @@ const classes = [
         ageGroupId: 1,
         schoolId: 5
     },
+    {
+        teacherId: 1,
+        name: '1B',
+        size: 28,
+        ageGroupId: 1,
+        termId: 1,
+        schoolId: 1
+    },
+    {
+        teacherId: 2,
+        name: '3F',
+        size: 28,
+        ageGroupId: 1,
+        termId: 1,
+        schoolId: 2
+    },
+    {
+        teacherId: 2,
+        name: '4E',
+        size: 28,
+        termId: 1,
+        ageGroupId: 1,
+        schoolId: 3
+    },
     // class that will not find  match
     {
         teacherId: 1,
@@ -163,10 +163,16 @@ const classes = [
     }
 ]
 
+const date = new Date();
+const expires = date.setDate(date.getDate() + 7);
+
 const exchanges = [
     {
-        status: 'initiated',
-        classAId: 2
+        status: 'pending',
+        classAId: 1,
+        classBId: 2,
+        verifyExchangeToken: 'ECd2gFnExPx4H8uRz25XwfCaGQy9Wl0Op',
+        verifyExchangeTokenExpires: expires
     },
     {
         status: 'initiated',
@@ -177,10 +183,10 @@ const exchanges = [
         classAId: 4
     },
     {
-        status: 'pending',
-        classAId: 5,
-        classBId: 6
-    }]
+        status: 'initiated',
+        classAId: 5
+    }
+]
 
 
 const sync = () => conn.sync({ force: true });
@@ -205,7 +211,7 @@ const seed = () => {
 
                 return Promise.all(classPromises);
             })
-            .then(() => {
+            .then(classes => {
                 const exchangePromises = exchanges.map(exchange => Exchange.create(exchange));
                 return Promise.all(exchangePromises);
             })

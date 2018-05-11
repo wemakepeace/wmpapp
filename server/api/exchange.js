@@ -138,7 +138,24 @@ app.post('/', (req, res, next) => {
         .catch(err => console.log('ERRRRR', err))
     })
     .then(({ _class, exchange, feedback }) => {
-        res.send({ _class, exchange, feedback })
+        console.log('exchange', exchange)
+        let _exchange;
+        if (exchange) {
+            _exchange = exchange.dataValues
+            if (exchange.classA) {
+                _exchange.classA = exchange.classA.dataValues
+            }
+            if (exchange.classB) {
+                _exchange.classB = exchange.classB.dataValues
+            }
+        }
+
+
+        res.send({
+            _class: extractDataForFrontend(_class, {}),
+            exchange: extractDataForFrontend(_exchange, {}),
+            feedback
+        })
     })
     .catch(err => console.log('Err', err))
 });
@@ -150,7 +167,7 @@ const initiateNewExchange = (_class) => {
         return exchange.setClassA(_class)
         .then(exchange => {
 
-            exchange.dataValues.classA = _class;
+            exchange.classA = _class;
 
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! "
 

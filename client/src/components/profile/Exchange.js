@@ -11,7 +11,14 @@ import { initiateExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
 
 const exchangeDetails = {
-    initiated: "Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match with. Look out for an email and make sure to confirm the Exchange particpation once you receive the email"
+    initiated: {
+        text: "Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match with. Look out for an email and make sure to confirm the Exchange particpation once you receive the email"
+    },
+    pending: {
+        text: "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!",
+        buttonUrl: "/",
+        buttonText: "Verify Exchange Participation"
+    }
 }
 
 const ProgressBar = ({ percent }) => (
@@ -35,21 +42,18 @@ class Exchange extends Component {
     }
 
     onStartExchangeClick = (id) => {
-        console.log('id', id)
         this.props.initiateExchange(id)
-        // dispatch action
     }
 
     render() {
-        const { teacher, classes } = this.props;
+        const { teacher, classes, feedback, exchange } = this.props;
         const { firstName, lastName, email, phone } = teacher;
-        let showClass, country, school;
-        const { feedback } = this.props;
+        let _class, country, school;
         const { showFeedback } = this.state;
 
         if (classes && classes.list && classes.currentClass) {
-            showClass = classes.list[classes.currentClass];
-            school = showClass.school;
+            _class = classes.list[classes.currentClass];
+            school = _class.school;
         }
 
         if (this.props.classes && this.props.classes.list) {
@@ -58,6 +62,9 @@ class Exchange extends Component {
                 country =  getCountryName(countryCode);
             }
         }
+
+        // console.log('exchangeDetails', exchangeDetails)
+        // console.log('exchange', exchange)
 
         return (
             <div className='profile-form'>
@@ -68,27 +75,32 @@ class Exchange extends Component {
                     <p>When a match has been made you will receive an email and you will be able to see more information about the exchange on this page.</p>
                 </div>
                 <div className='profile-segment'>
-                    <ProgressBar percent={this.state.percent}/>
+                    {/*<ProgressBar percent={this.state.percent}/>*/}
                 </div>
-                { /*showClass.exchange*/
-                    false
+                { exchange && exchange.status
                 ? <div className='profile-segment'>
                     <div className=''>
                         <h5 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h5>
-                        <span>{showClass.exchange.status || null}</span>
+                        <span>{exchange.status || null}</span>
                     </div>
                     <div>
-                        {exchangeDetails[showClass.exchange.status]}
+                        {exchangeDetails[exchange.status].text}
                     </div>
-                    <div>Details about current status. Pending means that you have initiated an exchange. If a match is found you will receive an email and you will need to login here to confirm the exchange within 7 days of receiving the email. Once the teachers for both of the exchanging classes have confirmed their classses participation, you will be ready to start the exchange.
-                    </div>
+                    { exchangeDetails[exchange.status].buttonUrl
+                        ?   <Button
+                                className='large-custom-btn'
+                                size='large'
+                                onClick={console.log('c')}>
+                                {exchangeDetails[exchange.status].buttonText}
+                            </Button>
+                        :   null }
                 </div>
                 : <div className='profile-segment'>
                     <div className='container-center-content'>
                         <p>By clicking START EXCHANGE your class will be signed up to participate in the Peace Letter program.
                         </p>
                         <Button
-                            onClick={() => this.onStartExchangeClick(showClass.id)}
+                            onClick={() => this.onStartExchangeClick(_class.id)}
                             size='massive'
                             className='add-class'>START EXCHANGE</Button>
                     </div>
@@ -105,7 +117,8 @@ const mapStateToProps = state => {
     return {
         teacher: state.teacher,
         classes: state.classes,
-        feedback: state.feedback
+        feedback: state.feedback,
+        exchange: state.exchange
     }
 }
 

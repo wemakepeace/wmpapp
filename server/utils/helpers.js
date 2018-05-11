@@ -64,9 +64,21 @@ const valuesForFrontend = [
     'country',
     'schools',
     'exchange',
-    'status'
+    'classA',
+    'classB',
+    'status',
+    'verifyExchangeToken',
+    'status',
+    'classAId',
+    'classBId'
 ];
 
+// const exchangeData = [
+//     'verifyExchangeToken',
+//     'status',
+//     'classAId',
+//     'classBId'
+// ]
 
 const isObject = (obj) => {
     if(Array.isArray(obj)) {
@@ -76,6 +88,10 @@ const isObject = (obj) => {
 };
 
 const extractDataForFrontend = (data, result) => {
+    if (!data) {
+        return {}
+    }
+    // console.log('data', data)
     valuesForFrontend.map(key => {
         if (data.hasOwnProperty(key)) {
             if (isObject(data[key])) {

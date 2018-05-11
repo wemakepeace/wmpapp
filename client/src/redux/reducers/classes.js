@@ -13,7 +13,6 @@ const classes = (state = initialState, action) => {
             } else {
                 return { ...state, currentClass: action.currentClass }
             }
-
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
             let newState = { ...state }

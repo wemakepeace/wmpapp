@@ -2,32 +2,54 @@ import { SAVE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
 import { SEND_FEEDBACK } from '../constants/shared';
 
 import axios from 'axios';
-
-const fetchClass = (id, shouldFetch) => {
+const fetchClass = (id) => {
     return dispatch => {
-        if (shouldFetch) {
-            return axios.get(`/class/${id}`)
-                .then(response => response.data)
-                .then(
-                    ({ _class, feedback}) => {
-                        localStorage.setItem('currentClass', _class.id);
-
-                        return dispatch({
-                            type: FETCH_CLASS,
-                            _class: _class,
-                            currentClass: _class.id
-                        });
-                    },
-                    (error) => {
-                        const feedback = error.response.data.feedback;
-                        return dispatch({ type: SEND_FEEDBACK, feedback });
-                    })
-        } else {
-            localStorage.setItem('currentClass',  id);
-            dispatch({ type: FETCH_CLASS, currentClass: id });
-        }
+        return axios.get(`/class/${id}`)
+            .then(response => response.data)
+            .then(
+                ({ _class, exchange, feedback}) => {
+                    localStorage.setItem('currentClass', _class.id);
+                    console.log('exchange', exchange)
+                    return dispatch({
+                        type: FETCH_CLASS,
+                        currentClass: _class.id,
+                        _class,
+                        exchange
+                    });
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    return dispatch({ type: SEND_FEEDBACK, feedback });
+                })
     }
 }
+
+// const fetchClass = (id, shouldFetch) => {
+//     return dispatch => {
+//         if (shouldFetch) {
+//             return axios.get(`/class/${id}`)
+//                 .then(response => response.data)
+//                 .then(
+//                     ({ _class, exchange, feedback}) => {
+//                         localStorage.setItem('currentClass', _class.id);
+//                         console.log('exchange', exchange)
+//                         return dispatch({
+//                             type: FETCH_CLASS,
+//                             currentClass: _class.id,
+//                             _class,
+//                             exchange
+//                         });
+//                     },
+//                     (error) => {
+//                         const feedback = error.response.data.feedback;
+//                         return dispatch({ type: SEND_FEEDBACK, feedback });
+//                     })
+//         } else {
+//             localStorage.setItem('currentClass',  id);
+//             dispatch({ type: FETCH_CLASS, currentClass: id });
+//         }
+//     }
+// }
 
 const removeCurrentClass = () => {
     localStorage.removeItem('currentClass');
