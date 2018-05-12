@@ -122,7 +122,6 @@ app.post('/', (req, res, next) => {
     }
 
     const schoolPromise = () => {
-        console.log('schoolData', schoolData)
         if (schoolData.id === null) {
             return School.create(schoolData)
             .catch(error => {
@@ -176,7 +175,6 @@ app.post('/', (req, res, next) => {
                 updatedClass.school = updatedSchool;
             }
 
-            console.log('updatedSchool', updatedSchool)
             res.send({
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),
                 _class: extractDataForFrontend(updatedClass, {}),

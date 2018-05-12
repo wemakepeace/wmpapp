@@ -29,7 +29,6 @@ app.post('/', (req, res, next) => {
         include: [ School, Teacher ]
     })
     .then(_class => {
-        // _class.dataValues.school = _class.dataValues.school;
         let classData = extractClassAddress(_class.dataValues);
 
         return getCoordinates(classData)
@@ -57,7 +56,6 @@ app.post('/', (req, res, next) => {
             }]
         })
         .then(matches => {
-            // console.log('matches', matches)
             /* If matches are found */
             if (matches.length) {
                 const matchDataCollection = matches.map(match => {
@@ -95,7 +93,6 @@ app.post('/', (req, res, next) => {
                             }, { transaction: t })
                             .then(( exchange ) => {
                                 /* send email with verification token to both teachers */
-                                console.log('exchange', exchange)
                                 const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
                                 const token = exchange.dataValues.verifyExchangeToken;
@@ -142,7 +139,6 @@ app.post('/', (req, res, next) => {
         .catch(err => console.log('ERRRRR', err))
     })
     .then(({ _class, exchange, feedback }) => {
-        console.log('exchange', exchange)
         let _exchange;
         if (exchange) {
             _exchange = exchange.dataValues
@@ -186,50 +182,6 @@ const initiateNewExchange = (_class) => {
     })
     .catch(err => console.log(err))
 }
-
-
-    // update Exchange instance with classAId and classBId
-    // find all classes with matching term
-    // find all classes with matching age group
-    // make sure class is not from same school
-    // make sure an exchange has not been attempted between the schools before
-    // choose the class that is furthest away
-
-    // if a class match is found
-        // send emails to both class teachers
-    // if no class match is founf
-        // create an Exchange instance and set classId to classAId
-        // and send email to teacher and send message to UI
-
-/* Verify email exchange verification link click */
-// app.get('/verify', (req, res, next) => {
-//     if ((req.protocol + "://" + req.get('host')) == ("http://" + host)) {
-//         console.log("Domain is matched. Information is from Authentic email");
-
-//         // find user based on req.query.id
-//         // if token exists on user
-//             // verify exchange
-
-//         if (req.query.token == rand) {
-//             models.Professional.update(
-//                   { verified: true },
-//                   { where: { id: req.query.id } }
-//             )
-//             .then( result => {
-//                 return res.redirect(`/login/true`)
-//             })
-//             .catch(next => {
-//                 res.end("<h1>Something went wrong when verifying your email address.</h1>")
-//             })
-//         } else {
-//             console.log("email is not verified");
-//             res.end("<h1>Bad Request</h1>");
-//         }
-//     } else {
-//         res.end("<h1>Request is from unknown source");
-//     }
-// });
-
 
 
 module.exports = app;
@@ -295,93 +247,3 @@ const findFurthestMatch = (classCoords, collection) => {
             return matchClass
     })
 }
-
-
-
-
-// /* Verify User Email */
-// let rand, host;
-
-// /* Send account verification email */
-// app.get('/send', (req, res) => {
-//     rand = crypto.randomBytes(20).toString('hex')
-//     host = req.get('host');
-//     const link = 'http://' + req.get('host') + '/professional/verify?token=' + rand + '&id=' + req.query.professionalId;
-//    const mailOptionsVerifyAccount = {
-//         to : req.query.to,
-//         professionalId: req.query.professionalId,
-//         firstName: req.query.firstName,
-//         subject : "Hello " + req.query.firstName + "! Please confirm your Email account",
-//         html : "Hello " + req.query.firstName + ",<br> Thank you for joining Oosa. Please click on the link to verify your email.<br><a href=" + link + ">Click here to verify</a>"
-//     }
-
-//     return sendEmail(res, mailOptionsVerifyAccount);
-// });
-
-//  Verify email route
-// app.get('/verify', (req, res, next) => {
-//     if ((req.protocol + "://" + req.get('host')) == ("http://" + host)) {
-//         console.log("Domain is matched. Information is from Authentic email");
-//          if (req.query.token == rand) {
-//             models.Professional.update(
-//                   { verified: true },
-//                   { where: { id: req.query.id } }
-//             )
-//             .then( result => {
-//                 return res.redirect(`/login/true`)
-//             })
-//             .catch(next => {
-//                 res.end("<h1>Something went wrong when verifying your email address.</h1>")
-//             })
-//         } else {
-//             console.log("email is not verified");
-//             res.end("<h1>Bad Request</h1>");
-//         }
-//     } else {
-//         res.end("<h1>Request is from unknown source");
-//     }
-// });
-
-
-
-
-
-
-
-
-
-
-/* async.waterfall([
-    function(done) {
-        crypto.randomBytes(20, function(err, buf) {
-            const token = buf.toString('hex');
-            done(err, token);
-        })
-    },
-    function(token, done) {
-        Teacher.findOne({
-            where: {
-                email: email,
-            }
-        })
-        .then(user => {
-            if (!user) {
-                let defaultError = ['No user found for this e-mail address.'];
-
-                return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
-            }
-
-            user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + 3600000;
-
-            user.save()
-            .then( res => {
-                done(null, token, res.dataValues)
-            })
-            .catch(err => {
-                let defaultError = ['Something went wrong. Please try submitting your email again.'];
-                return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
-            });
-        });
-    },
-*/

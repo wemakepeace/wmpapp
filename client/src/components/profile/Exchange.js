@@ -6,20 +6,10 @@ import axios from 'axios';
 
 import SelectClass from '../SelectClass';
 import Feedback from '../Feedback';
+import ExchangeDetails from './ExchangeDetails';
 
 import { initiateExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
-
-const exchangeDetails = {
-    initiated: {
-        text: "Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match with. Look out for an email and make sure to confirm the Exchange particpation once you receive the email"
-    },
-    pending: {
-        text: "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!",
-        buttonUrl: "/",
-        buttonText: "Verify Exchange Participation"
-    }
-}
 
 const ProgressBar = ({ percent }) => (
     <div>
@@ -63,9 +53,6 @@ class Exchange extends Component {
             }
         }
 
-        // console.log('exchangeDetails', exchangeDetails)
-        // console.log('exchange', exchange)
-
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
@@ -78,23 +65,7 @@ class Exchange extends Component {
                     {/*<ProgressBar percent={this.state.percent}/>*/}
                 </div>
                 { exchange && exchange.status
-                ? <div className='profile-segment'>
-                    <div className=''>
-                        <h5 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h5>
-                        <span>{exchange.status || null}</span>
-                    </div>
-                    <div>
-                        {exchangeDetails[exchange.status].text}
-                    </div>
-                    { exchangeDetails[exchange.status].buttonUrl
-                        ?   <Button
-                                className='large-custom-btn'
-                                size='large'
-                                onClick={console.log('c')}>
-                                {exchangeDetails[exchange.status].buttonText}
-                            </Button>
-                        :   null }
-                </div>
+                ? <ExchangeDetails exchange={exchange} />
                 : <div className='profile-segment'>
                     <div className='container-center-content'>
                         <p>By clicking START EXCHANGE your class will be signed up to participate in the Peace Letter program.
