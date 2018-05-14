@@ -11,7 +11,7 @@ const AgeGroup = require('../db/index').models.AgeGroup;
 
 
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
-const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { feedback, sendError } = require('../utils/feedback');
 const { extractSessionData, extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail, smtpTransport } = require('../utils/smpt');
 const {
@@ -47,12 +47,10 @@ app.post('/create', (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log('error', error)
 
             const defaultError = 'Something went wrong when creating a user.'
-            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-            res.status(500).send({ feedback: feedback(ERROR, errorMessages) })
+            sendError(500, error, defaultError, res);
         })
 });
 
@@ -108,17 +106,14 @@ app.post('/login', (req, res) => {
                 });
             }
             else {
-                errorMessage = ["Username or password is incorrect."];
-                res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+                errorMessage = "Username or password is incorrect.";
+                sendError(401, null, defaultError, res);
+                // res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
             }
     })
      .catch(error => {
-        console.log('error', error)
-
         const defaultError = 'Internal server error. Please try logging in again.';
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        sendError(500, error, defaultError, res)
     });
 });
 
@@ -129,9 +124,9 @@ app.post('/resetrequest', (req, res, next) => {
 
     async.waterfall([
         function(done) {
-            crypto.randomBytes(20, function(err, buf) {
+            crypto.randomBytes(20, function(error, buf) {
                 const token = buf.toString('hex');
-                done(err, token);
+                done(error, token);
             })
         },
         function(token, done) {
@@ -154,9 +149,9 @@ app.post('/resetrequest', (req, res, next) => {
                 .then( res => {
                     done(null, token, res.dataValues)
                 })
-                .catch(err => {
-                    let defaultError = ['Something went wrong. Please try submitting your email again.'];
-                    return res.status(500).send({ feedback: feedback(ERROR, defaultError)})
+                .catch(error => {
+                    const defaultError = 'Something went wrong. Please try submitting your email again.';
+                    sendError(500, error, defaultError, res);
                 });
             });
         },
@@ -170,11 +165,8 @@ app.post('/resetrequest', (req, res, next) => {
             smtpTransport.sendMail(mailOptionsRequestResetPw, function(error, response) {
                 if (error) {
 
-                    const defaultError = ['Something went wrong. Please try again.'];
-
-                    res.status(500).send({
-                        feedback: feedback(ERROR, defaultError)
-                    })
+                    const defaultError = 'Something went wrong. Please try again.';
+                    sendError(500, null, defaultError, res);
 
                  } else {
 
@@ -184,13 +176,12 @@ app.post('/resetrequest', (req, res, next) => {
                         feedback: feedback(SUCCESS, defaultMessage)
                     })
                 }
-                done(err, 'done');
+                done(error, 'done');
             });
         }],
-        function(err) {
-            if (err) {
-                console.log('error hitting down here', err);
-                return next(err);
+        function(error) {
+            if (error) {
+                return next(error);
             }
             res.redirect('/')
         })
@@ -226,9 +217,8 @@ app.post('/reset/:token', (req, res, next) => {
     .then(user => {
 
         if (!user) {
-            let defaultError = ['The reset password link has expired.'];
-
-            return res.status(401).send({ feedback: feedback(ERROR, defaultError)})
+            let defaultError = 'The reset password link has expired.';
+            sendError(401, null, defaultError, res);
         }
 
         /** Uncomment for validations
@@ -263,12 +253,9 @@ app.post('/reset/:token', (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log('error', error)
 
-            const defaultError = ['Internal server error. Please try resetting your password  again.'];
-            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+            const defaultError = 'Internal server error. Please try resetting your password  again.';
+            sendError(500, error, defaultError, res);
         });
     })
 })

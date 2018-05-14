@@ -4,7 +4,7 @@ const Class = require('../db/index').models.Class;
 const School = require('../db/index').models.School;
 const conn = require('../db/conn');
 
-const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { pbkdf2, saltHashPassword, createToken, decodeToken } = require('../utils/security');
 const { sendEmail, smtpTransport } = require('../utils/smpt');
@@ -26,16 +26,12 @@ app.get('/', (req, res, next) => {
             }]
         })
         .then(teacher => {
-            let errorMessage;
             if (!teacher){
-                errorMessage = ['No profile found.'];
-                return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+                const defaultError = 'No profile found.';
+                return sendError(401, null, defaultError, res);
             }
 
             teacher = teacher.dataValues;
-            console.log('teacher', teacher)
-
-
 
             if (teacher.classes) {
                 teacher.schools = [];
@@ -67,11 +63,11 @@ app.get('/', (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log('error', error)
-            const defaultError = 'Something went wrong when loading your session. Please login.';
-            const errorMessages = extractSequelizeErrorMessages(error, defaultError);
 
-            res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+            const defaultError = 'Something went wrong when loading your session. Please login.';
+
+            sendError(500, error, defaultError, res);
+
         })
 });
 
@@ -96,18 +92,15 @@ app.put('/', (req, res, next) => {
                 })
             })
             .catch(error => {
-                const defaultError = ['Something went wrong when updating your profile.'];
-                const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+                const defaultError = 'Something went wrong when updating your profile.';
 
-                res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+                sendError(500, error, defaultError, res);
+
             })
     })
     .catch(error => {
-        // [TODO] make sure that the errors go through
-        const defaultError = ['Something went wrong when updating your profile.']
-        const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-
-        res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+        const defaultError = 'Something went wrong when updating your profile.'
+        sendError(500, error, defaultError, res);
     })
 });
 
@@ -160,18 +153,16 @@ app.put('/changepassword', (req, res, next) => {
                     })
                 })
                 .catch(error => {
-                    console.log('error', error)
 
-                    const defaultError = ['Internal server error. Please try resetting your password  again.'];
-                    const errorMessages = extractSequelizeErrorMessages(error, defaultError);
+                    const defaultError = 'Internal server error. Please try resetting your password  again.';
 
-                    res.status(500).send({ feedback: feedback(ERROR, errorMessages) });
+                    return sendError(500, error, defaultError, res);
+
                 });
-
             }
             else {
-                errorMessage = ["Password is incorrect."];
-                res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
+                const defaultError = "Password is incorrect.";
+                sendError(401, null, defaultError, res);
             }
         })
 });

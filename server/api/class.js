@@ -107,34 +107,18 @@ app.post('/', (req, res, next) => {
     const classPromise = () => {
         if (classData.id === null) {
             return Class.create(classData)
-            // .catch(error => {
-            //     const defaultError = 'Something went wrong when saving your information.';
-            //     return sendError(500, error, defaultError, res);
-            // })
         } else {
             return Class.findById(classData.id)
             .then(_class => updateClass(_class, classData, schoolData))
-            // .catch(error => {
-            //     const defaultError = 'Something went wrong when saving your information.';
-            //     return sendError(500, error, defaultError, res);
-            // })
         }
     }
 
     const schoolPromise = () => {
         if (schoolData.id === null) {
             return School.create(schoolData)
-            // .catch(error => {
-            //     const defaultError = 'Something went wrong when saving your information.';
-            //     return sendError(500, error, defaultError, res);
-            // })
         } else {
             return School.findById(schoolData.id)
             .then(school => updateSchool(school, schoolData))
-            // .catch(error => {
-            //     const defaultError = 'Something went wrong when saving your information.';
-            //     return sendError(500, error, defaultError, res);
-            // })
         }
     }
 
@@ -181,14 +165,8 @@ app.post('/', (req, res, next) => {
                 school: extractDataForFrontend(updatedSchool, {})
             })
         })
-        .catch(error => {
-            console.log('oh hey error', error)
-            const defaultError = 'Something went wrong when saving your information.';
-            return sendError(500, error, defaultError, res);
-        })
     })
     .catch(error => {
-        console.log('oh hey error', error)
         const defaultError = 'Something went wrong when saving your information.';
         return sendError(500, error, defaultError, res);
     })
@@ -204,7 +182,6 @@ const updateSchool = (school, schoolData) => {
     }
 
     return school.save()
-    .then(res => res)
 }
 
 const updateClass = (_class, classData, schoolData) => {
@@ -215,10 +192,9 @@ const updateClass = (_class, classData, schoolData) => {
     for (var key in classData) {
         _class[key] = classData[key];
     }
+
     return _class.save()
 }
-
-
 
 
 module.exports = app;

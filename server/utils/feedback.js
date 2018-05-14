@@ -20,9 +20,8 @@ const extractSequelizeErrorMessages = (error, defaultError) => {
 };
 
 const sendError = (errorCode, error, defaultError, res) => {
-    // console.log('error', error)
+    console.log('error', error)
     const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-    console.log('errorMessages', errorMessages)
     return res.status(errorCode).send({ feedback: feedback(ERROR, errorMessages) });
 }
 

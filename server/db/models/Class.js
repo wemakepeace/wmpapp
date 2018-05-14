@@ -13,7 +13,6 @@ const Class = conn.define('class', {
         validate: {
             notEmpty: { msg: 'Please fill out class size.'},
             isInteger(value) {
-                // console.log('value', value)
                 if (Number(value) == NaN) {
                     console.log('Number(value)', Number(value))
                     throw new Error('Class size must be a number.')

@@ -2,6 +2,7 @@ const app = require('express').Router();
 const AgeGroup = require('../db/models/AgeGroup');
 const Term = require('../db/models/Term');
 const { extractDataForFrontend } = require('../utils/helpers');
+const { sendError } = require('../utils/feedback');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 /** fetch agegroups and format for FE **/
@@ -17,8 +18,8 @@ app.get('/agegroups', (req, res, next) => {
             res.send(data);
         })
         .catch(error => {
-            console.log(error)
-            res.status(500).send({ feedback: feedback(ERROR, ['Something went wrong. Please refresh']) });
+            const defaultError = 'Something went wrong when fetching data. Please refresh.'
+            sendError(500, null, defaultError, res);
         });
 });
 
@@ -34,8 +35,8 @@ app.get('/terms', (req, res, next) => {
             res.send(data);
         })
         .catch(error => {
-            console.log(error)
-            res.status(500).send({ feedback: feedback(ERROR, ['Something went wrong. Please refresh']) });
+            const defaultError = 'Something went wrong when fetching data. Please refresh.'
+            sendError(500, null, defaultError, res);
         });
 });
 module.exports = app;
