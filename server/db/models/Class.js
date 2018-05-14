@@ -11,7 +11,14 @@ const Class = conn.define('class', {
     size: {
         type: Sequelize.STRING,
         validate: {
-            notEmpty: { msg: 'Please fill out class size.'}
+            notEmpty: { msg: 'Please fill out class size.'},
+            isInteger(value) {
+                // console.log('value', value)
+                if (Number(value) == NaN) {
+                    console.log('Number(value)', Number(value))
+                    throw new Error('Class size must be a number.')
+                }
+            }
         }
     }
 });

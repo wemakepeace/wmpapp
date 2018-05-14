@@ -9,8 +9,8 @@ import exchange from './reducers/exchange';
 const combinedReducers = combineReducers({
     teacher,
     classes,
-    feedback,
-    exchange
+    exchange,
+    feedback
 });
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

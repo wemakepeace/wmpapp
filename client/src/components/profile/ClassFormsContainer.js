@@ -99,7 +99,7 @@ class ClassFormsContainer extends Component {
 
 
     componentWillReceiveProps({ feedback, classes, schools }) {
-        console.log('componentWillReceiveProps', this.state)
+
         const previousCurrentClass = this.props.classes.currentClass;
         const { currentClass, list } = classes;
 

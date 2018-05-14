@@ -32,7 +32,24 @@ class Exchange extends Component {
     }
 
     onStartExchangeClick = (id) => {
-        this.props.initiateExchange(id)
+        return this.props.initiateExchange(id)
+    }
+
+    componentWillReceiveProps({ feedback, classes, schools }) {
+
+        // const previousCurrentClass = this.props.classes.currentClass;
+        // const { currentClass, list } = classes;
+        console.log('feedback', feedback)
+        if (feedback && feedback.type) {
+            this.setState({ showFeedback: true });
+        }
+        // const newState = this.getDefaultStateOrProps(classes, schools);
+
+        /* do not update state if feedback type is error type */
+        // if (feedback && feedback.type !== 'error') {
+            // this.setState({...newState, showFeedback: true});
+        // }
+
     }
 
     render() {

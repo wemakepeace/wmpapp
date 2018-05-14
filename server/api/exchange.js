@@ -10,7 +10,7 @@ const Teacher = require('../db/index').models.Teacher;
 const Exchange = require('../db/index').models.Exchange;
 const conn = require('../db/conn');
 
-const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
@@ -121,7 +121,6 @@ app.post('/', (req, res, next) => {
                                 })
                             }, { transaction: t })
                             .then(({ exchange }) => {
-                                console.log('exchange inside match found', exchange)
                                 const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
                                 return {
@@ -136,7 +135,6 @@ app.post('/', (req, res, next) => {
                 return initiateNewExchange(_class)
             }
         })
-        .catch(err => console.log('ERRRRR', err))
     })
     .then(({ _class, exchange, feedback }) => {
         let _exchange;
@@ -160,7 +158,10 @@ app.post('/', (req, res, next) => {
             feedback
         })
     })
-    .catch(err => console.log('Err', err))
+    .catch(error => {
+        const defaultError = 'Something went wrong when initiating exchange.';
+        sendError(500, error, defaultError, res);
+    })
 });
 
 
@@ -180,7 +181,6 @@ const initiateNewExchange = (_class) => {
             }
         })
     })
-    .catch(err => console.log(err))
 }
 
 
@@ -208,9 +208,9 @@ const getCoordinates = (data) => {
             location: response.json.results[0].geometry.location
         }
     })
-    .catch((err) => {
-        // [TODO] handle error
-        console.log(err);
+    .catch(error => {
+        const defaultError = 'Something went wrong when initiating exchange.';
+        return sendError(500, error, defaultError, res);
     });
 }
 

@@ -7,7 +7,7 @@ const Exchange = require('../db/index').models.Exchange;
 const Teacher = require('../db/index').models.Teacher;
 const conn = require('../db/conn');
 
-const { feedback, extractSequelizeErrorMessages } = require('../utils/feedback');
+const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
@@ -107,34 +107,34 @@ app.post('/', (req, res, next) => {
     const classPromise = () => {
         if (classData.id === null) {
             return Class.create(classData)
-            .catch(error => {
-                const defaultError = 'Something went wrong when saving your information.';
-                return sendError(500, error, defaultError, res);
-            })
+            // .catch(error => {
+            //     const defaultError = 'Something went wrong when saving your information.';
+            //     return sendError(500, error, defaultError, res);
+            // })
         } else {
             return Class.findById(classData.id)
             .then(_class => updateClass(_class, classData, schoolData))
-            .catch(error => {
-                const defaultError = 'Something went wrong when saving your information.';
-                return sendError(500, error, defaultError, res);
-            })
+            // .catch(error => {
+            //     const defaultError = 'Something went wrong when saving your information.';
+            //     return sendError(500, error, defaultError, res);
+            // })
         }
     }
 
     const schoolPromise = () => {
         if (schoolData.id === null) {
             return School.create(schoolData)
-            .catch(error => {
-                const defaultError = 'Something went wrong when saving your information.';
-                return sendError(500, error, defaultError, res);
-            })
+            // .catch(error => {
+            //     const defaultError = 'Something went wrong when saving your information.';
+            //     return sendError(500, error, defaultError, res);
+            // })
         } else {
             return School.findById(schoolData.id)
             .then(school => updateSchool(school, schoolData))
-            .catch(error => {
-                const defaultError = 'Something went wrong when saving your information.';
-                return sendError(500, error, defaultError, res);
-            })
+            // .catch(error => {
+            //     const defaultError = 'Something went wrong when saving your information.';
+            //     return sendError(500, error, defaultError, res);
+            // })
         }
     }
 
@@ -182,9 +182,15 @@ app.post('/', (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log('oh hey error', error)
             const defaultError = 'Something went wrong when saving your information.';
             return sendError(500, error, defaultError, res);
         })
+    })
+    .catch(error => {
+        console.log('oh hey error', error)
+        const defaultError = 'Something went wrong when saving your information.';
+        return sendError(500, error, defaultError, res);
     })
 });
 
@@ -198,10 +204,7 @@ const updateSchool = (school, schoolData) => {
     }
 
     return school.save()
-    .then( res => {
-        console.log('res', res)
-        return res
-    })
+    .then(res => res)
 }
 
 const updateClass = (_class, classData, schoolData) => {
@@ -216,10 +219,6 @@ const updateClass = (_class, classData, schoolData) => {
 }
 
 
-const sendError = (errorCode, error, defaultError, res) => {
-    console.log('error', error)
-    const errorMessages = extractSequelizeErrorMessages(error, defaultError);
-    res.status(errorCode).send({ feedback: feedback(ERROR, errorMessages) });
-}
+
 
 module.exports = app;
