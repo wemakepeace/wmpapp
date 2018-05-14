@@ -19,6 +19,25 @@ const initiateExchange = (classId) => {
     }
 }
 
+const verifyExchange = (classId, exchangeId) => {
+    console.log('being called')
+    console.log('exchangeId', exchangeId)
+    console.log('classId', classId)
+    return dispatch => {
+        return axios.post(`/exchange/verify`, { exchangeId, classId })
+        .then(response => response.data)
+        .then(
+              ({ exchange, feedback }) => {
+                return dispatch({ type: FETCH_EXCHANGE_DATA, exchange, feedback })
+                // console.log('success', success)
+              },
+              (error) => {
+                console.log('error', error)
+              })
+    }
+}
+
 export {
-    initiateExchange
+    initiateExchange,
+    verifyExchange
 }

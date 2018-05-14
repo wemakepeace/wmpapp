@@ -71,7 +71,9 @@ const valuesForFrontend = [
     'status',
     'classAId',
     'classBId',
-    'teacher'
+    'teacher',
+    'classAVerified',
+    'classBVerified'
 ];
 
 // const exchangeData = [

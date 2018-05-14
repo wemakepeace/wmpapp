@@ -8,17 +8,25 @@ const Exchange = conn.define('exchange', {
             notEmpty: { msg: '.....'}
         }
     },
-    teacherAVerfified: {
+    classAVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
-    teacherBVerfified: {
+    classBVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
     verifyExchangeToken: Sequelize.STRING,
     verifyExchangeTokenExpires: Sequelize.DATE
 });
+
+Exchange.prototype.setStatus = function(status) {
+    return this.updateAttributes({ status: status })
+    .then(exchange => {
+        console.log('exchange in instance method', exchange)
+        return exchange
+    })
+}
 
 
 module.exports = Exchange;

@@ -8,7 +8,6 @@ import Exchange from './Exchange';
 
 
 const TabContent = ({ match, history }) => {
-
     const components = {
         overview: Overview,
         teacher: Teacher,

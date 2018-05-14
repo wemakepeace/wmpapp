@@ -79,8 +79,6 @@ class ClassFormsContainer extends Component {
         }
     }
 
-
-
     submitData = () => {
         let classData = this.state;
         classData.teacherId = this.props.teacher.id;

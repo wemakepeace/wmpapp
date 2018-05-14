@@ -164,6 +164,61 @@ app.post('/', (req, res, next) => {
     })
 });
 
+app.post('/verify', (req, res, next) => {
+    const { classId, exchangeId } = req.body;
+    console.log('exchangeId', exchangeId)
+    return Exchange.findOne({
+        where: {
+            id: exchangeId,
+            $or: [{ classAId: classId }, { classBId: classId }]
+
+        }
+    })
+    .then(exchange => {
+        console.log('exchange', exchange);
+        const { classAId, classBId } = exchange.dataValues;
+        if (classId === classAId) {
+            // set classAVerified to true
+            exchange.classAVerified = true;
+        }
+
+        if (classId === classBId)
+            // set classBVerified to true
+            exchange.classBVerified = true;
+        exchange.save()
+        .then(exchange => {
+            const { classAVerified, classBVerified } = exchange.dataValues;
+            console.log('classAVerified', classAVerified)
+            console.log('classBVerified', classBVerified)
+            // if (classAVerified && classBVerified) {
+            if (classBVerified) {
+                return exchange.setStatus('confirmed')
+                .then(exchange => {
+                    // send email to both of the teachers
+                    const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!']
+
+                    res.send({
+                        feedback: feedback(SUCCESS, feedbackMsg),
+                        exchange: extractDataForFrontend(exchange.dataValues, {}),
+                    })
+                })
+            }
+
+            res.send({ exchange })
+
+        })
+
+
+    })
+
+
+});
+
+module.exports = app;
+
+
+
+
 
 const initiateNewExchange = (_class) => {
     return Exchange.create({ status: 'initiated' })
@@ -183,8 +238,6 @@ const initiateNewExchange = (_class) => {
     })
 }
 
-
-module.exports = app;
 
 const extractClassAddress = (_class) => {
     const { zip, country, address1, city } = _class.school.dataValues;
@@ -247,3 +300,5 @@ const findFurthestMatch = (classCoords, collection) => {
             return matchClass
     })
 }
+
+

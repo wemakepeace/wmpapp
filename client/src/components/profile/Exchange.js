@@ -8,52 +8,42 @@ import SelectClass from '../SelectClass';
 import Feedback from '../Feedback';
 import ExchangeDetails from './ExchangeDetails';
 
-import { initiateExchange } from '../../redux/actions/exchange';
+import { initiateExchange, verifyExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
-
-const ProgressBar = ({ percent }) => (
-    <div>
-        <Progress percent={percent} indicating={false} />
-        <div className='progress profile-segment'>
-            <span>Create Profile</span>
-            <span>Find Match</span>
-            <span>Send Letter 1</span>
-            <span>Send Letter 2</span>
-            <span>Send Letter 3</span>
-        </div>
-    </div>
-)
-
 
 class Exchange extends Component {
     state = {
         percent: 20,
-        showFeedback: true
+        showFeedback: false
     }
 
-    onStartExchangeClick = (id) => {
+    initiate = (id) => {
         return this.props.initiateExchange(id)
     }
 
-    componentWillReceiveProps({ feedback, classes, schools }) {
+    onActionClick = (action) => {
+        const classId = this.props.classes.currentClass;
+        const exchangeId = this.props.exchange && this.props.exchange.id;
+        console.log('classId', classId)
+        console.log('exchangeId', exchangeId)
+        return this.props[action](classId, exchangeId);
+    }
 
-        // const previousCurrentClass = this.props.classes.currentClass;
-        // const { currentClass, list } = classes;
-        console.log('feedback', feedback)
-        if (feedback && feedback.type) {
+    componentWillReceiveProps({ feedback }) {
+        if (feedback && feedback.type === 'error') {
             this.setState({ showFeedback: true });
         }
-        // const newState = this.getDefaultStateOrProps(classes, schools);
-
-        /* do not update state if feedback type is error type */
-        // if (feedback && feedback.type !== 'error') {
-            // this.setState({...newState, showFeedback: true});
-        // }
-
     }
 
     render() {
-        const { teacher, classes, feedback, exchange } = this.props;
+        const {
+            teacher,
+            classes,
+            feedback,
+            exchange,
+            verifyExchange } = this.props;
+
+        const status = exchange && exchange.status ? exchange.status : null
         const { firstName, lastName, email, phone } = teacher;
         let _class, country, school;
         const { showFeedback } = this.state;
@@ -78,21 +68,9 @@ class Exchange extends Component {
                     <p>When you have filled in all the information, click the button to initiate an exchange.</p>
                     <p>When a match has been made you will receive an email and you will be able to see more information about the exchange on this page.</p>
                 </div>
-                <div className='profile-segment'>
-                    {/*<ProgressBar percent={this.state.percent}/>*/}
-                </div>
-                { exchange && exchange.status
-                ? <ExchangeDetails exchange={exchange} />
-                : <div className='profile-segment'>
-                    <div className='container-center-content'>
-                        <p>By clicking START EXCHANGE your class will be signed up to participate in the Peace Letter program.
-                        </p>
-                        <Button
-                            onClick={() => this.onStartExchangeClick(_class.id)}
-                            size='massive'
-                            className='add-class'>START EXCHANGE</Button>
-                    </div>
-                </div>}
+                <ExchangeDetails
+                    status={status}
+                    onActionClick={this.onActionClick} />
                  { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }
@@ -110,7 +88,7 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { initiateExchange })(Exchange);
+export default connect(mapStateToProps, { initiateExchange, verifyExchange })(Exchange);
 
 
 
