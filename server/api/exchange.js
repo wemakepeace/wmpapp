@@ -1,6 +1,5 @@
 const app = require('express').Router();
 const countries = require('country-list');
-const crypto = require('crypto');
 
 const Class = require('../db/index').models.Class;
 const AgeGroup = require('../db/index').models.AgeGroup;
@@ -58,19 +57,19 @@ app.post('/', (req, res, next) => {
         .then(matches => {
             /* If matches are found */
             if (matches.length) {
-                const matchDataCollection = matches.map(match => {
+                const locationDataForMatches = matches.map(match => {
                     const data = match.dataValues.classA.dataValues;
                     return extractClassAddress(data);
                 });
 
                 const classCoords = _class.dataValues.location;
 
-                return findFurthestMatch(classCoords, matchDataCollection)
-                    .then(result => {
-                        return matches.find(match => {
-                            return match.dataValues.classA.dataValues.id === result.id
-                        })
-                    })
+                return findFurthestMatch(classCoords, locationDataForMatches, matches)
+                    // .then(result => {
+                    //     return matches.find(match => {
+                    //         return match.dataValues.classA.dataValues.id === result.id
+                    //     })
+                    // })
                     .then(exchange => {
                         return conn.transaction((t) => {
                             return exchange.setClassB(_class, { transaction: t })
@@ -206,8 +205,6 @@ app.post('/verify', (req, res, next) => {
                     // send email to both of the teachers
                     const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
                     const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-                    // console.log('classBEmail', classBEmail)
-                    // console.log('classAEmail', classAEmail)
 
                     const generateEmail = (res, recipient) => {
                         const host = req.get('host');
@@ -231,12 +228,21 @@ app.post('/verify', (req, res, next) => {
                         return exchange
                     })
                     .then(exchange => {
-                        const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!']
+                        const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!'];
+
+                        exchange = exchange.dataValues
+                        exchange.classA = exchange.classA.dataValues
+                        exchange.classA.school = exchange.classA.school.dataValues;
+                        exchange.classA.teacher = exchange.classA.teacher.dataValues;
+
+                        exchange.classB = exchange.classB.dataValues
+                        exchange.classB.school = exchange.classB.school.dataValues;
+                        exchange.classB.teacher = exchange.classB.teacher.dataValues;
 
                         return res.send({
                             feedback: feedback(SUCCESS, feedbackMsg),
                             classRole,
-                            exchange: extractDataForFrontend(exchange.dataValues, {})
+                            exchange: extractDataForFrontend(exchange, {})
                         })
                     })
                 })
@@ -268,13 +274,23 @@ app.post('/verify', (req, res, next) => {
                     return exchange
                 })
                 .then(exchange => {
+                    console.log('exchange', exchange)
+
+                    exchange = exchange.dataValues
+                    exchange.classA = exchange.classA.dataValues
+                    exchange.classA.school = exchange.classA.school.dataValues;
+                    exchange.classA.teacher = exchange.classA.teacher.dataValues;
+
+                    exchange.classB = exchange.classB.dataValues
+                    exchange.classB.school = exchange.classB.school.dataValues;
+                    exchange.classB.teacher = exchange.classB.teacher.dataValues;
 
                     const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
 
                     return res.send({
                         feedback: feedback(SUCCESS, feedbackMsg),
                         classRole,
-                        exchange: extractDataForFrontend(exchange.dataValues, {})
+                        exchange: extractDataForFrontend(exchange, {})
                     })
                 })
 
@@ -334,7 +350,7 @@ const getCoordinates = (data) => {
 }
 
 /* helper fn that calculates distance between coordinates */
-    const calculateDistance = (location1, location2) => {
+const calculateDistance = (location1, location2) => {
     const radlat1 = Math.PI * location1.lat / 180
     const radlat2 = Math.PI * location2.lat / 180
     const radlon1 = Math.PI * location1.lng / 180
@@ -348,8 +364,8 @@ const getCoordinates = (data) => {
     return dist * 1.609344;
 }
 
-const findFurthestMatch = (classCoords, collection) => {
-    return Promise.all(collection.map(data => getCoordinates(data)))
+const findFurthestMatch = (classCoords, locationData, matches) => {
+    return Promise.all(locationData.map(data => getCoordinates(data)))
         .then(dataWithCoords => {
 
             const matchClass = dataWithCoords.reduce((result, curr) => {
@@ -364,6 +380,9 @@ const findFurthestMatch = (classCoords, collection) => {
             }, { id: null, distance: 0 })
 
             return matchClass
+    })
+    .then(result => {
+        return matches.find(match => match.dataValues.classA.dataValues.id === result.id)
     })
 }
 
