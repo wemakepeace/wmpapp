@@ -26,6 +26,7 @@ app.get('/:id', (req, res, next) => {
     })
     .then(_class => {
         _class = _class.dataValues;
+
         if (_class.age_group && _class.age_group.dataValues) {
             const age_groupFormatted = {
                 label: _class.age_group.dataValues.name,
@@ -68,27 +69,17 @@ app.get('/:id', (req, res, next) => {
         })
         .then(exchange => {
 
-            let classRole, _exchange;
+            let classRole;
 
             if (exchange) {
                 classRole = exchange.getClassRole(_class.id);
-                _exchange = exchange.dataValues
-                if (exchange.dataValues.classA) {
-                    _exchange.classA = exchange.dataValues.classA.dataValues
-                    _exchange.classA.school = exchange.dataValues.classA.school.dataValues;
-                    _exchange.classA.teacher = exchange.dataValues.classA.teacher.dataValues;
-                }
-                if (exchange.dataValues.classB) {
-                    _exchange.classB = exchange.dataValues.classB.dataValues
-                    _exchange.classB.school = exchange.dataValues.classB.school.dataValues;
-                    _exchange.classB.teacher = exchange.dataValues.classB.teacher.dataValues;
-                }
+                exchange = formatData(exchange)
             }
 
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
                 _class: extractDataForFrontend(_class, {}),
-                exchange: extractDataForFrontend(_exchange, {}),
+                exchange: extractDataForFrontend(exchange, {}),
                 classRole
             });
         })
@@ -129,9 +120,10 @@ app.post('/', (req, res, next) => {
     }
 
     /* Update or create class and school */
-    return Promise.all([classPromise(), schoolPromise()])
-    .then(([updatedClass, updatedSchool]) => {
+    return Promise.all([ classPromise(), schoolPromise() ])
+    .then(([ updatedClass, updatedSchool ]) => {
 
+        // should this be part of Promise chain?
         updatedClass.setSchool(updatedSchool.dataValues.id);
 
         return Promise.all([
@@ -202,5 +194,21 @@ const updateClass = (_class, classData, schoolData) => {
     return _class.save()
 }
 
+
+const formatData = (exchange) => {
+    exchange = exchange.dataValues;
+
+    if (exchange.classA) {
+        exchange.classA = exchange.classA.dataValues
+        exchange.classA.school = exchange.classA.school.dataValues;
+        exchange.classA.teacher = exchange.classA.teacher.dataValues;
+    }
+    if (exchange.classB) {
+        exchange.classB = exchange.classB.dataValues
+        exchange.classB.school = exchange.classB.school.dataValues;
+        exchange.classB.teacher = exchange.classB.teacher.dataValues;
+    }
+    return exchange
+}
 
 module.exports = app;

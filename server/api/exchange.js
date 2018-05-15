@@ -11,7 +11,7 @@ const conn = require('../db/conn');
 
 const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail } = require('../utils/smpt');
+const { sendEmail, generateEmailAdvanced } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 const googleMapsClient = require('@google/maps').createClient({
@@ -187,7 +187,7 @@ app.post('/verify', (req, res, next) => {
             const { classAVerified, classBVerified } = exchange.dataValues;
             const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
             const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-            let _feedback;
+            let feedbackMsg;
 
             if (classAVerified && classBVerified) {
                 return exchange.setStatus('confirmed')
@@ -211,54 +211,35 @@ app.post('/verify', (req, res, next) => {
                         generateEmail(res, classAEmail),
                         generateEmail(res, classBEmail)
                     ])
-                    .then(() => exchange)
-                    .then(exchange => {
-
-                        exchange = formatData(exchange);
-
-                        const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!'];
-
-                        return res.send({
-                            feedback: feedback(SUCCESS, feedbackMsg),
-                            exchange: extractDataForFrontend(exchange, {}),
-                            classRole
-                        })
+                    .then(() =>{
+                        feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!'];
+                        return { exchange, feedbackMsg }
                     })
                 })
             } else {
                 const otherClassEmail = classRole === 'A' ? classBEmail : classAEmail;
+                const classData = classRole === 'A' ? exchange.dataValues.classA : exchange.dataValues.classB;
+                const otherClass = classRole === 'A' ? exchange.dataValues.classB : exchange.dataValues.classA;
 
-                const generateEmail = (res, recipient) => {
-                    const host = req.get('host');
-                    const link = 'http://' + host + '/#/';
+                return generateEmailAdvanced(res, otherClassEmail, 'reminder', otherClass, classData)
+                .then(() => {
 
-                    /** Reminder email to the other class **/
-                    const mailOptions = {
-                    to: recipient,
-                    from: "tempwmp@gmail.com",
-                    subject: "Reminder to confirm Peace Letter Participation",
-                    text: "Great news! The other class has confirmed their participation in the Peace Letter Exchange with your class. We are currently awaiting your class' confirmaiton. \n\n" + "Please confirm by [date of expiration]!"
-                    };
+                    feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"];
 
-                    return sendEmail(res, mailOptions)
-                }
+                    return { exchange, feedbackMsg }
 
-                return generateEmail(res, otherClassEmail)
-                .then(() => exchange)
-                .then(exchange => {
-
-                    exchange = formatData(exchange);
-
-                    const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
-
-                    return res.send({
-                        feedback: feedback(SUCCESS, feedbackMsg),
-                        classRole,
-                        exchange: extractDataForFrontend(exchange, {})
-                    })
                 })
-
             }
+        })
+        .then(({ exchange, feedbackMsg }) => {
+
+            exchange = formatData(exchange);
+
+            return res.send({
+                feedback: feedback(SUCCESS, feedbackMsg),
+                classRole,
+                exchange: extractDataForFrontend(exchange, {})
+            })
         })
     })
 });
