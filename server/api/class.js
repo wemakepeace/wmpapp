@@ -48,7 +48,7 @@ app.get('/:id', (req, res, next) => {
         return _class
     })
     .then(_class => {
-        // console.log('_class has datavalues?', _class)
+        console.log('correct _class?', _class)
         Exchange.findOne({
             where: {
                 $or: [{ classAId: _class.id }, { classBId: _class.id }]

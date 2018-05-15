@@ -16,8 +16,7 @@ const Exchange = conn.define('exchange', {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
-    verifyExchangeToken: Sequelize.STRING,
-    verifyExchangeTokenExpires: Sequelize.DATE
+    verifyExchangeExpires: Sequelize.DATE
 });
 
 Exchange.prototype.setStatus = function(status) {

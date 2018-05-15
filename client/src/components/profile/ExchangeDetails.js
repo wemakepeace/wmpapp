@@ -2,6 +2,11 @@ import React from 'react';
 import { Button } from 'semantic-ui-react'
 
 const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified }) => {
+
+    if (status === 'pending' && classIsVerified) {
+        status = 'partially confirmed'
+    }
+
     return (
         <div className='profile-segment exchange-details'>
             <div className=''>
@@ -40,6 +45,9 @@ const exchangeData = {
         text: "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!",
         buttonText: "Verify Exchange Participation",
         action: "verifyExchange"
+    },
+    'partially confirmed': {
+        text: "Your paritication in the program is verified! We are waiting for the other class to verify as well. Please be on the lookout for an email confirmation."
     },
     confirmed: {
         text: "Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!"

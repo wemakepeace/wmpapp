@@ -67,7 +67,7 @@ const valuesForFrontend = [
     'classA',
     'classB',
     'status',
-    'verifyExchangeToken',
+    'verifyExchangeExpires',
     'status',
     'classAId',
     'classBId',

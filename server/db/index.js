@@ -180,8 +180,7 @@ const exchanges = [
         status: 'pending',
         classAId: 1,
         classBId: 2,
-        verifyExchangeToken: 'ECd2gFnExPx4H8uRz25XwfCaGQy9Wl0Op',
-        verifyExchangeTokenExpires: expires
+        verifyExchangeExpires: expires
     },
     {
         status: 'initiated',
