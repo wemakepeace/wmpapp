@@ -21,14 +21,10 @@ const Exchange = conn.define('exchange', {
 
 Exchange.prototype.setStatus = function(status) {
     return this.updateAttributes({ status: status })
-    .then(exchange => {
-        console.log('exchange in instance method', exchange)
-        return exchange
-    })
+    .then(exchange => exchange)
 }
 
 Exchange.prototype.getClassRole = function(classId) {
-    console.log('classId===', classId)
         if (this.classAId === classId) {
             return 'A'
         }

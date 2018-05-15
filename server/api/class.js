@@ -17,6 +17,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/:id', (req, res, next) => {
+
     const { id } = req.params;
 
     Class.findOne({
@@ -48,7 +49,7 @@ app.get('/:id', (req, res, next) => {
         return _class
     })
     .then(_class => {
-        console.log('correct _class?', _class)
+
         Exchange.findOne({
             where: {
                 $or: [{ classAId: _class.id }, { classBId: _class.id }]
@@ -66,16 +67,11 @@ app.get('/:id', (req, res, next) => {
                 }]
         })
         .then(exchange => {
-            let classRole;
 
-            console.log('exchange???',exchange)
-            let _exchange;
+            let classRole, _exchange;
+
             if (exchange) {
-                console.log('_class.id', _class.id)
                 classRole = exchange.getClassRole(_class.id);
-                console.log('classRole=====', classRole)
-            }
-            if (exchange) {
                 _exchange = exchange.dataValues
                 if (exchange.dataValues.classA) {
                     _exchange.classA = exchange.dataValues.classA.dataValues
@@ -89,7 +85,6 @@ app.get('/:id', (req, res, next) => {
                 }
             }
 
-            // console.log('_class=========', _class)
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
                 _class: extractDataForFrontend(_class, {}),

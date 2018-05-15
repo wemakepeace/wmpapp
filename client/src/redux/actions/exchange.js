@@ -9,9 +9,12 @@ const initiateExchange = (classId) => {
         .then(response => response.data)
         .then(
             ({ exchange, feedback, classRole }) => {
-                console.log('exchange in action', exchange)
-            return dispatch({ type: FETCH_EXCHANGE_DATA, exchange, feedback, classRole })
-
+                return dispatch({
+                    type: FETCH_EXCHANGE_DATA,
+                    exchange,
+                    feedback,
+                    classRole
+                })
             },
             (error) => {
                 const feedback = error.response.data.feedback;
@@ -34,8 +37,9 @@ const verifyExchange = (classId, exchangeId) => {
                 })
               },
               (error) => {
-                console.log('error', error)
-              })
+                const feedback = error.response.data.feedback;
+                return dispatch({ type: SEND_FEEDBACK, feedback });
+            })
     }
 }
 

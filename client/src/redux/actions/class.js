@@ -1,17 +1,16 @@
+import axios from 'axios';
+
 import { SAVE_CLASS_SUCCESS, FETCH_CLASS } from '../constants/class';
 import { SEND_FEEDBACK } from '../constants/shared';
 
-import axios from 'axios';
+
 const fetchClass = (id) => {
-    console.log('also firing')
     return dispatch => {
         return axios.get(`/class/${id}`)
             .then(response => response.data)
             .then(
                 ({ _class, exchange, classRole, feedback}) => {
                     localStorage.setItem('currentClass', _class.id);
-                    // console.log('classRole in action', classRole)
-                    // console.log('_class', _class)
                     return dispatch({
                         type: FETCH_CLASS,
                         currentClass: _class.id,

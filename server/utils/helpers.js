@@ -76,13 +76,6 @@ const valuesForFrontend = [
     'classBVerified'
 ];
 
-// const exchangeData = [
-//     'verifyExchangeToken',
-//     'status',
-//     'classAId',
-//     'classBId'
-// ]
-
 const isObject = (obj) => {
     if(Array.isArray(obj)) {
         return false;
@@ -94,7 +87,7 @@ const extractDataForFrontend = (data, result) => {
     if (!data) {
         return {}
     }
-    // console.log('data', data)
+
     valuesForFrontend.map(key => {
         if (data.hasOwnProperty(key)) {
             if (isObject(data[key])) {

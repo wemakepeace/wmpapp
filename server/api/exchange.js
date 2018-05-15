@@ -85,7 +85,6 @@ app.post('/', (req, res, next) => {
                                 return exchange.save({ transaction: t })
                             }, { transaction: t })
                             .then(( exchange ) => {
-                                console.log('does exchange have classB after save?', exchange)
                                 /* send email with verification token to both teachers */
                                 const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
                                 const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
@@ -126,7 +125,6 @@ app.post('/', (req, res, next) => {
                     })
             } else {
                 /* if no match is found initiate new Exchange instance */
-                // classRole = 'A';
                 return initiateNewExchange(_class)
             }
         })
@@ -168,11 +166,21 @@ app.post('/verify', (req, res, next) => {
         where: {
             id: exchangeId,
             $or: [{ classAId: classId }, { classBId: classId }]
-
-        }
+        },
+        include: [
+            {
+                model: Class,
+                as: 'classA',
+                include: [ School, Teacher ]
+            },
+            {
+                model: Class,
+                as: 'classB',
+                include: [ School, Teacher ]
+        }]
     })
     .then(exchange => {
-        console.log('exchange', exchange)
+
         let classRole;
 
         if (exchange) {
@@ -196,7 +204,72 @@ app.post('/verify', (req, res, next) => {
                 .then(exchange => {
                     // [TODO]
                     // send email to both of the teachers
-                    const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!']
+                    const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
+                    const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
+                    // console.log('classBEmail', classBEmail)
+                    // console.log('classAEmail', classAEmail)
+
+                    const generateEmail = (res, recipient) => {
+                        const host = req.get('host');
+                        const link = 'http://' + host + '/#/';
+
+                        const mailOptions = {
+                        to: recipient,
+                        from: "tempwmp@gmail.com",
+                        subject: "You have been matched with a class from [country] ",
+                        text: "Great News! \n\n" + "Your class is now all set to begin exchanging letters with a class from [country].\n\n"  + "Please login and follow the next steps. \n\n"  + link
+                        };
+
+                        return sendEmail(res, mailOptions)
+                    }
+
+                    return Promise.all([
+                        generateEmail(res, classAEmail),
+                        generateEmail(res, classBEmail)
+                    ])
+                    .then(() => {
+                        return exchange
+                    })
+                    .then(exchange => {
+                        const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!']
+
+                        return res.send({
+                            feedback: feedback(SUCCESS, feedbackMsg),
+                            classRole,
+                            exchange: extractDataForFrontend(exchange.dataValues, {})
+                        })
+                    })
+                })
+            } else {
+                // [TODO]
+                // send a reminder email to the other class...
+                const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
+                const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
+
+                const otherClassesEmail = classRole === 'A' ? classBEmail : classAEmail;
+
+                const generateEmail = (res, recipient) => {
+                    const host = req.get('host');
+                    const link = 'http://' + host + '/#/';
+
+                    /** Reminder email to the other class **/
+                    const mailOptions = {
+                    to: recipient,
+                    from: "tempwmp@gmail.com",
+                    subject: "Reminder to confirm Peace Letter Participation",
+                    text: "Great news! The other class has confirmed their participation in the Peace Letter Exchange with your class. We are currently awaiting your class' confirmaiton. \n\n" + "Please confirm by [date of expiration]!"
+                    };
+
+                    return sendEmail(res, mailOptions)
+                }
+
+                return generateEmail(res, otherClassesEmail)
+                .then(() => {
+                    return exchange
+                })
+                .then(exchange => {
+
+                    const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
 
                     return res.send({
                         feedback: feedback(SUCCESS, feedbackMsg),
@@ -204,26 +277,13 @@ app.post('/verify', (req, res, next) => {
                         exchange: extractDataForFrontend(exchange.dataValues, {})
                     })
                 })
-            } else {
-                // [TODO]
-                // send a reminder email to the other class...
 
-                const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
-                return res.send({
-                    feedback: feedback(SUCCESS, feedbackMsg),
-                    classRole,
-                    exchange: extractDataForFrontend(exchange.dataValues, {}),
-                })
             }
         })
     })
 });
 
 module.exports = app;
-
-
-
-
 
 const initiateNewExchange = (_class) => {
     return Exchange.create({ status: 'initiated' })
@@ -306,5 +366,4 @@ const findFurthestMatch = (classCoords, collection) => {
             return matchClass
     })
 }
-
 
