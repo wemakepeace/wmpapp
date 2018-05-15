@@ -28,6 +28,16 @@ Exchange.prototype.setStatus = function(status) {
     })
 }
 
+Exchange.prototype.getClassRole = function(classId) {
+    console.log('classId===', classId)
+        if (this.classAId === classId) {
+            return 'A'
+        }
+        if (this.classBId === classId) {
+            return 'B'
+        }
+        return 'none'
+}
 
 module.exports = Exchange;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react'
 
-const ExhangeDetails = ({ status, onActionClick }) => {
+const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified }) => {
     return (
         <div className='profile-segment exchange-details'>
             <div className=''>
@@ -11,7 +11,7 @@ const ExhangeDetails = ({ status, onActionClick }) => {
             <div style={{fontSize: '20px', border: '1px solid gray', padding: '20px', margin: '40px 0', lineHeight: '1.5em'}}>
                 {exchangeData[status].text}
             </div>
-            { exchangeData[status].buttonText
+            { exchangeData[status].buttonText && !classIsVerified
                 ?   <Button
                         className='large-custom-btn'
                         size='large'

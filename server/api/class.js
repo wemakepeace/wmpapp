@@ -48,6 +48,7 @@ app.get('/:id', (req, res, next) => {
         return _class
     })
     .then(_class => {
+        // console.log('_class has datavalues?', _class)
         Exchange.findOne({
             where: {
                 $or: [{ classAId: _class.id }, { classBId: _class.id }]
@@ -65,7 +66,15 @@ app.get('/:id', (req, res, next) => {
                 }]
         })
         .then(exchange => {
+            let classRole;
+
+            console.log('exchange???',exchange)
             let _exchange;
+            if (exchange) {
+                console.log('_class.id', _class.id)
+                classRole = exchange.getClassRole(_class.id);
+                console.log('classRole=====', classRole)
+            }
             if (exchange) {
                 _exchange = exchange.dataValues
                 if (exchange.dataValues.classA) {
@@ -80,10 +89,12 @@ app.get('/:id', (req, res, next) => {
                 }
             }
 
+            // console.log('_class=========', _class)
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
                 _class: extractDataForFrontend(_class, {}),
-                exchange: extractDataForFrontend(_exchange, {})
+                exchange: extractDataForFrontend(_exchange, {}),
+                classRole
             });
         })
     })

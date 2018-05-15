@@ -24,8 +24,6 @@ class Exchange extends Component {
     onActionClick = (action) => {
         const classId = this.props.classes.currentClass;
         const exchangeId = this.props.exchange && this.props.exchange.id;
-        console.log('classId', classId)
-        console.log('exchangeId', exchangeId)
         return this.props[action](classId, exchangeId);
     }
 
@@ -33,6 +31,24 @@ class Exchange extends Component {
         if (feedback && feedback.type === 'error') {
             this.setState({ showFeedback: true });
         }
+    }
+
+    classIsVerified = () => {
+        if (!this.props.exchange || !this.props.exchange.status) {
+            return false
+        }
+
+        const classId = this.props.classes.currentClass;
+        const { classAId, classBId, classAVerified, classBVerified } = this.props.exchange;
+        if ((classId === classAId) && classAVerified) {
+            return true
+        }
+
+        if ((classId === classBId) && classBVerified) {
+            return true
+        }
+
+        return false
     }
 
     render() {
@@ -43,7 +59,9 @@ class Exchange extends Component {
             exchange,
             verifyExchange } = this.props;
 
-        const status = exchange && exchange.status ? exchange.status : null
+        const status = exchange && exchange.status ? exchange.status : null;
+
+
         const { firstName, lastName, email, phone } = teacher;
         let _class, country, school;
         const { showFeedback } = this.state;
@@ -70,7 +88,9 @@ class Exchange extends Component {
                 </div>
                 <ExchangeDetails
                     status={status}
-                    onActionClick={this.onActionClick} />
+                    onActionClick={this.onActionClick}
+                    classIsVerified={this.classIsVerified()}
+                    serverFeedback={feedback.messages[0]} />
                  { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }

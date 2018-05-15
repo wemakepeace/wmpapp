@@ -19,7 +19,7 @@ class SelectClass extends Component  {
         }
 
         const fetchClassFromServer = this.props.classes && this.props.classes.list && this.props.classes.list[selected.value] ? false : true
-
+        console.log('firing')
         this.props.fetchClass(selected.value, fetchClassFromServer);
     }
 

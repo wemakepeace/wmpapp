@@ -76,7 +76,6 @@ app.post('/', (req, res, next) => {
                             return exchange.setClassB(_class, { transaction: t })
                             .then(exchange => {
                                 exchange.dataValues.classB = _class
-                                // exchange.classB = _class
                             /* create verification token and expiration */
                                 return Promise.all([crypto.randomBytes(20, { transaction: t }) ])
                                 .then(([ buf ]) => {
@@ -117,28 +116,32 @@ app.post('/', (req, res, next) => {
                                     generateEmail(res, classBEmail, token, { transaction: t }),
                                 ])
                                 .then(() => {
-                                    return { exchange }
+                                    return { exchange, _class }
                                 })
                             }, { transaction: t })
-                            .then(({ exchange }) => {
+                            .then(({ exchange, _class }) => {
                                 const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
                                 return {
                                     feedback: feedback(SUCCESS, [feedbackMsg]),
-                                    exchange
+                                    exchange,
+                                    _class
                                 }
                             }, { transaction: t })
                         })
                     })
             } else {
                 /* if no match is found initiate new Exchange instance */
+                // classRole = 'A';
                 return initiateNewExchange(_class)
             }
         })
     })
     .then(({ _class, exchange, feedback }) => {
-        let _exchange;
+        let _exchange, classRole;
         if (exchange) {
+            classRole = exchange.getClassRole(_class.dataValues.id);
+
             _exchange = exchange.dataValues
             if (exchange.dataValues.classA) {
                 _exchange.classA = exchange.dataValues.classA.dataValues
@@ -155,6 +158,7 @@ app.post('/', (req, res, next) => {
         res.send({
             _class: extractDataForFrontend(_class, {}),
             exchange: extractDataForFrontend(_exchange, {}),
+            classRole,
             feedback
         })
     })
@@ -166,7 +170,6 @@ app.post('/', (req, res, next) => {
 
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
-    console.log('exchangeId', exchangeId)
     return Exchange.findOne({
         where: {
             id: exchangeId,
@@ -175,43 +178,50 @@ app.post('/verify', (req, res, next) => {
         }
     })
     .then(exchange => {
-        console.log('exchange', exchange);
-        const { classAId, classBId } = exchange.dataValues;
-        if (classId === classAId) {
-            // set classAVerified to true
+        let classRole;
+
+        if (exchange) {
+            classRole = exchange.getClassRole(classId);
+        }
+
+        if (classRole === 'A') {
             exchange.classAVerified = true;
         }
 
-        if (classId === classBId)
-            // set classBVerified to true
+        if (classRole === 'B') {
             exchange.classBVerified = true;
+        }
+
         exchange.save()
         .then(exchange => {
             const { classAVerified, classBVerified } = exchange.dataValues;
-            console.log('classAVerified', classAVerified)
-            console.log('classBVerified', classBVerified)
-            // if (classAVerified && classBVerified) {
-            if (classBVerified) {
+            if (classAVerified && classBVerified) {
+            // if (classBVerified) {
                 return exchange.setStatus('confirmed')
                 .then(exchange => {
+                    // [TODO]
                     // send email to both of the teachers
                     const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!']
 
-                    res.send({
+                    return res.send({
                         feedback: feedback(SUCCESS, feedbackMsg),
-                        exchange: extractDataForFrontend(exchange.dataValues, {}),
+                        classRole,
+                        exchange: extractDataForFrontend(exchange.dataValues, {})
                     })
                 })
+            } else {
+                // [TODO]
+                // send a reminder email to the other class...
+
+                const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
+                return res.send({
+                    feedback: feedback(SUCCESS, feedbackMsg),
+                    classRole,
+                    exchange: extractDataForFrontend(exchange.dataValues, {}),
+                })
             }
-
-            res.send({ exchange })
-
         })
-
-
     })
-
-
 });
 
 module.exports = app;
@@ -232,7 +242,8 @@ const initiateNewExchange = (_class) => {
 
             return {
                 feedback: feedback(SUCCESS, [feedbackMsg]),
-                exchange
+                exchange,
+                _class
             }
         })
     })

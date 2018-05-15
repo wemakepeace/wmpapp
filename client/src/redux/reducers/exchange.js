@@ -6,8 +6,10 @@ const exchange = (state=initialState, action) => {
     switch(action.type) {
         case FETCH_EXCHANGE_DATA:
         case FETCH_CLASS:
+                console.log('action', action)
             if (action.exchange) {
-                return action.exchange
+                console.log('action.classRole', action.classRole)
+                return {...state, ...action.exchange, classRole: action.classRole}
             }
             return {}
 

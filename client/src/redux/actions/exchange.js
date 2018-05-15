@@ -8,8 +8,8 @@ const initiateExchange = (classId) => {
         return axios.post(`/exchange`, { classId })
         .then(response => response.data)
         .then(
-            ({ exchange, feedback }) => {
-            return dispatch({ type: FETCH_EXCHANGE_DATA, exchange, feedback })
+            ({ exchange, feedback, classRole }) => {
+            return dispatch({ type: FETCH_EXCHANGE_DATA, exchange, feedback, classRole })
 
             },
             (error) => {
@@ -20,16 +20,17 @@ const initiateExchange = (classId) => {
 }
 
 const verifyExchange = (classId, exchangeId) => {
-    console.log('being called')
-    console.log('exchangeId', exchangeId)
-    console.log('classId', classId)
     return dispatch => {
         return axios.post(`/exchange/verify`, { exchangeId, classId })
         .then(response => response.data)
         .then(
-              ({ exchange, feedback }) => {
-                return dispatch({ type: FETCH_EXCHANGE_DATA, exchange, feedback })
-                // console.log('success', success)
+              ({ exchange, feedback, classRole }) => {
+                return dispatch({
+                    type: FETCH_EXCHANGE_DATA,
+                    exchange,
+                    classRole,
+                    feedback
+                })
               },
               (error) => {
                 console.log('error', error)
