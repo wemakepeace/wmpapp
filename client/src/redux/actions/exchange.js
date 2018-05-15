@@ -29,7 +29,6 @@ const verifyExchange = (classId, exchangeId) => {
         .then(response => response.data)
         .then(
               ({ exchange, feedback, classRole }) => {
-                console.log('exchange in action', exchange)
                 return dispatch({
                     type: FETCH_EXCHANGE_DATA,
                     exchange,

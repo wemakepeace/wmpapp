@@ -57,71 +57,63 @@ app.post('/', (req, res, next) => {
         .then(matches => {
             /* If matches are found */
             if (matches.length) {
-                const locationDataForMatches = matches.map(match => {
-                    const data = match.dataValues.classA.dataValues;
-                    return extractClassAddress(data);
-                });
+                locationDataForMatches = getLocationDataForMatches(matches);
 
                 const classCoords = _class.dataValues.location;
 
                 return findFurthestMatch(classCoords, locationDataForMatches, matches)
-                    // .then(result => {
-                    //     return matches.find(match => {
-                    //         return match.dataValues.classA.dataValues.id === result.id
-                    //     })
-                    // })
-                    .then(exchange => {
-                        return conn.transaction((t) => {
-                            return exchange.setClassB(_class, { transaction: t })
-                            .then(exchange => {
-                                exchange.dataValues.classB = _class;
-                                const date = new Date();
-                                const expires = date.setDate(date.getDate() + 7);
+                .then(exchange => {
+                    return conn.transaction((t) => {
+                        return exchange.setClassB(_class, { transaction: t })
+                        .then(exchange => {
+                            exchange.dataValues.classB = _class;
 
-                                exchange.verifyExchangeExpires = expires;
-                                exchange.status = 'pending';
+                            const date = new Date();
+                            const expires = date.setDate(date.getDate() + 7);
+                            exchange.verifyExchangeExpires = expires;
+                            exchange.status = 'pending';
 
-                                return exchange.save({ transaction: t })
-                            }, { transaction: t })
-                            .then(( exchange ) => {
-                                /* send email with verification token to both teachers */
-                                const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-                                const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
+                            return exchange.save({ transaction: t })
+                        }, { transaction: t })
+                        .then(( exchange ) => {
+                            /* send email with verification token to both teachers */
+                            const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
+                            const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
 
 
-                                const generateEmail = (res, recipient, token) => {
-                                    const host = req.get('host');
-                                    const link = 'http://' + host + '/#/';
+                            const generateEmail = (res, recipient, token) => {
+                                const host = req.get('host');
+                                const link = 'http://' + host + '/#/';
 
-                                    const mailOptions = {
-                                    to: recipient,
-                                    from: 'tempwmp@gmail.com',
-                                    subject: 'Verify Exchange Participation | We Make Peace',
-                                    text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
-                                    };
+                                const mailOptions = {
+                                to: recipient,
+                                from: 'tempwmp@gmail.com',
+                                subject: 'Verify Exchange Participation | We Make Peace',
+                                text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
+                                };
 
-                                    return sendEmail(res, mailOptions, { transaction: t })
-                                }
+                                return sendEmail(res, mailOptions, { transaction: t })
+                            }
 
-                                return Promise.all([
-                                    generateEmail(res, classAEmail, { transaction: t }),
-                                    generateEmail(res, classBEmail, { transaction: t }),
-                                ])
-                                .then(() => {
-                                    return { exchange, _class }
-                                })
-                            }, { transaction: t })
-                            .then(({ exchange, _class }) => {
-                                const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
+                            return Promise.all([
+                                generateEmail(res, classAEmail, { transaction: t }),
+                                generateEmail(res, classBEmail, { transaction: t }),
+                            ])
+                            .then(() => {
+                                return { exchange, _class }
+                            })
+                        }, { transaction: t })
+                        .then(({ exchange, _class }) => {
+                            const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!"
 
-                                return {
-                                    feedback: feedback(SUCCESS, [feedbackMsg]),
-                                    exchange,
-                                    _class
-                                }
-                            }, { transaction: t })
-                        })
+                            return {
+                                feedback: feedback(SUCCESS, [feedbackMsg]),
+                                exchange,
+                                _class
+                            }
+                        }, { transaction: t })
                     })
+                })
             } else {
                 /* if no match is found initiate new Exchange instance */
                 return initiateNewExchange(_class)
@@ -129,26 +121,16 @@ app.post('/', (req, res, next) => {
         })
     })
     .then(({ _class, exchange, feedback }) => {
-        let _exchange, classRole;
+        let classRole;
+
         if (exchange) {
             classRole = exchange.getClassRole(_class.dataValues.id);
-
-            _exchange = exchange.dataValues
-            if (exchange.dataValues.classA) {
-                _exchange.classA = exchange.dataValues.classA.dataValues
-                _exchange.classA.school = exchange.dataValues.classA.school.dataValues;
-                _exchange.classA.teacher = exchange.dataValues.classA.teacher.dataValues;
-            }
-            if (exchange.dataValues.classB) {
-                _exchange.classB = exchange.dataValues.classB.dataValues
-                _exchange.classB.school = exchange.dataValues.classB.school.dataValues;
-                _exchange.classB.teacher = exchange.dataValues.classB.teacher.dataValues;
-            }
+            exchange = formatData(exchange);
         }
 
         res.send({
             _class: extractDataForFrontend(_class, {}),
-            exchange: extractDataForFrontend(_exchange, {}),
+            exchange: extractDataForFrontend(exchange, {}),
             classRole,
             feedback
         })
@@ -158,6 +140,11 @@ app.post('/', (req, res, next) => {
         sendError(500, error, defaultError, res);
     })
 });
+
+/** Route to verify exchange participation **/
+/** Both classes must verify by the time verifyExchangeExpires expires **/
+/** Notes: Here we could verify the expiration on the call or we could run a cleanup function that voids all expired instances, in which case the classes should be notified **/
+/** If a one class has confirmed the exchange, that class will be added to a new Exchnage instance as classA, and the class that did not confirm will be removed (not belong to any exchange) **/
 
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
@@ -196,16 +183,16 @@ app.post('/verify', (req, res, next) => {
 
         exchange.save()
         .then(exchange => {
+
             const { classAVerified, classBVerified } = exchange.dataValues;
+            const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
+            const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
+            let _feedback;
+
             if (classAVerified && classBVerified) {
-            // if (classBVerified) {
                 return exchange.setStatus('confirmed')
                 .then(exchange => {
-                    // [TODO]
-                    // send email to both of the teachers
-                    const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-                    const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-
+                    /** Send email to both teachers **/
                     const generateEmail = (res, recipient) => {
                         const host = req.get('host');
                         const link = 'http://' + host + '/#/';
@@ -224,35 +211,22 @@ app.post('/verify', (req, res, next) => {
                         generateEmail(res, classAEmail),
                         generateEmail(res, classBEmail)
                     ])
-                    .then(() => {
-                        return exchange
-                    })
+                    .then(() => exchange)
                     .then(exchange => {
+
+                        exchange = formatData(exchange);
+
                         const feedbackMsg = ['Thank you for confirming your participaiton! You are now ready to begin the Exchange Program!'];
-
-                        exchange = exchange.dataValues
-                        exchange.classA = exchange.classA.dataValues
-                        exchange.classA.school = exchange.classA.school.dataValues;
-                        exchange.classA.teacher = exchange.classA.teacher.dataValues;
-
-                        exchange.classB = exchange.classB.dataValues
-                        exchange.classB.school = exchange.classB.school.dataValues;
-                        exchange.classB.teacher = exchange.classB.teacher.dataValues;
 
                         return res.send({
                             feedback: feedback(SUCCESS, feedbackMsg),
-                            classRole,
-                            exchange: extractDataForFrontend(exchange, {})
+                            exchange: extractDataForFrontend(exchange, {}),
+                            classRole
                         })
                     })
                 })
             } else {
-                // [TODO]
-                // send a reminder email to the other class...
-                const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-                const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-
-                const otherClassesEmail = classRole === 'A' ? classBEmail : classAEmail;
+                const otherClassEmail = classRole === 'A' ? classBEmail : classAEmail;
 
                 const generateEmail = (res, recipient) => {
                     const host = req.get('host');
@@ -269,21 +243,11 @@ app.post('/verify', (req, res, next) => {
                     return sendEmail(res, mailOptions)
                 }
 
-                return generateEmail(res, otherClassesEmail)
-                .then(() => {
-                    return exchange
-                })
+                return generateEmail(res, otherClassEmail)
+                .then(() => exchange)
                 .then(exchange => {
-                    console.log('exchange', exchange)
 
-                    exchange = exchange.dataValues
-                    exchange.classA = exchange.classA.dataValues
-                    exchange.classA.school = exchange.classA.school.dataValues;
-                    exchange.classA.teacher = exchange.classA.teacher.dataValues;
-
-                    exchange.classB = exchange.classB.dataValues
-                    exchange.classB.school = exchange.classB.school.dataValues;
-                    exchange.classB.teacher = exchange.classB.teacher.dataValues;
+                    exchange = formatData(exchange);
 
                     const feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"]
 
@@ -300,6 +264,23 @@ app.post('/verify', (req, res, next) => {
 });
 
 module.exports = app;
+
+/*** Helper function to extract data from exchange instance ***/
+const formatData = (exchange) => {
+    exchange = exchange.dataValues;
+
+    if (exchange.classA) {
+        exchange.classA = exchange.classA.dataValues
+        exchange.classA.school = exchange.classA.school.dataValues;
+        exchange.classA.teacher = exchange.classA.teacher.dataValues;
+    }
+    if (exchange.classB) {
+        exchange.classB = exchange.classB.dataValues
+        exchange.classB.school = exchange.classB.school.dataValues;
+        exchange.classB.teacher = exchange.classB.teacher.dataValues;
+    }
+    return exchange
+}
 
 const initiateNewExchange = (_class) => {
     return Exchange.create({ status: 'initiated' })
@@ -331,8 +312,16 @@ const extractClassAddress = (_class) => {
         address: address
     }
 
-    return data
+    return data;
 }
+
+const getLocationDataForMatches = (matches) => {
+    return matches.map(match => {
+        const data = match.dataValues.classA.dataValues;
+        return extractClassAddress(data);
+    });
+}
+
 
 const getCoordinates = (data) => {
     return googleMapsClient.geocode({ address: data.address })
