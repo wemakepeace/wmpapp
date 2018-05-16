@@ -7,31 +7,26 @@ import axios from 'axios';
 
 import SelectClass from '../SelectClass';
 import TeacherForm from './TeacherForm';
-import { fetchClass, removeCurrentClass } from '../../redux/actions/class';
+import ClassDetails from './ClassDetails';
+
+import { fetchClass } from '../../redux/actions/class';
 import { getCountryName } from '../../utils/helpers';
 
 class Overview extends Component {
     state = {}
-
-    initiateNewClass = () => {
-        const newClass = true;
-        this.props.removeCurrentClass();
-        this.props.history.push('/profile/class');
-    }
-
 
     shouldComponentUpdate(nextProps) {
         return nextProps.classes && nextProps.classes.currentClass ? true : false
     }
 
     render() {
-        const { teacher, classes } = this.props;
+        const { teacher, classes, exchange } = this.props;
         const { firstName, lastName, email, phone } = teacher;
-        let showClass, country, school;
+        let classData, country, school;
 
         if (classes && classes.list && classes.currentClass) {
-            showClass = classes.list[classes.currentClass];
-            school = showClass.school;
+            classData = classes.list[classes.currentClass];
+            school = classData.school;
         }
 
         if (this.props.classes && this.props.classes.list) {
@@ -49,94 +44,27 @@ class Overview extends Component {
                     <p>Select an existing class in the top right corner or register a new class. Use the left side menu to navigate the portal.</p>
                     <p>Once a class has been matched you will be able to communicate with the other class' teacher through Messages.</p>
                 </div>
-                    When you have filled in all the forms and are ready to find an exchange class to match with, please go to the EXCHANGE section.
                 <div>
-                    [PROGRESS BAR FOR EXCHANGE]
-                </div>
-                <div>
-                    [NEXT STEPS]
-                </div>
-                <div>
-
-                </div>
-                <div>
-
-                    {showClass !== undefined
-                        ? <div>
-                            <hr style={{margin: '30px 0'}}/>
-                            <h3 style={{marginBottom: '18px'}}>Overview Class {showClass.name || null }</h3>
-                        </div>
-                        : null
-                    }
-                    <div className='div-display-inline-block'>
-                        <div className='class-overview'>
-                            <div className=''>
-                                <label>Teacher</label>
-                                <label>Email</label>
-                                <label>Phone</label>
-                            </div>
-                            <div className=''>
-                                <span>{firstName || null } {lastName || null }</span>
-                                <span>{email || null }</span>
-                                <span>{phone || null }</span>
-                            </div>
-                        </div>
+                    <div>
+                        When you have filled in all the forms and are ready to find an exchange class to match with, please go to the EXCHANGE section.
                     </div>
 
-                    {showClass !== undefined
-                        ? <div className='div-display-inline-block'>
-                            <div className='class-overview'>
-                                <div className=''>
-                                    <label>Class size</label>
-                                    <label>Age group</label>
-                                    <label>Registered for term</label>
-                                </div>
-                                <div className=''>
-                                    <span>{showClass.size || null }</span>
-                                    { showClass.age_group
-                                        ? <span>{showClass.age_group.label || null }</span>
-                                        : <span>Not defined yet.</span>
-                                    }
-                                    { showClass.term
-                                        ? <span>{showClass.term.label || null }</span>
-                                        : <span>Not defined yet.</span>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-                    {showClass && school && school.schoolName
-                        ? <div className='div-display-inline-block'>
-                            <div className='class-overview'>
-                                <div className=''>
-                                    <label>School Address</label>
-                                </div>
-                                <div className=''>
-                                    <span>{school.schoolName || null}</span>
-                                    <span>{school.address1 || null} {school.address2 || null}</span>
-                                    <span>{school.zip || null} {school.city || null}</span>
-                                    <span>{country || null}</span>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-                    {showClass && showClass.exchange
+                    <ClassDetails classData={classData} teacherData={teacher} />
+
+                    { classData && (exchange && exchange.status)
                         ? <div className='div-display-inline-block'>
                             <div className='class-overview'>
                                 <div className=''>
                                     <label>Exchange Progress</label>
                                 </div>
                                 <div className=''>
-                                    <span>{showClass.exchange.status || null}</span>
+                                    <span>{exchange.status || null}</span>
                                 </div>
                             </div>
                         </div>
-                        : null
-                    }
+                        : null }
                 </div>
-                {showClass
+                { classData
                     ?<div>
                         <hr style={{margin: '30px 0'}} />
                         <div className='profile-segment'>
@@ -163,16 +91,8 @@ class Overview extends Component {
                             </div>
                         </div>
                     </div>
-                    : null
-                }
-
+                    : null}
                 <hr style={{margin: '30px 0'}}/>
-                <div className='container-center-content'>
-                    <Button
-                        onClick={this.initiateNewClass}
-                        size='massive'
-                        className='add-class'>Register New Class</Button>
-                </div>
             </div>
         )
     }
@@ -181,11 +101,12 @@ class Overview extends Component {
 const mapStateToProps = state => {
     return {
         teacher: state.teacher,
-        classes: state.classes
+        classes: state.classes,
+        exchange: state.exchange
     }
 }
 
-export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(Overview);
+export default connect(mapStateToProps, { fetchClass })(Overview);
 
 
 

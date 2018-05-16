@@ -25,7 +25,7 @@ class Signup extends Component {
 
     componentWillReceiveProps(nextProps) {
         if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
-            this.props.history.push('/exchange')
+            this.props.history.push('/profile/overview')
         }
 
         if (nextProps.feedback && nextProps.feedback.type) {

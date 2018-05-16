@@ -9,22 +9,23 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
 
     return (
         <div className='profile-segment exchange-details'>
-            <div className=''>
-                <h3 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h3>
-                <span>{status || null}</span>
-            </div>
+            { status
+                ? <div>
+                    <h3 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h3>
+                    <span>{status}</span>
+                </div>
+                : null }
             <div style={{fontSize: '20px', border: '1px solid gray', padding: '20px', margin: '40px 0', lineHeight: '1.5em'}}>
                 {exchangeData[status].text}
             </div>
             { exchangeData[status].buttonText && !classIsVerified
-                ?   <Button
+                ? <Button
                         className='large-custom-btn'
                         size='large'
                         fluid
                         onClick={() => onActionClick(exchangeData[status].action)}>
-                        {exchangeData[status].buttonText}
-                    </Button>
-                :   null }
+                        {exchangeData[status].buttonText}</Button>
+                : null }
         </div>
     )
 }

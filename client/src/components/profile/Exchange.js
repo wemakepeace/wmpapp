@@ -7,6 +7,7 @@ import axios from 'axios';
 import SelectClass from '../SelectClass';
 import Feedback from '../Feedback';
 import ExchangeDetails from './ExchangeDetails';
+import ClassDetails from './ClassDetails';
 
 import { initiateExchange, verifyExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
@@ -58,13 +59,15 @@ class Exchange extends Component {
             feedback,
             exchange,
             verifyExchange } = this.props;
-
-        const status = exchange && exchange.status ? exchange.status : null;
-
-
-        const { firstName, lastName, email, phone } = teacher;
-        let _class, country, school;
         const { showFeedback } = this.state;
+        const status = exchange && exchange.status ? exchange.status : null;
+        const { firstName, lastName, email, phone } = teacher;
+        let _class, country, school, matchClass, matchTeacher;
+
+        if (exchange && exchange.classRole && exchange.classA && exchange.classB) {
+            matchClass = exchange.classRole === 'A' ? exchange.classB : exchange.classA;
+            matchTeacher = exchange.classRole === 'A' ? exchange.classB.teacher : exchange.classA.teacher;
+        }
 
         if (classes && classes.list && classes.currentClass) {
             _class = classes.list[classes.currentClass];
@@ -91,6 +94,12 @@ class Exchange extends Component {
                     onActionClick={this.onActionClick}
                     classIsVerified={this.classIsVerified()}
                     serverFeedback={feedback.messages[0]} />
+                <ClassDetails classData={matchClass} teacherData={matchTeacher} />
+                <div>
+                    { exchange && exchange.status === 'confirmed'
+                        ? <div>Exchange</div> : null
+                    }
+                </div>
                  { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }

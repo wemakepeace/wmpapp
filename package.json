@@ -10,7 +10,8 @@
     "start:dev-server": "JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/src/ ./server.js",
     "build:prod": "webpack -p",
     "start:dev-client": "npm run build",
-    "start:dev": "npm run build -- -w & JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore src/ server.js sass --watch"
+    "start:dev": "npm run build -- -w & JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore src/ server.js sass --watch",
+    "start:dev2": "npm run webpack -- -w & JWT_SECRET=foo DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore src/ server.js sass --watch"
   },
   "proxy": "http://localhost:8080",
   "author": "",

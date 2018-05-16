@@ -282,7 +282,6 @@ const initiateNewExchange = (_class) => {
     })
 }
 
-
 const extractClassAddress = (_class) => {
     const { zip, country, address1, city } = _class.school.dataValues;
     const countryName = countries().getName(country);
@@ -302,7 +301,6 @@ const getLocationDataForMatches = (matches) => {
         return extractClassAddress(data);
     });
 }
-
 
 const getCoordinates = (data) => {
     return googleMapsClient.geocode({ address: data.address })
