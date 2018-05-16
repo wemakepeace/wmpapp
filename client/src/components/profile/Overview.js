@@ -8,6 +8,7 @@ import axios from 'axios';
 import SelectClass from '../SelectClass';
 import TeacherForm from './TeacherForm';
 import ClassDetails from './ClassDetails';
+import ExchangeOverview from './ExchangeOverview';
 
 import { fetchClass } from '../../redux/actions/class';
 import { getCountryName } from '../../utils/helpers';
@@ -42,14 +43,15 @@ class Overview extends Component {
                     <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can edit your teacher profile, register a new class and manage all your enrolled classes.</p>
                     <p>Select an existing class in the top right corner or register a new class. Use the left side menu to navigate the portal.</p>
-                    <p>Once a class has been matched you will be able to communicate with the other class' teacher through Messages.</p>
+                    {/*<p>Once a class has been matched you will be able to communicate with the other class' teacher through Messages.</p>
+                        <p>When you have filled in all the forms and are ready to find an exchange class to match with, please go to the EXCHANGE section.</p>*/}
                 </div>
+                <hr style={{margin: '30px 0'}}/>
                 <div>
-                    <div>
-                        When you have filled in all the forms and are ready to find an exchange class to match with, please go to the EXCHANGE section.
-                    </div>
-
-                    <ClassDetails classData={classData} teacherData={teacher} />
+                    <ClassDetails
+                        classData={classData}
+                        teacherData={teacher}
+                        title='Your Class '/>
 
                     { classData && (exchange && exchange.status)
                         ? <div className='div-display-inline-block'>
@@ -57,42 +59,14 @@ class Overview extends Component {
                                 <div className=''>
                                     <label>Exchange Progress</label>
                                 </div>
-                                <div className=''>
-                                    <span>{exchange.status || null}</span>
-                                </div>
                             </div>
                         </div>
                         : null }
                 </div>
-                { classData
-                    ?<div>
-                        <hr style={{margin: '30px 0'}} />
-                        <div className='profile-segment'>
-                            <h3>Next Steps</h3>
-                            <h5>Awaiting: _____</h5>
-
-                            <div className='container-center-content'>
-                                <div style={{margin: 'auto'}} className='steps'>
-                                    <div className='step-list'>
-                                        <ul>
-                                            <li><Icon name='checkmark' />Complete Techer Profile</li>
-                                            <li><Icon name='checkmark' />Complete Class Profile</li>
-                                            <li><Icon name='checkmark' />Initiate Exchange</li>
-                                        </ul>
-                                    </div>
-                                    <div className='step-list'>
-                                        <ul>
-                                            <li><Icon name='checkmark' />Write and Send Letter 1</li>
-                                            <li><Icon name='checkmark' />Write and Send Letter 2</li>
-                                            <li><Icon name='' />Write and Send Letter 3</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    : null}
                 <hr style={{margin: '30px 0'}}/>
+                { classData
+                    ? <ExchangeOverview />
+                    : null }
             </div>
         )
     }
@@ -110,3 +84,31 @@ export default connect(mapStateToProps, { fetchClass })(Overview);
 
 
 
+ // { classData
+ //    ?<div>
+ //        <hr style={{margin: '30px 0'}} />
+ //        <div className='profile-segment'>
+ //            <h3>Next Steps</h3>
+ //            <h5>Awaiting: _____</h5>
+
+ //            <div className='container-center-content'>
+ //                <div style={{margin: 'auto'}} className='steps'>
+ //                    <div className='step-list'>
+ //                        <ul>
+ //                            <li><Icon name='checkmark' />Complete Techer Profile</li>
+ //                            <li><Icon name='checkmark' />Complete Class Profile</li>
+ //                            <li><Icon name='checkmark' />Initiate Exchange</li>
+ //                        </ul>
+ //                    </div>
+ //                    <div className='step-list'>
+ //                        <ul>
+ //                            <li><Icon name='checkmark' />Write and Send Letter 1</li>
+ //                            <li><Icon name='checkmark' />Write and Send Letter 2</li>
+ //                            <li><Icon name='' />Write and Send Letter 3</li>
+ //                        </ul>
+ //                    </div>
+ //                </div>
+ //            </div>
+ //        </div>
+ //    </div>
+ //    : null}

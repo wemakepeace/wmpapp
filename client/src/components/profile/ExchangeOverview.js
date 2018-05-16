@@ -62,7 +62,7 @@ class Exchange extends Component {
         const { showFeedback } = this.state;
         const status = exchange && exchange.status ? exchange.status : null;
         const { firstName, lastName, email, phone } = teacher;
-        let _class, country, school, matchClass, matchTeacher;
+        let classData, country, school, matchClass, matchTeacher;
 
         if (exchange && exchange.classRole && exchange.classA && exchange.classB) {
             matchClass = exchange.classRole === 'A' ? exchange.classB : exchange.classA;
@@ -70,8 +70,8 @@ class Exchange extends Component {
         }
 
         if (classes && classes.list && classes.currentClass) {
-            _class = classes.list[classes.currentClass];
-            school = _class.school;
+            classData = classes.list[classes.currentClass];
+            school = classData.school;
         }
 
         if (this.props.classes && this.props.classes.list) {
@@ -82,23 +82,21 @@ class Exchange extends Component {
         }
 
         return (
-            <div className='profile-form'>
-                <div className='profile-segment'>
-                    <h3>Exchange Details</h3>
-
-                    <p>When you have filled in all the information, click the button to initiate an exchange.</p>
-                    <p>When a match has been made you will receive an email and you will be able to see more information about the exchange on this page.</p>
+            <div>
+                <div>
+                    <h1 style={{margin: '30px 0'}}>Exchange Overview</h1>
                 </div>
+                <ClassDetails
+                    classData={matchClass}
+                    teacherData={matchTeacher}
+                    title='Exchange Class ' />
                 <ExchangeDetails
+                    classData={classData}
                     status={status}
                     onActionClick={this.onActionClick}
                     classIsVerified={this.classIsVerified()}
                     serverFeedback={feedback.messages[0]} />
-                <ClassDetails
-                    classData={matchClass}
-                    teacherData={matchTeacher}
-                    title='Exchange Class Details Class ' />
-                 { showFeedback && (feedback && feedback.type)
+                { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
                     : null }
             </div>

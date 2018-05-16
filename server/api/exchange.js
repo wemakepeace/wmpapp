@@ -25,7 +25,7 @@ app.post('/', (req, res, next) => {
 
     Class.findOne({
         where: { id: classId },
-        include: [ School, Teacher ]
+        include: [ School, Teacher, AgeGroup, Term ]
     })
     .then(_class => {
         let classData = extractClassAddress(_class.dataValues);
@@ -251,7 +251,8 @@ const formatData = (exchange) => {
     exchange = exchange.dataValues;
 
     if (exchange.classA) {
-        exchange.classA = exchange.classA.dataValues
+        exchange.classA = exchange.classA.dataValues;
+        exchange.classA.term = exchange.classA.term;
         exchange.classA.school = exchange.classA.school.dataValues;
         exchange.classA.teacher = exchange.classA.teacher.dataValues;
     }
