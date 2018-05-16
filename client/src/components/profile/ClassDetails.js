@@ -11,8 +11,8 @@ const ClassDetails = ({ classData, teacherData, title }) => {
                 <h3 style={{marginBottom: '18px'}}>{title} {classData.name || null}</h3>
             </div>
             <div className='div-display-inline-block'>
-                <div className='class-overview'>
-                    <div className=''>
+                <div className='inner-box-inline-block'>
+                    <div>
                         <label>Teacher</label>
                         <label>Email</label>
                         <label>Phone</label>
@@ -28,7 +28,7 @@ const ClassDetails = ({ classData, teacherData, title }) => {
             </div>
             { classData && school && school.schoolName
                 ? <div className='div-display-inline-block'>
-                    <div className='class-overview'>
+                    <div className='inner-box-inline-block'>
                         <div className=''>
                             <label>School Address</label>
                         </div>

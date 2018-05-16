@@ -66,6 +66,18 @@ app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRou
 app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
 app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeRoutes);
 
+
+const { feedback, sendError } = require('./server/utils/feedback');
+
+app.use(function (err, req, res, next) {
+    console.error('OH HEY ERROR err.stack', err.stack)
+    console.log('OH HEY OTHER KINDA ERROR', err)
+    // res.status(500).send()
+    return sendError(500, null, err, res);
+
+})
+
+
 app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));
 });

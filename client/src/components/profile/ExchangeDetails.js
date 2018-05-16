@@ -3,7 +3,7 @@ import { Button } from 'semantic-ui-react'
 import { Progress } from 'semantic-ui-react'
 
 const ProgressBar = ({ percent, label }) => (
-  <Progress percent={percent} label={label} color='yellow'/>
+    <Progress percent={percent} label={label} color="yellow"/>
 )
 
 
@@ -23,12 +23,8 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
 
     return (
         <div className='profile-segment exchange-details'>
-            {/*<div>
-                <h3 style={{ display: 'inline-block', marginRight: '20px'}}>Exchange Status</h3>
-                <span>{status}</span>
-            </div> */}
             <div className='div-display-inline-block'>
-                <div className='class-overview'>
+                <div className='inner-box-inline-block'>
                     <div className=''>
                         <label>Age group</label>
                         <label>Registered for term</label>
@@ -46,6 +42,12 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
                 </div>
             </div>
             <h4>Status</h4>
+            <div className="div-display-inline-block">
+                <div className="inner-box-inline-block">
+                    <label>Status of Exchange {status}</label>
+                    <div>{details.text()}</div>
+                </div>
+            </div>
             <ProgressBar percent={details.percent} label={details.label} />
             <div style={{fontSize: '20px', border: '1px solid gray', padding: '20px', margin: '40px 0', lineHeight: '1.5em'}}>
                 {details.text()}
@@ -85,7 +87,7 @@ const exchangeData = {
                 <p>Look out for an email and make sure to confirm the Exchange particpation once you receive the email</p>
             </div>
         ),
-        percent: 20,
+        percent: 16,
         label: "Initiated"
     },
     pending: {
@@ -98,7 +100,7 @@ const exchangeData = {
         ),
         buttonText: "Verify Exchange Participation",
         action: "verifyExchange",
-        percent: 40,
+        percent: 32,
         label: "Pending"
     },
     'partially confirmed': {
@@ -108,7 +110,7 @@ const exchangeData = {
                 <p>We are waiting for the other class to verify as well. Please be on the lookout for an email confirmation.</p>
             </div>
         ),
-        percent: 60,
+        percent: 48,
         label: "Partially Confirmed"
     },
     confirmed: {
@@ -118,8 +120,17 @@ const exchangeData = {
                 <p>You are now ready to begin the Exchange Program!</p>
             </div>
         ),
-        percent: 80,
+        percent: 64,
         label: 'Confirmed'
+    },
+    inprogress: {
+        text: () => (
+            <div>
+                <p>Exchange is in progress!</p>
+            </div>
+        ),
+        percent: 80,
+        label: 'In Progress'
     },
     completed: {
         text: () => (

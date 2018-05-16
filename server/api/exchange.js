@@ -28,6 +28,15 @@ app.post('/', (req, res, next) => {
         include: [ School, Teacher, AgeGroup, Term ]
     })
     .then(_class => {
+
+        if (!_class.dataValues.term || !_class.dataValues.age_group) {
+            const defaultError = 'You must select term and age group for your class before you can sign up for a letter exchange.';
+            // return new Error(defaultError);
+            // console.log('not ready')
+            return next(defaultError)
+            // return sendError(500, null, defaultError, res);
+        }
+
         let classData = extractClassAddress(_class.dataValues);
 
         return getCoordinates(classData)
@@ -136,8 +145,16 @@ app.post('/', (req, res, next) => {
         })
     })
     .catch(error => {
-        const defaultError = 'Something went wrong when initiating exchange.';
-        sendError(500, error, defaultError, res);
+        let defaultError;
+        if (error.Error) {
+            defaultError = error.Error
+        } else {
+            defaultError = 'Something went wrong when initiating exchange.';
+        }
+        console.log('error in da catchs', error)
+        // console.log('defaultError', defaultError)
+        // sendError(500, error, defaultError, res);
+        return next(defaultError)
     })
 });
 

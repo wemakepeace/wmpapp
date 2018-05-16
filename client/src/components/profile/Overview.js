@@ -55,7 +55,7 @@ class Overview extends Component {
 
                     { classData && (exchange && exchange.status)
                         ? <div className='div-display-inline-block'>
-                            <div className='class-overview'>
+                            <div className='inner-box-inline-block'>
                                 <div className=''>
                                     <label>Exchange Progress</label>
                                 </div>
