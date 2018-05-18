@@ -114,9 +114,10 @@ class ClassFormsContainer extends Component {
     }
 
     render() {
-        const { feedback, classes, showComponent, teacher } = this.props;
+        const { feedback, classes, showComponent, teacher, exchange } = this.props;
         const { currentClass } = classes;
         const { showFeedback } = this.state;
+        const exchangeStatus = exchange && exchange.status;
 
         return (
             <div className='profile-form'>
@@ -130,6 +131,7 @@ class ClassFormsContainer extends Component {
                             onInputChange={this.onInputChange.bind(this)}
                             onSelectOptionChange={this.onSelectOptionChange}
                             autoFillForm={this.autoFillForm}
+                            exchangeStatus={exchangeStatus}
                         />
                         <div className='form-row'>
                             <Button
@@ -152,7 +154,8 @@ const mapStateToProps = (state) => {
         teacher: state.teacher,
         schools: state.teacher.schools,
         classes: state.classes,
-        feedback: state.feedback
+        feedback: state.feedback,
+        exchange: state.exchange
     }
 }
 

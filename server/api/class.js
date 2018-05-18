@@ -83,10 +83,12 @@ app.get('/:id', (req, res, next) => {
                 classRole
             });
         })
+        .catch(error => next(error))
     })
     .catch(error => {
-        const defaultError = 'Something went wrong when loading your session.';
-        return sendError(500, error, defaultError, res);
+        return next(error)
+        // const defaultError = 'Something went wrong when loading your session.';
+        // return sendError(500, error, defaultError, res);
     })
 });
 
@@ -165,8 +167,9 @@ app.post('/', (req, res, next) => {
         })
     })
     .catch(error => {
-        const defaultError = 'Something went wrong when saving your information.';
-        return sendError(500, error, defaultError, res);
+        return next(error)
+        // const defaultError = 'Something went wrong when saving your information.';
+        // return sendError(500, error, defaultError, res);
     })
 });
 

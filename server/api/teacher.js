@@ -63,10 +63,12 @@ app.get('/', (req, res, next) => {
             })
         })
         .catch(error => {
-
+            // console.log('error', error)
             const defaultError = 'Something went wrong when loading your session. Please login.';
+            error.defaultError = defaultError;
+            return next(error)
 
-            sendError(500, error, defaultError, res);
+            // sendError(500, error, defaultError, res);
 
         })
 });
@@ -84,8 +86,7 @@ app.put('/', (req, res, next) => {
 
         user.save()
             .then(updatedUser => {
-                updatedUser =  updatedUser.dataValues;
-
+                updatedUser = updatedUser.dataValues;
                 res.send({
                     feedback: feedback(SUCCESS, ['Your information has been saved.']),
                     teacher: extractDataForFrontend(updatedUser, {})
@@ -93,14 +94,16 @@ app.put('/', (req, res, next) => {
             })
             .catch(error => {
                 const defaultError = 'Something went wrong when updating your profile.';
-
-                sendError(500, error, defaultError, res);
-
+                error.defaultError = defaultError;
+                return next(error);
+                // sendError(500, error, defaultError, res);
             })
     })
     .catch(error => {
-        const defaultError = 'Something went wrong when updating your profile.'
-        sendError(500, error, defaultError, res);
+        const defaultError = 'Something went wrong when updating your profile.';
+        error.defaultError = defaultError;
+        return next(error);
+        // sendError(500, error, defaultError, res);
     })
 });
 
@@ -120,7 +123,7 @@ app.put('/changepassword', (req, res, next) => {
 
             if (hashTest.passwordHash === user.password) {
 
-                /*** UNCOMMENT for validations
+                /*** UNCOMMENT for validations ***/
                 let errorMessage = validatePassword(password, confirmPassword);
 
                 if (errorMessage) {
@@ -128,7 +131,7 @@ app.put('/changepassword', (req, res, next) => {
                         feedback: feedback(ERROR, errorMessage)
                     });
                 }
-                ***/
+                /***/
 
                 user.password = password;
 
@@ -153,16 +156,18 @@ app.put('/changepassword', (req, res, next) => {
                     })
                 })
                 .catch(error => {
-
                     const defaultError = 'Internal server error. Please try resetting your password  again.';
-
-                    return sendError(500, error, defaultError, res);
+                    error.defaultError = defaultError;
+                    return next(error)
+                    // return sendError(500, error, defaultError, res);
 
                 });
             }
             else {
                 const defaultError = "Password is incorrect.";
-                sendError(401, null, defaultError, res);
+                const error = defaultError;
+                return next(error)
+                // sendError(401, null, defaultError, res);
             }
         })
 });

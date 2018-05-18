@@ -22,14 +22,14 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
 
 
     return (
-        <div className='profile-segment exchange-details'>
+        <div className='profile-segment exchange-details' style={{marginTop: "2em"}}>
             <div className='div-display-inline-block'>
                 <div className='inner-box-inline-block'>
                     <div className=''>
                         <label>Age group</label>
                         <label>Registered for term</label>
                     </div>
-                    <div className=''>
+                    <div style={{marginLeft: "12px"}}>
                         { classData.age_group
                             ? <span>{classData.age_group.label || null }</span>
                             : <span>Not specified yet</span>
@@ -41,25 +41,29 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
                     </div>
                 </div>
             </div>
-            <h4>Status</h4>
-            <div className="div-display-inline-block">
-                <div className="inner-box-inline-block">
-                    <label>Status of Exchange {status}</label>
-                    <div>{details.text()}</div>
+            <div className="flex-outer">
+                <div className="flex-inner-1">
+                    <div className="flex-item border"><label>Status of Exchange</label></div>
+                    <div className="flex-item status"><span className='status-span'>{status}</span></div>
+                </div>
+                <div className="flex-inner-3">
+                    <div className="flex-item border"><label>Next Steps</label></div>
+                    <div className="flex-item">{details.text()}</div>
                 </div>
             </div>
-            <ProgressBar percent={details.percent} label={details.label} />
-            <div style={{fontSize: '20px', border: '1px solid gray', padding: '20px', margin: '40px 0', lineHeight: '1.5em'}}>
-                {details.text()}
+
+            <div style={{fontSize: '20px', padding: '20px 0', margin: '40px 0', lineHeight: '1.5em'}}>
+                <ProgressBar percent={details.percent} label={details.label} />
             </div>
+            <div className="btn-wrapper">
             { details.buttonText && !classIsVerified
                 ? <Button
-                        className='large-custom-btn'
+                        className='large-custom-btn center-btn'
                         size='large'
-                        fluid
                         onClick={() => onActionClick(details.action)}>
                         {details.buttonText}</Button>
                 : null }
+            </div>
         </div>
     )
 }
@@ -98,7 +102,7 @@ const exchangeData = {
                 <p>Thank you for participating!</p>
             </div>
         ),
-        buttonText: "Verify Exchange Participation",
+        buttonText: "Confirm Exchange Participation",
         action: "verifyExchange",
         percent: 32,
         label: "Pending"

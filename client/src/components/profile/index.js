@@ -60,12 +60,6 @@ class Main extends Component {
                                     </Link>
                                     { currentClass
                                         ? <div>
-                                            <Link to={`${match.url}/exchange`}>
-                                                <div
-                                                    className={`profile-menu-item ${this.getActiveClass('exchange')}`}>
-                                                    <h3>EXCHANGE</h3>
-                                                </div>
-                                            </Link>
                                             <Link to={`${match.url}/materials`}>
                                                 <div
                                                     className={`profile-menu-item ${this.getActiveClass('materials')}`}>

@@ -6,7 +6,7 @@ import countries from 'country-list';
 import SchoolAddressDropdown from './SchoolAddressDropdown';
 
 
-const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillForm }) => {
+const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillForm, exchangeStatus }) => {
     const { name, size, age_group, term, schoolId } = classData;
 
     const { id, schoolName, address1, address2, city, zip, state, country } = classData.school;
@@ -64,6 +64,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                 <label className='form-label'>Age Group</label>
                 <span className='form-input-span'>
                     <Async
+                        disabled={exchangeStatus ? true : false}
                         name='form-field-name'
                         value={age_group && age_group.value}
                         onChange={(select) => onLocalSelectOptionChange(select, 'age_group')}
@@ -77,6 +78,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                 <label className='form-label-wide'>When would you like your class to participate in the Exchange Program?</label>
                 <span className='form-input-span'>
                     <Async
+                        disabled={exchangeStatus ? true : false}
                         className='select-country'
                         name='form-field-name'
                         value={term && term.value}

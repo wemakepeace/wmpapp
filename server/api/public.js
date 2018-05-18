@@ -66,7 +66,7 @@ app.post('/login', (req, res) => {
             }]
         })
         .then(teacher => {
-            let errorMessage;
+            let defaultError;
             if (!teacher){
                 errorMessage = ['No profile found.'];
                 return res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
@@ -106,7 +106,7 @@ app.post('/login', (req, res) => {
                 });
             }
             else {
-                errorMessage = "Username or password is incorrect.";
+                defaultError = "Username or password is incorrect.";
                 sendError(401, null, defaultError, res);
                 // res.status(401).send({ feedback: feedback(ERROR, errorMessage) });
             }

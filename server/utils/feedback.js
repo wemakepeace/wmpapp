@@ -8,9 +8,14 @@ const feedback = (type, messages) => {
 };
 
 const extractSequelizeErrorMessages = (error, defaultError) => {
-    if (error && (error.name.indexOf('SequelizeDatabaseError') > -1) && !error.errors) {
+    // console.log('error!', error, 'END OF ERROR ======')
+    // console.log('error.name!', error.name)
+    // console.log('error.errors!', error.errors)
+    if (typeof error === 'string') {
+        return [error]
+    } else if (error && error.name && (error.name.indexOf('SequelizeDatabaseError') > -1) && !error.errors) {
        return [defaultError];
-    } else if (error && (error.name.indexOf('Sequelize') > -1)) {
+    } else if (error && (error.name.indexOf('Sequelize') > -1) && error.errors) {
         return error.errors.map(err => {
             return err.message;
         });

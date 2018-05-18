@@ -13,14 +13,49 @@ import ExchangeOverview from './ExchangeOverview';
 import { fetchClass } from '../../redux/actions/class';
 import { getCountryName } from '../../utils/helpers';
 
+import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+
+const LoaderIndeterminate = ({loading, action}) => {
+    const loaderText = {
+        initiateExchange: 'Initiating Exchange',
+        verifyExchange: 'Confirming Your Exchange Participation'
+    }
+
+    const text = loaderText[action] ? loaderText[action] : 'Loading...'
+
+    return (
+        <div>
+            <Dimmer active={loading} inverted page={true} >
+            <Loader indeterminate>{text}</Loader>
+            </Dimmer>
+        </div>
+    )
+}
+
 class Overview extends Component {
-    state = {}
+    state = {
+        loading: false,
+        action: ''
+    }
+
+    toggleLoader(bool, action) {
+        if (bool !== undefined) {
+            this.setState({ loading: bool, action })
+        } else {
+            this.setState({ loading: !this.state.loading, action })
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.toggleLoader(false, "");
+    }
 
     shouldComponentUpdate(nextProps) {
         return nextProps.classes && nextProps.classes.currentClass ? true : false
     }
 
     render() {
+        const { loading, action } = this.state;
         const { teacher, classes, exchange } = this.props;
         const { firstName, lastName, email, phone } = teacher;
         let classData, country, school;
@@ -39,6 +74,8 @@ class Overview extends Component {
 
         return (
             <div className='profile-form'>
+            { loading ? <LoaderIndeterminate loading={loading} action={action} /> : null }
+
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can edit your teacher profile, register a new class and manage all your enrolled classes.</p>
@@ -46,26 +83,15 @@ class Overview extends Component {
                     {/*<p>Once a class has been matched you will be able to communicate with the other class' teacher through Messages.</p>
                         <p>When you have filled in all the forms and are ready to find an exchange class to match with, please go to the EXCHANGE section.</p>*/}
                 </div>
-                <hr style={{margin: '30px 0'}}/>
-                <div>
-                    <ClassDetails
-                        classData={classData}
-                        teacherData={teacher}
-                        title='Your Class '/>
+                <hr style={{margin: '20px 0'}}/>
+                <ClassDetails
+                    classData={classData}
+                    teacherData={teacher}
+                    title='Your Class '/>
 
-                    { classData && (exchange && exchange.status)
-                        ? <div className='div-display-inline-block'>
-                            <div className='inner-box-inline-block'>
-                                <div className=''>
-                                    <label>Exchange Progress</label>
-                                </div>
-                            </div>
-                        </div>
-                        : null }
-                </div>
-                <hr style={{margin: '30px 0'}}/>
+                <hr style={{margin: '20px 0'}}/>
                 { classData
-                    ? <ExchangeOverview />
+                    ? <ExchangeOverview toggleLoader={this.toggleLoader.bind(this)} />
                     : null }
             </div>
         )
@@ -76,7 +102,8 @@ const mapStateToProps = state => {
     return {
         teacher: state.teacher,
         classes: state.classes,
-        exchange: state.exchange
+        exchange: state.exchange,
+        feedback: state.feedback
     }
 }
 

@@ -23,6 +23,7 @@ class Exchange extends Component {
     }
 
     onActionClick = (action) => {
+        this.props.toggleLoader(true, action);
         const classId = this.props.classes.currentClass;
         const exchangeId = this.props.exchange && this.props.exchange.id;
         return this.props[action](classId, exchangeId);
@@ -83,9 +84,7 @@ class Exchange extends Component {
 
         return (
             <div>
-                <div>
-                    <h1 style={{margin: '30px 0'}}>Exchange Overview</h1>
-                </div>
+                <h1 style={{margin: '30px 0'}}>Exchange Details</h1>
                 <ClassDetails
                     classData={matchClass}
                     teacherData={matchTeacher}
