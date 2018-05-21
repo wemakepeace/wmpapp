@@ -19,20 +19,25 @@ const Exchange = conn.define('exchange', {
     verifyExchangeExpires: Sequelize.DATE
 });
 
-Exchange.prototype.setStatus = function(status) {
-    return this.updateAttributes({ status: status })
-    .then(exchange => exchange)
-}
+Exchange.prototype.setStatus = function(status, t) {
+    return this.updateAttributes({ status: status }, { transaction: t });
+};
+
+Exchange.prototype.setVerificationExpiration = function(t) {
+    const date = new Date();
+    const expires = date.setDate(date.getDate() + 7);
+    return this.updateAttributes({ verifyExchangeExpires: expires }, { transaction: t });
+};
 
 Exchange.prototype.getClassRole = function(classId) {
-        if (this.classAId === classId) {
-            return 'A'
-        }
-        if (this.classBId === classId) {
-            return 'B'
-        }
-        return 'none'
-}
+    if (this.classAId === classId) {
+        return 'A';
+    }
+    if (this.classBId === classId) {
+        return 'B';
+    }
+    return 'none';
+};
 
 module.exports = Exchange;
 

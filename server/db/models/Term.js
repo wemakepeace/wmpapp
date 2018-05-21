@@ -7,4 +7,11 @@ const Term = conn.define('term', {
     }
 });
 
+Term.prototype.formatForSelect = function() {
+    return {
+        label: this.name,
+        value: this.id
+    };
+};
+
 module.exports = Term;

@@ -10,5 +10,12 @@ const AgeGroup = conn.define('age_group', {
     }
 });
 
+AgeGroup.prototype.formatForSelect = function() {
+    return {
+        label: this.name,
+        value: this.id
+    };
+};
+
 
 module.exports = AgeGroup;

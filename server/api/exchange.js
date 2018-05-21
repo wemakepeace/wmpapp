@@ -24,26 +24,20 @@ app.post('/', (req, res, next) => {
 
     Class.findOne({
         where: { id: classId },
-        include: [ School, Teacher, AgeGroup, Term ]
+        include: [
+            School,
+            Teacher,
+            AgeGroup,
+            Term
+        ]
     })
     .then(_class => {
+        const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
 
         if (!_class.dataValues.term || !_class.dataValues.age_group) {
             const defaultError = 'You must select term and age group for your class before you can sign up for a letter exchange.';
             return next(defaultError)
-            // return sendError(500, null, defaultError, res);
         }
-
-        let classData = extractClassAddress(_class.dataValues);
-
-        return getCoordinates(classData)
-        .then(({ location }) => {
-            _class.dataValues.location = location;
-            return _class;
-        });
-    })
-    .then(_class => {
-        const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
 
         return Exchange.findAll({
             where: {
@@ -61,28 +55,17 @@ app.post('/', (req, res, next) => {
                 include: [ School, Teacher ]
             }]
         })
-        .then(matches => {
+        .then(matchingClasses => {
             /* If matches are found */
-            if (matches.length) {
-                const locationDataForMatches = getLocationDataForMatches(matches);
-
-                const classCoords = _class.dataValues.location;
-
-                return findFurthestMatch(classCoords, locationDataForMatches, matches)
+            if (matchingClasses.length) {
+                return findFurthestMatch(_class, matchingClasses)
                 .then(exchange => {
                     return conn.transaction((t) => {
                         return exchange.setClassB(_class, { transaction: t })
+                        .then(exchange => exchange.setStatus('pending', t))
+                        .then(exchange => exchange.setVerificationExpiration(t))
                         .then(exchange => {
-                            const date = new Date();
-                            const expires = date.setDate(date.getDate() + 7);
-
                             exchange.dataValues.classB = _class;
-                            exchange.verifyExchangeExpires = expires;
-                            exchange.status = 'pending';
-
-                            return exchange.save({ transaction: t })
-                        }, { transaction: t })
-                        .then(( exchange ) => {
                             /* send email with verification token to both teachers */
                             const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
                             const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
@@ -260,21 +243,15 @@ app.post('/verify', (req, res, next) => {
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
         return next(error);
-        // let defaultError;
-        // if (error.Error) {
-        //     defaultError = error.Error
-        // } else {
-        //     defaultError = 'Something went wrong when initiating exchange.';
-        // }
-        // sendError(500, error, defaultError, res);
     });
 });
 
 module.exports = app;
 
-/*** Helper function to extract data from exchange instance ***/
+ // Helper function to extract data from exchange instance
+
 const formatData = (data) => {
-    exchange = data.dataValues;
+    const exchange = data.dataValues;
 
     if (exchange.classA) {
         exchange.classA = exchange.classA.dataValues;
@@ -295,9 +272,7 @@ const initiateNewExchange = (_class) => {
     .then(exchange => {
         return exchange.setClassA(_class)
         .then(exchange => {
-
             exchange.dataValues.classA = _class;
-
             const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! ";
 
             return {
@@ -313,7 +288,6 @@ const extractClassAddress = (_class) => {
     const { zip, country, address1, city } = _class.school.dataValues;
     const countryName = countries().getName(country);
     const address = `${address1}, ${city}, ${countryName}`;
-
     const data = {
         id: _class.id,
         address: address
@@ -332,7 +306,7 @@ const getLocationDataForMatches = (matches) => {
 const getCoordinates = (data) => {
     return googleMapsClient.geocode({ address: data.address })
     .asPromise()
-    .then((response) => {
+    .then(response => {
         return {
             id: data.id,
             location: response.json.results[0].geometry.location
@@ -342,7 +316,6 @@ const getCoordinates = (data) => {
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
         return next(error);
-        // return sendError(500, error, defaultError, res);
     });
 }
 
@@ -365,28 +338,36 @@ const calculateDistance = (location1, location2) => {
     return totalMiles;
 };
 
-const findFurthestMatch = (classCoords, locationData, matches) => {
-    return Promise.all(locationData.map(data => getCoordinates(data)))
-        .then(dataWithCoords => {
 
-            const matchClass = dataWithCoords.reduce((result, curr) => {
-                const currCoords = curr.location;
-                const distance =  calculateDistance(classCoords, currCoords);
+const findFurthestMatch = (_class, matches) => {
+    let classData = extractClassAddress(_class.dataValues);
 
-                if (distance > result.distance) {
-                    result.id = curr.id;
-                    result.distance = distance;
-                }
-                return result;
-            }, { id: null, distance: 0 });
+    return getCoordinates(classData)
+    .then(({ location }) => location)
+    .then(classCoordinates => {
+        const locationDataForMatches = getLocationDataForMatches(matches);
+            return Promise.all(locationDataForMatches.map(data => getCoordinates(data)))
+            .then(dataWithCoords => {
+                const matchClass = dataWithCoords.reduce((result, curr) => {
+                    const currCoords = curr.location;
+                    const distance =  calculateDistance(classCoordinates, currCoords);
 
-            return matchClass;
-    })
-    .then(result => {
-        return matches.find(match => match.dataValues.classA.dataValues.id === result.id);
+                    if (distance > result.distance) {
+                        result.id = curr.id;
+                        result.distance = distance;
+                    }
+
+                    return result;
+
+                }, { id: null, distance: 0 });
+
+                return matchClass;
+            })
+            .then(result => {
+                return matches.find(match => match.dataValues.classA.dataValues.id === result.id);
+            });
     });
 };
-
 
 
 // One line comments should look like this

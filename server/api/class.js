@@ -17,7 +17,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/:id', (req, res, next) => {
-
     const { id } = req.params;
 
     Class.findOne({
@@ -25,35 +24,11 @@ app.get('/:id', (req, res, next) => {
         include: [ AgeGroup, Term, School ]
     })
     .then(_class => {
-        _class = _class.dataValues;
-
-        if (_class.age_group && _class.age_group.dataValues) {
-            const age_groupFormatted = {
-                label: _class.age_group.dataValues.name,
-                value: _class.age_group.dataValues.id
-            }
-            _class.age_group = age_groupFormatted;
-        }
-
-        if (_class.term && _class.term.dataValues) {
-            const termFormatted = {
-                label: _class.term.dataValues.name,
-                value: _class.term.dataValues.id
-            }
-            _class.term = termFormatted;
-        }
-
-        if (_class.school && _class.school.dataValues) {
-            _class.school = _class.school.dataValues
-        }
-
-        return _class
-    })
-    .then(_class => {
+        const { id } = _class.dataValues;
 
         Exchange.findOne({
             where: {
-                $or: [{ classAId: _class.id }, { classBId: _class.id }]
+                $or: [{ classAId: id }, { classBId: id }]
             },
             include: [
                 {
@@ -68,28 +43,36 @@ app.get('/:id', (req, res, next) => {
                 }]
         })
         .then(exchange => {
+            let classRole, exchangeData;
+            let classData = _class.dataValues;
 
-            let classRole;
+            if (classData.school && classData.school.dataValues) {
+                classData.school = classData.school.dataValues;
+            }
 
             if (exchange) {
                 classRole = exchange.getClassRole(_class.id);
-                exchange = formatData(exchange)
+                exchangeData = formatData(exchange);
+            }
+
+            if (classData.age_group) {
+                classData.age_group = classData.age_group.formatForSelect();
+            }
+
+            if (classData.term) {
+                classData.term = classData.term.formatForSelect();
             }
 
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
-                _class: extractDataForFrontend(_class, {}),
-                exchange: extractDataForFrontend(exchange, {}),
+                _class: extractDataForFrontend(classData, {}),
+                exchange: extractDataForFrontend(exchangeData, {}),
                 classRole
             });
         })
-        .catch(error => next(error))
+        .catch(error => next(error));
     })
-    .catch(error => {
-        return next(error)
-        // const defaultError = 'Something went wrong when loading your session.';
-        // return sendError(500, error, defaultError, res);
-    })
+    .catch(error => next(error));
 });
 
 // create update class and school instances
@@ -98,31 +81,29 @@ app.post('/', (req, res, next) => {
     const schoolData = classData.school;
 
     if (classData.age_group) classData.ageGroupId = classData.age_group.value;
-
     if (classData.term) classData.termId = classData.term.value;
-
     if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
 
     const classPromise = () => {
         if (classData.id === null) {
-            return Class.create(classData)
+            return Class.create(classData);
         } else {
             return Class.findById(classData.id)
-            .then(_class => updateClass(_class, classData, schoolData))
+            .then(_class => updateClass(_class, classData, schoolData));
         }
-    }
+    };
 
     const schoolPromise = () => {
         if (schoolData.id === null) {
-            return School.create(schoolData)
+            return School.create(schoolData);
         } else {
             return School.findById(schoolData.id)
-            .then(school => updateSchool(school, schoolData))
+            .then(school => updateSchool(school, schoolData));
         }
-    }
+    };
 
     /* Update or create class and school */
-    return Promise.all([ classPromise(), schoolPromise() ])
+    return Promise.all([classPromise(), schoolPromise()])
     .then(([ updatedClass, updatedSchool ]) => {
 
         // should this be part of Promise chain?
@@ -138,21 +119,11 @@ app.post('/', (req, res, next) => {
             updatedSchool = updatedSchool.dataValues;
 
             if (term && term.dataValues) {
-                const termFormatted = {
-                    label: term.dataValues.name,
-                    value: term.dataValues.id
-                }
-
-                updatedClass.term = termFormatted;
+                updatedClass.term = term.formatForSelect();
             }
 
             if (age_group && age_group.dataValues) {
-                const age_groupFormatted = {
-                    label: age_group.dataValues.name,
-                    value: age_group.dataValues.id
-                }
-
-                updatedClass.age_group = age_groupFormatted;
+                updatedClass.age_group = age_group.formatForSelect();
             }
 
             if (updatedSchool ) {
@@ -163,27 +134,22 @@ app.post('/', (req, res, next) => {
                 feedback: feedback(SUCCESS, ['Your information has been saved.']),
                 _class: extractDataForFrontend(updatedClass, {}),
                 school: extractDataForFrontend(updatedSchool, {})
-            })
-        })
+            });
+        });
     })
-    .catch(error => {
-        return next(error)
-        // const defaultError = 'Something went wrong when saving your information.';
-        // return sendError(500, error, defaultError, res);
-    })
+    .catch(error => next(error))
 });
 
 
 /* Update or Create helper methods */
 
 const updateSchool = (school, schoolData) => {
-
     for (var key in schoolData) {
         school[key] = schoolData[key];
     }
 
-    return school.save()
-}
+    return school.save();
+};
 
 const updateClass = (_class, classData, schoolData) => {
     if (_class.schoolId !== schoolData.id) {
@@ -197,12 +163,14 @@ const updateClass = (_class, classData, schoolData) => {
     return _class.save()
 }
 
+ // Helper function to extract data from exchange instance
 
-const formatData = (exchange) => {
-    exchange = exchange.dataValues;
+const formatData = (data) => {
+    const exchange = data.dataValues;
 
     if (exchange.classA) {
-        exchange.classA = exchange.classA.dataValues
+        exchange.classA = exchange.classA.dataValues;
+        exchange.classA.term = exchange.classA.term;
         exchange.classA.school = exchange.classA.school.dataValues;
         exchange.classA.teacher = exchange.classA.teacher.dataValues;
     }
@@ -211,7 +179,8 @@ const formatData = (exchange) => {
         exchange.classB.school = exchange.classB.school.dataValues;
         exchange.classB.teacher = exchange.classB.teacher.dataValues;
     }
-    return exchange
-}
+    return exchange;
+};
+
 
 module.exports = app;
