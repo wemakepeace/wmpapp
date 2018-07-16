@@ -20,8 +20,8 @@ class Signup extends Component {
 
     onSubmit = () => {
         const data = this.state;
-        const { createTeacher } = this.props;
-        createTeacher(data);
+        const { action } = this.props;
+        action(data);
     }
 
     componentWillReceiveProps({ teacher, feedback }) {

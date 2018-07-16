@@ -15,9 +15,9 @@ class Login extends Component {
     onChange = (ev, key) => this.setState({ [ key ]: ev.target.value })
 
     onSubmit = () => {
-        const { login } = this.props;
+        const { action } = this.props;
         const { email, password } = this.state;
-        login({
+        action({
             email: email,
             password: password
         });

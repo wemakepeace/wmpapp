@@ -12,7 +12,7 @@ class Main extends Component {
         message: ''
     }
 
-    toggleForm = (form) => this.setState({showForm: form})
+    toggleForm = (form) => this.setState({ showForm: form })
 
     getActiveClass = (item) => this.state.showForm === item ? 'active-main' : '';
 
@@ -46,16 +46,8 @@ class Main extends Component {
                     </div>
                 </div>
             </div>
-        )
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        feedback: state.feedback
+        );
     }
 }
 
 export default Main;
-// export default connect(mapStateToProps)(Main);
