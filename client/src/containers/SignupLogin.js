@@ -7,11 +7,16 @@ import { createTeacher } from '../redux/actions/teacher';
 
 const SignupLogin = ({ showForm, login, createTeacher, teacher, feedback }) => {
 
-    if (showForm === 'login') {
-        return (<LoginForm login={login} teacher={teacher} feedback={feedback}/>)
-    } else {
-        return (<SignupForm createTeacher={createTeacher} />)
-    }
+    const ComponentName = showForm === 'login' ? LoginForm : SignupForm ;
+
+    return (
+        <ComponentName
+            login={login}
+            createTeacher={createTeacher}
+            teacher={teacher}
+            feedback={feedback}
+        />
+    );
 }
 
 const mapStateToProps = (state) => {

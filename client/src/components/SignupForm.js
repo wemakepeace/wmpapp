@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Feedback from './Feedback';
-
 import { createTeacher } from '../redux/actions/teacher';
+
 
 class Signup extends Component {
     state = {
@@ -16,19 +16,20 @@ class Signup extends Component {
         showFeedback: false
     }
 
-    onChange = (ev, key) => this.setState({[key]: ev.target.value})
+    onChange = (ev, key) => this.setState({ [ key ]: ev.target.value})
 
     onSubmit = () => {
         const data = this.state;
-        this.props.createTeacher(data);
+        const { createTeacher } = this.props;
+        createTeacher(data);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
+    componentWillReceiveProps({ teacher, feedback }) {
+        if((teacher && teacher.id) && localStorage.getItem('token')) {
             this.props.history.push('/profile/overview')
         }
 
-        if (nextProps.feedback && nextProps.feedback.type) {
+        if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
     }
@@ -81,15 +82,8 @@ class Signup extends Component {
                     ? <Feedback {...feedback} />
                     : null }
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        feedback: state.feedback
-    }
-}
-
-export default connect(mapStateToProps, { createTeacher })(Signup);
+export default Signup;

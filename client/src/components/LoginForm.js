@@ -6,13 +6,13 @@ import Feedback from './Feedback';
 
 class Login extends Component {
     state = {
-        redirectToReferrer: false,
         email: '',
         password: '',
+        redirectToReferrer: false,
         showFeedback: false
     }
 
-    onChange = (ev, key) => this.setState({ [key]: ev.target.value })
+    onChange = (ev, key) => this.setState({ [ key ]: ev.target.value })
 
     onSubmit = () => {
         const { login } = this.props;
@@ -23,12 +23,12 @@ class Login extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
-            this.setState({redirectToReferrer: true })
+    componentWillReceiveProps({ teacher, feedback }) {
+        if((teacher && teacher.id) && localStorage.getItem('token')) {
+            this.setState({ redirectToReferrer: true })
         }
 
-        if (nextProps.feedback && nextProps.feedback.type) {
+        if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
     }
@@ -36,15 +36,11 @@ class Login extends Component {
 
     render() {
         const { redirectToReferrer, showFeedback } = this.state;
-        const { feedback } = this.props;
-
+        const { feedback, teacher } = this.props;
         const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile/overview' }};
 
-        if (redirectToReferrer === true || this.props.teacher.id) {
-            return (
-                <Redirect
-                    to={from} />
-            )
+        if (redirectToReferrer === true || teacher.id) {
+            return ( <Redirect to={from} /> );
         }
 
         return (
@@ -72,7 +68,7 @@ class Login extends Component {
                     ? <Feedback {...feedback} />
                     : null }
             </div>
-        )
+        );
     }
 }
 
