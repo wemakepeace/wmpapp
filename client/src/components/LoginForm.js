@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route, Link } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
-
 import Feedback from './Feedback';
-
-import { login, logout } from '../redux/actions/teacher';
-
-// import queryString from 'query-string';
-
 
 class Login extends Component {
     state = {
@@ -21,7 +15,12 @@ class Login extends Component {
     onChange = (ev, key) => this.setState({ [key]: ev.target.value })
 
     onSubmit = () => {
-        this.props.login({email: this.state.email, password: this.state.password });
+        const { login } = this.props;
+        const { email, password } = this.state;
+        login({
+            email: email,
+            password: password
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,8 +46,6 @@ class Login extends Component {
                     to={from} />
             )
         }
-
-
 
         return (
             <div className='login-form'>
@@ -79,11 +76,4 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        feedback: state.feedback
-    }
-}
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;

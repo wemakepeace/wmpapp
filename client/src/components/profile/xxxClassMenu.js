@@ -12,7 +12,7 @@ const ClassMenu = ({ classes }) => {
     })
 
     return (
-        <Menu size='tinu' items={items} />
+        <Menu size='tiny' items={items} />
     )
 }
 

@@ -4,7 +4,6 @@ import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import WMPHeader from '../WMPHeader';
 import Feedback from '../Feedback';
-import ClassMenu from './ClassMenu';
 import Settings from './Settings';
 
 import { updateTeacher } from '../../redux/actions/teacher';

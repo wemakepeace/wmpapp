@@ -7,8 +7,6 @@ const ProgressBar = ({ percent, label }) => (
 )
 
 
-
-
 const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified, classData }) => {
 
     if (status === 'pending' && classIsVerified) {

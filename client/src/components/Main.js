@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { Container, Message } from 'semantic-ui-react';
-
-import SignupForm from './SignupForm';
-import LoginForm from './LoginForm';
 import WMPHeader from './WMPHeader';
+import SignupLoginContainer from '../containers/SignupLogin';
+
 
 class Main extends Component {
     state = {
@@ -28,20 +27,20 @@ class Main extends Component {
                     <WMPHeader history={history} />
                     <div>
                         <div className='login-signup-container'>
-                            <div className='second'>
+                            <div className='signup-login-tabs'>
                                 <div
-                                    className={`second-b ${this.getActiveClass('login')}`}
+                                    className={`login-tab ${this.getActiveClass('login')}`}
                                     onClick={()=> this.toggleForm('login')}>
                                     <h3>LOGIN</h3>
                                 </div>
                                 <div
-                                    className={`second-a ${this.getActiveClass('signup')}`}
+                                    className={`signup-tab ${this.getActiveClass('signup')}`}
                                     onClick={()=> this.toggleForm('signup')}>
                                     <h3>SIGNUP</h3>
                                 </div>
                             </div>
-                            <div className='first'>
-                            { showForm === 'signup' ? <SignupForm {...this.props}/> : <LoginForm {...this.props} /> }
+                            <div className='login-signup-form'>
+                                <SignupLoginContainer showForm={showForm} />
                             </div>
                         </div>
                     </div>
@@ -51,4 +50,12 @@ class Main extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        teacher: state.teacher,
+        feedback: state.feedback
+    }
+}
+
 export default Main;
+// export default connect(mapStateToProps)(Main);
