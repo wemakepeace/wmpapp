@@ -17,28 +17,30 @@ const ExhangeDetails = ({ status, onExchangeActionClick, serverFeedback, classIs
         status = 'Not started'
     }
     const details = exchangeData[ status ];
-
+    console.log('classData', classData)
 
     return (
         <div className='profile-segment exchange-details' style={{marginTop: "2em"}}>
-            <div className='div-display-inline-block'>
-                <div className='inner-box-inline-block'>
-                    <div className=''>
-                        <label>Age group</label>
-                        <label>Registered for term</label>
+            { status !== 'Not started' ?
+                <div className='div-display-inline-block'>
+                    <div className='inner-box-inline-block'>
+                        <div className=''>
+                            <label>Age group</label>
+                            <label>Registered for term</label>
+                        </div>
+                        <div style={{marginLeft: "12px"}}>
+                            { classData.age_group
+                                ? <span>{classData.age_group.label || null }</span>
+                                : <span>Not specified yet</span>
+                            }
+                            { classData.term
+                                ? <span>{classData.term.label || null }</span>
+                                : <span>Not specified yet</span>
+                            }
+                        </div>
                     </div>
-                    <div style={{marginLeft: "12px"}}>
-                        { classData.age_group
-                            ? <span>{classData.age_group.label || null }</span>
-                            : <span>Not specified yet</span>
-                        }
-                        { classData.term
-                            ? <span>{classData.term.label || null }</span>
-                            : <span>Not specified yet</span>
-                        }
-                    </div>
-                </div>
-            </div>
+                </div> : null
+            }
             <div className="flex-outer">
                 <div className="flex-inner-1">
                     <div className="flex-item border"><label>Status of Exchange</label></div>

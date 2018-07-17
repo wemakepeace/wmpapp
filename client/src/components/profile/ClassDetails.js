@@ -1,11 +1,14 @@
 import React from 'react';
 
-const ClassDetails = ({ classData, teacherData, title }) => {
+const ClassDetails = ({ classData, teacher, title }) => {
     let school;
-    if (!teacherData) return (<div></div>)
+
+    if (!classData || !teacher) {
+        return null
+    }
 
     if (classData && classData.school) {
-        school = classData.school;
+        school = classData.school || {};
     }
 
     return (
@@ -22,9 +25,9 @@ const ClassDetails = ({ classData, teacherData, title }) => {
                         {classData && classData.size ? <label>Class size</label> : null}
                     </div>
                     <div style={{marginLeft: "12px"}}>
-                        <span>{teacherData.firstName || null} {teacherData.lastName || null}</span>
-                        <span>{teacherData.email || null}</span>
-                        <span>{teacherData.phone || "Not specified"}</span>
+                        <span>{ teacher.firstName || null} {teacher.lastName || null}</span>
+                        <span>{teacher.email || null}</span>
+                        <span>{teacher.phone || "Not specified"}</span>
                         <span>{classData && classData.size || null }</span>
                     </div>
                 </div>

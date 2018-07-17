@@ -15,11 +15,13 @@ const Main = ({ ...props, classes: { currentClass } }) => {
                 <div className='page-content'>
                     <Header {...props} />
                     <div className='profile-column-container'>
-                        <div className='profile-form-column'>
+                        <div className='profile-menu-column'>
                             <ProfileMenu
                                 currentClass={currentClass}
                                 {...props}
                             />
+                        </div>
+                        <div className='profile-form-column'>
                             <Route
                                 path={`${props.match.path}/:tab`}
                                 component={TabContent}

@@ -114,7 +114,7 @@ app.post('/', (req, res, next) => {
 
         if (exchange) {
             classRole = exchange.getClassRole(_class.dataValues.id);
-            exchange = formatData(exchange);
+            exchange = formatData(exchange, classRole);
         }
 
         res.send({
@@ -264,6 +264,21 @@ const formatData = (data) => {
         exchange.classB.school = exchange.classB.school.dataValues;
         exchange.classB.teacher = exchange.classB.teacher.dataValues;
     }
+    return exchange;
+};
+
+const formatDataNew = (data, classRole) => {
+    const exchange = data.dataValues;
+    console.log('classRole', classRole)
+    const exChangeClassRole = classRole === 'A' ? 'classB' : 'classA';
+    const exChangeClass = exchange[ exChangeClassRole ];
+    if (exchangeClass) {
+        exchange.exchangeClass = exchange.exChangeClass.dataValues;
+        exchange.exChangeClass.term = exchange.exChangeClass.term;
+        exchange.exChangeClass.school = exchange.exChangeClass.school.dataValues;
+        exchange.exChangeClass.teacher = exchange.exChangeClass.teacher.dataValues;
+    }
+
     return exchange;
 };
 

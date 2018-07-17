@@ -19,11 +19,11 @@ class Exchange extends Component {
         }
     }
 
-    initiate = (id) => {
+    initiate(id) {
         return this.props.initiateExchange(id);
     }
 
-    onExchangeActionClick = (exchangeAction) => {
+    onExchangeActionClick(exchangeAction) {
         const { currentClass } = this.props.classes;
         const { exchange, toggleLoader } = this.props;
         const exchangeId = exchange && exchange.id;
@@ -38,28 +38,6 @@ class Exchange extends Component {
         }
     }
 
-    // A class can either be registered as classA or classB in an exhange
-    // See README for further explanations
-    getClassRole(currentClass) {
-        const { exchange : { classAId, classBId } } = this.props;
-        if (currentClass === classAId) return 'A';
-        if (currentClass === classBId) return 'B';
-        return;
-    }
-
-    // check if class has verified exchange participation
-    classIsVerified = () => {
-        const { exchange } = this.props;
-        const { currentClass } = this.props.classes;
-        const classRole = this.getClassRole(currentClass);
-        const isVerified = this.props.exchange[ `class${classRole}Verified` ];
-
-        if (!exchange || !exchange.status) {
-            return false
-        }
-
-        return isVerified;
-    }
 
     render() {
         const {
@@ -69,17 +47,9 @@ class Exchange extends Component {
             exchange,
             verifyExchange } = this.props;
         const { showFeedback } = this.state;
-        const status = exchange && exchange.status ? exchange.status : null;
-        let classData, matchClass, matchTeacher;
+        const status = exchange && exchange.status || null;
+        let classData;
 
-        if (!exchange || !exchange.status) {
-            return false
-        }
-
-        if (exchange && exchange.classRole && exchange.classA && exchange.classB) {
-            matchClass = exchange.classRole === 'A' ? exchange.classB : exchange.classA;
-            matchTeacher = exchange.classRole === 'A' ? exchange.classB.teacher : exchange.classA.teacher;
-        }
 
         if (classes && classes.list && classes.currentClass) {
             classData = classes.list[ classes.currentClass ];
@@ -89,15 +59,11 @@ class Exchange extends Component {
         return (
             <div>
                 <h1 style={{margin: '30px 0'}}>Exchange Details</h1>
-                <ClassDetails
-                    classData={matchClass}
-                    teacherData={matchTeacher}
-                    title='Exchange Class ' />
                 <ExchangeDetails
                     classData={classData}
                     status={status}
-                    onExchangeActionClick={this.onExchangeActionClick}
-                    classIsVerified={this.classIsVerified()}
+                    onExchangeActionClick={this.onExchangeActionClick.bind(this)}
+                    classIsVerified={exchange.classIsVerified}
                     serverFeedback={feedback.messages[0]} />
                 { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />

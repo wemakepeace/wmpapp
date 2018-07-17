@@ -73,7 +73,9 @@ const valuesForFrontend = [
     'classBId',
     'teacher',
     'classAVerified',
-    'classBVerified'
+    'classBVerified',
+    'exchangeClass',
+    'classRole'
 ];
 
 const isObject = (obj) => {

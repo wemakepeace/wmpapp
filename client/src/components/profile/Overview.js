@@ -46,6 +46,7 @@ class Overview extends Component {
             classData = classes.list[ classes.currentClass ];
         }
 
+
         return (
             <div className='profile-form'>
                 <LoaderWithText loading={loading} exchangeAction={exchangeAction} />
@@ -56,9 +57,12 @@ class Overview extends Component {
                 <hr style={{margin: '20px 0'}}/>
                 <ClassDetails
                     classData={classData}
-                    teacherData={teacher}
+                    teacher={teacher}
                     title='Your Class '/>
-
+                <ClassDetails
+                    classData={exchange.exchangeClass}
+                    teacher={exchange.exchangeClass && exchange.exchangeClass.teacher}
+                    title='Exchange Class '/>
                 <hr style={{margin: '20px 0'}}/>
                 <ExchangeOverview toggleLoader={this.toggleLoader.bind(this)} />
             </div>

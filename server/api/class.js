@@ -29,51 +29,123 @@ app.get('/:id', (req, res, next) => {
         Exchange.findOne({
             where: {
                 $or: [{ classAId: id }, { classBId: id }]
-            },
-            include: [
-                {
-                    model: Class,
-                    as: 'classA',
-                    include: [ School, Teacher ]
-                },
-                {
-                    model: Class,
-                    as: 'classB',
-                    include: [ School, Teacher ]
-                }]
+            }
         })
         .then(exchange => {
-            let classRole, exchangeData;
-            let classData = _class.dataValues;
+            let classRole, exchangeClassId;
 
-            if (classData.school && classData.school.dataValues) {
-                classData.school = classData.school.dataValues;
+            if (!exchange) {
+                return {};
             }
 
-            if (exchange) {
-                classRole = exchange.getClassRole(_class.id);
-                exchangeData = formatData(exchange);
+            classRole = exchange.getClassRole(id);
+
+            if (exchange.status === 'initiated') {
+                exchange.dataValues.exchangeClass = {};
+                return exchange;
+
             }
 
-            if (classData.age_group) {
-                classData.age_group = classData.age_group.formatForSelect();
+
+            // if exchange exist
+            // if exchange is pending and class has verified participation
+            exchangeClassId = classRole === 'A' ? exchange.classBId : exchange.classAId;
+            if (exchangeClassId) {
+                return Class.findOne({
+                    where: {
+                        id: exchangeClassId
+                    },
+                    include: [ School, Teacher ]
+                })
+                    .then(exchangeClass => {
+                        exchange.dataValues.exchangeClass = formatDataNew(exchangeClass, classRole);
+                        exchange.dataValues.classRole = classRole;
+                        return exchange;
+                    })
+            } else {
+                exchange.dataValues.exchangeClass = {};
+                return exhange;
             }
 
-            if (classData.term) {
-                classData.term = classData.term.formatForSelect();
-            }
+                // find out the other class' id
+                    // get that class info
 
+
+        })
+        .then((exchangeData) => {
+            console.log('exchangeData', exchangeData)
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
-                _class: extractDataForFrontend(classData, {}),
-                exchange: extractDataForFrontend(exchangeData, {}),
-                classRole
+                _class: extractDataForFrontend(_class.dataValues, {}),
+                exchange: extractDataForFrontend(exchangeData.dataValues, {})
             });
         })
+
         .catch(error => next(error));
     })
     .catch(error => next(error));
 });
+
+
+
+// app.get('/:id', (req, res, next) => {
+//     const { id } = req.params;
+
+//     Class.findOne({
+//         where: { id },
+//         include: [ AgeGroup, Term, School ]
+//     })
+//     .then(_class => {
+//         const { id } = _class.dataValues;
+
+//         Exchange.findOne({
+//             where: {
+//                 $or: [{ classAId: id }, { classBId: id }]
+//             },
+//             include: [
+//                 {
+//                     model: Class,
+//                     as: 'classA',
+//                     include: [ School, Teacher ]
+//                 },
+//                 {
+//                     model: Class,
+//                     as: 'classB',
+//                     include: [ School, Teacher ]
+//                 }]
+//         })
+//         .then(exchange => {
+//             let classRole, exchangeData;
+//             let classData = _class.dataValues;
+
+//             if (classData.school && classData.school.dataValues) {
+//                 classData.school = classData.school.dataValues;
+//             }
+
+//             if (exchange) {
+//                 classRole = exchange.getClassRole(_class.id);
+//                 exchangeData = formatDataNew(exchange, classRole);
+//             }
+
+//             if (classData.age_group) {
+//                 classData.age_group = classData.age_group.formatForSelect();
+//             }
+
+//             if (classData.term) {
+//                 classData.term = classData.term.formatForSelect();
+//             }
+
+//             res.send({
+//                 feedback: feedback(SUCCESS, ['Class fetched.']),
+//                 _class: extractDataForFrontend(classData, {}),
+//                 exchange: extractDataForFrontend(exchangeData, {}),
+//                 classRole
+//             });
+//         })
+//         .catch(error => next(error));
+//     })
+//     .catch(error => next(error));
+// });
 
 // create update class and school instances
 app.post('/', (req, res, next) => {
@@ -164,6 +236,16 @@ const updateClass = (_class, classData, schoolData) => {
 }
 
  // Helper function to extract data from exchange instance
+const formatDataNew = (exchangeClass) => {
+
+    if (exchangeClass) {
+        exchangeClass.dataValues.school = exchangeClass.school.dataValues || {};
+        exchangeClass.dataValues.teacher = exchangeClass.teacher.dataValues || {};
+    }
+    console.log('exchangeClass.dataValues', exchangeClass.dataValues)
+    return exchangeClass.dataValues;
+};
+
 
 const formatData = (data) => {
     const exchange = data.dataValues;
