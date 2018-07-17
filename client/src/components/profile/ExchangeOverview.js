@@ -1,32 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { Button, Progress } from 'semantic-ui-react'
 import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
-
 import SelectClass from '../SelectClass';
 import Feedback from '../Feedback';
 import ExchangeDetails from './ExchangeDetails';
 import ClassDetails from './ClassDetails';
-
 import { initiateExchange, verifyExchange } from '../../redux/actions/exchange';
 import { getCountryName } from '../../utils/helpers';
 
 class Exchange extends Component {
-    state = {
-        percent: 20,
-        showFeedback: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            percent: 20,
+            showFeedback: false
+        }
     }
 
     initiate = (id) => {
-        return this.props.initiateExchange(id)
+        return this.props.initiateExchange(id);
     }
 
-    onActionClick = (action) => {
-        this.props.toggleLoader(true, action);
-        const classId = this.props.classes.currentClass;
-        const exchangeId = this.props.exchange && this.props.exchange.id;
-        return this.props[action](classId, exchangeId);
+    onExchangeActionClick = (exchangeAction) => {
+        const { currentClass } = this.props.classes;
+        const { exchange, toggleLoader } = this.props;
+        const exchangeId = exchange && exchange.id;
+
+        toggleLoader(true, exchangeAction);
+        return this.props[ exchangeAction ](currentClass, exchangeId);
     }
 
     componentWillReceiveProps({ feedback }) {
@@ -35,22 +38,27 @@ class Exchange extends Component {
         }
     }
 
+    // A class can either be registered as classA or classB in an exhange
+    // See README for further explanations
+    getClassRole(currentClass) {
+        const { exchange : { classAId, classBId } } = this.props;
+        if (currentClass === classAId) return 'A';
+        if (currentClass === classBId) return 'B';
+        return;
+    }
+
+    // check if class has verified exchange participation
     classIsVerified = () => {
-        if (!this.props.exchange || !this.props.exchange.status) {
+        const { exchange } = this.props;
+        const { currentClass } = this.props.classes;
+        const classRole = this.getClassRole(currentClass);
+        const isVerified = this.props.exchange[ `class${classRole}Verified` ];
+
+        if (!exchange || !exchange.status) {
             return false
         }
 
-        const classId = this.props.classes.currentClass;
-        const { classAId, classBId, classAVerified, classBVerified } = this.props.exchange;
-        if ((classId === classAId) && classAVerified) {
-            return true
-        }
-
-        if ((classId === classBId) && classBVerified) {
-            return true
-        }
-
-        return false
+        return isVerified;
     }
 
     render() {
@@ -62,8 +70,11 @@ class Exchange extends Component {
             verifyExchange } = this.props;
         const { showFeedback } = this.state;
         const status = exchange && exchange.status ? exchange.status : null;
-        const { firstName, lastName, email, phone } = teacher;
-        let classData, country, school, matchClass, matchTeacher;
+        let classData, matchClass, matchTeacher;
+
+        if (!exchange || !exchange.status) {
+            return false
+        }
 
         if (exchange && exchange.classRole && exchange.classA && exchange.classB) {
             matchClass = exchange.classRole === 'A' ? exchange.classB : exchange.classA;
@@ -71,16 +82,9 @@ class Exchange extends Component {
         }
 
         if (classes && classes.list && classes.currentClass) {
-            classData = classes.list[classes.currentClass];
-            school = classData.school;
+            classData = classes.list[ classes.currentClass ];
         }
 
-        if (this.props.classes && this.props.classes.list) {
-            const countryCode = this.props.classes.list[this.props.classes.currentClass].school.country;
-            if (countryCode) {
-                country =  getCountryName(countryCode);
-            }
-        }
 
         return (
             <div>
@@ -92,7 +96,7 @@ class Exchange extends Component {
                 <ExchangeDetails
                     classData={classData}
                     status={status}
-                    onActionClick={this.onActionClick}
+                    onExchangeActionClick={this.onExchangeActionClick}
                     classIsVerified={this.classIsVerified()}
                     serverFeedback={feedback.messages[0]} />
                 { showFeedback && (feedback && feedback.type)

@@ -9,13 +9,13 @@ const exchange = (state=initialState, action) => {
         case FETCH_EXCHANGE_DATA:
         case FETCH_CLASS:
             if (action.exchange) {
-                return { ...action.exchange, classRole: action.classRole }
+                return { ...action.exchange, classRole: action.classRole };
             }
-            return {}
+            return {};
         case LOGOUT_SUCCESS:
-            return {}
+            return {};
     }
-    return state
+    return state;
 }
 
 export default exchange;

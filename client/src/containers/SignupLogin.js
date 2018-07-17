@@ -9,6 +9,7 @@ const SignupLogin = ({ showForm, login, createTeacher, teacher, feedback }) => {
 
     const ComponentName = showForm === 'login' ? LoginForm : SignupForm ;
     const action = showForm === 'login' ? login : createTeacher;
+
     return (
         <ComponentName
             login={login}

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
-import { Container, Message } from 'semantic-ui-react';
-import WMPHeader from './WMPHeader';
+import Header from './MainHeader/Container';
 import SignupLoginContainer from '../containers/SignupLogin';
 
 
@@ -24,7 +21,7 @@ class Main extends Component {
         return (
             <div className='page-container login-signup'>
                 <div className='page-content'>
-                    <WMPHeader history={history} />
+                    <Header history={history} />
                     <div>
                         <div className='login-signup-container'>
                             <div className='signup-login-tabs'>

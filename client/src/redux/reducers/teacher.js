@@ -1,9 +1,10 @@
+import { SAVE_CLASS_SUCCESS } from '../constants/class';
 import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     CREATE_TEACHER_SUCCESS,
-    UPDATE_TEACHER_SUCCESS } from '../constants/teacher';
-import { SAVE_CLASS_SUCCESS } from '../constants/class';
+    UPDATE_TEACHER_SUCCESS
+} from '../constants/teacher';
 
 
 const initialState = {};
@@ -11,11 +12,11 @@ const initialState = {};
 const teacher = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_TEACHER_SUCCESS:
-            return { ...state, ...action.teacher }
+            return { ...state, ...action.teacher };
         case LOGIN_SUCCESS:
-            return { ...state, ...action.teacher }
+            return { ...state, ...action.teacher };
         case LOGOUT_SUCCESS:
-            return {}
+            return {};
         case UPDATE_TEACHER_SUCCESS:
             return {...state, ...action.teacher }
         case SAVE_CLASS_SUCCESS:
@@ -27,18 +28,25 @@ const teacher = (state = initialState, action) => {
                 updatedClassArray = state.classes.map(_class => {
                     if (_class.value === id) {
                         classExists = true;
-                        return { label: name, value: id }
+                        return { label: name, value: id };
                     }
-                    return _class
+                    return _class;
                 });
             }
 
             if (classExists === false) {
                 updatedClassArray = updatedClassArray.concat([{ label: name, value: id }]);
             }
-            let schools = {...state.schools, [action.school.id] : action.school }
+            let schools = {
+                ...state.schools,
+                [ action.school.id ] : action.school
+            };
 
-            return { ...state, classes: updatedClassArray, schools }
+            return {
+                ...state,
+                classes: updatedClassArray,
+                schools
+            };
     }
     return state;
 }

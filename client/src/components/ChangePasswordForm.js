@@ -2,9 +2,7 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
-
 import Feedback from './Feedback';
-
 import { changePassword } from '../redux/actions/teacher';
 
 class ChangePasswordForm extends Component {

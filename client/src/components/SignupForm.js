@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Feedback from './Feedback';
-import { createTeacher } from '../redux/actions/teacher';
-
 
 class Signup extends Component {
     state = {

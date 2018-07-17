@@ -8,7 +8,6 @@ const ClassDetails = ({ classData, teacherData, title }) => {
         school = classData.school;
     }
 
-
     return (
         <div>
             <div>

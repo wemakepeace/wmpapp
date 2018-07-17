@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect, Link, Route } from 'react-router-dom';
-
 import Overview from './Overview'
 import ClassFormsContainer from './ClassFormsContainer';
 import Teacher from './TeacherForm';
@@ -13,7 +12,7 @@ const TabContent = ({ match, history }) => {
         class: ClassFormsContainer
     };
 
-    const Component = components[match.params.tab];
+    const Component = components[ match.params.tab ];
 
     return (
         <Component history={history} />

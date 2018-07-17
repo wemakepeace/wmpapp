@@ -7,7 +7,7 @@ const ProgressBar = ({ percent, label }) => (
 )
 
 
-const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified, classData }) => {
+const ExhangeDetails = ({ status, onExchangeActionClick, serverFeedback, classIsVerified, classData }) => {
 
     if (status === 'pending' && classIsVerified) {
         status = 'partially confirmed'
@@ -16,7 +16,7 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
     if (!status) {
         status = 'Not started'
     }
-    const details = exchangeData[status];
+    const details = exchangeData[ status ];
 
 
     return (
@@ -58,7 +58,7 @@ const ExhangeDetails = ({ status, onActionClick, serverFeedback, classIsVerified
                 ? <Button
                         className='large-custom-btn center-btn'
                         size='large'
-                        onClick={() => onActionClick(details.action)}>
+                        onClick={() => onExchangeActionClick(details.action)}>
                         {details.buttonText}</Button>
                 : null }
             </div>
