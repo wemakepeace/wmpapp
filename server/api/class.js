@@ -73,10 +73,25 @@ app.get('/:id', (req, res, next) => {
 
         })
         .then((exchangeData) => {
+
+            _class = _class.dataValues;
+
+            if (_class.age_group) {
+                _class.age_group = _class.age_group.formatForSelect();
+            }
+
+            if (_class.term) {
+                _class.term = _class.term.formatForSelect();
+            }
+
+            if (_class.school && _class.school.dataValues) {
+                _class.school = _class.school.dataValues;
+            }
+
             console.log('exchangeData', exchangeData)
             res.send({
                 feedback: feedback(SUCCESS, ['Class fetched.']),
-                _class: extractDataForFrontend(_class.dataValues, {}),
+                _class: extractDataForFrontend(_class, {}),
                 exchange: extractDataForFrontend(exchangeData.dataValues, {})
             });
         })
