@@ -38,17 +38,17 @@ class ClassFormsContainer extends Component {
             showFeedback: false
         }
 
-        if (classes && classes.list && classes.currentClass) {
+        if (classes && classes.currentClassDetails && classes.currentClassDetails.id) {
             defaultState = {
-                ...classes.list[classes.currentClass],
+                ...classes.currentClassDetails,
                 showFeedback: false
             };
 
-
-            if (schools && classes.currentClass) {
-                defaultState.schools = classes.list[classes.currentClass].schoolId;
-                console.log('defaultState.schools', defaultState.schools)
-            }
+            // [TODO]
+            // if (schools && classes.currentClassDetails) {
+            //     defaultState.schools = classes.list[classes.currentClass].schoolId;
+            //     console.log('defaultState.schools', defaultState.schools)
+            // }
         }
         return defaultState;
     }
@@ -97,10 +97,6 @@ class ClassFormsContainer extends Component {
 
 
     componentWillReceiveProps({ feedback, classes, schools }) {
-
-        const previousCurrentClass = this.props.classes.currentClass;
-        const { currentClass, list } = classes;
-
         if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
@@ -115,30 +111,31 @@ class ClassFormsContainer extends Component {
 
     render() {
         const { feedback, classes, showComponent, teacher, exchange } = this.props;
-        const { currentClass } = classes;
+        const currentClassDetails  = classes && classes.currentClassDetails || {};
         const { showFeedback } = this.state;
         const exchangeStatus = exchange && exchange.status;
+
 
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <div>
-                        {currentClass
-                            ? <h2>Information and Settings for Class {classes.list[currentClass].name}</h2>
-                            : <h2> Register New Class </h2>}
-                        <ClassForm
-                            classData={this.state}
-                            onInputChange={this.onInputChange.bind(this)}
-                            onSelectOptionChange={this.onSelectOptionChange}
-                            autoFillForm={this.autoFillForm}
-                            exchangeStatus={exchangeStatus}
-                        />
-                        <div className='form-row'>
-                            <Button
-                                className='large-custom-btn'
-                                size='large'
-                                onClick={this.submitData}>SAVE</Button>
-                        </div>
+                        {currentClassDetails ?
+                            <h2>Information and Settings for Class {currentClassDetails.name}</h2> :
+                            <h2> Register New Class </h2>}
+                            <ClassForm
+                                classData={this.state}
+                                onInputChange={this.onInputChange.bind(this)}
+                                onSelectOptionChange={this.onSelectOptionChange}
+                                autoFillForm={this.autoFillForm}
+                                exchangeStatus={exchangeStatus}
+                            />
+                            <div className='form-row'>
+                                <Button
+                                    className='large-custom-btn'
+                                    size='large'
+                                    onClick={this.submitData}>SAVE</Button>
+                            </div>
                         { showFeedback && (feedback && feedback.type)
                             ? <Feedback {...feedback} />
                             : null }

@@ -13,6 +13,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
 
     return (
         <div>
+            <hr style={{margin: '20px 0'}}/>
             <div>
                 <h3 style={{marginBottom: '18px'}}>{title} {classData && classData.name || null}</h3>
             </div>

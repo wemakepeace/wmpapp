@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Dimmer, Loader } from 'semantic-ui-react'
 
 export const LoaderWithText = ({ loading, exchangeAction }) => {

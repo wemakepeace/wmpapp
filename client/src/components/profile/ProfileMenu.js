@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProfileMenuLink } from './ProfileMenuLink';
 
-export const ProfileMenu = ({ currentClass, ...props }) => {
+export const ProfileMenu = ({ currentClassDetails, ...props }) => {
     return (
         <div className='profile-menu-column'>
             <ProfileMenuLink name='overview' {...props} />
             <ProfileMenuLink name='teacher' {...props} />
-            { currentClass ?
+            { currentClassDetails ?
                 <div>
                     <ProfileMenuLink name='class' {...props} />
                     <ProfileMenuLink name='materials' {...props} />
