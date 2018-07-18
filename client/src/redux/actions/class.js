@@ -28,7 +28,11 @@ const fetchClass = (id) => {
 const removeCurrentClass = () => {
     localStorage.removeItem('currentClass');
     return dispatch => {
-        return dispatch({ type: FETCH_CLASS, currentClass: null });
+        return dispatch({
+            type: FETCH_CLASS,
+            currentClass: null,
+            currentClassDetails: {}
+        });
     }
 }
 
@@ -37,9 +41,8 @@ const removeCurrentClass = () => {
 /** Will update class otherwise **/
 
 const saveClass = (data) => {
-    console.log('data in action', data)
     return dispatch => {
-        return axios.post('/class', data)
+        return axios.post(`/class`, data)
             .then(response => response.data)
             .then(
                 ({ _class, school, feedback }) => {

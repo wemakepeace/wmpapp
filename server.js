@@ -70,9 +70,7 @@ app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeR
 const { feedback, sendError } = require('./server/utils/feedback');
 
 app.use(function (err, req, res, next) {
-    // console.error('OH HEY ERROR err.stack', err.stack)
-    // console.log('OH HEY OTHER KINDA ERROR', err)
-    // res.status(500).send()
+    console.log('err', err)
     let defaultError;
     if (err && err.defaultError) {
         defaultError = err.defaultError;

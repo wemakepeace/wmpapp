@@ -19,6 +19,7 @@ const googleMapsClient = require('@google/maps').createClient({
     Promise: Promise
 });
 
+
 app.post('/', (req, res, next) => {
     const { classId } = req.body;
 
@@ -33,11 +34,6 @@ app.post('/', (req, res, next) => {
     })
     .then(_class => {
         const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
-
-        if (!_class.dataValues.term || !_class.dataValues.age_group) {
-            const defaultError = 'You must select term and age group for your class before you can sign up for a letter exchange.';
-            return next(defaultError)
-        }
 
         return Exchange.findAll({
             where: {
@@ -57,7 +53,7 @@ app.post('/', (req, res, next) => {
         })
         .then(matchingClasses => {
             /* If matches are found */
-            if (matchingClasses.length) {
+            if (matchingClasses && matchingClasses.length) {
                 return findFurthestMatch(_class, matchingClasses)
                 .then(exchange => {
                     return conn.transaction((t) => {
@@ -65,6 +61,8 @@ app.post('/', (req, res, next) => {
                         .then(exchange => exchange.setStatus('pending', t))
                         .then(exchange => exchange.setVerificationExpiration(t))
                         .then(exchange => {
+                            // [TODO]
+                            // not sure this is working.....
                             exchange.dataValues.classB = _class;
                             /* send email with verification token to both teachers */
                             const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
@@ -76,7 +74,7 @@ app.post('/', (req, res, next) => {
 
                                 const mailOptions = {
                                     to: recipient,
-                                    from: 'tempwmp@gmail.com',
+                                    from: process.env.MAIL_FROM,
                                     subject: 'Verify Exchange Participation | We Make Peace',
                                     text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
                                 };
@@ -115,6 +113,7 @@ app.post('/', (req, res, next) => {
         if (exchange) {
             classRole = exchange.getClassRole(_class.dataValues.id);
             exchange = formatData(exchange, classRole);
+            exchange.classRole = classRole
         }
 
         res.send({
@@ -138,9 +137,10 @@ app.post('/', (req, res, next) => {
 /** If a one class has confirmed the exchange, that class will be added to a new Exchnage instance as classA, and the class that did not confirm will be removed (not belong to any exchange) **/
 
 
-/*** CONSIDER DOIAN A TRANSACTION HERE ***/
+/*** CONSIDER DOING A TRANSACTION HERE ***/
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
+    let classRole;
     return Exchange.findOne({
         where: {
             id: exchangeId,
@@ -159,22 +159,19 @@ app.post('/verify', (req, res, next) => {
         }]
     })
     .then(exchange => {
+        return exchange.getClassRole(classId)
+        .then((_classRole) => {
+            if (_classRole === 'A') {
+                exchange.classAVerified = true;
+            }
 
-        let classRole;
-
-        if (exchange) {
-            classRole = exchange.getClassRole(classId);
-        }
-
-        if (classRole === 'A') {
-            exchange.classAVerified = true;
-        }
-
-        if (classRole === 'B') {
-            exchange.classBVerified = true;
-        }
-
-        exchange.save()
+            if (_classRole === 'B') {
+                exchange.classBVerified = true;
+            }
+            classRole = _classRole
+            console.log('classRole', classRole)
+            return exchange.save()
+        })
         .then(exchange => {
 
             const { classAVerified, classBVerified } = exchange.dataValues;
@@ -269,7 +266,6 @@ const formatData = (data) => {
 
 const formatDataNew = (data, classRole) => {
     const exchange = data.dataValues;
-    console.log('classRole', classRole)
     const exChangeClassRole = classRole === 'A' ? 'classB' : 'classA';
     const exChangeClass = exchange[ exChangeClassRole ];
     if (exchangeClass) {

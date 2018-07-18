@@ -22,10 +22,10 @@ const teacher = (state = initialState, action) => {
         case SAVE_CLASS_SUCCESS:
             const { id, name } = action._class;
             let classExists = false;
-            let updatedClassArray = [];
+            let updatedClasses = [];
 
             if (state && state.classes && state.classes.length) {
-                updatedClassArray = state.classes.map(_class => {
+                updatedClasses = state.classes.map(_class => {
                     if (_class.value === id) {
                         classExists = true;
                         return { label: name, value: id };
@@ -34,17 +34,18 @@ const teacher = (state = initialState, action) => {
                 });
             }
 
-            if (classExists === false) {
-                updatedClassArray = updatedClassArray.concat([{ label: name, value: id }]);
+            if (!classExists) {
+                updatedClasses = updatedClasses.concat([{ label: name, value: id }]);
             }
+
             let schools = {
                 ...state.schools,
-                [ action.school.id ] : action.school
+                [ action._class.school.id ] : action._class.school
             };
 
             return {
                 ...state,
-                classes: updatedClassArray,
+                classes: updatedClasses,
                 schools
             };
     }
