@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Feedback from './Feedback';
 
@@ -9,7 +10,8 @@ class Signup extends Component {
         email: '',
         password: '',
         confirmPassword: '',
-        showFeedback: false
+        showFeedback: false,
+        redirectToReferrer: false
     }
 
     onChange = (ev, key) => this.setState({ [ key ]: ev.target.value})
@@ -22,7 +24,7 @@ class Signup extends Component {
 
     componentWillReceiveProps({ teacher, feedback }) {
         if((teacher && teacher.id) && localStorage.getItem('token')) {
-            this.props.history.push('/profile/overview')
+            this.setState({ redirectToReferrer: true })
         }
 
         if (feedback && feedback.type) {
@@ -33,8 +35,13 @@ class Signup extends Component {
 
     render() {
 
-        const { feedback } = this.props;
-        const { showFeedback } = this.state;
+        const { feedback, teacher } = this.props;
+        const { redirectToReferrer, showFeedback } = this.state;
+        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile/overview' }};
+
+        if (redirectToReferrer === true || teacher.id) {
+            return ( <Redirect to={from} /> );
+        }
 
         return (
             <div className='signup-form'>

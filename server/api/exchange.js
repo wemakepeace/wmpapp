@@ -9,7 +9,7 @@ const Exchange = models.Exchange;
 const conn = require('../db/conn');
 const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail, generateEmailAdvanced } = require('../utils/smpt');
+const { sendEmail, generateEmail } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 /*
@@ -51,8 +51,8 @@ app.post('/', (req, res, next) => {
                         const template = 'verify';
 
                         return Promise.all([
-                            generateEmailAdvanced(res, classEmail, template, classData, matchClass, { transaction: t }),
-                            generateEmailAdvanced(res, matchEmail, template, matchClass, classData, { transaction: t }),
+                            generateEmail(res, classEmail, template, classData, matchClass, { transaction: t }),
+                            generateEmail(res, matchEmail, template, matchClass, classData, { transaction: t }),
                         ])
                         .then(() => {
                             return exchange
@@ -112,7 +112,7 @@ app.post('/', (req, res, next) => {
 // CONSIDER DOING A TRANSACTION HERE
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
-    let classRole;
+    let classRole, matchClassRole;
     return Exchange.findOne({
         where: {
             id: exchangeId,
@@ -133,52 +133,46 @@ app.post('/verify', (req, res, next) => {
     .then(exchange => {
         return exchange.getClassRole(classId)
         .then((_classRole) => {
-            if (_classRole === 'A') {
-                exchange.classAVerified = true;
-            }
-
-            if (_classRole === 'B') {
-                exchange.classBVerified = true;
-            }
-            classRole = _classRole
+            classRole = _classRole;
+            matchClassRole = classRole === 'A' ? 'B' : 'A';
+            // Set class to verified = true
+            const key = `class${_classRole}Verified`;
+            exchange[ key ] = true;
             return exchange.save()
         })
         .then(exchange => {
             const { classAVerified, classBVerified } = exchange.dataValues;
-            const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-            const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-            const classBData = exchange.dataValues.classB.dataValues;
-            const classAData = exchange.dataValues.classA.dataValues;
+            const _class = exchange.dataValues[`class${classRole}`].dataValues;
+            const matchClass = exchange.dataValues[`class${matchClassRole}`].dataValues;
+            const classEmail = _class.teacher.dataValues.email;
+            const matchEmail = matchClass.teacher.dataValues.email;
+            let template;
 
             if (classAVerified && classBVerified) {
                 return exchange.setStatus('confirmed')
                 .then(exchange => {
                     // Send email to both teachers to confirm match
-                    const template = 'matchConfirmed';
+                    template = 'matchConfirmed';
                     return Promise.all([
-                        generateEmailAdvanced(res, classAEmail, template, classAData, classBData),
-                        generateEmailAdvanced(res, classBEmail, template, classBData, classAData)
+                        generateEmail(res, classEmail, template, _class, matchClass),
+                        generateEmail(res, matchEmail, template, matchClass, _class)
                     ])
                     .then(() => exchange);
                 })
             } else {
-                const otherClassEmail = classRole === 'A' ? classBEmail : classAEmail;
-                const classData = classRole === 'A' ? exchange.dataValues.classA : exchange.dataValues.classB;
-                const otherClass = classRole === 'A' ? exchange.dataValues.classB : exchange.dataValues.classA;
-
-                return generateEmailAdvanced(res, otherClassEmail, 'reminder', otherClass, classData)
+                // Send a reminder to the match class
+                template = 'reminder';
+                return generateEmail(res, matchEmail, template, matchClass, _class)
                 .then(() => exchange);
             }
         })
         .then((exchange) => {
-            /* refetch the exchange and exchanging class go get correct data
-             * and formatting for frontend */
+            /*
+             * Re-fetch the exchange and exchanging class go get correct data
+             * and formatting for frontend
+             */
             exchange.getExchangeAndExchangingClass(classId)
-            .then((_exchange) => {
-                res.send({
-                    exchange: _exchange
-                });
-            })
+            .then((_exchange) => res.send({ exchange: _exchange }));
         })
         .catch(error => {
             const defaultError = 'Something went wrong when initiating exchange.';
@@ -194,41 +188,6 @@ app.post('/verify', (req, res, next) => {
 });
 
 module.exports = app;
-
- // Helper function to extract data from exchange instance
-
-// const formatData = (data) => {
-//     const exchange = data.dataValues;
-
-//     if (exchange.classA) {
-//         exchange.classA = exchange.classA.dataValues;
-//         exchange.classA.term = exchange.classA.term;
-//         exchange.classA.school = exchange.classA.school.dataValues;
-//         exchange.classA.teacher = exchange.classA.teacher.dataValues;
-//     }
-//     if (exchange.classB) {
-//         exchange.classB = exchange.classB.dataValues
-//         exchange.classB.school = exchange.classB.school.dataValues;
-//         exchange.classB.teacher = exchange.classB.teacher.dataValues;
-//     }
-//     return exchange;
-// };
-
-// const formatDataNew = (data, classRole) => {
-//     const exchange = data.dataValues;
-//     const exChangeClassRole = classRole === 'A' ? 'classB' : 'classA';
-//     const exChangeClass = exchange[ exChangeClassRole ];
-//     if (exchangeClass) {
-//         exchange.exchangeClass = exchange.exChangeClass.dataValues;
-//         exchange.exChangeClass.term = exchange.exChangeClass.term;
-//         exchange.exChangeClass.school = exchange.exChangeClass.school.dataValues;
-//         exchange.exChangeClass.teacher = exchange.exChangeClass.teacher.dataValues;
-//     }
-
-//     return exchange;
-// };
-
-
 
 
 // One line comments should look like this

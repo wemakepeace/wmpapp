@@ -3,7 +3,7 @@ import React from 'react';
 const ClassDetails = ({ classData, teacher, title }) => {
     let school;
 
-    if (!classData || !teacher) {
+    if (!classData || !classData.id || !teacher) {
         return null
     }
 
