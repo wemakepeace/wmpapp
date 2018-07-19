@@ -17,11 +17,11 @@ const sendEmail = (res, mailOptions) => {
     return smtpTransport.sendMail(mailOptions);
 };
 
-const generateEmailAdvanced = (res, recipient, templateName, classData, matchData) => {
-    const content = generateTemplate(classData, matchData, templateName)
+const generateEmailAdvanced = (res, recipient, template, classData, matchData) => {
+    const content = generateTemplate(classData, matchData, template);
     const mailOptions = {
         to: recipient,
-        from: "tempwmp@gmail.com",
+        from: process.env.MAIL_FROM,
         ...content
 
     };
@@ -29,17 +29,22 @@ const generateEmailAdvanced = (res, recipient, templateName, classData, matchDat
     return sendEmail(res, mailOptions)
 }
 
-const generateTemplate = (classData, matchData, templateName) => {
+const generateTemplate = (classData, matchData, template) => {
     const templates = {
-        reminder: {
-            subject: "Reminder to confirm Peace Letter Participation for " + classData.name,
-            text: "Great news! The " + matchData.name + " from " + matchData.school.country + "has confirmed their participation in the Peace Letter Exchange and is ready to begin writing letters with your class. We are currently awaiting your class' confirmaiton. \n\n" + "Please confirm by [date of expiration]!"
-
+        reminder: function() {
+            return {
+                subject: "Reminder to confirm Peace Letter Participation for " + classData.name,
+                text: "Great news! The " + matchData.name + " from " + matchData.school.country + "has confirmed their participation in the Peace Letter Exchange and is ready to begin writing letters with your class. We are currently awaiting your class' confirmaiton. \n\n" + "Please login to your account and confirm by [date of expiration]!"
+            }
+        },
+        verify: function() {
+            return {
+                subject: 'Verify Exchange Participation for ' + classData.name + ' | We Make Peace',
+                text: "You are receiving this because your class has been matched with another class!\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"
+            }
         }
     }
-
-    return templates[ templateName ]
-
+    return templates[ template ]();
 }
 
 

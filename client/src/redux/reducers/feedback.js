@@ -19,7 +19,7 @@ const feedback = (state = initialState, action) => {
         case UPDATE_TEACHER_SUCCESS:
         case SAVE_CLASS_SUCCESS:
         case SEND_FEEDBACK:
-        case FETCH_EXCHANGE_DATA:
+        // case FETCH_EXCHANGE_DATA:
             return action.feedback;
         case CLEAR_FEEDBACK:
         case LOGOUT_SUCCESS:
