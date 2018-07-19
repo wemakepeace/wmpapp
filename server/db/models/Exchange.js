@@ -56,7 +56,8 @@ Exchange.getExchangeAndExchangingClass = function(classId) {
                 return extractDataForFrontend(exchange.dataValues, {});
             }
 
-            const getterMethod = `getClass${classRole}`
+            const otherClassRole = classRole === 'A' ? 'B' : 'A';
+            const getterMethod = `getClass${otherClassRole}`;
             return exchange[ getterMethod ]()
                 .then((exchangeClass) => {
                     return Promise.all([
@@ -76,9 +77,14 @@ Exchange.getExchangeAndExchangingClass = function(classId) {
     })
 }
 
+/*
+ * Find all classes that:
+ * - have the same termId and ageGroupId
+ * - do not belong to the current teacher or school
+ */
+
 Exchange.findMatch = function(_class) {
     const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
-
     return Exchange.findAll({
         where: {
             status: 'initiated'
@@ -92,11 +98,15 @@ Exchange.findMatch = function(_class) {
                 termId: { $eq: termId },
                 ageGroupId: { $eq: ageGroupId }
             },
-            include: [ School, Teacher ]
+            attributes: [ 'name', 'id' ],
+            include: [
+                { model: School },
+                { model: Teacher, attributes: [ 'id', 'email' ] }
+            ]
         }]
     })
     .then((matchingClasses) => {
-        // If matches are found
+        // If matching classes are found
         if (matchingClasses && matchingClasses.length) {
             return findFurthestMatch(_class, matchingClasses);
         } else {
@@ -168,9 +178,9 @@ Exchange.prototype.getExchangeAndExchangingClass = function(classId) {
                         this.dataValues.exchangeClass = exchangeClass
                         return extractDataForFrontend(this.dataValues, {});
                     })
-                })
-        })
-}
+                });
+        });
+};
 
 
 module.exports = Exchange;
