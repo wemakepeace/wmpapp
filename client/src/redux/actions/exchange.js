@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { FETCH_EXCHANGE_DATA } from '../constants/exchange';
 import { SEND_FEEDBACK } from '../constants/shared';
 
-import axios from 'axios';
 
 const initiateExchange = (classId) => {
     return dispatch => {
@@ -14,7 +14,7 @@ const initiateExchange = (classId) => {
                     exchange,
                     feedback,
                     classRole
-                })
+                });
             },
             (error) => {
                 const feedback = error.response.data.feedback;
@@ -34,7 +34,7 @@ const verifyExchange = (classId, exchangeId) => {
                     exchange,
                     classRole,
                     feedback
-                })
+                });
               },
               (error) => {
                 const feedback = error.response.data.feedback;

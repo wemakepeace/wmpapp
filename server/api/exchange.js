@@ -1,146 +1,118 @@
 const app = require('express').Router();
-const countries = require('country-list');
-
-const Class = require('../db').models.Class;
-const AgeGroup = require('../db').models.AgeGroup;
-const Term = require('../db').models.Term;
-const School = require('../db').models.School;
-const Teacher = require('../db').models.Teacher;
-const Exchange = require('../db').models.Exchange;
+const { models } = require('../db');
+const Class = models.Class;
+const AgeGroup = models.AgeGroup;
+const Term = models.Term;
+const School = models.School;
+const Teacher = models.Teacher;
+const Exchange = models.Exchange;
 const conn = require('../db/conn');
-
 const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail, generateEmailAdvanced } = require('../utils/smpt');
+const { sendEmail, generateEmail } = require('../utils/smpt');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
-const googleMapsClient = require('@google/maps').createClient({
-    key: process.env.GOOGLEKEY,
-    Promise: Promise
-});
+/*
+ * Handles the following cases:
+ * One match is found - updates exchange instance returns exchange and matchingClass
+ * Multiple matches are found - finds furthest match, updates exchange instance
+ * and return exchange and matchingClass
+ * No match is found - Initiates new exchange and returns exchange
+*/
 
 app.post('/', (req, res, next) => {
     const { classId } = req.body;
 
     Class.findOne({
         where: { id: classId },
+        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
         include: [
-            School,
-            Teacher,
-            AgeGroup,
-            Term
+            { model: School },
+            { model: Teacher, attributes: [ 'id', 'email' ] }
         ]
     })
     .then(_class => {
-        const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
+        console.log(_class)
+        return Exchange.findMatch(_class)
+        .then(exchange => {
+            // If matches are found
+            if (exchange) {
+                return conn.transaction((t) => {
+                    // Ff match was found, _class will have classRole = B
+                    return exchange.setClassB(_class, { transaction: t })
+                    .then(exchange => exchange.setStatus('pending', t))
+                    .then(exchange => exchange.setVerificationExpiration(t))
+                    .then(exchange => {
+                        // At this point exchange.classA will be the matching class
+                        const classData = _class.dataValues;
+                        const matchClass = exchange.dataValues.classA.dataValues;
+                        const classEmail = classData.teacher.dataValues.email;
+                        const matchEmail = matchClass.teacher.dataValues.email;
+                        const template = 'verify';
 
-        if (!_class.dataValues.term || !_class.dataValues.age_group) {
-            const defaultError = 'You must select term and age group for your class before you can sign up for a letter exchange.';
-            return next(defaultError)
-        }
-
-        return Exchange.findAll({
-            where: {
-                status: 'initiated'
-            },
-            include: [{
-                model: Class,
-                as: 'classA',
-                where: {
-                    teacherId: { $ne: teacherId },
-                    schoolId: { $ne: schoolId },
-                    termId: { $eq: termId },
-                    ageGroupId: { $eq: ageGroupId }
-                },
-                include: [ School, Teacher ]
-            }]
-        })
-        .then(matchingClasses => {
-            /* If matches are found */
-            if (matchingClasses.length) {
-                return findFurthestMatch(_class, matchingClasses)
-                .then(exchange => {
-                    return conn.transaction((t) => {
-                        return exchange.setClassB(_class, { transaction: t })
-                        .then(exchange => exchange.setStatus('pending', t))
-                        .then(exchange => exchange.setVerificationExpiration(t))
-                        .then(exchange => {
-                            exchange.dataValues.classB = _class;
-                            /* send email with verification token to both teachers */
-                            const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-                            const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-
-                            const generateEmail = (res, recipient, token) => {
-                                const host = req.get('host');
-                                const link = 'http://' + host + '/#/';
-
-                                const mailOptions = {
-                                    to: recipient,
-                                    from: 'tempwmp@gmail.com',
-                                    subject: 'Verify Exchange Participation | We Make Peace',
-                                    text: "You are receiving this because your class has been matched\n\n" + "Please login and confirm your class' participation within 7 days.\n\n"  + link
-                                };
-
-                                return sendEmail(res, mailOptions, { transaction: t })
-                            };
-
-                            return Promise.all([
-                                generateEmail(res, classAEmail, { transaction: t }),
-                                generateEmail(res, classBEmail, { transaction: t }),
-                            ])
-                            .then(() => {
-                                return { exchange, _class }
-                            })
-                        }, { transaction: t })
-                        .then(({ exchange, _class }) => {
-                            const feedbackMsg = "We have found a match for your class! Please verify your class' participation within 7 days. Thank you for participating!";
-
-                            return {
-                                feedback: feedback(SUCCESS, [feedbackMsg]),
-                                exchange,
-                                _class
-                            };
-                        }, { transaction: t })
-                    })
+                        return Promise.all([
+                            generateEmail(res, classEmail, template, classData, matchClass, { transaction: t }),
+                            generateEmail(res, matchEmail, template, matchClass, classData, { transaction: t }),
+                        ])
+                        .then(() => {
+                            return exchange
+                        })
+                    }, { transaction: t })
+                    .then((exchange) => exchange)
                 })
+                .catch((error) => next(error))
             } else {
-                /* if no match is found initiate new Exchange instance */
-                return initiateNewExchange(_class);
+                // f no match is found, initiate new Exchange instance
+                return Exchange.create({ status: 'initiated', classAId: classId })
+                .catch((error) => next(error))
             }
-        });
+        })
+        .catch((error) => next(error))
     })
-    .then(({ _class, exchange, feedback }) => {
-        let classRole;
-
-        if (exchange) {
-            classRole = exchange.getClassRole(_class.dataValues.id);
-            exchange = formatData(exchange);
-        }
-
-        res.send({
-            _class: extractDataForFrontend(_class, {}),
-            exchange: extractDataForFrontend(exchange, {}),
-            classRole,
-            feedback
-        });
+    .then((exchange) => {
+        /* refetch the exchange and exchanging class go get correct data
+         * and formatting for frontend */
+        exchange.getExchangeAndExchangingClass(classId)
+        .then((_exchange) => {
+            res.send({
+                exchange: _exchange
+            });
+        })
     })
     .catch(error => {
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
-        // sendError(500, error, defaultError, res);
         return next(error)
     })
 });
 
-/** Route to verify exchange participation **/
-/** Both classes must verify by the time verifyExchangeExpires expires **/
-/** Notes: Here we could verify the expiration on the call or we could run a cleanup function that voids all expired instances, in which case the classes should be notified **/
-/** If a one class has confirmed the exchange, that class will be added to a new Exchnage instance as classA, and the class that did not confirm will be removed (not belong to any exchange) **/
+/*
+ * Route to verify exchange participation
+ * Both classes must verify by the time verifyExchangeExpires expires
+ * Notes: Here we could verify the expiration on the call or we could
+ * run a cleanup function that voids all expired instances,
+ * in which case the classes should be notified
+ * If a one class has confirmed the exchange, that class will
+ * be added to a new Exchnage instance as classA, and the
+ * class that did not confirm will be removed (not belong to any
+ * exchange)
+ */
+
+/*
+ * /verify handles the following scenarios:
+ * 1.   Verifies class, exchanging class not verified yet.
+ *      Sends reminder to exchanging class.
+ * 2.   Verifies class, exchanging class is already verified
+ *      Sends emails to both saying exchange is ready
+ * 3.   Verification link on exchange instance has expired
+*/
 
 
-/*** CONSIDER DOIAN A TRANSACTION HERE ***/
+// [TODO]
+// CONSIDER DOING A TRANSACTION HERE
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
+    let classRole, matchClassRole;
     return Exchange.findOne({
         where: {
             id: exchangeId,
@@ -159,79 +131,48 @@ app.post('/verify', (req, res, next) => {
         }]
     })
     .then(exchange => {
-
-        let classRole;
-
-        if (exchange) {
-            classRole = exchange.getClassRole(classId);
-        }
-
-        if (classRole === 'A') {
-            exchange.classAVerified = true;
-        }
-
-        if (classRole === 'B') {
-            exchange.classBVerified = true;
-        }
-
-        exchange.save()
+        return exchange.getClassRole(classId)
+        .then((_classRole) => {
+            classRole = _classRole;
+            matchClassRole = classRole === 'A' ? 'B' : 'A';
+            // Set class to verified = true
+            const key = `class${_classRole}Verified`;
+            exchange[ key ] = true;
+            return exchange.save()
+        })
         .then(exchange => {
-
             const { classAVerified, classBVerified } = exchange.dataValues;
-            const classAEmail = exchange.dataValues.classA.dataValues.teacher.dataValues.email;
-            const classBEmail = exchange.dataValues.classB.dataValues.teacher.dataValues.email;
-            let feedbackMsg;
+            const _class = exchange.dataValues[`class${classRole}`].dataValues;
+            const matchClass = exchange.dataValues[`class${matchClassRole}`].dataValues;
+            const classEmail = _class.teacher.dataValues.email;
+            const matchEmail = matchClass.teacher.dataValues.email;
+            let template;
 
             if (classAVerified && classBVerified) {
                 return exchange.setStatus('confirmed')
                 .then(exchange => {
-                    /** Send email to both teachers **/
-                    const generateEmail = (res, recipient) => {
-                        const host = req.get('host');
-                        const link = 'http://' + host + '/#/';
-
-                        const mailOptions = {
-                            to: recipient,
-                            from: "tempwmp@gmail.com",
-                            subject: "You have been matched with a class from [country] ",
-                            text: "Great News! \n\n" + "Your class is now all set to begin exchanging letters with a class from [country].\n\n"  + "Please login and follow the next steps. \n\n"  + link
-                        };
-
-                        return sendEmail(res, mailOptions);
-                    }
-
+                    // Send email to both teachers to confirm match
+                    template = 'matchConfirmed';
                     return Promise.all([
-                        generateEmail(res, classAEmail),
-                        generateEmail(res, classBEmail)
+                        generateEmail(res, classEmail, template, _class, matchClass),
+                        generateEmail(res, matchEmail, template, matchClass, _class)
                     ])
-                    .then(() =>{
-                        feedbackMsg = ['Thank you for confirming your participation! You are now ready to begin the Exchange Program!'];
-                        return { exchange, feedbackMsg };
-                    });
+                    .then(() => exchange);
                 })
             } else {
-                const otherClassEmail = classRole === 'A' ? classBEmail : classAEmail;
-                const classData = classRole === 'A' ? exchange.dataValues.classA : exchange.dataValues.classB;
-                const otherClass = classRole === 'A' ? exchange.dataValues.classB : exchange.dataValues.classA;
-
-                return generateEmailAdvanced(res, otherClassEmail, 'reminder', otherClass, classData)
-                .then(() => {
-
-                    feedbackMsg = ["Thank you for confirming your participaiton in the program. We are currently awaiting the other class' confirmaiton. Look out for an email!"];
-
-                    return { exchange, feedbackMsg };
-                });
+                // Send a reminder to the match class
+                template = 'reminder';
+                return generateEmail(res, matchEmail, template, matchClass, _class)
+                .then(() => exchange);
             }
         })
-        .then(({ exchange, feedbackMsg }) => {
-
-            exchange = formatData(exchange);
-
-            return res.send({
-                feedback: feedback(SUCCESS, feedbackMsg),
-                classRole,
-                exchange: extractDataForFrontend(exchange, {})
-            });
+        .then((exchange) => {
+            /*
+             * Re-fetch the exchange and exchanging class go get correct data
+             * and formatting for frontend
+             */
+            exchange.getExchangeAndExchangingClass(classId)
+            .then((_exchange) => res.send({ exchange: _exchange }));
         })
         .catch(error => {
             const defaultError = 'Something went wrong when initiating exchange.';
@@ -247,127 +188,6 @@ app.post('/verify', (req, res, next) => {
 });
 
 module.exports = app;
-
- // Helper function to extract data from exchange instance
-
-const formatData = (data) => {
-    const exchange = data.dataValues;
-
-    if (exchange.classA) {
-        exchange.classA = exchange.classA.dataValues;
-        exchange.classA.term = exchange.classA.term;
-        exchange.classA.school = exchange.classA.school.dataValues;
-        exchange.classA.teacher = exchange.classA.teacher.dataValues;
-    }
-    if (exchange.classB) {
-        exchange.classB = exchange.classB.dataValues
-        exchange.classB.school = exchange.classB.school.dataValues;
-        exchange.classB.teacher = exchange.classB.teacher.dataValues;
-    }
-    return exchange;
-};
-
-const initiateNewExchange = (_class) => {
-    return Exchange.create({ status: 'initiated' })
-    .then(exchange => {
-        return exchange.setClassA(_class)
-        .then(exchange => {
-            exchange.dataValues.classA = _class;
-            const feedbackMsg = "Your class is now registered in the Peace Letter Program. You will receive an email once we have found an Exchange Class to match you with. Thank you for participating! ";
-
-            return {
-                feedback: feedback(SUCCESS, [feedbackMsg]),
-                exchange,
-                _class
-            };
-        });
-    });
-};
-
-const extractClassAddress = (_class) => {
-    const { zip, country, address1, city } = _class.school.dataValues;
-    const countryName = countries().getName(country);
-    const address = `${address1}, ${city}, ${countryName}`;
-    const data = {
-        id: _class.id,
-        address: address
-    };
-
-    return data;
-};
-
-const getLocationDataForMatches = (matches) => {
-    return matches.map(match => {
-        const data = match.dataValues.classA.dataValues;
-        return extractClassAddress(data);
-    });
-};
-
-const getCoordinates = (data) => {
-    return googleMapsClient.geocode({ address: data.address })
-    .asPromise()
-    .then(response => {
-        return {
-            id: data.id,
-            location: response.json.results[0].geometry.location
-        }
-    })
-    .catch(error => {
-        const defaultError = 'Something went wrong when initiating exchange.';
-        error.defaultError = defaultError;
-        return next(error);
-    });
-}
-
-/* helper fn that calculates distance between coordinates */
-const calculateDistance = (location1, location2) => {
-    const kilometerPerMile = 1.609344;
-    const curvature = 1.1515;
-    const radlat1 = Math.PI * location1.lat / 180;
-    const radlat2 = Math.PI * location2.lat / 180;
-    const radlon1 = Math.PI * location1.lng / 180;
-    const radlon2 = Math.PI * location2.lng / 180;
-    const theta = location1.lng - location2.lng;
-    const radtheta = Math.PI * theta / 180;
-
-    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    dist = Math.acos(dist)
-    dist = dist * 180 / Math.PI;
-    dist = dist * 60 * curvature;
-    const totalMiles = dist * kilometerPerMile;
-    return totalMiles;
-};
-
-
-const findFurthestMatch = (_class, matches) => {
-    let classData = extractClassAddress(_class.dataValues);
-
-    return getCoordinates(classData)
-    .then(({ location }) => location)
-    .then(classCoordinates => {
-        const locationDataForMatches = getLocationDataForMatches(matches);
-            return Promise.all(locationDataForMatches.map(data => getCoordinates(data)))
-            .then(dataWithCoords => {
-                const matchClass = dataWithCoords.reduce((result, curr) => {
-                    const currCoords = curr.location;
-                    const distance =  calculateDistance(classCoordinates, currCoords);
-
-                    if (distance > result.distance) {
-                        result.id = curr.id;
-                        result.distance = distance;
-                    }
-
-                    return result;
-
-                }, { id: null, distance: 0 });
-
-                return matchClass;
-            })
-            .then(result => {
-                return matches.find(match => match.dataValues.classA.dataValues.id === result.id);
-            });
-    });
-};
 
 
 // One line comments should look like this

@@ -1,3 +1,13 @@
+import axios from 'axios';
+import { SEND_FEEDBACK } from '../constants/shared';
+import { setToken } from '../../utils/helpers';
+import {
+    login,
+    logout,
+    sendResetPasswordLink,
+    resetPasswordWithToken,
+    changePassword
+} from './auth';
 import {
     CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
@@ -6,21 +16,12 @@ import {
     UPDATE_TEACHER_SUCCESS,
     UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
-import { SEND_FEEDBACK } from '../constants/shared';
-
-import axios from 'axios';
-
-import { setToken } from '../../utils/helpers';
-
-import { login, logout, sendResetPasswordLink, resetPasswordWithToken, changePassword } from './auth';
-
 const createTeacher = data => {
     return dispatch => {
         return axios.post('/public/create', { data })
             .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {
-
                     setToken(token);
                     dispatch(createTeacherSuccess(teacher, feedback));
                 },
@@ -47,7 +48,7 @@ const fetchTeacher = () => {
             .then(response => response.data)
             .then(
                 ({ teacher, feedback }) => {
-                    return dispatch({type: LOGIN_SUCCESS, teacher, feedback })
+                    return dispatch({type: LOGIN_SUCCESS, teacher, feedback });
                 },
                 (error) => dispatch(logout())
             )
@@ -63,9 +64,8 @@ const updateTeacher = (data) => {
                     dispatch(updateTeacherSuccess(teacher, feedback));
                 },
                 (error) => {
-                    console.log('error', error)
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: SEND_FEEDBACK, feedback })
+                    dispatch({ type: SEND_FEEDBACK, feedback });
                 })
     }
 };

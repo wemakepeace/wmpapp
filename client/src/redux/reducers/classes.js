@@ -1,17 +1,25 @@
-import {
-    FETCH_CLASS,
-    SAVE_CLASS_SUCCESS  } from '../constants/class';
+import { FETCH_CLASS, SAVE_CLASS_SUCCESS  } from '../constants/class';
 import { LOGOUT_SUCCESS } from '../constants/teacher';
 
-const initialState = {};
+const initialState = { currentClassDetails: {} };
 
 const classes = (state = initialState, action) => {
     switch(action.type) {
         case FETCH_CLASS:
             if (action._class && action._class.id) {
-                return { ...state, list: { ...state.list, [action._class.id] : action._class }, currentClass: action.currentClass }
+                return {
+                    ...state,
+                    currentClassDetails: action._class,
+                    list: {
+                        ...state.list,
+                        [action._class.id] : action._class
+                    }
+                };
             } else {
-                return { ...state, currentClass: action.currentClass }
+                return {
+                    ...state,
+                    currentClassDetails: action._class,
+                };
             }
         case SAVE_CLASS_SUCCESS:
             const classId = action._class.id;
@@ -20,13 +28,13 @@ const classes = (state = initialState, action) => {
             if (!newState.list) {
                 newState.list = {};
             }
+            // update or create new class in class list
+            newState.list[ classId ] = { ...action._class };
+            newState.currentClassDetails =  action._class;
 
-            newState.list[classId] = { ...action._class }
-            newState.currentClass = classId || null;
-
-            return newState
+            return newState;
         case LOGOUT_SUCCESS:
-            return {}
+            return {};
     }
     return state;
 }

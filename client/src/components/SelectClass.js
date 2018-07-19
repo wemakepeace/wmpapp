@@ -27,9 +27,9 @@ class SelectClass extends Component  {
 
         let selected = '';
 
-        if(classes && classes.currentClass) {
+        if(classes && classes.currentClassDetails) {
             selected = options.find(option => {
-                return option.value === classes.currentClass
+                return option.value === classes.currentClassDetails.id
             });
         }
 

@@ -1,5 +1,10 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
+const { extractDataForFrontend } = require('../../utils/helpers');
+const AgeGroup = require('./AgeGroup');
+const Term = require('./Term');
+const School = require('./School');
+
 
 const Class = conn.define('class', {
      name: {
@@ -13,14 +18,81 @@ const Class = conn.define('class', {
         validate: {
             notEmpty: { msg: 'Please fill out class size.'},
             isInteger(value) {
-                if (Number(value) == NaN) {
-                    console.log('Number(value)', Number(value))
+                if (Number(value) === NaN) {
                     throw new Error('Class size must be a number.')
                 }
             }
         }
     }
 });
+
+Class.getClassWithAssociations = function(id, associations) {
+    return Class.findOne({
+        where: { id },
+        include: associations
+    })
+        .then(_class => {
+
+             _class = _class.dataValues;
+
+            if (_class.age_group) {
+                _class.age_group = _class.age_group.formatForSelect();
+            }
+
+            if (_class.term) {
+                _class.term = _class.term.formatForSelect();
+            }
+
+            if (_class.school) {
+                _class.school = _class.school.dataValues;
+            }
+
+            if (_class.teacher) {
+                _class.teacher = _class.teacher.dataValues;
+            }
+
+            return extractDataForFrontend(_class, {});
+        });
+};
+
+Class.createOrUpdate = function(classData) {
+    classData.termId = classData.term.value;
+    classData.ageGroupId = classData.age_group.value
+
+    if (classData.id === null) {
+        return Class.create(classData);
+    } else {
+        return Class.findById(classData.id)
+            .then(_class => _class.update(classData));
+    }
+};
+
+
+// Instance methods
+Class.prototype.getClassWithAssociations = function() {
+    let _class = this.dataValues;
+
+    return Promise.all([
+        this.getTerm(),
+        this.getAge_group(),
+        this.getSchool()
+    ])
+    .then(([term, age_group, school]) => {
+        if (term) {
+            _class.term = term.formatForSelect();
+        }
+
+        if (age_group) {
+            _class.age_group = age_group.formatForSelect();
+        }
+
+        if (school) {
+            _class.school = school.dataValues;
+        }
+
+        return extractDataForFrontend(_class, {});
+    });
+};
 
 
 module.exports = Class;

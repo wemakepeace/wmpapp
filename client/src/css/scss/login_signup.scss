@@ -6,7 +6,7 @@
     margin: 0 auto;
     height: 330px;
 
-    .first {
+    .login-signup-form {
         background-color: $lightyellow !important;
         padding: 20px;
 
@@ -20,12 +20,12 @@
 
     }
 
-    .second {
+    .signup-login-tabs {
         flex: 1;
         display: flex;
         cursor: pointer;
 
-        .second-a, .second-b {
+        .signup-tab, .login-tab {
             flex: 1;
             display: flex;
 
@@ -40,8 +40,8 @@
             @include active(none)
         }
 
-        .second-a { background-color: $lightblue; }
-        .second-b { background-color: $peach; }
+        .signup-tab { background-color: $lightblue; }
+        .login-tab { background-color: $peach; }
     }
 }
 
@@ -69,18 +69,18 @@
     .login-signup-container {
          display: flex;
 
-        .first, .second {
+        .login-signup-form, .signup-login-tabs {
             display: flex;
          }
 
-        .first {
+        .login-signup-form {
             flex: 2;
         }
 
-        .second {
+        .signup-login-tabs {
             flex-direction: column;
 
-            .second-a, .second-b {
+            .signup-tab, .login-tab {
                 h3 {
                     font-size: 3em;
                 }
@@ -88,7 +88,6 @@
         }
     }
 }
-
 
 
 

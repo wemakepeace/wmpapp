@@ -24,6 +24,8 @@ School.hasMany(Class);
 Exchange.belongsTo(Class, { as:  'classA' }); // creates classAId on Exchange
 Exchange.belongsTo(Class, { as:  'classB' }); // creates classBId on Exchange
 
+
+
 const teachers = [
     {
         firstName: 'Leonard',

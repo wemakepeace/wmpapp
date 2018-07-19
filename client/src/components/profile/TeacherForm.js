@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import WMPHeader from '../WMPHeader';
+// import Header from '../Header/Container';
 import Feedback from '../Feedback';
-import ClassMenu from './ClassMenu';
 import Settings from './Settings';
 
 import { updateTeacher } from '../../redux/actions/teacher';

@@ -1,35 +1,33 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Container, Button } from 'semantic-ui-react';
-
 import Feedback from './Feedback';
-
-import { login, logout } from '../redux/actions/teacher';
-
-// import queryString from 'query-string';
-
 
 class Login extends Component {
     state = {
-        redirectToReferrer: false,
         email: '',
         password: '',
+        redirectToReferrer: false,
         showFeedback: false
     }
 
-    onChange = (ev, key) => this.setState({ [key]: ev.target.value })
+    onChange = (ev, key) => this.setState({ [ key ]: ev.target.value })
 
     onSubmit = () => {
-        this.props.login({email: this.state.email, password: this.state.password });
+        const { action } = this.props;
+        const { email, password } = this.state;
+        action({
+            email: email,
+            password: password
+        });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
-            this.setState({redirectToReferrer: true })
+    componentWillReceiveProps({ teacher, feedback }) {
+        if((teacher && teacher.id) && localStorage.getItem('token')) {
+            this.setState({ redirectToReferrer: true })
         }
 
-        if (nextProps.feedback && nextProps.feedback.type) {
+        if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
     }
@@ -37,18 +35,12 @@ class Login extends Component {
 
     render() {
         const { redirectToReferrer, showFeedback } = this.state;
-        const { feedback } = this.props;
-
+        const { feedback, teacher } = this.props;
         const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile/overview' }};
 
-        if (redirectToReferrer === true || this.props.teacher.id) {
-            return (
-                <Redirect
-                    to={from} />
-            )
+        if (redirectToReferrer === true || teacher.id) {
+            return ( <Redirect to={from} /> );
         }
-
-
 
         return (
             <div className='login-form'>
@@ -75,15 +67,8 @@ class Login extends Component {
                     ? <Feedback {...feedback} />
                     : null }
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        feedback: state.feedback
-    }
-}
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;

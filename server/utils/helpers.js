@@ -1,3 +1,5 @@
+const countries =  require('country-list');
+
 /* Manual way of extractingd data for FE*/
 /* Assumes classes is an Array*/
 const extractSessionData = ({ id, firstName, lastName, email, phone, classes }) => {
@@ -73,7 +75,9 @@ const valuesForFrontend = [
     'classBId',
     'teacher',
     'classAVerified',
-    'classBVerified'
+    'classBVerified',
+    'exchangeClass',
+    'classRole'
 ];
 
 const isObject = (obj) => {
@@ -110,7 +114,12 @@ const extractDataForFrontend = (data, result) => {
 };
 
 
+const getCountryName = (code) => {
+    return countries().getName(code);
+}
+
 module.exports = {
     extractSessionData,
-    extractDataForFrontend
+    extractDataForFrontend,
+    getCountryName
 };

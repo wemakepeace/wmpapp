@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Feedback from './Feedback';
-
-import { createTeacher } from '../redux/actions/teacher';
 
 class Signup extends Component {
     state = {
@@ -13,22 +10,24 @@ class Signup extends Component {
         email: '',
         password: '',
         confirmPassword: '',
-        showFeedback: false
+        showFeedback: false,
+        redirectToReferrer: false
     }
 
-    onChange = (ev, key) => this.setState({[key]: ev.target.value})
+    onChange = (ev, key) => this.setState({ [ key ]: ev.target.value})
 
     onSubmit = () => {
         const data = this.state;
-        this.props.createTeacher(data);
+        const { action } = this.props;
+        action(data);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if((nextProps.teacher && nextProps.teacher.id) && localStorage.getItem('token')) {
-            this.props.history.push('/profile/overview')
+    componentWillReceiveProps({ teacher, feedback }) {
+        if((teacher && teacher.id) && localStorage.getItem('token')) {
+            this.setState({ redirectToReferrer: true })
         }
 
-        if (nextProps.feedback && nextProps.feedback.type) {
+        if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
     }
@@ -36,8 +35,13 @@ class Signup extends Component {
 
     render() {
 
-        const { feedback } = this.props;
-        const { showFeedback } = this.state;
+        const { feedback, teacher } = this.props;
+        const { redirectToReferrer, showFeedback } = this.state;
+        const { from } = this.props.location && this.props.location.state || { from: { pathname: '/profile/overview' }};
+
+        if (redirectToReferrer === true || teacher.id) {
+            return ( <Redirect to={from} /> );
+        }
 
         return (
             <div className='signup-form'>
@@ -81,15 +85,8 @@ class Signup extends Component {
                     ? <Feedback {...feedback} />
                     : null }
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        feedback: state.feedback
-    }
-}
-
-export default connect(mapStateToProps, { createTeacher })(Signup);
+export default Signup;

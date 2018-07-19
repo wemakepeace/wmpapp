@@ -52,5 +52,21 @@ const School = conn.define('school', {
     }
 });
 
+// Class methods
+
+School.createOrUpdate = function(schoolData) {
+    if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
+    if (schoolData.id === null) {
+        return School.create(schoolData);
+    } else {
+        return School.findById(schoolData.id)
+            .then(school => school.update(schoolData));
+    }
+};
+
+
+// Instance methods
+
+
 
 module.exports = School;
