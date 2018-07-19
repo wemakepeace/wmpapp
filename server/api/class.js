@@ -16,20 +16,20 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/:id', (req, res, next) => {
-    const { id } = req.params;
+    const classId = req.params.id;
     const associations = [ AgeGroup, Term, School ];
 
-    Class.getClassWithAssociations(id, associations)
-        .then(_class => {
-            Exchange.getExchangeAndExchangingClass(id)
-                .then((exchange) => {
-                    res.send({
-                        feedback: feedback(SUCCESS, ['Class fetched.']),
-                        exchange,
-                        _class
-                    });
-                })
-                .catch(error => next(error));
+    return Promise.all([
+        Class.getClassWithAssociations(classId, associations),
+        Exchange.getExchangeAndExchangingClass(classId)
+    ])
+        .then(([ _class, exchange ]) => {
+            // fetches Exchange and the exchanging class if any based on classId
+            res.send({
+                feedback: feedback(SUCCESS, ['Class fetched.']),
+                exchange,
+                _class
+            });
         })
         .catch(error => next(error));
 });

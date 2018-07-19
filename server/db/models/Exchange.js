@@ -24,6 +24,15 @@ const Exchange = conn.define('exchange', {
 });
 
 
+/*  Exchange statuses:
+ *  - initiated
+ *  - pending
+ *  - confirmed
+ *  - cancelled
+ *  - completed */
+
+
+
 // Class methods
 Exchange.getExchangeAndExchangingClass = function(classId) {
     return Exchange.findOne({
@@ -37,26 +46,34 @@ Exchange.getExchangeAndExchangingClass = function(classId) {
         }
 
         return Promise.all([
-            exchange.getExchangeClassId(classId),
-            exchange.getClassRole(classId)
+            exchange.getClassRole(classId),
+            exchange.getExchangeClassId(classId)
         ])
-        .then(([ exchangeClassId, classRole ]) => {
+        .then(([ classRole, exchangeClassId ]) => {
             exchange.dataValues.classRole = classRole;
             if (!exchangeClassId) {
                 return extractDataForFrontend(exchange.dataValues, {});
             }
 
-            const associations = [ School, Teacher ];
-            return Class.getClassWithAssociations(exchangeClassId, associations)
+            const getterMethod = `getClass${classRole}`
+            return exchange[ getterMethod ]()
                 .then((exchangeClass) => {
-                    exchange.dataValues.exchangeClass = exchangeClass
-                    return extractDataForFrontend(exchange.dataValues, {});
+                    return Promise.all([
+                        exchangeClass.getTeacher(),
+                        exchangeClass.getSchool()
+                    ])
+                    .then(([ teacher, school ]) => {
+                        exchangeClass = exchangeClass.dataValues;
+                        exchangeClass.school = school.dataValues;
+                        exchangeClass.teacher = teacher.dataValues;
+                        exchange.dataValues.exchangeClass = exchangeClass
+                        return extractDataForFrontend(exchange.dataValues, {});
+                    })
+
                 })
         })
     })
 }
-
-
 
 
 // Instance methods
@@ -72,46 +89,31 @@ Exchange.prototype.setVerificationExpiration = function(t) {
 };
 
 Exchange.prototype.getClassRole = function(classId) {
-    console.log('classId', classId)
     return new Promise((resolve, reject) => {
         if (classId == this.classAId) {
              return resolve('A');
         } else if (classId == this.classBId) {
              return resolve('B');
         } else {
-             return reject()
+             return reject();
         }
-    })
+    });
 
 };
 
 
 Exchange.prototype.getExchangeClassId = function(id) {
     if (!id) return null;
-    // classRole for the current class
     return this.getClassRole(id)
-    .then((classRole) => {
-        const exchangeClassId = classRole === 'A'
-            ? this.classBId
-            : this.classAId;
-
-        return exchangeClassId;
-    })
-    // id for the other class participating in exchange
-
+        .then((classRole) => {
+            const exchangeClassId = classRole === 'A'
+                ? this.classBId
+                : this.classAId;
+            return exchangeClassId;
+        });
 }
 
 
 
 
 module.exports = Exchange;
-
-/*
-    Exchange statuses
-    - initiated
-    - pending
-    - confirmed
-    - cancelled
-    - completed
-
-*/

@@ -1,14 +1,13 @@
 const app = require('express').Router();
 const countries = require('country-list');
-
-const Class = require('../db').models.Class;
-const AgeGroup = require('../db').models.AgeGroup;
-const Term = require('../db').models.Term;
-const School = require('../db').models.School;
-const Teacher = require('../db').models.Teacher;
-const Exchange = require('../db').models.Exchange;
+const { models } = require('../db');
+const Class = models.Class;
+const AgeGroup = models.AgeGroup;
+const Term = models.Term;
+const School = models.School;
+const Teacher = models.Teacher;
+const Exchange = models.Exchange;
 const conn = require('../db/conn');
-
 const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail, generateEmailAdvanced } = require('../utils/smpt');
@@ -126,15 +125,17 @@ app.post('/', (req, res, next) => {
     .catch(error => {
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
-        // sendError(500, error, defaultError, res);
         return next(error)
     })
 });
 
-/** Route to verify exchange participation **/
-/** Both classes must verify by the time verifyExchangeExpires expires **/
-/** Notes: Here we could verify the expiration on the call or we could run a cleanup function that voids all expired instances, in which case the classes should be notified **/
-/** If a one class has confirmed the exchange, that class will be added to a new Exchnage instance as classA, and the class that did not confirm will be removed (not belong to any exchange) **/
+/* Route to verify exchange participation
+ * Both classes must verify by the time verifyExchangeExpires expires
+ * Notes: Here we could verify the expiration on the call or we could run a cleanup function
+ * that voids all expired instances, in which case the classes should be notified
+ * If a one class has confirmed the exchange, that class will be added to a new Exchnage
+ * instance as classA, and the class that did not confirm will be removed (not belong to any
+ * exchange) */
 
 
 /*** CONSIDER DOING A TRANSACTION HERE ***/

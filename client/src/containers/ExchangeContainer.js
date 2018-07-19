@@ -53,7 +53,7 @@ class Exchange extends Component {
         let classData;
 
 
-        if (!currentClassDetails.id) {
+        if (currentClassDetails && !currentClassDetails.id) {
             return null;
         }
 
