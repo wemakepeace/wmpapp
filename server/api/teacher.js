@@ -22,36 +22,15 @@ app.get('/', (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);
 
-    return Teacher.findOne({
-        where: { id },
-        include: [ {
-                model: Class,
-                include: [ School ]
-            }]
-        })
-        .then(teacher => {
-            let schoolIds = [];
+    return Teacher.getTeacherAndAssociations(id)
+        .then((teacher) => {
             if (!teacher){
-                const defaultError = 'No profile found.';
-                return sendError(401, null, defaultError, res);
+                error.defaultError =  'No profile found.';
+                return next(error);
             }
-
-            teacher = teacher.dataValues;
-
-            if (teacher.classes) {
-                teacher.schools = [];
-                teacher.classes = teacher.classes.map((_class) => {
-                    teacher.schools.push(_class.school.dataValues);
-                    return {
-                        label: _class.name,
-                        value: _class.id
-                    }
-                });
-            }
-
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),
-                teacher: extractDataForFrontend(teacher, {})
+                teacher
             });
         })
         .catch(error => {

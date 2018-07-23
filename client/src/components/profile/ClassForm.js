@@ -2,9 +2,7 @@ import React from 'react';
 import { fetchDataForSelectDropdown } from '../../utils/helpers';
 import { Async } from 'react-select';
 import countries from 'country-list';
-
 import SchoolAddressDropdown from './SchoolAddressDropdown';
-
 
 const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillForm, exchangeStatus }) => {
     const { name, size, age_group, term, schoolId } = classData;
@@ -90,6 +88,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                 </span>
             </div>
 
+            {/*
             <div>
                 <h2> School Mailing Address</h2>
                 <p>This address will be used when sending letters to your class.</p>
@@ -173,7 +172,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange, autoFillFor
                         />}
                     </span>
                 </div>
-            </div>
+            </div>*/}
         </div>
     )
 }

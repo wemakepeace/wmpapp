@@ -33,10 +33,7 @@ class SchoolAddressDropdown extends Component {
         const schoolAddressOptions = [];
         let option = {};
 
-
-
         for (var school in schools) {
-            // console.log('schools[school]', schools[school])
             option = {
                 label: schools[school].schoolName,
                 value: schools[school].id

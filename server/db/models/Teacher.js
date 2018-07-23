@@ -1,7 +1,9 @@
 const conn = require('../conn');
+const School = require('./School');
+const Class = require('./Class');
 const Sequelize = conn.Sequelize;
 const phone = require('phone');
-
+const { extractDataForFrontend } = require('../../utils/helpers');
 const { saltHashPassword } = require('../../utils/security');
 
 let Teacher = conn.define('teacher', {
@@ -91,5 +93,36 @@ Teacher.beforeUpdate((teacher, options) => {
     }
 });
 
+// ClassMethods
+
+Teacher.getTeacherAndAssociations = function(id) {
+    return Teacher.findOne({
+        where: { id },
+        include: [ {
+                model: Class,
+                include: [ School ]
+            }]
+        })
+        .then((teacher) => {
+            if (!teacher){
+                return null;
+            }
+
+            teacher = teacher.dataValues;
+
+            // formats classes for FE dropdown
+            if (teacher.classes) {
+                teacher.schools = [];
+                teacher.classes = teacher.classes.map((_class) => {
+                    teacher.schools.push(_class.school.dataValues);
+                    return {
+                        label: _class.name,
+                        value: _class.id
+                    }
+                });
+            }
+            return extractDataForFrontend(teacher, {})
+    });
+}
 
 module.exports = Teacher;

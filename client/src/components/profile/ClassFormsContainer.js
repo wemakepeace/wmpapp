@@ -7,6 +7,8 @@ import { Redirect } from 'react-router-dom';
 import Feedback from '../Feedback';
 import ClassForm from './ClassForm';
 
+import SchoolForm from './SchoolForm';
+
 import { saveClass, removeCurrentClass } from '../../redux/actions/class';
 import { fetchTeacher } from '../../redux/actions/teacher';
 
@@ -43,12 +45,6 @@ class ClassFormsContainer extends Component {
                 ...classes.currentClassDetails,
                 showFeedback: false
             };
-
-            // [TODO]
-            // if (schools && classes.currentClassDetails) {
-            //     defaultState.schools = classes.list[classes.currentClass].schoolId;
-            //     console.log('defaultState.schools', defaultState.schools)
-            // }
         }
         return defaultState;
     }
@@ -130,6 +126,14 @@ class ClassFormsContainer extends Component {
                                 autoFillForm={this.autoFillForm}
                                 exchangeStatus={exchangeStatus}
                             />
+                            <SchoolForm
+                                school={this.state.school}
+                                onInputChange={this.onInputChange.bind(this)}
+                                onSelectOptionChange={this.onSelectOptionChange}
+                                autoFillForm={this.autoFillForm}
+                                exchangeStatus={exchangeStatus}
+                            />
+
                             <div className='form-row'>
                                 <Button
                                     className='large-custom-btn'
