@@ -1,9 +1,8 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
+import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react';
 import Feedback from './Feedback';
-
 import { resetPasswordWithToken } from '../redux/actions/teacher';
 
 class ResetPasswordForm extends Component {
@@ -21,10 +20,21 @@ class ResetPasswordForm extends Component {
     }
 
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.feedback) {
+    componentWillReceiveProps({ feedback }) {
+        if (feedback) {
             this.setState({ showFeedback: true });
         }
+
+        if (feedback.type === 'success' && feedback.messages[ 0 ] === 'Your password has been reset. We are redirecting you to your profile.') {
+            return this.redirectToProfile();
+        }
+
+    }
+
+    redirectToProfile() {
+        return setTimeout(() => {
+            return this.props.history.push('/profile/overview');
+        }, 4000);
     }
 
     render() {
@@ -69,14 +79,6 @@ class ResetPasswordForm extends Component {
                     }
                     { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />
-                    : null }
-                    { showFeedback && (feedback && (feedback.type === 'success'))
-                    ? <Button
-                        name='Go to Portal'
-                        as={Link}
-                        className='large-custom-btn'
-                        size='large'
-                        to='/exchange' />
                     : null }
                 </Grid.Column>
             </Grid>

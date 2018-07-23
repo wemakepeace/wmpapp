@@ -1,22 +1,5 @@
-const nodemailer = require('nodemailer');
-const gmailUser = process.env.MAIL_ID;
-const pass =  process.env.MAIL_PW;
-const service = process.env.SERVICE;
-const Email = require('email-templates');
-const { getCountryName } = require('./helpers');
-
-const smtpTransport = nodemailer.createTransport({
-    service: service,
-    auth: {
-        user: gmailUser,
-        pass: pass
-    }
-});
-
-
-const sendEmail = (res, mailOptions) => {
-    return smtpTransport.sendMail(mailOptions);
-};
+const { getCountryName } = require('../helpers');
+const { sendEmail } = require ('./smtp');
 
 const generateEmail = (res, recipient, template, classData, matchData) => {
     const content = generateTemplate(classData, matchData, template);
@@ -63,12 +46,6 @@ const generateTemplate = (classData, matchData, template) => {
         }
     }
     return templates[ template ]();
-}
-
-
-
-module.exports = {
-    sendEmail,
-    smtpTransport,
-    generateEmail
 };
+
+module.exports = { generateEmail };

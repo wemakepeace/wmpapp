@@ -1,16 +1,20 @@
 const app = require('express').Router();
-const Teacher = require('../db/index').models.Teacher;
-const Class = require('../db/index').models.Class;
-const School = require('../db/index').models.School;
-const conn = require('../db/conn');
-
-const { feedback, sendError } = require('../utils/feedback');
+const { models } = require('../db/index.js');
+const Teacher = models.Teacher;
+const Class = models.Class;
+const School = models.School;
+const { feedback } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { pbkdf2, saltHashPassword, createToken, decodeToken } = require('../utils/security');
-const { sendEmail, smtpTransport } = require('../utils/smpt');
+const { sendEmail, smtpTransport } = require('../utils/email/smtp');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
+const {
+    pbkdf2,
+    saltHashPassword,
+    createToken,
+    decodeToken,
+    validatePassword
+} = require('../utils/security');
 
-const jwt = require('jsonwebtoken');
 
 app.get('/', (req, res, next) => {
 
@@ -26,6 +30,7 @@ app.get('/', (req, res, next) => {
             }]
         })
         .then(teacher => {
+            let schoolIds = [];
             if (!teacher){
                 const defaultError = 'No profile found.';
                 return sendError(401, null, defaultError, res);
@@ -35,43 +40,27 @@ app.get('/', (req, res, next) => {
 
             if (teacher.classes) {
                 teacher.schools = [];
-
-                let schoolIds = [];
-
-                teacher.classes = teacher.classes.map(_class => {
-                    _class = _class.dataValues;
-                    const schoolId = !_class.school
-                        ? null
-                        : _class.school.dataValues.id;
-
-                    if (schoolId && schoolIds.indexOf(schoolId) < 0) {
-                        schoolIds.push(schoolId);
-                        teacher.schools.push(_class.school.dataValues);
-                    }
-
+                teacher.classes = teacher.classes.map((_class) => {
+                    teacher.schools.push(_class.school.dataValues);
                     return {
                         label: _class.name,
                         value: _class.id
                     }
                 });
-
             }
 
             res.send({
                 feedback: feedback(SUCCESS, ['Valid session loaded.']),
                 teacher: extractDataForFrontend(teacher, {})
-            })
+            });
         })
         .catch(error => {
-            // console.log('error', error)
             const defaultError = 'Something went wrong when loading your session. Please login.';
             error.defaultError = defaultError;
-            return next(error)
-
-            // sendError(500, error, defaultError, res);
-
-        })
+            return next(error);
+        });
 });
+
 
 app.put('/', (req, res, next) => {
     const data = req.body;
@@ -81,7 +70,7 @@ app.put('/', (req, res, next) => {
     .then(user => {
 
         for (var key in data) {
-            user[key] = data[key];
+            user[ key ] = data[ key ];
         }
 
         user.save()
@@ -96,47 +85,43 @@ app.put('/', (req, res, next) => {
                 const defaultError = 'Something went wrong when updating your profile.';
                 error.defaultError = defaultError;
                 return next(error);
-                // sendError(500, error, defaultError, res);
             })
     })
     .catch(error => {
         const defaultError = 'Something went wrong when updating your profile.';
         error.defaultError = defaultError;
         return next(error);
-        // sendError(500, error, defaultError, res);
     })
 });
 
 
-const { validatePassword } = require('../utils/security');
-
 app.put('/changepassword', (req, res, next) => {
-
     const { password, confirmPassword, oldPassword } = req.body;
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);
 
     Teacher.findById(id)
         .then(user => {
-
             const hashTest = pbkdf2(oldPassword, user.salt);
+            let error = {};
 
             if (hashTest.passwordHash === user.password) {
-
                 /*** UNCOMMENT for validations ***/
                 let errorMessage = validatePassword(password, confirmPassword);
 
                 if (errorMessage) {
-                    return res.status(500).send({
-                        feedback: feedback(ERROR, errorMessage)
-                    });
+                    error.defaultError = errorMessage;
+                    next(error);
+                    // return res.status(500).send({
+                    //     feedback: feedback(ERROR, errorMessage)
+                    // });
                 }
                 /***/
 
                 user.password = password;
 
                 user.save()
-                .then(updatedUser => {
+                .then((updatedUser) => {
 
                     updatedUser.destroyTokens();
 
@@ -158,18 +143,15 @@ app.put('/changepassword', (req, res, next) => {
                 .catch(error => {
                     const defaultError = 'Internal server error. Please try resetting your password  again.';
                     error.defaultError = defaultError;
-                    return next(error)
-                    // return sendError(500, error, defaultError, res);
-
+                    return next(error);
                 });
             }
             else {
                 const defaultError = "Password is incorrect.";
                 const error = defaultError;
-                return next(error)
-                // sendError(401, null, defaultError, res);
+                return next(error);
             }
-        })
+        });
 });
 
 

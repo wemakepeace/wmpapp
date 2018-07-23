@@ -35,7 +35,7 @@ const Exchange = conn.define('exchange', {
 
 
 // Class methods
-Exchange.getExchangeAndExchangingClass = function(classId) {
+Exchange.getExchangeAndMatchClass = function(classId) {
     return Exchange.findOne({
         where: {
             $or: [{ classAId: classId }, { classBId: classId }]
@@ -153,7 +153,7 @@ Exchange.prototype.getExchangeClassId = function(id) {
         });
 }
 
-Exchange.prototype.getExchangeAndExchangingClass = function(classId) {
+Exchange.prototype.getExchangeAndMatchClass = function(classId) {
     return Promise.all([
             this.getClassRole(classId),
             this.getExchangeClassId(classId)

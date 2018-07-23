@@ -9,15 +9,15 @@ const Exchange = models.Exchange;
 const conn = require('../db/conn');
 const { feedback, sendError } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail, generateEmail } = require('../utils/smpt');
+const { generateEmail } = require('../utils/email/exchange');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 /*
  * Handles the following cases:
- * One match is found - updates exchange instance returns exchange and matchingClass
- * Multiple matches are found - finds furthest match, updates exchange instance
- * and return exchange and matchingClass
- * No match is found - Initiates new exchange and returns exchange
+ * 1.   One match is found - updates exchange instance returns exchange and matchingClass
+ * 2.   Multiple matches are found - finds furthest match, updates exchange instance
+ *      and return exchange and matchingClass
+ * 3.   No match is found - Initiates new exchange and returns exchange
 */
 
 app.post('/', (req, res, next) => {
@@ -38,7 +38,7 @@ app.post('/', (req, res, next) => {
             // If matches are found
             if (exchange) {
                 return conn.transaction((t) => {
-                    // Ff match was found, _class will have classRole = B
+                    // If match is found, _class will have classRole = B
                     return exchange.setClassB(_class, { transaction: t })
                     .then(exchange => exchange.setStatus('pending', t))
                     .then(exchange => exchange.setVerificationExpiration(t))
@@ -62,7 +62,10 @@ app.post('/', (req, res, next) => {
                 })
                 .catch((error) => next(error))
             } else {
-                // f no match is found, initiate new Exchange instance
+                /*
+                 * If no match is found, initiate new Exchange instance
+                 * and set _class as classA
+                 */
                 return Exchange.create({ status: 'initiated', classAId: classId })
                 .catch((error) => next(error))
             }
@@ -70,9 +73,11 @@ app.post('/', (req, res, next) => {
         .catch((error) => next(error))
     })
     .then((exchange) => {
-        /* refetch the exchange and exchanging class go get correct data
-         * and formatting for frontend */
-        exchange.getExchangeAndExchangingClass(classId)
+        /*
+         * refetch the exchange and exchanging class go get correct data
+         * and formatting for frontend
+         */
+        exchange.getExchangeAndMatchClass(classId)
         .then((_exchange) => {
             res.send({
                 exchange: _exchange
@@ -99,7 +104,7 @@ app.post('/', (req, res, next) => {
  */
 
 /*
- * /verify handles the following scenarios:
+ * Route /verify handles the following scenarios:
  * 1.   Verifies class, exchanging class not verified yet.
  *      Sends reminder to exchanging class.
  * 2.   Verifies class, exchanging class is already verified
@@ -168,10 +173,10 @@ app.post('/verify', (req, res, next) => {
         })
         .then((exchange) => {
             /*
-             * Re-fetch the exchange and exchanging class go get correct data
+             * Refetch the exchange and match class go get correct data
              * and formatting for frontend
              */
-            exchange.getExchangeAndExchangingClass(classId)
+            exchange.getExchangeAndMatchClass(classId)
             .then((_exchange) => res.send({ exchange: _exchange }));
         })
         .catch(error => {

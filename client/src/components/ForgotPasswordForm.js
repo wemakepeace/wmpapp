@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react'
+import { Grid, Header, Image, Form, Segment, Button, Loader } from 'semantic-ui-react'
 import Feedback from './Feedback';
 
 import { sendResetPasswordLink } from '../redux/actions/teacher';
@@ -8,24 +8,28 @@ import { sendResetPasswordLink } from '../redux/actions/teacher';
 class ForgotPasswordForm extends Component {
     state = {
         email: '',
-        showFeedback: false
+        showFeedback: false,
+        loading: false
     }
 
     onInputChange = (ev, type) => this.setState({[type]: ev.target.value})
 
     onForgotPassword = () => {
         this.props.sendResetPasswordLink({ email: this.state.email });
+        this.setState({ loading: true });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.feedback) {
-            this.setState({ showFeedback: true });
+            this.setState({ showFeedback: true, loading: false });
+        } else {
+            this.setState({ loading: false });
         }
     }
 
     render() {
         const { feedback } = this.props;
-        const { showFeedback } = this.state;
+        const { showFeedback, loading } = this.state;
 
         return (
             <Grid
@@ -37,9 +41,15 @@ class ForgotPasswordForm extends Component {
                         <Image src='../../../assets/logos/WMPlogo_transparent.png' />
                                 {' '}Request Reset Password
                     </Header>
-                    {   feedback && feedback.type === 'SUCCESS'
+                    {   feedback && feedback.type === 'success'
                     ?   null
-                    :   <Form size='large'>
+                    :   loading ?
+                            <Loader
+                                active={loading}
+                                inline='centered'
+                            >Sending reset password request
+                            </Loader> :
+                        <Form size='large'>
                             <Segment stacked>
                                 <Form.Input
                                     fluid
