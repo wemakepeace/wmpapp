@@ -38,8 +38,7 @@ app.get('/:id', (req, res, next) => {
 
 // Create update class and school instances
 app.post('/', (req, res, next) => {
-    const classData = req.body;
-    const schoolData = classData.school;
+    const { classData, schoolData } = req.body;
     let error = {};
 
     // Validate that associations are included (cannot be done in model definition)

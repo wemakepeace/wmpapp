@@ -7,24 +7,25 @@ import Feedback from '../Feedback';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
 import { saveClass, removeCurrentClass } from '../../redux/actions/class';
-import { fetchTeacher } from '../../redux/actions/teacher';
 import axios from 'axios';
 
 class ClassFormsContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = this.getDefaultStateOrProps(props.classes, props.schools);
+        const { currentClass } = props.classes;
+        this.state = this.getDefaultStateOrProps(currentClass, currentClass.school);
     }
 
-    getDefaultStateOrProps = (classes, schools) => {
+    getDefaultStateOrProps = (currentClass) => {
         let defaultState = {
-            id: null,
-            name: '',
-            size: '',
-            age_group: null,
-            term: '',
-            languageProficiency: '',
-            language: '',
+            class: {
+                id: null,
+                name: '',
+                size: '',
+                age_group: null,
+                term: '',
+                language: '',
+            },
             school: {
                 id: null,
                 schoolName: '',
@@ -36,11 +37,12 @@ class ClassFormsContainer extends Component {
                 country: ''
             },
             showFeedback: false
-        }
+        };
 
-        if (classes && classes.currentClassDetails && classes.currentClassDetails.id) {
+        if (currentClass && currentClass.id) {
             defaultState = {
-                ...classes.currentClassDetails,
+                class: { ...currentClass },
+                school: { ...currentClass.school },
                 showFeedback: false
             };
         }
@@ -48,79 +50,66 @@ class ClassFormsContainer extends Component {
     }
 
     onInputChange = (value, key, objName) => {
-        if (objName === 'school') {
-            this.setState({
-                school: {
-                    ...this.state.school,
-                    [ key ]: value
-                }
-            });
-        } else {
-            this.setState({ [ key ]: value });
-        }
+        this.setState({
+            [ objName ]: {
+                ...this.state[ objName ],
+                [ key ]: value
+            }
+        });
     }
 
-    onSelectOptionChange = (ev, key) => {
-        if (ev.name === 'school') {
-            const schoolId = ev.selected.value;
-            return axios.get(`/school/${schoolId}`)
+    fetchSchool = (ev) => {
+        const schoolId = ev.selected.value;
+        return axios.get(`/school/${schoolId}`)
             .then(({ data }) => this.setState({ school: data }));
-        } else {
-            this.setState({ [ key ] : ev });
-        }
     }
 
     submitData = () => {
-        let classData = this.state;
+        let classData = this.state.class;
+        let schoolData = this.state.school;
         classData.teacherId = this.props.teacher.id;
-        this.props.saveClass(classData);
+        this.props.saveClass(classData, schoolData);
     }
 
-    componentWillReceiveProps({ feedback, classes, schools }) {
+    componentWillReceiveProps({ feedback, classes: { currentClass } }) {
         if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
-        const newState = this.getDefaultStateOrProps(classes, schools);
 
-        /* do not update state if feedback type is error type */
-        if (feedback && feedback.type !== 'error') {
-            this.setState({...newState, showFeedback: true});
+        if (currentClass.id !== this.state.class.id) {
+            this.setState(this.getDefaultStateOrProps(currentClass));
         }
     }
 
     render() {
-        const { feedback, classes, showComponent, teacher, exchange } = this.props;
-        const currentClassDetails  = classes && classes.currentClassDetails || {};
+        const { feedback, classes: { currentClass }, teacher: { id } } = this.props;
         const { showFeedback } = this.state;
-
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <div>
-                        {currentClassDetails ?
-                            <h2>Information and Settings for Class {currentClassDetails.name}</h2> :
-                            <h2> Register New Class </h2>}
-                            <ClassForm
-                                classData={this.state}
-                                onInputChange={this.onInputChange.bind(this)}
-                                onSelectOptionChange={this.onSelectOptionChange}
-                            />
-                            <SchoolForm
-                                school={this.state.school}
-                                onInputChange={this.onInputChange.bind(this)}
-                                onSelectOptionChange={this.onSelectOptionChange}
-                                teacherId={teacher.id}
-                            />
-
-                            <div className='form-row'>
-                                <Button
-                                    className='large-custom-btn'
-                                    size='large'
-                                    onClick={this.submitData}>SAVE</Button>
-                            </div>
-                        { showFeedback && (feedback && feedback.type)
-                            ? <Feedback {...feedback} />
-                            : null }
+                        { currentClass && currentClass.id ?
+                            <h2>Information & Settings for Class {currentClass.name}</h2> :
+                            <h2> Register New Class </h2>
+                        }
+                        <ClassForm
+                            classData={this.state.class}
+                            onInputChange={this.onInputChange.bind(this)}
+                        />
+                        <SchoolForm
+                            school={this.state.school}
+                            onInputChange={this.onInputChange.bind(this)}
+                            teacherId={id}
+                            fetchSchool={this.fetchSchool.bind(this)}
+                        />
+                        <div className='form-row'>
+                            <Button
+                                className='large-custom-btn'
+                                size='large'
+                                onClick={this.submitData}>SAVE</Button>
+                        </div>
+                        { showFeedback && (feedback && feedback.type) ?
+                            <Feedback {...feedback} /> : null }
                     </div>
                 </div>
             </div>
@@ -128,19 +117,11 @@ class ClassFormsContainer extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher,
-        schools: state.teacher.schools,
-        classes: state.classes,
-        feedback: state.feedback,
-        exchange: state.exchange
-    }
-}
+const mapStateToProps = ({ teacher, classes, feedback }) => {
+    return { teacher, classes, feedback };
+};
 
-const toBeDispatched = {
-    saveClass, removeCurrentClass, fetchTeacher
-}
+const toBeDispatched = { saveClass, removeCurrentClass };
 
 export default connect(mapStateToProps, toBeDispatched )(ClassFormsContainer);
 

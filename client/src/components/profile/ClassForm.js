@@ -2,7 +2,7 @@ import React from 'react';
 import { fetchDataForSelectDropdown } from '../../utils/helpers';
 import { Async } from 'react-select';
 
-const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
+const ClassForm = ({ classData, onInputChange }) => {
     const {
         name,
         size,
@@ -22,7 +22,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
                         className='form-input'
                         placeholder='. . . . . .'
                         name='name'
-                        onChange={(ev) => onInputChange(ev.target.value, 'name')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'name', 'class')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -33,7 +33,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
                         className='form-input'
                         placeholder='. . . . . .'
                         name='size'
-                        onChange={(ev) => onInputChange(ev.target.value, 'size')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'size', 'class')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -42,7 +42,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
                     <Async
                         name='form-field-name'
                         value={age_group && age_group.value}
-                        onChange={(ev) => onSelectOptionChange(ev, 'age_group')}
+                        onChange={(ev) => onInputChange(ev, 'age_group', 'class')}
                         loadOptions={() => fetchDataForSelectDropdown('agegroups')}
                         clearable={false}
                         searchable={false}
@@ -56,7 +56,7 @@ const ClassForm = ({ classData, onInputChange, onSelectOptionChange }) => {
                         className='select-country'
                         name='form-field-name'
                         value={term && term.value}
-                        onChange={(ev) => onSelectOptionChange(ev, 'term')}
+                        onChange={(ev) => onInputChange(ev, 'term', 'class')}
                         loadOptions={() => fetchDataForSelectDropdown('terms')}
                         clearable={false}
                         searchable={false}

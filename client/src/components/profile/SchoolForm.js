@@ -4,7 +4,7 @@ import countries from 'country-list';
 import AsyncSelect from '../AsyncSelect';
 import { fetchSchools, fetchCountries } from '../../utils/fetchConstantData'
 
-const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) => {
+const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
     const {
         id,
         schoolName,
@@ -17,7 +17,6 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
     } = school;
 
     return (
-
         <div>
             <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
@@ -25,7 +24,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                 value={{ label: schoolName, value: id }}
                 asyncFetch={() => fetchSchools(teacherId)}
                 name='school'
-                handleAddValues={onSelectOptionChange}
+                handleAddValues={fetchSchool}
             />
             <div className='form-row'>
                 <label className='form-label'>School name</label>
@@ -35,7 +34,8 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='schoolName'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'schoolName', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'schoolName', 'school')}
+                    />
                 </span>
             </div>
 
@@ -47,7 +47,8 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='address1'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'address1', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'address1', 'school')}
+                    />
                 </span>
             </div>
             <div className='form-row'>
@@ -58,7 +59,8 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='address1'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'address2', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'address2', 'school')}
+                    />
                 </span>
             </div>
             <div className='form-row'>
@@ -69,7 +71,8 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='city'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'city', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'city', 'school')}
+                    />
                 </span>
             </div>
             <div className='form-row'>
@@ -80,7 +83,8 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='state'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'state', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'state', 'school')}
+                    />
                 </span>
             </div>
             <div className='form-row'>
@@ -91,18 +95,19 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) 
                         className='form-input'
                         placeholder=''
                         name='zip'
-                        onChange={(ev)=> onInputChange(ev.target.value, 'zip', 'school')}/>
+                        onChange={(ev) => onInputChange(ev.target.value, 'zip', 'school')}
+                    />
                 </span>
             </div>
             <div className='form-row'>
                 <label className='form-label'>Country</label>
                 <span className='form-input-span'>
-                    {<Async
+                    <Async
                         name='form-field-name'
                         value={country}
                         onChange={(ev) => onInputChange(ev, 'country', 'school')}
                         loadOptions={fetchCountries}
-                    />}
+                    />
                 </span>
             </div>
         </div>

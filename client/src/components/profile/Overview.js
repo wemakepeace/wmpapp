@@ -38,8 +38,8 @@ class Overview extends Component {
         const { firstName } = teacher;
         let classData;
 
-        if (classes && classes.currentClassDetails) {
-            classData = classes.currentClassDetails;
+        if (classes && classes.currentClass) {
+            classData = classes.currentClass;
         }
 
 

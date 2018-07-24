@@ -25,7 +25,7 @@ class Exchange extends Component {
     }
 
     onExchangeActionClick(exchangeAction) {
-        const { currentClassDetails: { id } } = this.props.classes;
+        const { currentClass: { id } } = this.props.classes;
         const { exchange, toggleLoader } = this.props;
         const exchangeId = exchange && exchange.id;
 
@@ -47,20 +47,20 @@ class Exchange extends Component {
             feedback,
             exchange,
             verifyExchange } = this.props;
-        const { currentClassDetails } = classes;
+        const { currentClass } = classes;
         const { showFeedback } = this.state;
         const status = exchange && exchange.status || null;
         let classData;
 
 
-        if (!currentClassDetails || !currentClassDetails.id) {
+        if (!currentClass || !currentClass.id) {
             return null;
         }
 
         return (
             <div>
                 <h1 style={{margin: '30px 0'}}>Exchange Details</h1>
-                <ExchangeDetails classData={currentClassDetails} />
+                <ExchangeDetails classData={currentClass} />
                 <ExchangeStatus
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
                     status={status}

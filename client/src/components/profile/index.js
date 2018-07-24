@@ -8,7 +8,7 @@ import { ProfileMenu } from './ProfileMenu';
 import { removeCurrentClass } from '../../redux/actions/class';
 
 
-const Main = ({ ...props, classes: { currentClassDetails } }) => {
+const Main = ({ ...props, classes: { currentClass } }) => {
 
         return (
             <div className='page-container profile'>
@@ -17,7 +17,7 @@ const Main = ({ ...props, classes: { currentClassDetails } }) => {
                     <div className='profile-column-container'>
                         <div className='profile-menu-column'>
                             <ProfileMenu
-                                currentClassDetails={currentClassDetails}
+                                currentClass={currentClass}
                                 {...props}
                             />
                         </div>

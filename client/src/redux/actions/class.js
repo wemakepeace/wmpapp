@@ -31,7 +31,7 @@ const removeCurrentClass = () => {
         return dispatch({
             type: FETCH_CLASS,
             currentClass: null,
-            currentClassDetails: {}
+            currentClass: {}
         });
     }
 }
@@ -40,9 +40,9 @@ const removeCurrentClass = () => {
 /** Will create class if class id does not exist **/
 /** Will update class otherwise **/
 
-const saveClass = (data) => {
+const saveClass = (classData, schoolData) => {
     return dispatch => {
-        return axios.post(`/class`, data)
+        return axios.post(`/class`, { classData, schoolData })
             .then(response => response.data)
             .then(
                 ({ _class, school, feedback }) => {
