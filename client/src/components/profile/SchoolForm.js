@@ -1,43 +1,32 @@
 import React from 'react';
-// import { fetchDataForSelectDropdown } from '../../utils/helpers';
 import { Async } from 'react-select';
 import countries from 'country-list';
-import SchoolAddressDropdown from './SchoolAddressDropdown';
+import AsyncSelect from '../AsyncSelect';
+import { fetchSchools, fetchCountries } from '../../utils/fetchConstantData'
 
-const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm }) => {
-
-    const { id, schoolName, address1, address2, city, zip, state, country } = school;
-
-    const onLocalInputChange = (ev, key, objName) => onInputChange(key, ev.target.value, objName)
-
-    const onLocalSelectOptionChange = (value, key, objName) => onSelectOptionChange(key, value, objName);
-
-    const fetchCountries = () => {
-        let options;
-
-        return new Promise((resolve, reject) => {
-            const list = countries().getData()
-
-            options = list.map(el => {
-                return {
-                    label: el.name,
-                    value: el.code
-                }
-            });
-
-            options.length ? resolve() : reject();
-        })
-        .then(res => {
-            return { options: options }
-        })
-    }
+const SchoolForm = ({ school, onInputChange, onSelectOptionChange, teacherId }) => {
+    const {
+        id,
+        schoolName,
+        address1,
+        address2,
+        city,
+        zip,
+        state,
+        country
+    } = school;
 
     return (
 
         <div>
             <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
-            <SchoolAddressDropdown schoolId={id} autoFillForm={autoFillForm}/>
+            <AsyncSelect
+                value={{ label: schoolName, value: id }}
+                asyncFetch={() => fetchSchools(teacherId)}
+                name='school'
+                handleAddValues={onSelectOptionChange}
+            />
             <div className='form-row'>
                 <label className='form-label'>School name</label>
                 <span className='form-input-span'>
@@ -46,7 +35,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='schoolName'
-                        onChange={(ev)=> onLocalInputChange(ev, 'schoolName', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'schoolName', 'school')}/>
                 </span>
             </div>
 
@@ -58,7 +47,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='address1'
-                        onChange={(ev)=> onLocalInputChange(ev, 'address1', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'address1', 'school')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -69,7 +58,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='address1'
-                        onChange={(ev)=> onLocalInputChange(ev, 'address2', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'address2', 'school')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -80,7 +69,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='city'
-                        onChange={(ev)=> onLocalInputChange(ev, 'city', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'city', 'school')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -91,7 +80,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='state'
-                        onChange={(ev)=> onLocalInputChange(ev, 'state', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'state', 'school')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -102,7 +91,7 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                         className='form-input'
                         placeholder=''
                         name='zip'
-                        onChange={(ev)=> onLocalInputChange(ev, 'zip', 'school')}/>
+                        onChange={(ev)=> onInputChange(ev.target.value, 'zip', 'school')}/>
                 </span>
             </div>
             <div className='form-row'>
@@ -111,13 +100,13 @@ const SchoolForm = ({ school, onInputChange, onSelectOptionChange, autoFillForm 
                     {<Async
                         name='form-field-name'
                         value={country}
-                        onChange={(select) => onLocalSelectOptionChange(select, 'country', 'school')}
+                        onChange={(ev) => onInputChange(ev, 'country', 'school')}
                         loadOptions={fetchCountries}
                     />}
                 </span>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SchoolForm;

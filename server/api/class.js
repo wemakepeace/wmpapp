@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { models } = require('../db/index.js');
+const { models, conn } = require('../db/index.js');
 const Teacher = models.Teacher;
 const Class = models.Class;
 const School = models.School;
@@ -7,7 +7,6 @@ const AgeGroup = models.AgeGroup;
 const Term = models.Term;
 const Exchange = models.Exchange;
 const { feedback } = require('../utils/feedback');
-const { extractDataForFrontend } = require('../utils/helpers');
 const { SUCCESS } = require('../constants/feedbackTypes');
 
 
@@ -61,22 +60,28 @@ app.post('/', (req, res, next) => {
     }
 
     // Update or create class / school
-    return Promise.all([
-        Class.createOrUpdate(classData),
-        School.createOrUpdate(schoolData)
-    ])
-    .then(([ updatedClass, updatedSchool ]) => {
-        const { id } = updatedSchool.dataValues;
-        updatedClass.setSchool(id);
-        return updatedClass.getClassWithAssociations()
-            .then((_class) => {
-                res.send({
-                    feedback: feedback(SUCCESS, [ 'Your information has been saved.' ]),
-                    _class
-                });
-            });
+    // Transaction to ensure rollback if any action fails
+    return conn.transaction((t) => {
+        return Promise.all([
+            Class.createOrUpdate(classData, t),
+            School.createOrUpdate(schoolData, t)
+        ])
+        .then(([ updatedClass, updatedSchool ]) => {
+            const { id } = updatedSchool.dataValues;
+            return updatedClass.setSchool(id, { transaction: t })
+                .then(() => {
+                    return updatedClass.getClassWithAssociations(t)
+                        .then((_class) => {
+                            res.send({
+                                feedback: feedback(SUCCESS, [ 'Your information has been saved.' ]),
+                                _class
+                            });
+                        })
+                        .catch((error) => next(error));
+                })
+        })
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
 

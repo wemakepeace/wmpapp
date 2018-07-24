@@ -24,7 +24,7 @@ class AsyncSelect extends Component {
     }
 
     render() {
-        const { asyncFetch, name, disabled } = this.props;
+        const { asyncFetch, name } = this.props;
         const { selected } = this.state;
 
         return (
@@ -37,7 +37,6 @@ class AsyncSelect extends Component {
                 onChange={this.handleChange}
                 search
                 cache={false}
-                disabled={disabled}
             />
         );
     }

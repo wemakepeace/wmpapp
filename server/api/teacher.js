@@ -15,9 +15,7 @@ const {
     validatePassword
 } = require('../utils/security');
 
-
 app.get('/', (req, res, next) => {
-
     /* Have to verify that this is secure .... */
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);

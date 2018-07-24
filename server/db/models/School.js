@@ -54,13 +54,13 @@ const School = conn.define('school', {
 
 // Class methods
 
-School.createOrUpdate = function(schoolData) {
+School.createOrUpdate = function(schoolData, t) {
     if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
     if (schoolData.id === null) {
-        return School.create(schoolData);
+        return School.create(schoolData, { transaction: t });
     } else {
         return School.findById(schoolData.id)
-            .then(school => school.update(schoolData));
+            .then(school => school.update(schoolData, { transaction: t }));
     }
 };
 
