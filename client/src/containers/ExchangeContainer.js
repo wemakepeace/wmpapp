@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { Button, Progress } from 'semantic-ui-react'
-import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import SelectClass from '../components/SelectClass';
 import Feedback from '../components/Feedback';
 import ExchangeDetails from '../components/profile/ExchangeDetails';
 import { ExchangeStatus } from '../components/profile/ExchangeStatus';
-import ClassDetails from '../components/profile/ClassDetails';
 import { initiateExchange, verifyExchange } from '../redux/actions/exchange';
-import { getCountryName } from '../utils/helpers';
+
 
 class Exchange extends Component {
     constructor(props) {
@@ -24,11 +19,20 @@ class Exchange extends Component {
         return this.props.initiateExchange(id);
     }
 
+    /*
+     * An exchange can be in one of these four stages:
+     * 1.   Not started
+     * 2.   Initiated (no match has been found, waiting for another class to sign up that matches)
+     * 3.   Pending (match has been made, but we are waiting for one or both classes to confirm exchange)
+     * 4.   Confirmed (both classes has confirmed, ready to begin exchange)
+     */
+
     onExchangeActionClick(exchangeAction) {
         const { currentClass: { id } } = this.props.classes;
         const { exchange, toggleLoader } = this.props;
         const exchangeId = exchange && exchange.id;
-
+        // toggleLoader will submit action based on current exchange status
+        // either intiateExchange or verifyExchange
         toggleLoader(true, exchangeAction);
         return this.props[ exchangeAction ](id, exchangeId);
     }
@@ -39,19 +43,13 @@ class Exchange extends Component {
         }
     }
 
-
     render() {
         const {
-            teacher,
-            classes,
             feedback,
             exchange,
-            verifyExchange } = this.props;
-        const { currentClass } = classes;
+            verifyExchange,
+            classes: { currentClass } } = this.props;
         const { showFeedback } = this.state;
-        const status = exchange && exchange.status || null;
-        let classData;
-
 
         if (!currentClass || !currentClass.id) {
             return null;
@@ -59,30 +57,28 @@ class Exchange extends Component {
 
         return (
             <div>
-                <h1 style={{margin: '30px 0'}}>Exchange Details</h1>
+                <hr style={{margin: '20px 0'}}/>
+                <h3 style={{margin: '30px 0'}}>Exchange Details</h3>
                 <ExchangeDetails classData={currentClass} />
                 <ExchangeStatus
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
-                    status={status}
+                    status={exchange && exchange.status}
                     classIsVerified={exchange.classIsVerified}
                 />
-
-                { showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null }
+                { showFeedback && (feedback && feedback.type) ?
+                    <Feedback {...feedback} /> : null }
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ classes, feedback, exchange }) => {
     return {
-        teacher: state.teacher,
-        classes: state.classes,
-        feedback: state.feedback,
-        exchange: state.exchange
-    }
-}
+        classes,
+        feedback,
+        exchange
+    };
+};
 
 export default connect(mapStateToProps, { initiateExchange, verifyExchange })(Exchange);
 

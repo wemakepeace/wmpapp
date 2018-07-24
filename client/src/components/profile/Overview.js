@@ -34,24 +34,26 @@ class Overview extends Component {
 
     render() {
         const { loading, exchangeAction } = this.state;
-        const { teacher, classes, exchange } = this.props;
+        const { teacher, exchange, classes: { currentClass} } = this.props;
         const { firstName } = teacher;
-        let classData;
+        // let classData;
 
-        if (classes && classes.currentClass) {
-            classData = classes.currentClass;
-        }
-
+        // if (classes && classes.currentClass) {
+        //     classData = classes.currentClass;
+        // }
 
         return (
             <div className='profile-form'>
-                <LoaderWithText loading={loading} exchangeAction={exchangeAction} />
+                <LoaderWithText
+                    loading={loading}
+                    exchangeAction={exchangeAction}
+                />
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can edit your teacher profile, manage all your enrolled classes or register a new class.</p>
                 </div>
                 <ClassDetails
-                    classData={classData}
+                    classData={currentClass}
                     teacher={teacher}
                     title='Your Class '/>
                 <ClassDetails

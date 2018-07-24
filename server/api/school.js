@@ -23,17 +23,15 @@ app.get('/teacher/:teacherId', (req, res, next) => {
         include: School
         })
         .then((classes) => {
-            const schoolAddressOptions = [];
-            let option = {};
             let schools = classes.map((current) => {
                 return {
                     label : current.dataValues.school.dataValues.schoolName,
                     value: current.dataValues.school.dataValues.id
                 }
-            })
+            });
 
-            schools.push({ label: 'New Address', value: 'newaddress' })
-            res.send(schools)
+            schools.push({ label: 'New Address', value: 'newaddress' });
+            res.send(schools);
         })
         .catch((error) => next(error));
 });

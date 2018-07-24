@@ -21,24 +21,26 @@ const fetchClass = (id) => {
                 (error) => {
                     const feedback = error.response.data.feedback;
                     return dispatch({ type: SEND_FEEDBACK, feedback });
-                })
-    }
+                });
+    };
 };
+
 
 const removeCurrentClass = () => {
     localStorage.removeItem('currentClass');
     return dispatch => {
         return dispatch({
             type: FETCH_CLASS,
-            currentClass: null,
-            currentClass: {}
+            _class: {}
         });
-    }
-}
+    };
+};
 
 
-/** Will create class if class id does not exist **/
-/** Will update class otherwise **/
+/*
+ * Will create class / school address if class id does not exist
+ * Will update class / school address otherwise
+*/
 
 const saveClass = (classData, schoolData) => {
     return dispatch => {
@@ -51,9 +53,10 @@ const saveClass = (classData, schoolData) => {
                 (error) => {
                     const feedback = error.response.data.feedback;
                     return dispatch({ type: SEND_FEEDBACK, feedback });
-                })
-    }
-}
+                });
+    };
+};
+
 
 const saveClassSuccess = (_class, school, feedback) => {
     return {
@@ -63,6 +66,7 @@ const saveClassSuccess = (_class, school, feedback) => {
         feedback
     }
 };
+
 
 export {
     fetchClass,

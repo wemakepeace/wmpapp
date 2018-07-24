@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link, Route } from 'react-router-dom';
 import Overview from './Overview'
-import ClassFormsContainer from './ClassFormsContainer';
+import ClassFormsContainer from '../../containers/ClassFormsContainer';
 import Teacher from './TeacherForm';
 
 

@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {  BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import { fetchTeacher } from '../redux/actions/teacher';
-import { fetchClass } from '../redux/actions/class';
-
+import { Route, Switch } from 'react-router-dom';
 import Main from '../components/Main';
-import FlexExamples from '../components/FlexExamples';
-import MainMenu from '../components/MainMenu';
 import Profile from '../components/profile';
-import Secret from '../components/Secret';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import PrivateRoute from './PrivateRoute';
+import { fetchTeacher } from '../redux/actions/teacher';
+import { fetchClass } from '../redux/actions/class';
+
 
 class Routes extends Component  {
     state = { loading: true }
 
     componentWillMount () {
         return this.props.fetchTeacher()
-        .then(res => {
-            if (res.type === 'LOGIN_SUCCESS') {
+        .then(({ type }) => {
+            if (type === 'LOGIN_SUCCESS') {
                 const currentClass = localStorage.getItem('currentClass');
                 if (currentClass) {
                     return this.props.fetchClass(currentClass, true)
-                    .then(res => this.setState({ loading: false }))
+                    .then(() => this.setState({ loading: false }))
                 }
             }
             this.setState({ loading: false });
@@ -36,10 +32,8 @@ class Routes extends Component  {
 
         return (
             <div>
-                <MainMenu history={history} />
                 <Switch>
                     <Route key={1} exact path={match.url} render={(props) => <Main {...this.props} />} />
-                    <Route key={2} exact path={match.url + 'flex'} render={() => <FlexExamples />} />
                     <Route key={2.1} exact path={match.url + 'reset'} render={() => <ForgotPasswordForm />} />
                     <Route key={2.2} path={match.url + 'reset/:token'} component={ResetPasswordForm} />
                     <PrivateRoute
@@ -49,17 +43,12 @@ class Routes extends Component  {
                         component={Profile} />
                     <PrivateRoute
                         loading={this.state.loading}
-                        key={5}
-                        exact path={match.url + 'secret'}
-                        component={Secret} />
-                    <PrivateRoute
-                        loading={this.state.loading}
                         key={6}
                         exact path={match.url + 'protected'}
                         component={Main} />
                 </Switch>
             </div>
-        )
+        );
     };
 };
 

@@ -37,8 +37,8 @@ const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
 }
 
 
-const mapStateToProps = state => {
-    return { teacher: state.teacher }
+const mapStateToProps = ({ teacher }) => {
+    return { teacher }
 };
 
 export default connect(mapStateToProps, { logout, removeCurrentClass })(HeaderContainer);

@@ -4,6 +4,7 @@ const Term = require('../db/models/Term');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { sendError } = require('../utils/feedback');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
+const countries = require('country-list');
 
 /** fetch agegroups and format for FE **/
 app.get('/agegroups', (req, res, next) => {
@@ -39,6 +40,24 @@ app.get('/terms', (req, res, next) => {
             sendError(500, null, defaultError, res);
         });
 });
+
+app.get('/countries', (req, res, next) => {
+    return new Promise((resolve, reject) => {
+        const list = countries().getData();
+        const options = list.map(({ name, code }) => {
+            return {
+                label: name,
+                value: code
+            }
+        });
+
+        options.length ? resolve(options) : reject();
+    })
+    .then(options => {
+        res.send(options)
+    })
+})
+
 module.exports = app;
 
 

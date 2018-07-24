@@ -3,35 +3,34 @@ import { LOGOUT_SUCCESS } from '../constants/teacher';
 
 const initialState = { currentClass: {} };
 
-const classes = (state = initialState, action) => {
-    switch(action.type) {
+const classes = (state = initialState, { type, _class }) => {
+    switch(type) {
         case FETCH_CLASS:
-            if (action._class && action._class.id) {
+            if (_class && _class.id) {
                 return {
                     ...state,
-                    currentClass: action._class,
+                    currentClass: _class,
                     list: {
                         ...state.list,
-                        [action._class.id] : action._class
+                        [ _class.id ] : _class
                     }
                 };
             } else {
                 return {
                     ...state,
-                    currentClass: action._class,
+                    currentClass: _class,
                 };
             }
         case SAVE_CLASS_SUCCESS:
-            const classId = action._class.id;
-            let newState = { ...state }
+            const { id } = _class;
+            let newState = { ...state };
 
             if (!newState.list) {
                 newState.list = {};
             }
-            // update or create new class in class list
-            newState.list[ classId ] = { ...action._class };
-            newState.currentClass =  action._class;
-
+            // update or add new class to list
+            newState.list[ id ] = { ..._class };
+            newState.currentClass =  _class;
             return newState;
         case LOGOUT_SUCCESS:
             return {};

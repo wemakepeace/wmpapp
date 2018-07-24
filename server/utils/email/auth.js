@@ -13,7 +13,6 @@ const generateEmail = (res, user, template) => {
 };
 
 const generateTemplate = (user, template) => {
-    console.log('being called', user)
     const templates = {
         resetPassword: function() {
             const { firstName, email, link } = user;
@@ -33,8 +32,6 @@ const generateTemplate = (user, template) => {
 
     return templates[ template ]();
 }
-
-
 
 module.exports = { generateEmail };
 

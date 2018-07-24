@@ -234,9 +234,6 @@ const seed = () => {
                 return Promise.all(exchangePromises);
             })
         })
-        .catch((error) => {
-            console.log('error===', error)
-        })
 }
 
 module.exports = {

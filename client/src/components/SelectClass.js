@@ -12,9 +12,8 @@ class SelectClass extends Component  {
     }
 
     onClassSelect = (selected) => {
-
         if (selected === null) {
-            this.setState({selected})
+            this.setState({ selected })
             return this.props.removeCurrentClass();
         }
 
@@ -24,7 +23,6 @@ class SelectClass extends Component  {
     }
 
     setSelected = (classes, options) => {
-
         let selected = '';
 
         if(classes && classes.currentClass) {
@@ -34,20 +32,17 @@ class SelectClass extends Component  {
         }
 
         this.setState({ selected, options });
-
     }
 
     componentDidMount() {
         const classes = this.props.classes;
         const options = this.props.teacher.classes;
-
         this.setSelected(classes, options)
     }
 
     componentWillReceiveProps(nextProps) {
         const classes = nextProps.classes;
         const options = nextProps.teacher.classes;
-
         this.setSelected(classes, options);
     }
 
@@ -66,15 +61,12 @@ class SelectClass extends Component  {
                 clearable={false}
                 searchable={false}
             />
-        )
-    }
-}
+        );
+    };
+};
 
-const mapStateToProps = state => {
-    return {
-        teacher: state.teacher,
-        classes: state.classes
-    }
-}
+const mapStateToProps = ({ teacher, classes }) => {
+    return { teacher, classes };
+};
 
 export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(SelectClass);

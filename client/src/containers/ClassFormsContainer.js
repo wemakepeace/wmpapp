@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Async } from 'react-select';
 import { Redirect } from 'react-router-dom';
-import Feedback from '../Feedback';
-import ClassForm from './ClassForm';
-import SchoolForm from './SchoolForm';
-import { saveClass, removeCurrentClass } from '../../redux/actions/class';
+import Feedback from '../components/Feedback';
+import ClassForm from '../components/profile/ClassForm';
+import SchoolForm from '../components/profile/SchoolForm';
+import { saveClass, removeCurrentClass } from '../redux/actions/class';
 import axios from 'axios';
 
 class ClassFormsContainer extends Component {
@@ -58,8 +58,8 @@ class ClassFormsContainer extends Component {
         });
     }
 
-    fetchSchool = (ev) => {
-        const schoolId = ev.selected.value;
+    fetchSchool = ({ value }) => {
+        const schoolId = value;
         return axios.get(`/school/${schoolId}`)
             .then(({ data }) => this.setState({ school: data }));
     }
@@ -76,7 +76,7 @@ class ClassFormsContainer extends Component {
             this.setState({ showFeedback: true });
         }
 
-        if (currentClass.id !== this.state.class.id) {
+        if (currentClass && (currentClass.id !== this.state.class.id)) {
             this.setState(this.getDefaultStateOrProps(currentClass));
         }
     }
@@ -84,14 +84,14 @@ class ClassFormsContainer extends Component {
     render() {
         const { feedback, classes: { currentClass }, teacher: { id } } = this.props;
         const { showFeedback } = this.state;
+
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
                     <div>
                         { currentClass && currentClass.id ?
                             <h2>Information & Settings for Class {currentClass.name}</h2> :
-                            <h2> Register New Class </h2>
-                        }
+                            <h2> Register New Class </h2> }
                         <ClassForm
                             classData={this.state.class}
                             onInputChange={this.onInputChange.bind(this)}
@@ -113,7 +113,7 @@ class ClassFormsContainer extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

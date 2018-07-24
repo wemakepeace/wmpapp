@@ -8,16 +8,14 @@ const Settings = ({ onChangePasswordClick, showChangePwForm }) => {
             <h2>Security Settings</h2>
             <div className='form-row'>
                 <h4 onClick={onChangePasswordClick}>Change password</h4>
-            { showChangePwForm
-                ?  <ChangePasswordForm />
-                : null
-            }
+            { showChangePwForm ?
+                <ChangePasswordForm /> : null }
             </div>
             <div className='form-row'>
                 <Link to='/delete'>Delete Account</Link>
             </div>
         </div>
-    )
+    );
 }
 
 export default Settings;
