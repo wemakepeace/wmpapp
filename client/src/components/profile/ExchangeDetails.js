@@ -10,14 +10,12 @@ const ExhangeDetails = ({ classData }) => {
                         <label>Registered for term</label>
                     </div>
                     <div style={{marginLeft: "12px"}}>
-                        { classData && classData.age_group
-                            ? <span>{`${classData.age_group.label} years` || null }</span>
-                            : <span>Not specified yet</span>
-                        }
-                        { classData && classData.term
-                            ? <span>{classData.term.label || null }</span>
-                            : <span>Not specified yet</span>
-                        }
+                        { classData && classData.age_group ?
+                            <span>{`${classData.age_group.label} years` || null }</span> :
+                            <span>Not specified yet</span> }
+                        { classData && classData.term ?
+                            <span>{classData.term.label || null }</span> :
+                            <span>Not specified yet</span> }
                     </div>
                 </div>
             </div>

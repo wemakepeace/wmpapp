@@ -1,7 +1,7 @@
 import React from 'react';
 import { Async } from 'react-select';
 
-export const AsyncSelect = ({ label, value, name, objName, loadOptions, onChange, path }) => {
+export const AsyncSelectInput = ({ label, value, name, objName, loadOptions, onChange, path, clearable }) => {
     return (
         <div className='form-row'>
             <label className='form-label-wide'>{label}</label>
@@ -10,7 +10,7 @@ export const AsyncSelect = ({ label, value, name, objName, loadOptions, onChange
                     value={value}
                     onChange={(ev) => onChange(ev, name, objName)}
                     loadOptions={() => loadOptions(path)}
-                    clearable={false}
+                    clearable={clearable}
                     searchable={false}
                 />
             </span>

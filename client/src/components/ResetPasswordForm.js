@@ -86,10 +86,10 @@ class ResetPasswordForm extends Component {
     };
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ feedback, teacher }) => {
     return {
-        feedback: state.feedback,
-        teacher: state.teacher
+        feedback,
+        teacher
     }
 };
 

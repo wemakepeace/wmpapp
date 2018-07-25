@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Icon } from 'semantic-ui-react'
-import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Select from 'react-select';
-import axios from 'axios';
-import SelectClass from '../SelectClass';
-import TeacherForm from './TeacherForm';
-import ClassDetails from './ClassDetails';
-import ExchangeContainer from '../../containers/ExchangeContainer';
-import { fetchClass } from '../../redux/actions/class';
-import { getCountryName } from '../../utils/helpers';
-import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
-import { LoaderWithText } from './LoaderWithText';
+import ExchangeContainer from './ExchangeContainer';
+import ClassDetails from '../../components/profile/ClassDetails';
+import { LoaderWithText } from '../../components/profile/LoaderWithText';
 
 
-class Overview extends Component {
+class OverviewContainer extends Component {
     state = {
         loading: false,
         exchangeAction: ''
@@ -36,11 +27,6 @@ class Overview extends Component {
         const { loading, exchangeAction } = this.state;
         const { teacher, exchange, classes: { currentClass} } = this.props;
         const { firstName } = teacher;
-        // let classData;
-
-        // if (classes && classes.currentClass) {
-        //     classData = classes.currentClass;
-        // }
 
         return (
             <div className='profile-form'>
@@ -68,13 +54,12 @@ class Overview extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ teacher, classes, exchange }) => {
     return {
-        teacher: state.teacher,
-        classes: state.classes,
-        exchange: state.exchange,
-        feedback: state.feedback
-    }
-}
+        teacher,
+        classes,
+        exchange
+    };
+};
 
-export default connect(mapStateToProps, { fetchClass })(Overview);
+export default connect(mapStateToProps)(OverviewContainer);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import SelectClass from '../SelectClass';
+import SelectClass from './SelectClass';
 
-const LoggedIn = ({ teacher, initiateNewClass, onLogout }) => {
+const HeaderLinks = ({ teacher, initiateNewClass, onLogout }) => {
     if (!teacher || !teacher.id) {
         return null;
     }
@@ -21,15 +21,15 @@ const LoggedIn = ({ teacher, initiateNewClass, onLogout }) => {
                     </div>
                     : null
                 }
-                 <span
-                    className='header-menu-item'
-                    onClick={initiateNewClass}>Register New Class</span>
-                 <span
-                    className='header-menu-item no-border'
-                    onClick={onLogout}>Log out</span>
+                 <span className='header-menu-item' onClick={initiateNewClass}>
+                    Register New Class
+                </span>
+                 <span className='header-menu-item no-border' onClick={onLogout}>
+                    Log out
+                </span>
             </div>
         </div>
     );
 }
 
-export default LoggedIn;
+export default HeaderLinks;

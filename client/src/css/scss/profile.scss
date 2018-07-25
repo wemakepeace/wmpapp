@@ -63,16 +63,23 @@
             }
         }
 
-        .ui.progress:first-child {
-           margin: 0 0 0.3em;
-        }
+        .progress-bar {
+            font-size: 20px;
+            padding: 20px 0;
+            margin: 40px 0;
+            line-height: 1.5em;
 
-        .progress  {
-            display: flex;
-            span {
-                flex: 1;
-                text-align: center;
-                text-transform: uppercase;
+            .ui.progress:first-child {
+               margin: 0 0 0.3em;
+            }
+
+            .progress  {
+                display: flex;
+                span {
+                    flex: 1;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
             }
         }
 

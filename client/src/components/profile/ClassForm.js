@@ -1,7 +1,7 @@
 import React from 'react';
 import { fetchData } from '../../utils/fetchData';
 import { Input } from './Input';
-import { AsyncSelect } from './AsyncSelect';
+import { AsyncSelectInput } from './AsyncSelectInput';
 
 const ClassForm = ({ classData, onInputChange }) => {
     const {
@@ -53,7 +53,7 @@ const ClassForm = ({ classData, onInputChange }) => {
                     key={field.name}
                 />)) }
             { selectFields.map((field) => (
-                <AsyncSelect
+                <AsyncSelectInput
                     {...field}
                     onChange={onInputChange}
                     objName='class'

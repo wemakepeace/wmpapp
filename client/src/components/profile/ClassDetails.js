@@ -48,7 +48,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
                 </div>
             : null }
         </div>
-    )
-}
+    );
+};
 
 export default ClassDetails;

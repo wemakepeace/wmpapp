@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Header from './MainHeader/Container';
+import HeaderContainer from '../containers/HeaderContainer';
 import SignupLoginContainer from '../containers/SignupLogin';
-
 
 class Main extends Component {
     state = {
@@ -20,7 +19,7 @@ class Main extends Component {
         return (
             <div className='page-container login-signup'>
                 <div className='page-content'>
-                    <Header history={history} />
+                    <HeaderContainer history={history} />
                     <div>
                         <div className='login-signup-container'>
                             <div className='signup-login-tabs'>
@@ -43,7 +42,7 @@ class Main extends Component {
                 </div>
             </div>
         );
-    }
-}
+    };
+};
 
 export default Main;

@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export const Input = ({ label, value, name, onInputChange, objName }) => {
     return (
         <div className='form-row'>

@@ -1,23 +1,17 @@
-import React, { Component } from 'react';
-import { Redirect, Link, Route } from 'react-router-dom';
-import Overview from './Overview'
-import ClassFormsContainer from '../../containers/ClassFormsContainer';
-import Teacher from './TeacherForm';
-
+import React from 'react';
+import OverviewContainer from '../../containers/profile/OverviewContainer'
+import ClassFormsContainer from '../../containers/profile/ClassFormsContainer';
+import TeacherFormContainer from '../../containers/profile/TeacherFormContainer';
 
 const TabContent = ({ match, history }) => {
     const components = {
-        overview: Overview,
-        teacher: Teacher,
+        overview: OverviewContainer,
+        teacher: TeacherFormContainer,
         class: ClassFormsContainer
     };
-
     const Component = components[ match.params.tab ];
 
-    return (
-        <Component history={history} />
-    );
-
+    return (<Component history={history} />);
 }
 
 export default TabContent;

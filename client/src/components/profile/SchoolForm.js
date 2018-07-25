@@ -1,6 +1,6 @@
 import React from 'react';
 import countries from 'country-list';
-import { AsyncSelect } from './AsyncSelect';
+import { AsyncSelectInput } from './AsyncSelectInput';
 import { fetchData } from '../../utils/fetchData'
 import { Input } from './Input';
 
@@ -15,6 +15,9 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
         state,
         country
     } = school;
+    const schoolDropdownValue = !schoolName
+        ? { label: 'New address', id: 'newaddress' }
+        : { label: schoolName, value: id };
 
     const fields = [
         {
@@ -49,16 +52,17 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
         }
     ];
 
+
     return (
         <div>
             <h2> School Mailing Address</h2>
             <p>This address will be used when sending letters to your class.</p>
-            <AsyncSelect
+            <AsyncSelectInput
                 name='school'
-                value={{ label: schoolName, value: id }}
+                value={schoolDropdownValue}
                 onChange={fetchSchool}
                 loadOptions={fetchData}
-                clearable={false}
+                clearable={true}
                 objName='school'
                 path={`/school/teacher/${teacherId}`}
             />
@@ -69,7 +73,7 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
                     objName='school'
                     key={field.name}
                 />)) }
-            <AsyncSelect
+            <AsyncSelectInput
                 name='country'
                 value={country}
                 onChange={onInputChange}

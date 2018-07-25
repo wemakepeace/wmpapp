@@ -41,13 +41,11 @@ class ForgotPasswordForm extends Component {
                         <Image src='../../../assets/logos/WMPlogo_transparent.png' />
                                 {' '}Request Reset Password
                     </Header>
-                    {   feedback && feedback.type === 'success'
-                    ?   null
-                    :   loading ?
-                            <Loader
-                                active={loading}
-                                inline='centered'
-                            >Sending reset password request
+                    {   feedback && feedback.type === 'success' ?
+                        null :
+                        loading ?
+                            <Loader active={loading} inline='centered'>
+                                Sending reset password request
                             </Loader> :
                         <Form size='large'>
                             <Segment stacked>
@@ -74,10 +72,8 @@ class ForgotPasswordForm extends Component {
     };
 };
 
-const mapStateToProps = (state) => {
-    return {
-        feedback: state.feedback
-    }
+const mapStateToProps = ({ feedback }) => {
+    return { feedback }
 };
 
 export default connect(mapStateToProps, { sendResetPasswordLink })(ForgotPasswordForm);

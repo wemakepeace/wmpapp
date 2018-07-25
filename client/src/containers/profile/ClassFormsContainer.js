@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
-import { Async } from 'react-select';
-import { Redirect } from 'react-router-dom';
-import Feedback from '../components/Feedback';
-import ClassForm from '../components/profile/ClassForm';
-import SchoolForm from '../components/profile/SchoolForm';
-import { saveClass, removeCurrentClass } from '../redux/actions/class';
 import axios from 'axios';
+import { Button } from 'semantic-ui-react';
+import Feedback from '../../components/Feedback';
+import ClassForm from '../../components/profile/ClassForm';
+import SchoolForm from '../../components/profile/SchoolForm';
+import { saveClass, removeCurrentClass } from '../../redux/actions/class';
+
 
 class ClassFormsContainer extends Component {
     constructor(props) {
@@ -16,7 +15,7 @@ class ClassFormsContainer extends Component {
         this.state = this.getDefaultStateOrProps(currentClass, currentClass.school);
     }
 
-    getDefaultStateOrProps = (currentClass) => {
+    getDefaultStateOrProps = (currentClass, school) => {
         let defaultState = {
             class: {
                 id: null,
@@ -40,12 +39,13 @@ class ClassFormsContainer extends Component {
         };
 
         if (currentClass && currentClass.id) {
-            defaultState = {
-                class: { ...currentClass },
-                school: { ...currentClass.school },
-                showFeedback: false
-            };
+            defaultState.class = { ...currentClass };
         }
+
+        if (school) {
+            defaultState.school = { ...school };
+        }
+
         return defaultState;
     }
 
@@ -58,10 +58,14 @@ class ClassFormsContainer extends Component {
         });
     }
 
-    fetchSchool = ({ value }) => {
-        const schoolId = value;
-        return axios.get(`/school/${schoolId}`)
-            .then(({ data }) => this.setState({ school: data }));
+    fetchSchool = (ev) => {
+        if (!ev || ev.value === 'newaddress') {
+            this.setState(this.getDefaultStateOrProps(this.state.class))
+        } else {
+            const schoolId = ev.value || null;
+            return axios.get(`/school/${schoolId}`)
+                .then(({ data }) => this.setState({ school: data }));
+        }
     }
 
     submitData = () => {
@@ -77,7 +81,7 @@ class ClassFormsContainer extends Component {
         }
 
         if (currentClass && (currentClass.id !== this.state.class.id)) {
-            this.setState(this.getDefaultStateOrProps(currentClass));
+            this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
         }
     }
 
