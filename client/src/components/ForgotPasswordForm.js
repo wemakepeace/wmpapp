@@ -47,21 +47,21 @@ class ForgotPasswordForm extends Component {
                             <Loader active={loading} inline='centered'>
                                 Sending reset password request
                             </Loader> :
-                        <Form size='large'>
-                            <Segment stacked>
-                                <Form.Input
-                                    fluid
-                                    icon='mail'
-                                    iconPosition='left'
-                                    placeholder='E-mail address'
-                                    onChange={ (ev) => this.onInputChange(ev, 'email')}
-                                />
-                                <Button
-                                    className='large-custom-btn'
-                                    fluid size='large'
-                                    onClick={this.onForgotPassword}>Send Reset Password Link</Button>
-                            </Segment>
-                        </Form>
+                            <Form size='large'>
+                                <Segment stacked>
+                                    <Form.Input
+                                        fluid
+                                        icon='mail'
+                                        iconPosition='left'
+                                        placeholder='E-mail address'
+                                        onChange={ (ev) => this.onInputChange(ev, 'email')}
+                                    />
+                                    <Button
+                                        className='large-custom-btn'
+                                        fluid size='large'
+                                        onClick={this.onForgotPassword}>Send Reset Password Link</Button>
+                                </Segment>
+                            </Form>
                     }
                     { showFeedback && (feedback && feedback.type)
                     ? <Feedback {...feedback} />

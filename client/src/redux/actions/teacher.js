@@ -16,14 +16,14 @@ import {
     UPDATE_TEACHER_SUCCESS,
     UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
 
-const createTeacher = data => {
+const signup = data => {
     return dispatch => {
         return axios.post('/public/create', { data })
             .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {
                     setToken(token);
-                    dispatch(createTeacherSuccess(teacher, feedback));
+                    dispatch(signupSuccess(teacher, feedback));
                 },
                 (error) => {
                     // TODO handle error messages
@@ -34,7 +34,7 @@ const createTeacher = data => {
     }
 };
 
-const createTeacherSuccess = (teacher, feedback) => {
+const signupSuccess = (teacher, feedback) => {
     return {
         type: CREATE_TEACHER_SUCCESS,
         teacher,
@@ -88,7 +88,7 @@ const updateClassSuccess = (updatedClass, feedback) => {
 
 
 export {
-    createTeacher,
+    signup,
     fetchTeacher,
     updateTeacher,
     login,

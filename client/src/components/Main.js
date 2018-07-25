@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import HeaderContainer from '../containers/HeaderContainer';
-import SignupLoginContainer from '../containers/SignupLogin';
+import SignupLoginContainer from '../containers/SignupLoginContainer';
 
 class Main extends Component {
     state = {
-        showForm: 'login',
-        message: ''
+        form: 'login'
     }
 
-    toggleForm = (form) => this.setState({ showForm: form })
+    toggleForm = (form) => this.setState({ form })
 
-    getActiveClass = (item) => this.state.showForm === item ? 'active-main' : '';
+    getActiveClass = (item) => this.state.form === item ? 'active-main' : '';
 
     render() {
-        const { showForm } = this.state;
+        const { form } = this.state;
         const { history } = this.props;
 
         return (
@@ -35,7 +34,7 @@ class Main extends Component {
                                 </div>
                             </div>
                             <div className='login-signup-form'>
-                                <SignupLoginContainer showForm={showForm} />
+                                <SignupLoginContainer form={form} />
                             </div>
                         </div>
                     </div>
