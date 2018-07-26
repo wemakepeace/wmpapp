@@ -12,7 +12,6 @@ const fetchClass = (id) => {
                     localStorage.setItem('currentClass', _class.id);
                     return dispatch({
                         type: FETCH_CLASS,
-                        currentClass: _class.id,
                         _class,
                         exchange,
                         classRole
@@ -40,7 +39,7 @@ const removeCurrentClass = () => {
 /*
  * Will create class / school address if class id does not exist
  * Will update class / school address otherwise
-*/
+ */
 
 const saveClass = (classData, schoolData) => {
     return dispatch => {

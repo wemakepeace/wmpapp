@@ -28,7 +28,7 @@ class Exchange extends Component {
      */
 
     onExchangeActionClick(exchangeAction) {
-        const { currentClass: { id } } = this.props.classes;
+        const { currentClass: { id } } = this.props;
         const { exchange, toggleLoader } = this.props;
         const exchangeId = exchange && exchange.id;
         // toggleLoader will submit action based on current exchange status
@@ -48,7 +48,8 @@ class Exchange extends Component {
             feedback,
             exchange,
             verifyExchange,
-            classes: { currentClass } } = this.props;
+            currentClass
+        } = this.props;
         const { showFeedback } = this.state;
 
         if (!currentClass || !currentClass.id) {
@@ -72,9 +73,9 @@ class Exchange extends Component {
     };
 };
 
-const mapStateToProps = ({ classes, feedback, exchange }) => {
+const mapStateToProps = ({ currentClass, feedback, exchange }) => {
     return {
-        classes,
+        currentClass,
         feedback,
         exchange
     };

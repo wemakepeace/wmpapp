@@ -6,7 +6,7 @@ const { sendError } = require('../utils/feedback');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const countries = require('country-list');
 
-/** fetch agegroups and format for FE **/
+// Fetch agegroups and format for FE
 app.get('/agegroups', (req, res, next) => {
     return AgeGroup.findAll()
         .then(age_groups => {

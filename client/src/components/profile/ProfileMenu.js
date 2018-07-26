@@ -7,7 +7,7 @@ export const ProfileMenu = ({ currentClass, ...props }) => {
         <div className='profile-menu-column'>
             <ProfileMenuLink name='overview' {...props} />
             <ProfileMenuLink name='teacher' {...props} />
-            { currentClass ?
+            { currentClass && currentClass.id ?
                 <div>
                     <ProfileMenuLink name='class' {...props} />
                     <ProfileMenuLink name='materials' {...props} />

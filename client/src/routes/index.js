@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import Main from '../components/Main';
 import Profile from '../components/profile';
-import ForgotPasswordForm from '../components/ForgotPasswordForm';
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import ChangePasswordContainer from '../containers/profile/ChangePasswordContainer';
 import PrivateRoute from './PrivateRoute';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
@@ -35,7 +34,7 @@ class Routes extends Component  {
                 <Switch>
                     <Route key={1} exact path={match.url} render={(props) => <Main {...this.props} />} />
                     <Route key={2.1} exact path={match.url + 'reset'} render={() => <ForgotPasswordForm />} />
-                    <Route key={2.2} path={match.url + 'reset/:token'} component={ResetPasswordForm} />
+                    <Route key={2.2} path={match.url + 'reset/:token'} component={ChangePasswordContainer} />
                     <PrivateRoute
                         loading={this.state.loading}
                         key={4}

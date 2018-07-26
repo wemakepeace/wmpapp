@@ -11,7 +11,7 @@ import { saveClass, removeCurrentClass } from '../../redux/actions/class';
 class ClassFormsContainer extends Component {
     constructor(props) {
         super(props);
-        const { currentClass } = props.classes;
+        const { currentClass } = props;
         this.state = this.getDefaultStateOrProps(currentClass, currentClass.school);
     }
 
@@ -75,7 +75,7 @@ class ClassFormsContainer extends Component {
         this.props.saveClass(classData, schoolData);
     }
 
-    componentWillReceiveProps({ feedback, classes: { currentClass } }) {
+    componentWillReceiveProps({ feedback, currentClass }) {
         if (feedback && feedback.type) {
             this.setState({ showFeedback: true });
         }
@@ -86,7 +86,7 @@ class ClassFormsContainer extends Component {
     }
 
     render() {
-        const { feedback, classes: { currentClass }, teacher: { id } } = this.props;
+        const { feedback, currentClass, teacher: { id } } = this.props;
         const { showFeedback } = this.state;
 
         return (
@@ -121,8 +121,8 @@ class ClassFormsContainer extends Component {
     }
 }
 
-const mapStateToProps = ({ teacher, classes, feedback }) => {
-    return { teacher, classes, feedback };
+const mapStateToProps = ({ teacher, currentClass, feedback }) => {
+    return { teacher, currentClass, feedback };
 };
 
 const toBeDispatched = { saveClass, removeCurrentClass };

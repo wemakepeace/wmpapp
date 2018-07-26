@@ -68,7 +68,8 @@ app.post('/login', (req, res, next) => {
             }
 
             hashTest = pbkdf2(password, teacher.salt);
-
+            console.log('teacher.password', teacher.password)
+            console.log('hashTest.passwordHash', hashTest.passwordHash)
             if (hashTest.passwordHash !== teacher.password) {
                 error.defaultError = 'Username or password is incorrect.';
                 next(error);
@@ -182,9 +183,9 @@ app.get('/reset/:token', (req, res, next) => {
     });
 });
 
-
+// Reset user password if resetPasswordToken is valid
 app.post('/reset/:token', (req, res, next) => {
-    const { password1, password2 } = req.body;
+    const { password, confirmPassword } = req.body;
     const { token } = req.params;
 
     return Teacher.findOne({
@@ -209,7 +210,7 @@ app.post('/reset/:token', (req, res, next) => {
             next(error);
         } **/
 
-        user.password = password1;
+        user.password = password;
         user.save()
         .then(updatedUser => {
             updatedUser.destroyTokens();

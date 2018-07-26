@@ -6,7 +6,7 @@ import TabContent from './TabContent';
 import { ProfileMenu } from './ProfileMenu';
 import { removeCurrentClass } from '../../redux/actions/class';
 
-const Main = ({ ...props, classes: { currentClass } }) => {
+const Main = ({ ...props, currentClass }) => {
     return (
         <div className='page-container profile'>
             <div className='page-content'>
@@ -30,8 +30,8 @@ const Main = ({ ...props, classes: { currentClass } }) => {
     );
 }
 
-const mapStateToProps = ({ classes }) => {
-    return { classes };
+const mapStateToProps = ({ currentClass }) => {
+    return { currentClass };
 };
 
 export default connect(mapStateToProps, { removeCurrentClass })(Main);

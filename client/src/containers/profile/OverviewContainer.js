@@ -25,7 +25,7 @@ class OverviewContainer extends Component {
 
     render() {
         const { loading, exchangeAction } = this.state;
-        const { teacher, exchange, classes: { currentClass} } = this.props;
+        const { teacher, exchange, currentClass } = this.props;
         const { firstName } = teacher;
 
         return (
@@ -54,10 +54,10 @@ class OverviewContainer extends Component {
     }
 }
 
-const mapStateToProps = ({ teacher, classes, exchange }) => {
+const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     return {
         teacher,
-        classes,
+        currentClass,
         exchange
     };
 };

@@ -47,6 +47,12 @@
                         width: 100%;
                         letter-spacing: 0.2em !important;
                         flex: 1;
+
+                    }
+
+                    input[type=email], input[type=password], input[type=search], input[type=text] {
+                        -webkit-appearance: textfield;
+                        -moz-appearance: none;
                     }
                 }
 

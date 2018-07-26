@@ -31,6 +31,7 @@ const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
                 teacher={teacher}
                 onLogout={onLogout}
                 initiateNewClass={initiateNewClass}
+                history={history}
             />
         </div>
     );

@@ -4,7 +4,6 @@ import Select from 'react-select';
 import { Async } from 'react-select';
 import { fetchClass, removeCurrentClass } from '../redux/actions/class';
 
-
 class SelectClass extends Component  {
     state = {
         selected: '',
@@ -17,17 +16,19 @@ class SelectClass extends Component  {
             return this.props.removeCurrentClass();
         }
 
-        const fetchClassFromServer = this.props.classes && this.props.classes.list && this.props.classes.list[selected.value] ? false : true;
+        this.props.fetchClass(selected.value);
 
-        this.props.fetchClass(selected.value, fetchClassFromServer);
+        if (this.props.history.location.pathname !== '/profile/overview') {
+            this.props.history.push('/profile/overview');
+        }
     }
 
-    setSelected = (classes, options) => {
+    setSelected = (options, id) => {
         let selected = '';
 
-        if(classes && classes.currentClass) {
+        if(options && id) {
             selected = options.find(option => {
-                return option.value === classes.currentClass.id
+                return option.value === id
             });
         }
 
@@ -35,15 +36,15 @@ class SelectClass extends Component  {
     }
 
     componentDidMount() {
-        const classes = this.props.classes;
         const options = this.props.teacher.classes;
-        this.setSelected(classes, options)
+        const { currentClass: { id } } = this.props;
+        this.setSelected(options, id);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const classes = nextProps.classes;
-        const options = nextProps.teacher.classes;
-        this.setSelected(classes, options);
+    componentWillReceiveProps({ teacher, currentClass}) {
+        const options = teacher.classes;
+        const { id } = currentClass;
+        this.setSelected(options, id);
     }
 
     render() {
@@ -65,8 +66,8 @@ class SelectClass extends Component  {
     };
 };
 
-const mapStateToProps = ({ teacher, classes }) => {
-    return { teacher, classes };
+const mapStateToProps = ({ teacher, currentClass }) => {
+    return { teacher, currentClass };
 };
 
 export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(SelectClass);
