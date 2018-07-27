@@ -35,7 +35,7 @@ const Exchange = conn.define('exchange', {
 
 
 // Class methods
-Exchange.getExchangeAndExchangingClass = function(classId) {
+Exchange.getExchangeAndMatchClass = function(classId) {
     return Exchange.findOne({
         where: {
             $or: [{ classAId: classId }, { classBId: classId }]
@@ -98,10 +98,11 @@ Exchange.findMatch = function(_class) {
                 termId: { $eq: termId },
                 ageGroupId: { $eq: ageGroupId }
             },
-            attributes: [ 'name', 'id' ],
+            // attributes: [ 'name', 'id' ],
             include: [
                 { model: School },
-                { model: Teacher, attributes: [ 'id', 'email' ] }
+                { model: Teacher }
+                // { model: Teacher, attributes: [ 'id', 'email' ] }
             ]
         }]
     })
@@ -153,7 +154,7 @@ Exchange.prototype.getExchangeClassId = function(id) {
         });
 }
 
-Exchange.prototype.getExchangeAndExchangingClass = function(classId) {
+Exchange.prototype.getExchangeAndMatchClass = function(classId) {
     return Promise.all([
             this.getClassRole(classId),
             this.getExchangeClassId(classId)

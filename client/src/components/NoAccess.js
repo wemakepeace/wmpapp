@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import {  BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
 
 const NoAccess = (props) => {
     const redirectToHome = () => props.history.push('/')

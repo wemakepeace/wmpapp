@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { ProgressBar } from './ProgressBar';
 
-const exchangeData = {
-    'Not started': {
+const exchangeStatusData = {
+    'not started': {
         text: () => (
             <div>
                 <p>When you have filled in all the information, click the button to initiate an exchange.</p>
@@ -93,11 +93,10 @@ export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick 
     }
 
     if (!status) {
-        status = 'Not started';
+        status = 'not started';
     }
 
-
-    const details = exchangeData[ status ];
+    const details = exchangeStatusData[ status ];
 
     return (
         <div>
@@ -127,8 +126,7 @@ export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick 
                     size='large'
                     onClick={() => onExchangeActionClick(details.action)}>
                     {details.buttonText}
-                </Button>
-                : null }
+                </Button> : null }
             </div>
         </div>
     );

@@ -45,7 +45,9 @@
   "dependencies": {
     "@google/maps": "^0.4.6",
     "async": "^2.6.0",
+    "aws-sdk": "^2.281.1",
     "axios": "^0.18.0",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "country-list": "^1.1.0",
     "csprng": "^0.1.2",
@@ -60,7 +62,7 @@
     "node-geocoder": "^3.22.0",
     "nodemailer": "^4.6.4",
     "normalize.css": "^8.0.0",
-    "npm": "^6.1.0",
+    "npm": "^6.2.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

@@ -55,27 +55,27 @@ Class.getClassWithAssociations = function(id, associations) {
         });
 };
 
-Class.createOrUpdate = function(classData) {
+Class.createOrUpdate = function(classData, t) {
     classData.termId = classData.term.value;
     classData.ageGroupId = classData.age_group.value
 
     if (classData.id === null) {
-        return Class.create(classData);
+        return Class.create(classData, { transaction: t });
     } else {
         return Class.findById(classData.id)
-            .then(_class => _class.update(classData));
+            .then(_class => _class.update(classData, { transaction: t }));
     }
 };
 
 
 // Instance methods
-Class.prototype.getClassWithAssociations = function() {
+Class.prototype.getClassWithAssociations = function(t) {
     let _class = this.dataValues;
 
     return Promise.all([
-        this.getTerm(),
-        this.getAge_group(),
-        this.getSchool()
+        this.getTerm({ transaction: t }),
+        this.getAge_group({ transaction: t }),
+        this.getSchool({ transaction: t })
     ])
     .then(([term, age_group, school]) => {
         if (term) {

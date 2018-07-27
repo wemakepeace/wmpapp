@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
-import LoggedIn from './LoggedIn';
-import { logout } from '../../redux/actions/teacher';
-import { removeCurrentClass } from '../../redux/actions/class';
+import HeaderLinks from '../components/HeaderLinks';
+import { logout } from '../redux/actions/teacher';
+import { removeCurrentClass } from '../redux/actions/class';
 
 const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
     const onLogout = () => {
@@ -27,18 +27,19 @@ const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
                     <h1><span className='title-span'>PEACE LETTERS</span></h1>
                 </div>
             </div>
-            <LoggedIn
+            <HeaderLinks
                 teacher={teacher}
                 onLogout={onLogout}
                 initiateNewClass={initiateNewClass}
+                history={history}
             />
         </div>
     );
 }
 
 
-const mapStateToProps = state => {
-    return { teacher: state.teacher }
+const mapStateToProps = ({ teacher }) => {
+    return { teacher }
 };
 
 export default connect(mapStateToProps, { logout, removeCurrentClass })(HeaderContainer);

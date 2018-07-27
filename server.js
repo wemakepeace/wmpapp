@@ -4,16 +4,13 @@ const path = require('path');
 const bodyparser = require('body-parser');
 const open = require('open');
 const { seed, models } = require('./server/db/index.js');
-
 const webpack =  require('webpack');
 const config =  require('./webpack.config');
 const compiler = webpack(config);
-
 const passport = require('passport');
 const passportJWT = require("passport-jwt");
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
-
 let jwtOptions = {};
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -59,12 +56,14 @@ const teacherRoutes = require('./server/api/teacher');
 const classRoutes = require('./server/api/class');
 const resources = require('./server/api/resources');
 const exchangeRoutes = require('./server/api/exchange');
+const schoolRoutes = require('./server/api/school');
 
 app.use('/public', publicRoutes);
 app.use('/resources', resources);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
 app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
 app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeRoutes);
+app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
 
 
 const { feedback, sendError } = require('./server/utils/feedback');
@@ -79,8 +78,7 @@ app.use(function (err, req, res, next) {
     }
     return sendError(500, err, defaultError, res);
 
-})
-
+});
 
 app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));

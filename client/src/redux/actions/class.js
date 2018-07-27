@@ -12,7 +12,6 @@ const fetchClass = (id) => {
                     localStorage.setItem('currentClass', _class.id);
                     return dispatch({
                         type: FETCH_CLASS,
-                        currentClass: _class.id,
                         _class,
                         exchange,
                         classRole
@@ -21,28 +20,30 @@ const fetchClass = (id) => {
                 (error) => {
                     const feedback = error.response.data.feedback;
                     return dispatch({ type: SEND_FEEDBACK, feedback });
-                })
-    }
+                });
+    };
 };
+
 
 const removeCurrentClass = () => {
     localStorage.removeItem('currentClass');
     return dispatch => {
         return dispatch({
             type: FETCH_CLASS,
-            currentClass: null,
-            currentClassDetails: {}
+            _class: {}
         });
-    }
-}
+    };
+};
 
 
-/** Will create class if class id does not exist **/
-/** Will update class otherwise **/
+/*
+ * Will create class / school address if class id does not exist
+ * Will update class / school address otherwise
+ */
 
-const saveClass = (data) => {
+const saveClass = (classData, schoolData) => {
     return dispatch => {
-        return axios.post(`/class`, data)
+        return axios.post(`/class`, { classData, schoolData })
             .then(response => response.data)
             .then(
                 ({ _class, school, feedback }) => {
@@ -51,9 +52,10 @@ const saveClass = (data) => {
                 (error) => {
                     const feedback = error.response.data.feedback;
                     return dispatch({ type: SEND_FEEDBACK, feedback });
-                })
-    }
-}
+                });
+    };
+};
+
 
 const saveClassSuccess = (_class, school, feedback) => {
     return {
@@ -63,6 +65,7 @@ const saveClassSuccess = (_class, school, feedback) => {
         feedback
     }
 };
+
 
 export {
     fetchClass,

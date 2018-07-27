@@ -207,11 +207,13 @@ const exchanges = [
 ]
 
 
-const sync = () => conn.sync({ force: true });
+const sync = () => conn.sync({ force: true, logging: console.log });
 
 const seed = () => {
-    return sync({ force: true })
+    console.log('here')
+    return sync()
         .then(() => {
+            console.log('here too!')
 
             const teacherPromises = teachers.map(teacher => {
                 return Teacher.create(teacher);
@@ -234,9 +236,7 @@ const seed = () => {
                 return Promise.all(exchangePromises);
             })
         })
-        .catch((error) => {
-            console.log('error===', error)
-        })
+        .catch(error => console.log('error', error))
 }
 
 module.exports = {

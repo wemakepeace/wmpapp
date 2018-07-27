@@ -1,4 +1,5 @@
 import React from 'react';
+import { getCountryName } from '../../utils/helpers';
 
 const ClassDetails = ({ classData, teacher, title }) => {
     let school;
@@ -14,9 +15,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
     return (
         <div>
             <hr style={{margin: '20px 0'}}/>
-            <div>
-                <h3 style={{marginBottom: '18px'}}>{title} {classData && classData.name || null}</h3>
-            </div>
+            <h3 style={{marginBottom: '18px'}}>{title} {classData && classData.name || null}</h3>
             <div className='div-display-inline-block'>
                 <div className='inner-box-inline-block'>
                     <div>
@@ -29,7 +28,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
                         <span>{ teacher.firstName || null} {teacher.lastName || null}</span>
                         <span>{teacher.email || null}</span>
                         <span>{teacher.phone || "Not specified"}</span>
-                        <span>{classData && classData.size || null }</span>
+                        <span>{`${classData && classData.size} students` || null }</span>
                     </div>
                 </div>
             </div>
@@ -43,13 +42,13 @@ const ClassDetails = ({ classData, teacher, title }) => {
                             <span>{school.schoolName || null}</span>
                             <span>{school.address1 || null} {school.address2 || null}</span>
                             <span>{school.zip || null} {school.city || null}</span>
-                            <span>{school.country || null}</span>
+                            <span>{getCountryName(school.country) || null}</span>
                         </div>
                     </div>
                 </div>
             : null }
         </div>
-    )
-}
+    );
+};
 
 export default ClassDetails;

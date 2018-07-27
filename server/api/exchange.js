@@ -8,37 +8,35 @@ const Teacher = models.Teacher;
 const Exchange = models.Exchange;
 const conn = require('../db/conn');
 const { feedback, sendError } = require('../utils/feedback');
-const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail, generateEmail } = require('../utils/smpt');
+const { generateEmail } = require('../utils/email/exchange');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 /*
  * Handles the following cases:
- * One match is found - updates exchange instance returns exchange and matchingClass
- * Multiple matches are found - finds furthest match, updates exchange instance
- * and return exchange and matchingClass
- * No match is found - Initiates new exchange and returns exchange
-*/
+ * 1.   One match is found - updates exchange instance returns exchange and matchClass
+ * 2.   Multiple matches are found - finds furthest match, updates exchange instance
+ *      and return exchange and matchClass
+ * 3.   No match is found - Initiates new exchange, sets class to classA and returns exchange
+ */
 
 app.post('/', (req, res, next) => {
     const { classId } = req.body;
 
     Class.findOne({
         where: { id: classId },
-        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
+        // attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
         include: [
             { model: School },
-            { model: Teacher, attributes: [ 'id', 'email' ] }
+            { model: Teacher }
+            // { model: Teacher, attributes: [ 'id', 'email' ] }
         ]
     })
-    .then(_class => {
-        console.log(_class)
+    .then((_class) => {
         return Exchange.findMatch(_class)
         .then(exchange => {
-            // If matches are found
+            // If match is found, _class will have classRole = B
             if (exchange) {
                 return conn.transaction((t) => {
-                    // Ff match was found, _class will have classRole = B
                     return exchange.setClassB(_class, { transaction: t })
                     .then(exchange => exchange.setStatus('pending', t))
                     .then(exchange => exchange.setVerificationExpiration(t))
@@ -62,7 +60,10 @@ app.post('/', (req, res, next) => {
                 })
                 .catch((error) => next(error))
             } else {
-                // f no match is found, initiate new Exchange instance
+                /*
+                 * If no match is found, initiate new Exchange instance
+                 * and set _class as classA
+                 */
                 return Exchange.create({ status: 'initiated', classAId: classId })
                 .catch((error) => next(error))
             }
@@ -70,9 +71,11 @@ app.post('/', (req, res, next) => {
         .catch((error) => next(error))
     })
     .then((exchange) => {
-        /* refetch the exchange and exchanging class go get correct data
-         * and formatting for frontend */
-        exchange.getExchangeAndExchangingClass(classId)
+        /*
+         * Refetch the exchange and exchanging class go get correct data
+         * and formatting for frontend
+         */
+        exchange.getExchangeAndMatchClass(classId)
         .then((_exchange) => {
             res.send({
                 exchange: _exchange
@@ -99,7 +102,7 @@ app.post('/', (req, res, next) => {
  */
 
 /*
- * /verify handles the following scenarios:
+ * Route /verify handles the following scenarios:
  * 1.   Verifies class, exchanging class not verified yet.
  *      Sends reminder to exchanging class.
  * 2.   Verifies class, exchanging class is already verified
@@ -168,10 +171,10 @@ app.post('/verify', (req, res, next) => {
         })
         .then((exchange) => {
             /*
-             * Re-fetch the exchange and exchanging class go get correct data
+             * Refetch the exchange and match class go get correct data
              * and formatting for frontend
              */
-            exchange.getExchangeAndExchangingClass(classId)
+            exchange.getExchangeAndMatchClass(classId)
             .then((_exchange) => res.send({ exchange: _exchange }));
         })
         .catch(error => {
@@ -188,32 +191,3 @@ app.post('/verify', (req, res, next) => {
 });
 
 module.exports = app;
-
-
-// One line comments should look like this
-
-/*
- * Multi line comments should
- * look like this
- */
-
-/*
- * In general I would say that this is really great stuff overall. I think some things you
- * could do to help with readability would be to work on spacing things more consistently,
- * and split these huge requests into smaller functions. For example, you could name the
- * callback functions so that reading the promise chain reads like english. Here's what I
- * mean using arbitrary functions...
- *
- * createUser()
- *      .then(setUserData)
- *      .then(assignUserClass)
- *      .then(findUserMatch)
- *      .finally(done);
- *
- * ... something like this could help with the readability so other devs looking at the
- * code can easily see what is happening. And this uses the power of JavaScript by passing
- * named callback functions to other functions.
- *
- * Other improvements you could make would be to see where there are repeated sections of code and
- * refactor those into reusable functions.
- */
