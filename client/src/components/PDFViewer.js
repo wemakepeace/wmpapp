@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PDF from 'react-pdf-js';
+// import PDF from 'react-pdf-js';
 import PropTypes from 'prop-types';
 import { Button, Icon } from 'semantic-ui-react';
 

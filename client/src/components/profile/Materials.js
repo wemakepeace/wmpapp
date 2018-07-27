@@ -4,17 +4,18 @@ import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react'
 import axios from 'axios';
 import { getMaterials } from '../../redux/actions/exchange';
-import PDFViewer from '../PDFViewer';
 
 class Materials extends Component  {
 
-    componentWillMount() {
+    componentDidMount() {
+        console.log('here')
         return this.props.getMaterials()
+        .then(urls => console.log(urls))
     }
 
     render() {
         const { letterURLs } = this.props.exchange;
-
+        console.log('letterURLs', letterURLs)
         return (
             <div className='profile-form'>
                 <div className='profile-segment'>
@@ -22,7 +23,6 @@ class Materials extends Component  {
                     { letterURLs && letterURLs.length ?
                         <div>
                             <span><a href={letterURLs[0]} target='_blank'>Letter 1</a></span>
-                            <PDFViewer URL={letterURLs[0]} />
                         </div>
                     : null
                     }
