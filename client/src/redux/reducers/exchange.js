@@ -18,6 +18,7 @@ const exchange = (state=initialState, { type, exchange }) => {
         case FETCH_CLASS:
             if (exchange) {
                 return {
+                    ...state,
                     ...exchange,
                     classIsVerified: classIsVerified(exchange.classRole, exchange)
                 };

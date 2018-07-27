@@ -78,8 +78,7 @@ app.use(function (err, req, res, next) {
     }
     return sendError(500, err, defaultError, res);
 
-})
-
+});
 
 app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, '/client/src/index.html'));

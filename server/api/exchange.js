@@ -24,10 +24,11 @@ app.post('/', (req, res, next) => {
 
     Class.findOne({
         where: { id: classId },
-        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
+        // attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
         include: [
             { model: School },
-            { model: Teacher, attributes: [ 'id', 'email' ] }
+            { model: Teacher }
+            // { model: Teacher, attributes: [ 'id', 'email' ] }
         ]
     })
     .then((_class) => {

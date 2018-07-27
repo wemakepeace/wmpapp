@@ -43,7 +43,18 @@ const verifyExchange = (classId, exchangeId) => {
     }
 }
 
+const getMaterials = () => {
+    return dispatch => {
+        return axios.get('/resources/letter_templates')
+            .then((response) => response.data)
+            .then(({ letterURLs }) => {
+                dispatch({ type: 'FETCH_EXCHANGE_DATA', exchange: { letterURLs } })
+            })
+    }
+}
+
 export {
     initiateExchange,
-    verifyExchange
+    verifyExchange,
+    getMaterials
 }

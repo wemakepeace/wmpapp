@@ -98,10 +98,11 @@ Exchange.findMatch = function(_class) {
                 termId: { $eq: termId },
                 ageGroupId: { $eq: ageGroupId }
             },
-            attributes: [ 'name', 'id' ],
+            // attributes: [ 'name', 'id' ],
             include: [
                 { model: School },
-                { model: Teacher, attributes: [ 'id', 'email' ] }
+                { model: Teacher }
+                // { model: Teacher, attributes: [ 'id', 'email' ] }
             ]
         }]
     })
