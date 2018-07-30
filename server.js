@@ -34,13 +34,6 @@ passport.use(strategy);
 const app = express();
 app.use(passport.initialize());
 
-app.use(require('webpack-hot-middleware')(compiler));
-app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true,
-    publicPath: config.output.publicPath,
-    serverSideRender: true
-}));
-
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
     extended:true
@@ -69,8 +62,9 @@ app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoute
 const { feedback, sendError } = require('./server/utils/feedback');
 
 app.use(function (err, req, res, next) {
-    console.log('err', err)
+    console.log('errfdsjkalfhdsjklahfjkdls', err);
     let defaultError;
+
     if (err && err.defaultError) {
         defaultError = err.defaultError;
     } else {
@@ -81,7 +75,7 @@ app.use(function (err, req, res, next) {
 });
 
 app.get('*', (req, res, next) => {
-    return res.sendFile(path.join(__dirname, '/client/src/index.html'));
+    return res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 const port = process.env.PORT || 3000;

@@ -9,21 +9,32 @@ import Routes from './routes';
 import store from './redux/store';
 
 // for hot reloading
-if (module.hot) {
-    module.hot.accept();
-}
+// if (module.hot) {
+//     module.hot.accept();
+// }
 
 const token = localStorage.getItem('token');
-const root = document.getElementById('root');
+const root = document.createElement('div');
+document.body.appendChild(root);
 
 if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
-render(
-    <Provider store={store}>
-        <HashRouter>
-            <Route component={Routes} />
-        </HashRouter>
-    </Provider>, root);
+const renderApp = () => {
+    render(
+        <Provider store={store}>
+            <HashRouter>
+                <Route component={Routes} />
+            </HashRouter>
+        </Provider>, root
+    );
+};
 
+renderApp();
+
+if (process.env.NODE_ENV === 'development') {
+    if (module.hot) {
+        module.hot.accept('./routes', renderApp);
+    }
+}

@@ -63,15 +63,10 @@ app.get('/letter_templates', (req, res, next) => {
     const { number } = req.params;
     const letters = ['WMP_letter_1.pdf', 'WMP_letter_2.pdf', 'WMP_letter_3.pdf'];
     const folder = 'letter_templates';
-    // console.log('getFileFromAWS', getFileFromAWS)
     return Promise.all(letters.map((letter) => getFileFromAWS(letter, folder)))
            .then(([ letter1, letter2, letter3 ]) => {
                 res.send({ letterURLs: [ letter1, letter2, letter3 ] })
            })
-    // return getFileFromAWS(file, folder)
-    // .then((link) => {
-    //     res.send({ letterURLs: [] )
-    // })
 });
 
 module.exports = app;

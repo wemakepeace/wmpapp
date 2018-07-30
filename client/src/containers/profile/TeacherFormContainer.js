@@ -63,7 +63,6 @@ class TeacherFormContainer extends Component {
 
         const { firstName, lastName, email, phone, password, showFeedback, showChangePwForm } = this.state;
         const { feedback } = this.props;
-        console.log('showFeedback', showFeedback)
         const fields = [
             {
                 label: 'First name',

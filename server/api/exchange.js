@@ -180,7 +180,7 @@ app.post('/verify', (req, res, next) => {
         .catch(error => {
             const defaultError = 'Something went wrong when initiating exchange.';
             error.defaultError = defaultError;
-            next(error);
+            return next(error);
         });
     })
     .catch(error => {

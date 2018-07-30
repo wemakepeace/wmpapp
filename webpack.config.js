@@ -4,50 +4,55 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebPackPlugin = require('clean-webpack-plugin');
-
+const nodeExternals = require('webpack-node-externals');
 
 const extractPlugin = new ExtractTextPlugin({
    filename: 'main.css'
 });
 
-
 module.exports = {
     entry: [
-        // 'webpack-hot-middleware/client?reload=true',
         'webpack-hot-middleware/client',
         './client/src/index.js',
     ],
-    // entry: './client/src/index.js',  // can be array, can be object with aliases or string
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle.js',
+        publicPath: '/dist/'
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: [ '.js', '.json' ],
+        modules: [ path.resolve(__dirname, 'client'), 'node_modules' ]
     },
     module: {
         rules: [
-
             {
                 test: /\.js$/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['es2015', 'react', 'stage-1']
-                        }
-                    }
-                ]
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    presets: [ 'env', 'react', 'stage-1' ],
+                    plugins: [ 'transform-decorators-legacy', 'transform-object-rest-spread' ]
+                }
             },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /node_modules/,
+            //     use: [
+            //         {
+            //             loader: 'babel-loader',
+            //             options: {
+            //                 presets: [ 'env', 'react', 'stage-1'],
+
+            //             }
+            //         }
+            //     ]
+            // },
             {
                 test: /\.scss|css$/,
                 use: extractPlugin.extract({
                     use: ['css-loader', 'sass-loader', 'resolve-url-loader']
                 })
-            },
-            {
-                test: /\.html$/,
-                use: ['html-loader']
             },
             {
                 test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -78,16 +83,14 @@ module.exports = {
         ]
     },
     devServer: {
+        stats: 'errors-only',
+        open: true,
+        port: 3000,
+        compress: true,
         hot: true,
-        inline: true,
-        historyApiFallback: true,
-        host: 'localhost', // Defaults to `localhost`
-        port: 3000, // Defaults to 8080
         proxy: {
-            '^/api/*': {
-                target: 'http://localhost:8080/api/',
-                secure: false
-            }
+            // '**': 'http://localhost:8080'
+            '*': 'http://[::1]:8080'
         }
     },
     plugins: [
@@ -96,8 +99,15 @@ module.exports = {
             jQuery: 'jquery'
         }),
         extractPlugin, // to extract css into own file
-        new HtmlWebpackPlugin({ // to create the html file
-            template: 'client/src/index.html'
+        new HtmlWebpackPlugin({
+            hash: true,
+            meta: {
+                name: 'viewport',
+                charset: 'UTF-8',
+                content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, ie=edge, user-scalable=no',
+                'http-equiv': 'X-UA-Compatible'
+            },
+            title: 'WE MAKE PEACE portal'
         }),
         // new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
         new webpack.optimize.OccurrenceOrderPlugin(),

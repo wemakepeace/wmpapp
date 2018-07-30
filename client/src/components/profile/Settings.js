@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Image, Form, Segment, Message, Button, Menu,  } from 'semantic-ui-react';
-import { Accordion, Icon } from 'semantic-ui-react'
+import { Grid, Header, Image, Form, Segment, Message, Button, Menu, Accordion, Icon } from 'semantic-ui-react';
 import ChangePasswordContainer from '../../containers/profile/ChangePasswordContainer';
 
 class Settings extends Component {
@@ -10,11 +9,11 @@ class Settings extends Component {
     }
 
     handleClick = (e, titleProps) => {
-    const { index } = titleProps
-    const { activeIndex } = this.state
-    const newIndex = activeIndex === index ? -1 : index
-    this.setState({ activeIndex: newIndex })
-  }
+        const { index } = titleProps
+        const { activeIndex } = this.state
+        const newIndex = activeIndex === index ? -1 : index
+        this.setState({ activeIndex: newIndex })
+    }
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 

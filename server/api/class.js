@@ -55,7 +55,7 @@ app.post('/', (req, res, next) => {
     }
 
     if (error && error.defaultError) {
-        next(error);
+        return next(error);
     }
 
     // Update or create class / school

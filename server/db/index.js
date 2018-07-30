@@ -210,11 +210,8 @@ const exchanges = [
 const sync = () => conn.sync({ force: true, logging: console.log });
 
 const seed = () => {
-    console.log('here')
     return sync()
         .then(() => {
-            console.log('here too!')
-
             const teacherPromises = teachers.map(teacher => {
                 return Teacher.create(teacher);
             })

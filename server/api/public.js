@@ -16,18 +16,13 @@ const {
 
 
 app.post('/create', (req, res, next) => {
-    let { data } = req.body;
-    let error = {};
+    const { data } = req.body;
     const { password, confirmPassword } = data;
-
-    /* UNCOMMENT for validations
-    let errorMessage = validatePassword(password, confirmPassword);
+    const errorMessage = validatePassword(password, confirmPassword);
 
     if (errorMessage) {
-        error.defaultError = errorMessage;
-        next(error);
+        return next({ defaultError: errorMessage });
     }
-    */
 
     return Teacher.create(data)
         .then((teacher) => {
@@ -43,7 +38,7 @@ app.post('/create', (req, res, next) => {
         })
         .catch((error) => {
             error.defaultError = 'Something went wrong when creating a user.';
-            next(error);
+            return next(error);
         });
 });
 
@@ -58,25 +53,20 @@ app.post('/login', (req, res, next) => {
             }]
         })
         .then(teacher => {
-            let defaultError, token, hashTest;
+            let token, hashTest;
             let schoolIds = [];
-            let error = {};
 
             if (!teacher){
-                error.defaultError =  'No profile found.';
-                next(error);
+                return next({ defaultError: 'No profile found.' });
             }
 
             hashTest = pbkdf2(password, teacher.salt);
-            console.log('teacher.password', teacher.password)
-            console.log('hashTest.passwordHash', hashTest.passwordHash)
+
             if (hashTest.passwordHash !== teacher.password) {
-                error.defaultError = 'Username or password is incorrect.';
-                next(error);
+                return next({ defaultError: 'Username or password is incorrect.' });
             }
 
             token = createToken(teacher.id);
-            teacher.destroyTokens();
             teacher = teacher.dataValues;
             teacher.schools = [];
             teacher.classes = teacher.classes.map(_class => {
@@ -98,7 +88,7 @@ app.post('/login', (req, res, next) => {
     })
      .catch(error => {
         error.defaultError = 'Internal server error. Please try logging in again.';
-        next(error);
+        return next(error);
     });
 });
 
@@ -139,7 +129,7 @@ app.post('/resetrequest', (req, res, next) => {
                 .catch(error => {
                     const defaultError = 'Something went wrong. Please try submitting your email again.';
                     error.defaultError = defaultError;
-                    next(error);
+                    return next(error);
                 });
         },
         function(token, user, done) {
@@ -199,16 +189,14 @@ app.post('/reset/:token', (req, res, next) => {
 
         if (!user) {
             error.defaultError = 'The reset password link has expired.';
-            next(error);
+            return next(error);
         }
 
-        /** Uncomment for validations
         const errorMessage = validatePassword(password, confirmPassword);
-
         if (errorMessage) {
             error.defaultError = errorMessage;
-            next(error);
-        } **/
+            return next(error);
+        }
 
         user.password = password;
         user.save()
@@ -227,7 +215,7 @@ app.post('/reset/:token', (req, res, next) => {
         })
         .catch(error => {
             error.defaultError = 'Internal server error. Please try resetting your password  again.';
-            next(error);
+            return next(error);
         });
     });
 });
