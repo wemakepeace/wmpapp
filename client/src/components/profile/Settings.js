@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu, Accordion, Icon } from 'semantic-ui-react';
-import ChangePasswordContainer from '../../containers/profile/ChangePasswordContainer';
+import ChangePasswordContainer from '../../containers/ChangePasswordContainer';
 
 class Settings extends Component {
     state = {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import Main from '../components/Main';
+import SignupOrLogin from '../components/SignupOrLogin';
 import Profile from '../components/profile';
-import ChangePasswordContainer from '../containers/profile/ChangePasswordContainer';
+import ChangePasswordContainer from '../containers/ChangePasswordContainer';
 import ResetPasswordRequestContainer from '../containers/ResetPWRequestContainer';
 import PrivateRoute from './PrivateRoute';
 import { fetchTeacher } from '../redux/actions/teacher';
@@ -31,9 +31,9 @@ class Routes extends Component  {
         const { match, history } = this.props;
 
         return (
-            <div>
+            <div className='page-container'>
                 <Switch>
-                    <Route key={1} exact path={match.url} render={(props) => <Main {...this.props} />} />
+                    <Route key={1} exact path={match.url} render={(props) => <SignupOrLogin {...this.props} />} />
                     <Route key={2.1} exact path={match.url + 'reset'} render={() => <ResetPasswordRequestContainer />} />
                     <Route key={2.2} path={match.url + 'reset/:token'} component={ChangePasswordContainer} />
                     <PrivateRoute
@@ -41,11 +41,11 @@ class Routes extends Component  {
                         key={4}
                         path={match.url + 'profile'}
                         component={Profile} />
-                    <PrivateRoute
+                    {/*<PrivateRoute
                         loading={this.state.loading}
                         key={6}
                         exact path={match.url + 'protected'}
-                        component={Main} />
+                        component={SignupOrLogin} /> */}
                 </Switch>
             </div>
         );

@@ -2,7 +2,6 @@
 @import '../partials/_colors';
 
 .login-signup-container {
-    // max-width: 700px;
     margin: 0 auto;
     height: 330px;
 
@@ -49,7 +48,7 @@
 
 @media (min-width: 1000px) {
 
-    .login-signup .page-content {
+    .login-signup.page-content {
         width: 760px;
     }
 

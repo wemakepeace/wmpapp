@@ -195,13 +195,12 @@
 
 
 @media (min-width: 1000px) {
-    .profile {
-        .page-content {
-            // width: 70vw;
 
-            .profile-form-column .profile-form {
-                width: 65%;
-            }
+    .page-content {
+        // width: 70vw;
+
+        .profile-form-column .profile-form {
+            width: 65%;
         }
     }
 }

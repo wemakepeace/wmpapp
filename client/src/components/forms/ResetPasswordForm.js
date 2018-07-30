@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Header, Image, Form, Segment, Message, Button, Menu } from 'semantic-ui-react';
 
 
-export const ResetPassword = ({ onInputChange, feedback }) => {
+export const ResetPasswordForm = ({ onInputChange, onChangePassword, feedback }) => {
     return (
         <Grid
             textAlign='center'
@@ -30,11 +30,18 @@ export const ResetPassword = ({ onInputChange, feedback }) => {
                             type='password'
                             onChange={ (ev) => onInputChange(ev, 'confirmPassword')}
                         />
+                        <Button
+                            className='large-custom-btn'
+                            size='large'
+                            fluid
+                            onClick={onChangePassword}>
+                            Change Password
+                        </Button>
                     </Segment>
                 </Form>
             </Grid.Column>
         </Grid>
-    )
+    );
 };
 
 

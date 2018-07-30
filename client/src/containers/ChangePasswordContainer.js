@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react'
-import Feedback from '../../components/Feedback';
-import { changePassword, resetPasswordWithToken } from '../../redux/actions/teacher';
-import { Input } from '../../components/profile/Input';
-import { ChangePassword } from '../../components/profile/ChangePassword';
-import { ResetPassword } from '../../components/ResetPassword';
+import Feedback from '../components/Feedback';
+import { changePassword, resetPasswordWithToken } from '../redux/actions/teacher';
+import { Input } from '../components/profile/Input';
+import { ChangePasswordForm } from '../components/profile/forms/ChangePasswordForm';
+import { ResetPasswordForm } from '../components/forms/ResetPasswordForm';
 
 class ChangePasswordContainer extends Component {
     constructor(props) {
@@ -48,20 +48,18 @@ class ChangePasswordContainer extends Component {
     render() {
         const { feedback, form } = this.props;
         const { showFeedback } = this.state;
-        const Form = form === 'change' ? ChangePassword : ResetPassword;
+        const Form = form === 'change' ? ChangePasswordForm : ResetPasswordForm;
 
         return (
-            <div className=''>
+            <div style={{ width: '100%' }}>
                 { showFeedback && (feedback && feedback.type === 'success') ?
                 <h4> Your password has been changed.</h4> :
                 <div>
-                    <Form onInputChange={this.onInputChange} feedback={feedback}/>
-                    <Button
-                        className='large-custom-btn'
-                        size='large'
-                        onClick={this.onChangePassword}>
-                        Change Password
-                    </Button>
+                    <Form
+                        onInputChange={this.onInputChange}
+                        feedback={feedback}
+                        onChangePassword={this.onChangePassword}
+                        />
                     { showFeedback && (feedback && feedback.type) && form !== 'change'
                         ? <Feedback {...feedback} />
                         : null }

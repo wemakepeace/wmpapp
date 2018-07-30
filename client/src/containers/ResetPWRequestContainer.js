@@ -30,7 +30,7 @@ class ResetPasswordRequestContainer extends Component {
         return (
             <Grid
                 textAlign='center'
-                style={{ height: '100%' }}
+                style={{ height: '100%', width: '100%' }}
                 verticalAlign='middle'>
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Header as='h2' textAlign='center'>

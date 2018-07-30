@@ -1,8 +1,9 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react'
 
-export const ChangePassword = ({ onInputChange }) => {
+export const ChangePasswordForm = ({ onInputChange, onChangePassword }) => {
     return (
-        <div className=''>
+        <div>
             <p>Password must be at least 8 characters long.</p>
             <div className='form-row'>
                 <label className='form-label'>Current password</label>
@@ -33,7 +34,14 @@ export const ChangePassword = ({ onInputChange }) => {
                         name='confirmPassword'
                         onChange={(ev)=>onInputChange(ev, 'confirmPassword')}/>
                 </span>
+                <Button
+                    className='large-custom-btn'
+                    size='large'
+                    fluid
+                    onClick={onChangePassword}>
+                    Change Password
+                </Button>
             </div>
         </div>
-    )
-}
+    );
+};
