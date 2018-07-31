@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Image, Form, Segment, Message, Button, Menu, Accordion, Icon } from 'semantic-ui-react';
-import ChangePasswordContainer from '../../containers/ChangePasswordContainer';
+import ChangePassword from './forms/ChangePassword';
+import {
+    Grid,
+    Header,
+    Image,
+    Form,
+    Segment,
+    Message,
+    Button,
+    Menu,
+    Accordion,
+    Icon
+} from 'semantic-ui-react';
 
 class Settings extends Component {
-    state = {
-        activeIndex: null
-    }
+    state = { activeIndex: null }
 
     handleClick = (e, titleProps) => {
         const { index } = titleProps
@@ -30,7 +39,7 @@ class Settings extends Component {
                         Change password
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
-                        <ChangePasswordContainer form='change' />
+                        <ChangePassword />
                     </Accordion.Content>
 
                     <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
@@ -55,10 +64,6 @@ class Settings extends Component {
                         </p>
                     </Accordion.Content>
                 </Accordion>
-                <div className='form-row'>
-                    { activeIndex === 'Change password' ? <ChangePasswordContainer form='change' /> : null }
-                    { activeIndex === 'Delete account' ?  <Link to='/delete'>Delete Account</Link> : null }
-                </div>
             </div>
         );
     }
