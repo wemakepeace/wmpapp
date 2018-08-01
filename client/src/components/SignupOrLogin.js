@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import HeaderContainer from '../containers/HeaderContainer';
-import SignupLoginContainer from '../containers/SignupLoginContainer';
+import LoginContainer from '../containers/LoginContainer';
+import SignupContainer from '../containers/SignupContainer';
 
 class SignupOrLogin extends Component {
-    state = {
-        form: 'login'
-    }
+
+    state = { form: 'login' }
 
     toggleForm = (form) => this.setState({ form })
 
@@ -14,6 +14,7 @@ class SignupOrLogin extends Component {
     render() {
         const { form } = this.state;
         const { history } = this.props;
+        const Form = form === 'login' ? LoginContainer : SignupContainer;
 
         return (
             <div className='login-signup page-content'>
@@ -31,7 +32,9 @@ class SignupOrLogin extends Component {
                             <h3>SIGNUP</h3>
                         </div>
                     </div>
-                    <SignupLoginContainer form={form} />
+                    <div className='login-signup-form'>
+                        <Form history={history} />
+                    </div>
                 </div>
             </div>
         );

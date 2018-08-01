@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react'
-import { Input } from '../components/profile/Input';
 
-export default ({ inputs, selectInputs, state }) => {
+export default ({ Input, CustomButton }) => {
 
     return class extends Component {
-        constructor(props) {
-            super(props);
-            this.state = state;
-        }
 
-        onInputChange = (value, key, objName) => {
+        state = {}
+
+        onInputChange = (value, key) => {
             this.setState({[ key ]: value })
         }
 
         onSubmit = () => this.props.onSubmit(this.state)
 
         render() {
+            const { inputs } = this.props;
+
             return (
                 <div className=''>
                     { inputs && inputs.length ?
@@ -30,13 +29,7 @@ export default ({ inputs, selectInputs, state }) => {
                                 />))}
                         </div> : null }
                     <div className='form-row'>
-                        <Button
-                            className='large-custom-btn'
-                            size='large'
-                            fluid
-                            onClick={this.onSubmit.bind(this)}>
-                            Save
-                        </Button>
+                        <CustomButton onSubmit={this.onSubmit.bind(this)} />
                     </div>
                 </div>
             );

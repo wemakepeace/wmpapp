@@ -20,7 +20,7 @@ const login = (data, specialFeedback) => {
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
-                    dispatch({ type: SEND_FEEDBACK, feedback });
+                    return dispatch({ type: SEND_FEEDBACK, feedback });
                 })
     }
 };

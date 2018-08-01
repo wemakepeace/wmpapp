@@ -5,7 +5,7 @@ import PrivateRoute from './PrivateRoute';
 import SignupOrLogin from '../components/SignupOrLogin';
 import Profile from '../components/profile';
 import ResetPasswordRequestContainer from '../containers/ResetPWRequestContainer';
-import ResetPassword from '../components/forms/ResetPassword';
+import ResetPassword from '../containers/ResetPasswordContainer';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
 
