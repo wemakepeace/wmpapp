@@ -16,7 +16,7 @@ const login = (data, specialFeedback) => {
                         feedback.messages = specialFeedback;
                     }
 
-                    dispatch(loginSuccess(teacher, feedback));
+                    return dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {
                     const feedback = error.response.data.feedback;
@@ -73,11 +73,11 @@ const resetPasswordWithToken = (data, token) => {
                 };
 
                 const feedback = response.data.feedback.messages;
-                dispatch(login(credentials, feedback));
+                return dispatch(login(credentials, feedback));
             },
             (error) => {
                 const feedback = error.response.data.feedback;
-                dispatch({ type: SEND_FEEDBACK, feedback });
+                return dispatch({ type: SEND_FEEDBACK, feedback });
             })
     }
 }

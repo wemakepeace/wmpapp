@@ -18,24 +18,20 @@ class SignupOrLogin extends Component {
         return (
             <div className='login-signup page-content'>
                 <HeaderContainer history={history} />
-                <div>
-                    <div className='login-signup-container'>
-                        <div className='signup-login-tabs'>
-                            <div
-                                className={`login-tab ${this.getActiveClass('login')}`}
-                                onClick={()=> this.toggleForm('login')}>
-                                <h3>LOGIN</h3>
-                            </div>
-                            <div
-                                className={`signup-tab ${this.getActiveClass('signup')}`}
-                                onClick={()=> this.toggleForm('signup')}>
-                                <h3>SIGNUP</h3>
-                            </div>
+                <div className='login-signup-container'>
+                    <div className='signup-login-tabs'>
+                        <div
+                            className={`login-tab ${this.getActiveClass('login')}`}
+                            onClick={()=> this.toggleForm('login')}>
+                            <h3>LOGIN</h3>
                         </div>
-                        <div className='login-signup-form'>
-                            <SignupLoginContainer form={form} />
+                        <div
+                            className={`signup-tab ${this.getActiveClass('signup')}`}
+                            onClick={()=> this.toggleForm('signup')}>
+                            <h3>SIGNUP</h3>
                         </div>
                     </div>
+                    <SignupLoginContainer form={form} />
                 </div>
             </div>
         );

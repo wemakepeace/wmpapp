@@ -35,32 +35,6 @@
                 font-size: 0.8em;
             }
 
-            .form-row {
-                margin: 10px 0;
-
-                .form-label {
-                    letter-spacing: 0.2em;
-                }
-
-                .form-input-span {
-                    .form-input {
-                        width: 100%;
-                        letter-spacing: 0.2em !important;
-                        flex: 1;
-
-                    }
-
-                    input[type=email], input[type=password], input[type=search], input[type=text] {
-                        -webkit-appearance: textfield;
-                        -moz-appearance: none;
-                    }
-                }
-
-                .form-input {
-                    padding: 8px;
-                }
-            }
-
             .steps {
                display: flex;
                .step-list ul li {
@@ -124,9 +98,7 @@
 
             span, div {
                display: block;
-               // margin-left: 12px;
             }
-
 
             label {
                 font-weight: bold;
@@ -186,6 +158,32 @@
                 justify-content: center;
             }
         }
+    }
+}
+
+.form-row {
+    margin: 10px 0;
+
+    .form-label {
+        letter-spacing: 0.2em;
+    }
+
+    .form-input-span {
+        .form-input {
+            width: 100%;
+            letter-spacing: 0.2em !important;
+            flex: 1;
+        }
+
+
+        input[type=email], input[type=password], input[type=search], input[type=text] {
+            -webkit-appearance: textfield;
+            -moz-appearance: none;
+        }
+    }
+
+    .form-input {
+        padding: 8px;
     }
 }
 

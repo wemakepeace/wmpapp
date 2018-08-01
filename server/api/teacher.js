@@ -80,20 +80,13 @@ app.put('/changepassword', (req, res, next) => {
     Teacher.findById(id)
         .then(user => {
             const hashTest = pbkdf2(oldPassword, user.salt);
-            let error = {};
 
             if (hashTest.passwordHash === user.password) {
-                /*** UNCOMMENT for validations ***/
                 let errorMessage = validatePassword(password, confirmPassword);
 
                 if (errorMessage) {
-                    error.defaultError = errorMessage;
-                    next(error);
-                    // return res.status(500).send({
-                    //     feedback: feedback(ERROR, errorMessage)
-                    // });
+                    return next({ defaultError: errorMessage });
                 }
-                /***/
 
                 user.password = password;
 

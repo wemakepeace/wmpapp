@@ -1,6 +1,7 @@
 @import '../partials/_mixins';
 @import '../partials/_colors';
 
+
 .login-signup-container {
     margin: 0 auto;
     height: 330px;
@@ -8,15 +9,16 @@
     .login-signup-form {
         background-color: $lightyellow !important;
         padding: 20px;
+        height: 100%;
+        display: flex;
+        @include form-styles
+        input { @include input-styles }
+        button { @include action-btn }
 
-        .signup-form, .login-form {
-            @include form-styles
-
-            input { @include input-styles }
-
-            button { @include action-btn }
+        .form-container {
+            margin: auto;
+            width: 100%;
         }
-
     }
 
     .signup-login-tabs {
