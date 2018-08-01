@@ -1,8 +1,8 @@
 import React from 'react';
 import countries from 'country-list';
-import { AsyncSelectInput } from './AsyncSelectInput';
-import { fetchData } from '../../utils/fetchData'
-import { Input } from './Input';
+import { AsyncSelectInput } from '../AsyncSelectInput';
+import { fetchData } from '../../../utils/fetchData'
+import { Input } from '../Input';
 
 const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
     const {

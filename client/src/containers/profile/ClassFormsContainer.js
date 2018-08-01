@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { Button } from 'semantic-ui-react';
 import Feedback from '../../components/Feedback';
-import ClassForm from '../../components/profile/ClassForm';
-import SchoolForm from '../../components/profile/SchoolForm';
+import ClassForm from '../../components/profile/forms/ClassForm';
+import SchoolForm from '../../components/profile/forms/SchoolForm';
 import { saveClass, removeCurrentClass } from '../../redux/actions/class';
 
 

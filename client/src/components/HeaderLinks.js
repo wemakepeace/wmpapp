@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import SelectClass from './SelectClass';
 
 const HeaderLinks = ({ teacher, initiateNewClass, onLogout, history }) => {
