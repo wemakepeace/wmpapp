@@ -62,7 +62,7 @@ class ClassFormsContainer extends Component {
         if (!ev || ev.value === 'newaddress') {
             this.setState(this.getDefaultStateOrProps(this.state.class))
         } else {
-            const schoolId = ev.value || null;
+            const schoolId = ev.value;
             return axios.get(`/school/${schoolId}`)
                 .then(({ data }) => this.setState({ school: data }));
         }

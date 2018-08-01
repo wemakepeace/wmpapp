@@ -2,7 +2,7 @@ import React from 'react';
 
 const SignupForm = ({ onChange }) => {
     return (
-        <div className='login-form'>
+        <div>
             <div className='form-row'>
                 <input
                     placeholder='FIRST NAME'

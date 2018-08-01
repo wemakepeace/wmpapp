@@ -56,7 +56,6 @@ const saveClass = (classData, schoolData) => {
     };
 };
 
-
 const saveClassSuccess = (_class, school, feedback) => {
     return {
         type: SAVE_CLASS_SUCCESS,

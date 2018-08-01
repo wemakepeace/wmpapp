@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
+import Feedback from '../components/Feedback';
 import SignupForm from '../components/forms/SignupForm';
 import LoginForm from '../components/forms/LoginForm';
 import { login, logout } from '../redux/actions/teacher';
 import { signup } from '../redux/actions/teacher';
-import Feedback from '../components/Feedback';
 
 class SignupLoginContainer extends Component {
     constructor(props) {
@@ -30,17 +30,6 @@ class SignupLoginContainer extends Component {
             redirectToReferrer: false,
             showFeedback: false
         };
-        const login = {
-            email: '',
-            password: ''
-        };
-        const signup =  {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
-        }
 
         return { ...state, ...form };
     }
@@ -67,15 +56,17 @@ class SignupLoginContainer extends Component {
         }
 
         return(
-            <div className='login-form'>
-                <Form onChange={this.onChange.bind(this)} />
-                <Button
-                    className='large-custom-btn'
-                    size='large'
-                    onClick={()=>this.onSubmit()}>{form.toUpperCase()}</Button>
-                { showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null }
+            <div className='login-signup-form'>
+                <div className='form-container'>
+                    <Form onChange={this.onChange.bind(this)} />
+                    <Button
+                        className='large-custom-btn'
+                        size='large'
+                        onClick={()=>this.onSubmit()}>{form.toUpperCase()}</Button>
+                    { showFeedback && (feedback && feedback.type)
+                        ? <Feedback {...feedback} />
+                        : null }
+                </div>
             </div>
         );
     }

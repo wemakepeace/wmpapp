@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const LoginForm = ({ onChange }) => {
 
     return (
-        <div className='login-form'>
+        <div>
             <div className='form-row'>
                 <input
                     placeholder='USERNAME'
