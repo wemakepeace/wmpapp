@@ -32,6 +32,7 @@ const ResetPassword = ({ changePassword, feedback }) => {
         <div>
             <p>Password must be at least 8 characters long.</p>
             <Form onSubmit={onSubmit} />
+
             <Feedback {...feedback} />
         </div>
     );
