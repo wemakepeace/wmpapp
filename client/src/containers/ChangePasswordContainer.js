@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import FormContainer from '../../../containers/FormContainer';
-import Feedback from '../../Feedback';
-import { changePassword } from '../../../redux/actions/teacher';
+import FormContainer from './FormContainer';
+import Feedback from '../components/Feedback';
+import { changePassword } from '../redux/actions/teacher';
+import { Input } from '../components/profile/Input';
+import CustomButton from '../components/CustomButton';
 
+const ChangePasswordButton = CustomButton({ name: 'Change Password' });
 const inputs = [
     {
         label: 'Current password',
@@ -22,8 +25,7 @@ const inputs = [
     }
 ];
 
-const state = { password: '', confirmPassword: '' };
-const Form = FormContainer({ inputs, state });
+const Form = FormContainer({ Input, CustomButton: ChangePasswordButton });
 
 const ResetPassword = ({ changePassword, feedback }) => {
     const onSubmit = (passwords) => changePassword(passwords)
@@ -31,8 +33,7 @@ const ResetPassword = ({ changePassword, feedback }) => {
     return (
         <div>
             <p>Password must be at least 8 characters long.</p>
-            <Form onSubmit={onSubmit} />
-
+            <Form onSubmit={onSubmit} inputs={inputs} />
             <Feedback {...feedback} />
         </div>
     );
