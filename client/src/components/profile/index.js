@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import HeaderContainer from '../../containers/HeaderContainer';
+import Header from '../Header';
 import TabContent from './TabContent';
-import { ProfileMenu } from './ProfileMenu';
+import { Menu } from './Menu';
 import { removeCurrentClass } from '../../redux/actions/class';
 
 const Profile = ({ ...props, currentClass }) => {
     return (
         <div className='page-content'>
-            <HeaderContainer {...props} />
+            <Header {...props} />
             <div className='profile-column-container'>
                 <div className='profile-menu-column'>
-                    <ProfileMenu
-                        currentClass={currentClass}
-                        {...props}
-                    />
+                    <Menu currentClass={currentClass} {...props} />
                 </div>
                 <div className='profile-form-column'>
                     <Route

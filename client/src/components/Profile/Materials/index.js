@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Table, Grid, Header, Image, Form, Segment, Message, Button, Menu, Accordion, Icon } from 'semantic-ui-react';
-import axios from 'axios';
-import { getMaterials } from '../../redux/actions/exchange';
+import { getMaterials } from '../../../redux/actions/exchange';
+import {
+    Table,
+    Grid,
+    Header,
+    Image,
+    Form,
+    Segment,
+    Message,
+    Button,
+    Menu,
+    Accordion,
+    Icon
+} from 'semantic-ui-react';
 
 
 const OverviewTable = () => (

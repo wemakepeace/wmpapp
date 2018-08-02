@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import HeaderContainer from '../containers/HeaderContainer';
-import LoginContainer from '../containers/LoginContainer';
-import SignupContainer from '../containers/SignupContainer';
+import Header from '../Header';
+import Login from '../Login';
+import Signup from '../Signup';
 
 class SignupOrLogin extends Component {
 
@@ -14,11 +14,11 @@ class SignupOrLogin extends Component {
     render() {
         const { form } = this.state;
         const { history } = this.props;
-        const Form = form === 'login' ? LoginContainer : SignupContainer;
+        const Form = form === 'login' ? Login : Signup;
 
         return (
             <div className='login-signup page-content'>
-                <HeaderContainer history={history} />
+                <Header history={history} />
                 <div className='login-signup-container'>
                     <div className='signup-login-tabs'>
                         <div

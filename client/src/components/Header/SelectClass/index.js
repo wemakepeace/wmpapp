@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Async } from 'react-select';
-import { fetchClass, removeCurrentClass } from '../redux/actions/class';
+import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
 
 class SelectClass extends Component  {
     state = {

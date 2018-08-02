@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const ProfileMenuLink = ({ match, location, name }) => {
+export const MenuLink = ({ match, location, name }) => {
     const getActiveClass = (item) => location.pathname.indexOf(item) > -1 ? 'active-profile' : '';
 
     return (

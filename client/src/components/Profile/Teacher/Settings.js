@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ChangePassword from '../../containers/ChangePasswordContainer';
+import ChangePassword from './ChangePassword';
 import {
     Grid,
     Header,

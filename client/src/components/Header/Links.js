@@ -1,7 +1,7 @@
 import React from 'react';
 import SelectClass from './SelectClass';
 
-const HeaderLinks = ({ teacher, initiateNewClass, onLogout, history }) => {
+const Links = ({ teacher, initiateNewClass, onLogout, history }) => {
     if (!teacher || !teacher.id) {
         return null;
     }
@@ -31,4 +31,4 @@ const HeaderLinks = ({ teacher, initiateNewClass, onLogout, history }) => {
     );
 }
 
-export default HeaderLinks;
+export default Links;
