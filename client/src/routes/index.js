@@ -41,7 +41,8 @@ class Routes extends Component  {
                     <Route
                         key={2}
                         exact path={match.url}
-                        render={(props) => <LandingPage {...this.props} />}
+                        // passes feedback
+                        render={() => <LandingPage {...this.props} />}
                     />
                     <Route
                         key={3}
@@ -65,4 +66,10 @@ class Routes extends Component  {
     };
 };
 
-export default connect(null, { fetchTeacher, fetchClass })(Routes);
+const mapStateToProps = ({ feedback }) => {
+    return {
+        feedback
+    }
+}
+
+export default connect(mapStateToProps, { fetchTeacher, fetchClass })(Routes);

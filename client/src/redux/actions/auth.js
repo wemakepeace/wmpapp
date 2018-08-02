@@ -82,6 +82,7 @@ const resetPasswordWithToken = (data, token) => {
     }
 }
 const changePassword = (data) => {
+    console.log('data', data)
     return dispatch => {
         return axios.put('/teacher/changepassword', data)
         .then(

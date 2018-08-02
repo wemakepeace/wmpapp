@@ -23,17 +23,16 @@ app.get('/', (req, res, next) => {
     return Teacher.getTeacherAndAssociations(id)
         .then((teacher) => {
             if (!teacher){
-                error.defaultError =  'No profile found.';
-                return next(error);
+                const defaultError =  'No profile found.';
+                return next({ defaultError });
             }
             res.send({
-                feedback: feedback(SUCCESS, ['Valid session loaded.']),
+                feedback: feedback(SUCCESS, []),
                 teacher
             });
         })
         .catch(error => {
-            const defaultError = 'Something went wrong when loading your session. Please login.';
-            error.defaultError = defaultError;
+            error.defaultError = 'Something went wrong when loading your session. Please login.';
             return next(error);
         });
 });
@@ -59,14 +58,12 @@ app.put('/', (req, res, next) => {
                 })
             })
             .catch(error => {
-                const defaultError = 'Something went wrong when updating your profile.';
-                error.defaultError = defaultError;
+                error.defaultError = 'Something went wrong when updating your profile.';
                 return next(error);
             })
     })
     .catch(error => {
-        const defaultError = 'Something went wrong when updating your profile.';
-        error.defaultError = defaultError;
+        error.defaultError = 'Something went wrong when updating your profile.';
         return next(error);
     })
 });
@@ -77,12 +74,16 @@ app.put('/changepassword', (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);
 
+    if (!password || !confirmPassword || !oldPassword) {
+        return next({ defaultError: 'You have to fill in all fields to change password.'})
+    }
+
     Teacher.findById(id)
         .then(user => {
             const hashTest = pbkdf2(oldPassword, user.salt);
 
             if (hashTest.passwordHash === user.password) {
-                let errorMessage = validatePassword(password, confirmPassword);
+                const errorMessage = validatePassword(password, confirmPassword);
 
                 if (errorMessage) {
                     return next({ defaultError: errorMessage });
@@ -111,15 +112,13 @@ app.put('/changepassword', (req, res, next) => {
                     })
                 })
                 .catch(error => {
-                    const defaultError = 'Internal server error. Please try resetting your password  again.';
-                    error.defaultError = defaultError;
+                    error.defaultError = 'Internal server error. Please try resetting your password  again.';;
                     return next(error);
                 });
             }
             else {
                 const defaultError = "Password is incorrect.";
-                const error = defaultError;
-                return next(error);
+                return next({ defaultError });
             }
         });
 });
