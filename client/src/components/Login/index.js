@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import FormContainer from '../reusables/FormContainer';
 import CustomButton from '../reusables/CustomButton';
-import Feedback from '../Feedback';
 import { login } from '../../redux/actions/auth';
 import { LoginSignupInput } from '../reusables/LoginSignupInput';
 
@@ -35,16 +34,12 @@ const LoginContainer = ({ login, match, history, feedback }) => {
     }
 
     return (
-        <div className='form-container'>
-            <Form onSubmit={onSubmit} inputs={inputs} />
-            <Feedback {...feedback} />
+        <div className='login-signup-form'>
+            <div className='form-container'>
+                <Form onSubmit={onSubmit} inputs={inputs} />
+            </div>
         </div>
     );
 }
 
-const mapStateToProps = ({ feedback }) => {
-    return { feedback }
-}
-
-
-export default connect(mapStateToProps, { login })(LoginContainer);
+export default connect(null, { login })(LoginContainer);

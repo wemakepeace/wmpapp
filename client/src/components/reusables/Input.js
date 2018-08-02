@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Input = ({ label, value, name, onInputChange, type }) => {
+export const Input = ({ label, value, name, onInputChange, type, objName }) => {
     return (
         <div className='form-row'>
             <label className='form-label'>{label}</label>
@@ -11,7 +11,7 @@ export const Input = ({ label, value, name, onInputChange, type }) => {
                     placeholder=''
                     type={type}
                     name={name}
-                    onChange={(ev) => onInputChange(ev.target.value, name)}
+                    onChange={(ev) => onInputChange(ev.target.value, name, objName)}
                 />
             </span>
         </div>

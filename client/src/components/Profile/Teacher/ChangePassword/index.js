@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FormContainer from '../../../reusables/FormContainer';
 import CustomButton from '../../../reusables/CustomButton';
-import Feedback from '../../../Feedback';
 import { changePassword } from '../../../../redux/actions/teacher';
 import { Input } from '../../../reusables/Input';
 
@@ -27,21 +26,16 @@ const inputs = [
 
 const Form = FormContainer({ Input, CustomButton: ChangePasswordButton });
 
-const ResetPassword = ({ changePassword, feedback }) => {
+const ResetPassword = ({ changePassword }) => {
     const onSubmit = (passwords) => changePassword(passwords)
 
     return (
         <div>
             <p>Password must be at least 8 characters long.</p>
             <Form onSubmit={onSubmit} inputs={inputs} />
-            <Feedback {...feedback} />
         </div>
     );
 }
 
-const mapStateToProps = ({ feedback }) => {
-    return { feedback }
-}
 
-
-export default connect(mapStateToProps, { changePassword })(ResetPassword);
+export default connect(null, { changePassword })(ResetPassword);

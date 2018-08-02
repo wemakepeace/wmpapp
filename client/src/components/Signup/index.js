@@ -44,16 +44,12 @@ const SignupContainer = ({ signup, feedback }) => {
     }
 
     return (
-        <div className='form-container'>
-            <Form onSubmit={onSubmit} inputs={inputs} />
-            <Feedback {...feedback} />
+        <div className='login-signup-form'>
+            <div className='form-container'>
+                <Form onSubmit={onSubmit} inputs={inputs} />
+            </div>
         </div>
     );
 }
 
-const mapStateToProps = ({ feedback }) => {
-    return { feedback }
-}
-
-
-export default connect(mapStateToProps, { signup })(SignupContainer);
+export default connect(null, { signup })(SignupContainer);

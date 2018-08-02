@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Feedback from '../../Feedback';
 import Settings from './Settings';
 import { Input } from '../../reusables/Input';
 import { updateTeacher } from '../../../redux/actions/teacher';
@@ -22,7 +21,6 @@ class TeacherFormContainer extends Component {
             email: '',
             phone: '',
             password: '',
-            showFeedback: false,
             showChangePwForm: false
         };
 
@@ -33,7 +31,7 @@ class TeacherFormContainer extends Component {
     }
 
     onInputChange = (value, key) => {
-        this.setState({ [ key ]: value, showFeedback: false })
+        this.setState({ [ key ]: value })
     }
 
     onChangePasswordClick = () => {
@@ -49,11 +47,7 @@ class TeacherFormContainer extends Component {
 
     }
 
-    componentWillReceiveProps({ teacher, feedback }) {
-        if (feedback && feedback.type) {
-            this.setState({ showFeedback: true });
-        }
-
+    componentWillReceiveProps({ teacher}) {
         if (teacher && (teacher !== this.state)) {
             this.setState(this.getDefaultStateOrProps(teacher));
         }
@@ -61,8 +55,7 @@ class TeacherFormContainer extends Component {
 
     render() {
 
-        const { firstName, lastName, email, phone, password, showFeedback, showChangePwForm } = this.state;
-        const { feedback } = this.props;
+        const { firstName, lastName, email, phone, password, showChangePwForm } = this.state;
         const fields = [
             {
                 label: 'First name',
@@ -89,7 +82,7 @@ class TeacherFormContainer extends Component {
         ];
 
         return (
-            <div className='profile-form'>
+            <div>
                 <div className='profile-segment'>
                     <h2>Teacher Information</h2>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
@@ -110,9 +103,6 @@ class TeacherFormContainer extends Component {
                     showChangePwForm={showChangePwForm}
                     onChangePasswordClick={this.onChangePasswordClick}
                 />
-                { showFeedback && (feedback && feedback.type)
-                    ? <Feedback {...feedback} />
-                    : null }
             </div>
         )
     }
@@ -120,8 +110,7 @@ class TeacherFormContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        teacher: state.teacher,
-        feedback: state.feedback
+        teacher: state.teacher
     }
 }
 

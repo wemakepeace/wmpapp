@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { Button } from 'semantic-ui-react';
-import Feedback from '../../Feedback';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
 import { saveClass, removeCurrentClass } from '../../../redux/actions/class';
@@ -34,8 +33,7 @@ class ClassFormsContainer extends Component {
                 zip: '',
                 state: '',
                 country: ''
-            },
-            showFeedback: false
+            }
         };
 
         if (currentClass && currentClass.id) {
@@ -50,6 +48,10 @@ class ClassFormsContainer extends Component {
     }
 
     onInputChange = (value, key, objName) => {
+        console.log('rendering')
+        console.log('value', value)
+        console.log('key', key)
+        console.log('objName', objName)
         this.setState({
             [ objName ]: {
                 ...this.state[ objName ],
@@ -75,45 +77,36 @@ class ClassFormsContainer extends Component {
         this.props.saveClass(classData, schoolData);
     }
 
-    componentWillReceiveProps({ feedback, currentClass }) {
-        if (feedback && feedback.type) {
-            this.setState({ showFeedback: true });
-        }
-
+    componentWillReceiveProps({ currentClass }) {
         if (currentClass && (currentClass.id !== this.state.class.id)) {
             this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
         }
     }
 
     render() {
-        const { feedback, currentClass, teacher: { id } } = this.props;
-        const { showFeedback } = this.state;
+        const { currentClass, teacher: { id } } = this.props;
 
         return (
-            <div className='profile-form'>
-                <div className='profile-segment'>
-                    <div>
-                        { currentClass && currentClass.id ?
-                            <h2>Information & Settings for Class {currentClass.name}</h2> :
-                            <h2> Register New Class </h2> }
-                        <ClassForm
-                            classData={this.state.class}
-                            onInputChange={this.onInputChange.bind(this)}
-                        />
-                        <SchoolForm
-                            school={this.state.school}
-                            onInputChange={this.onInputChange.bind(this)}
-                            teacherId={id}
-                            fetchSchool={this.fetchSchool.bind(this)}
-                        />
-                        <div className='form-row'>
-                            <Button
-                                className='large-custom-btn'
-                                size='large'
-                                onClick={this.submitData}>SAVE</Button>
-                        </div>
-                        { showFeedback && (feedback && feedback.type) ?
-                            <Feedback {...feedback} /> : null }
+            <div className='profile-segment'>
+                <div>
+                    { currentClass && currentClass.id ?
+                        <h2>Information & Settings for Class {currentClass.name}</h2> :
+                        <h2> Register New Class </h2> }
+                    <ClassForm
+                        classData={this.state.class}
+                        onInputChange={this.onInputChange}
+                    />
+                    <SchoolForm
+                        school={this.state.school}
+                        onInputChange={this.onInputChange}
+                        teacherId={id}
+                        fetchSchool={this.fetchSchool}
+                    />
+                    <div className='form-row'>
+                        <Button
+                            className='large-custom-btn'
+                            size='large'
+                            onClick={this.submitData}>SAVE</Button>
                     </div>
                 </div>
             </div>
@@ -121,8 +114,8 @@ class ClassFormsContainer extends Component {
     }
 }
 
-const mapStateToProps = ({ teacher, currentClass, feedback }) => {
-    return { teacher, currentClass, feedback };
+const mapStateToProps = ({ teacher, currentClass }) => {
+    return { teacher, currentClass };
 };
 
 const toBeDispatched = { saveClass, removeCurrentClass };

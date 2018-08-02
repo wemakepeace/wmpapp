@@ -17,7 +17,7 @@ export default ({ Input, CustomButton }) => {
             const { inputs } = this.props;
 
             return (
-                <div className=''>
+                <div className='custom-form'>
                     { inputs && inputs.length ?
                         <div className='profile-segment'>
                             {inputs.map((input) => (

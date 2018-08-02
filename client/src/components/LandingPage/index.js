@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from '../Header';
 import Login from '../Login';
 import Signup from '../Signup';
+import Feedback from '../Feedback';
 
 class SignupOrLogin extends Component {
 
@@ -13,7 +14,7 @@ class SignupOrLogin extends Component {
 
     render() {
         const { form } = this.state;
-        const { history } = this.props;
+        const { history, feedback } = this.props;
         const Form = form === 'login' ? Login : Signup;
 
         return (
@@ -32,10 +33,9 @@ class SignupOrLogin extends Component {
                             <h3>SIGNUP</h3>
                         </div>
                     </div>
-                    <div className='login-signup-form'>
-                        <Form history={history} />
-                    </div>
+                    <Form history={history} />
                 </div>
+                <Feedback {...feedback} />
             </div>
         );
     };

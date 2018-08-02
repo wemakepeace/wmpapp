@@ -85,7 +85,7 @@ class Materials extends Component  {
         const { activeIndex } = this.state
 
         return (
-            <div className='profile-form'>
+            <div>
                 <div className='profile-segment'>
                     <h2>Instructions & Materials</h2>
                     <p>sjfkgfjhkgjhgldfklfgjhlkflgkhjrtljhlgkjfdglhr</p>
@@ -149,12 +149,9 @@ class Materials extends Component  {
                             Letter 3
                         </Accordion.Title>
                     </Accordion>
-
                 </div>
-
             </div>
-        )
-
+        );
     }
 }
 

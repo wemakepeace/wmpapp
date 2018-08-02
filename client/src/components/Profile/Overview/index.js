@@ -29,7 +29,7 @@ class OverviewContainer extends Component {
         const { firstName } = teacher;
 
         return (
-            <div className='profile-form'>
+            <div>
                 <LoaderWithText
                     loading={loading}
                     exchangeAction={exchangeAction}
