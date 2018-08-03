@@ -48,10 +48,6 @@ class ClassFormsContainer extends Component {
     }
 
     onInputChange = (value, key, objName) => {
-        console.log('rendering')
-        console.log('value', value)
-        console.log('key', key)
-        console.log('objName', objName)
         this.setState({
             [ objName ]: {
                 ...this.state[ objName ],
@@ -66,7 +62,9 @@ class ClassFormsContainer extends Component {
         } else {
             const schoolId = ev.value;
             return axios.get(`/school/${schoolId}`)
-                .then(({ data }) => this.setState({ school: data }));
+                .then(({ data }) => {
+                    this.setState({ school: data })
+                });
         }
     }
 

@@ -4,8 +4,17 @@ import { Button } from 'semantic-ui-react'
 export default ({ Input, CustomButton }) => {
 
     return class extends Component {
+        constructor(props) {
+            super(props);
+            this.state = this.getDefaultState(props);
+        }
 
-        state = {}
+        getDefaultState = (props) => {
+            return props.inputs.reduce((state, input) => {
+                state[ input.name ] = '';
+                return state
+            }, {});
+        }
 
         onInputChange = (value, key) => {
             this.setState({[ key ]: value })

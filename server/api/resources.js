@@ -16,7 +16,7 @@ app.get('/agegroups', (req, res, next) => {
                     label: group.dataValues.name,
                     value: group.dataValues.id
                 }
-            })
+            });
             res.send(data);
         })
         .catch(error => {
