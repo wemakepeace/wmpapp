@@ -18,15 +18,6 @@ AWS.config.update({
 */
 const getFileFromAWS = (file, folder) => {
     const s3 = new AWS.S3();
-    console.log('accessKeyId', accessKeyId)
-    console.log('secretAccessKey', secretAccessKey)
-    // AWS.config.update({
-    //     region: 'us-east-1',
-    //     accessKeyId: accessKeyId,
-    //     secretAccessKey: secretAccessKey,
-    //     signatureVersion: 'v4'
-    // });
-
     const signedUrlExpireSeconds = 60 * 10; // your expiry time in seconds.
     return new Promise((resolve, reject) => {
         if (!file) resolve();
@@ -36,11 +27,9 @@ const getFileFromAWS = (file, folder) => {
             Expires: signedUrlExpireSeconds
         }, (err, url) => {
             if (err) {
-                console.log('err', err)
-                reject(err);
+                return reject(err);
             }
-            console.log('url', url)
-            resolve(url);
+            return resolve(url);
         });
     });
 };

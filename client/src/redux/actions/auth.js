@@ -12,9 +12,9 @@ const login = (data, specialFeedback) => {
                 ({ teacher, token, feedback }) => {
                     setToken(token);
 
-                    if (specialFeedback) {
-                        feedback.messages = specialFeedback;
-                    }
+                    // if (specialFeedback) {
+                    //     feedback.messages = specialFeedback;
+                    // }
 
                     return dispatch(loginSuccess(teacher, feedback));
                 },
@@ -82,7 +82,6 @@ const resetPasswordWithToken = (data, token) => {
     }
 }
 const changePassword = (data) => {
-    console.log('data', data)
     return dispatch => {
         return axios.put('/teacher/changepassword', data)
         .then(

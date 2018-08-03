@@ -49,14 +49,14 @@ const teacherRoutes = require('./server/api/teacher');
 const classRoutes = require('./server/api/class');
 const resources = require('./server/api/resources');
 const exchangeRoutes = require('./server/api/exchange');
-// const schoolRoutes = require('./server/api/school');
+const schoolRoutes = require('./server/api/school');
 
 app.use('/public', publicRoutes);
 app.use('/resources', resources);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
 app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes);
 app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeRoutes);
-// app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
+app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
 
 
 const { feedback, sendError } = require('./server/utils/feedback');
