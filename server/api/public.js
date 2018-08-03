@@ -31,7 +31,7 @@ app.post('/create', (req, res, next) => {
             const token = createToken(teacher.id);
 
             res.send({
-                feedback: feedback(SUCCESS, ['ok']),
+                feedback: feedback(SUCCESS, []),
                 token: token,
                 teacher: extractDataForFrontend(teacher, {})
             });
@@ -81,7 +81,7 @@ app.post('/login', (req, res, next) => {
             });
 
             res.send({
-                feedback: feedback(SUCCESS, ["ok"]),
+                feedback: feedback(SUCCESS, []),
                 token: token,
                 teacher: extractDataForFrontend(teacher, {})
             });

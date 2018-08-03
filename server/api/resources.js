@@ -2,6 +2,7 @@ const app = require('express').Router();
 const AgeGroup = require('../db/models/AgeGroup');
 const Term = require('../db/models/Term');
 const { extractDataForFrontend } = require('../utils/helpers');
+const { getFileFromAWS } = require('../utils/aws/helpers');
 const { sendError } = require('../utils/feedback');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const countries = require('country-list');
@@ -19,8 +20,8 @@ app.get('/agegroups', (req, res, next) => {
             res.send(data);
         })
         .catch(error => {
-            const defaultError = 'Something went wrong when fetching data. Please refresh.'
-            sendError(500, null, defaultError, res);
+            error.defaultError = 'Something went wrong when fetching data. Please refresh.'
+            next(error);
         });
 });
 
@@ -36,8 +37,8 @@ app.get('/terms', (req, res, next) => {
             res.send(data);
         })
         .catch(error => {
-            const defaultError = 'Something went wrong when fetching data. Please refresh.'
-            sendError(500, null, defaultError, res);
+            error.defaultError = 'Something went wrong when fetching data. Please refresh.'
+            next(error);
         });
 });
 
@@ -53,11 +54,13 @@ app.get('/countries', (req, res, next) => {
 
         options.length ? resolve(options) : reject();
     })
-    .then(options => res.send(options));
+    .then(options => res.send(options))
+    .catch(error => {
+        error.defaultError = 'Something went wrong when fetching data. Please refresh.'
+        next(error);
+    });
 });
 
-
-const { getFileFromAWS } = require('../utils/aws/helpers');
 
 app.get('/letter_templates', (req, res, next) => {
     const { number } = req.params;
@@ -67,6 +70,10 @@ app.get('/letter_templates', (req, res, next) => {
            .then(([ letter1, letter2, letter3 ]) => {
                 res.send({ letterURLs: [ letter1, letter2, letter3 ] })
            })
+            .catch(error => {
+                error.defaultError = 'Something went wrong when fetching data. Please refresh.'
+                next(error);
+            });
 });
 
 module.exports = app;

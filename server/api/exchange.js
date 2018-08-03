@@ -24,11 +24,11 @@ app.post('/', (req, res, next) => {
 
     Class.findOne({
         where: { id: classId },
-        // attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
+        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
         include: [
-            { model: School },
-            { model: Teacher }
-            // { model: Teacher, attributes: [ 'id', 'email' ] }
+            // { model: School },
+            // { model: Teacher }
+            { model: Teacher, attributes: [ 'id', 'email' ] }
         ]
     })
     .then((_class) => {
@@ -76,11 +76,7 @@ app.post('/', (req, res, next) => {
          * and formatting for frontend
          */
         exchange.getExchangeAndMatchClass(classId)
-        .then((_exchange) => {
-            res.send({
-                exchange: _exchange
-            });
-        })
+        .then((_exchange) => res.send({ exchange: _exchange }));
     })
     .catch(error => {
         const defaultError = 'Something went wrong when initiating exchange.';

@@ -8,11 +8,6 @@ import './css/scss/index.scss';
 import Routes from './routes';
 import store from './redux/store';
 
-// for hot reloading
-// if (module.hot) {
-//     module.hot.accept();
-// }
-
 const token = localStorage.getItem('token');
 const root = document.createElement('div');
 document.body.appendChild(root);

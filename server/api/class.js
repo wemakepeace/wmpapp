@@ -27,7 +27,7 @@ app.get('/:id', (req, res, next) => {
         .then(([ _class, exchange ]) => {
             // Fetches Exchange and the match class if any, based on classId
             res.send({
-                feedback: feedback(SUCCESS, ['Class fetched.']),
+                feedback: feedback(SUCCESS, []),
                 exchange,
                 _class
             });

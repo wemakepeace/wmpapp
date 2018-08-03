@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import HeaderContainer from '../../containers/HeaderContainer';
+import Header from '../Header';
 import TabContent from './TabContent';
-import { ProfileMenu } from './ProfileMenu';
+import { Menu } from './Menu';
 import { removeCurrentClass } from '../../redux/actions/class';
+import Feedback from '../Feedback';
 
-const Profile = ({ ...props, currentClass }) => {
+const Profile = ({ ...props, currentClass, feedback }) => {
     return (
         <div className='page-content'>
-            <HeaderContainer {...props} />
+            <Header {...props} />
             <div className='profile-column-container'>
                 <div className='profile-menu-column'>
-                    <ProfileMenu
-                        currentClass={currentClass}
-                        {...props}
-                    />
+                    <Menu currentClass={currentClass} {...props} />
                 </div>
                 <div className='profile-form-column'>
-                    <Route
-                        path={`${props.match.path}/:tab`}
-                        component={TabContent}
-                        {...props} />
+                    <div className='profile-form'>
+                        <Route
+                            path={`${props.match.path}/:tab`}
+                            component={TabContent}
+                            {...props} />
+                        <Feedback {...feedback} />
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
 
-const mapStateToProps = ({ currentClass }) => {
-    return { currentClass };
+const mapStateToProps = ({ currentClass, feedback }) => {
+    return { currentClass, feedback };
 };
 
 export default connect(mapStateToProps, { removeCurrentClass })(Profile);

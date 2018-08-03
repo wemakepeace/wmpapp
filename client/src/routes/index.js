@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
-import SignupOrLogin from '../components/SignupOrLogin';
-import Profile from '../components/profile';
-import ResetPasswordRequestContainer from '../containers/ResetPWRequestContainer';
-import ResetPassword from '../containers/ResetPasswordContainer';
+import LandingPage from '../components/LandingPage';
+import Profile from '../components/Profile';
+import RequestResetPassword from '../components/RequestResetPassword';
+import ResetPassword from '../components/ResetPassword';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
 
@@ -33,24 +33,43 @@ class Routes extends Component  {
         return (
             <div className='page-container'>
                 <Switch>
-                    <Route key={2.1} exact path={match.url + 'test'} render={() => <ResetPassword />} />
-                    <Route key={1} exact path={match.url} render={(props) => <SignupOrLogin {...this.props} />} />
-                    <Route key={2.1} exact path={match.url + 'reset'} render={() => <ResetPasswordRequestContainer />} />
-                    <Route key={2.2} path={match.url + 'reset/:token'} component={ResetPassword} />
+                    <Route
+                        key={1}
+                        exact path={match.url + 'test'}
+                        render={() => <ResetPassword />}
+                    />
+                    <Route
+                        key={2}
+                        exact path={match.url}
+                        // passes feedback
+                        render={() => <LandingPage {...this.props} />}
+                    />
+                    <Route
+                        key={3}
+                        exact path={match.url + 'reset'}
+                        component={RequestResetPassword}
+                    />
+                    <Route
+                        key={4}
+                        path={match.url + 'reset/:token'}
+                        component={ResetPassword}
+                    />
                     <PrivateRoute
                         loading={this.state.loading}
-                        key={4}
+                        key={5}
                         path={match.url + 'profile'}
-                        component={Profile} />
-                    {/*<PrivateRoute
-                        loading={this.state.loading}
-                        key={6}
-                        exact path={match.url + 'protected'}
-                        component={SignupOrLogin} /> */}
+                        component={Profile}
+                    />
                 </Switch>
             </div>
         );
     };
 };
 
-export default connect(null, { fetchTeacher, fetchClass })(Routes);
+const mapStateToProps = ({ feedback }) => {
+    return {
+        feedback
+    }
+}
+
+export default connect(mapStateToProps, { fetchTeacher, fetchClass })(Routes);
