@@ -21,9 +21,11 @@ Term.hasMany(Class);
 Class.belongsTo(School);
 School.hasMany(Class);
 
-Exchange.belongsTo(Class, { as:  'classA' }); // creates classAId on Exchange
-Exchange.belongsTo(Class, { as:  'classB' }); // creates classBId on Exchange
+// Exchange.belongsTo(Class, { as:  'classA' }); // creates classAId on Exchange
+// Exchange.belongsTo(Class, { as:  'classB' }); // creates classBId on Exchange
 
+Exchange.belongsTo(Class, { as:  'sender' }); // creates senderId on Exchange
+Exchange.belongsTo(Class, { as:  'receiver' }); // creates receiverId on Exchange
 
 
 const teachers = [
@@ -96,12 +98,12 @@ const schools = [
     },
     {
         schoolName: 'Trinity Primary and Preschool',
-        address1: 'P.O Box 6391',
+        address1: 'FH46+WW Kampala Metropolitan Area',
         address2: '',
         zip: '',
-        city: 'Uganda',
-        state: 'Bukoto-Mukalazi Zone Kampala',
-        country: 'DK'
+        city: 'Kampala',
+        state: '',
+        country: 'UG'
     }
 ];
 
@@ -180,29 +182,29 @@ const expires = date.setDate(date.getDate() + 7);
 const exchanges = [
     {
         status: 'pending',
-        classAId: 1,
-        classBId: 2,
+        senderId: 1,
+        receiverId: 2,
         verifyExchangeExpires: expires
     },
     {
         status: 'initiated',
-        classAId: 3
+        senderId: 3
     },
     {
         status: 'initiated',
-        classAId: 4
+        senderId: 4
     },
     {
         status: 'initiated',
-        classAId: 5
+        senderId: 5
     },
     {
         status: 'initiated',
-        classAId: 7
+        senderId: 7
     },
     {
         status: 'initiated',
-        classAId: 6
+        senderId: 6
     }
 ]
 

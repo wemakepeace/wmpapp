@@ -1,7 +1,9 @@
 const countries = require('country-list');
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GOOGLEKEY,
-    Promise: Promise
+    Promise: Promise,
+    rate: { limit: 50 }
+
 });
 
 const extractClassAddress = (_class) => {
@@ -12,30 +14,34 @@ const extractClassAddress = (_class) => {
         id: _class.id,
         address: address
     };
-
+    console.log('data', data)
     return data;
 };
 
 const getLocationDataForMatches = (matches) => {
     return matches.map(match => {
-        const data = match.dataValues.classA.dataValues;
+        const data = match.dataValues.sender.dataValues;
         return extractClassAddress(data);
     });
 };
 
+
+
 const getCoordinates = (data) => {
-    return googleMapsClient.geocode({ address: data.address })
+    return googleMapsClient.geocode({ address: '1600 Amphitheatre Parkway, Mountain View, CA' })
     .asPromise()
     .then(response => {
+        console.log('response', response)
         return {
             id: data.id,
             location: response.json.results[0].geometry.location
         }
     })
     .catch(error => {
+        console.log('error', error)
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
-        return next(error);
+        throw new Error(error);
     });
 }
 
@@ -65,6 +71,7 @@ const findFurthestMatch = (_class, matches) => {
     return getCoordinates(classData)
     .then(({ location }) => location)
     .then(classCoordinates => {
+        console.log('classCoordinates', classCoordinates)
         const locationDataForMatches = getLocationDataForMatches(matches);
             return Promise.all(locationDataForMatches.map(data => getCoordinates(data)))
             .then(dataWithCoords => {
@@ -84,9 +91,9 @@ const findFurthestMatch = (_class, matches) => {
                 return matchClass;
             })
             .then(result => {
-                return matches.find(match => match.dataValues.classA.dataValues.id === result.id);
+                return matches.find(match => match.dataValues.sender.dataValues.id === result.id);
             });
-    });
+    })
 };
 
 module.exports = { findFurthestMatch };

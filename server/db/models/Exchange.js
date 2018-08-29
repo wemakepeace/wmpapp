@@ -13,11 +13,11 @@ const Exchange = conn.define('exchange', {
             notEmpty: { msg: '.....'}
         }
     },
-    classAVerified: {
+    senderVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
-    classBVerified: {
+    receiverVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
@@ -38,7 +38,7 @@ const Exchange = conn.define('exchange', {
 Exchange.getExchangeAndMatchClass = function(classId) {
     return Exchange.findOne({
         where: {
-            $or: [{ classAId: classId }, { classBId: classId }]
+            $or: [{ senderId: classId }, { receiverId: classId }]
         }
     })
     .then((exchange) => {
@@ -56,8 +56,8 @@ Exchange.getExchangeAndMatchClass = function(classId) {
                 return extractDataForFrontend(exchange.dataValues, {});
             }
 
-            const otherClassRole = classRole === 'A' ? 'B' : 'A';
-            const getterMethod = `getClass${otherClassRole}`;
+            const otherClassRole = classRole === 'sender' ? 'Receiver' : 'Sender';
+            const getterMethod = `get${otherClassRole}`;
             return exchange[ getterMethod ]()
                 .then((exchangeClass) => {
                     return Promise.all([
@@ -91,18 +91,16 @@ Exchange.findMatch = function(_class) {
         },
         include: [{
             model: Class,
-            as: 'classA',
+            as: 'sender',
             where: {
                 teacherId: { $ne: teacherId },
                 schoolId: { $ne: schoolId },
                 termId: { $eq: termId },
                 ageGroupId: { $eq: ageGroupId }
             },
-            // attributes: [ 'name', 'id' ],
             include: [
                 { model: School },
                 { model: Teacher }
-                // { model: Teacher, attributes: [ 'id', 'email' ] }
             ]
         }]
     })
@@ -131,10 +129,10 @@ Exchange.prototype.setVerificationExpiration = function(t) {
 
 Exchange.prototype.getClassRole = function(classId) {
     return new Promise((resolve, reject) => {
-        if (classId == this.classAId) {
-             return resolve('A');
-        } else if (classId == this.classBId) {
-             return resolve('B');
+        if (classId == this.senderId) {
+             return resolve('sender');
+        } else if (classId == this.receiverId) {
+             return resolve('receiver');
         } else {
              return reject();
         }
@@ -147,9 +145,9 @@ Exchange.prototype.getExchangeClassId = function(id) {
     if (!id) return null;
     return this.getClassRole(id)
         .then((classRole) => {
-            const exchangeClassId = classRole === 'A'
-                ? this.classBId
-                : this.classAId;
+            const exchangeClassId = classRole === 'sender'
+                ? this.receiverId
+                : this.senderId;
             return exchangeClassId;
         });
 }
@@ -164,8 +162,7 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
             if (!exchangeClassId) {
                 return extractDataForFrontend(this.dataValues, {});
             }
-            const otherClassRole = classRole === 'A' ? 'B' : 'A';
-            const getterMethod = `getClass${otherClassRole}`;
+            const getterMethod = classRole === 'sender' ? 'getReceiver' : 'getSender';
             return this[ getterMethod ]()
                 .then((exchangeClass) => {
                     return Promise.all([
