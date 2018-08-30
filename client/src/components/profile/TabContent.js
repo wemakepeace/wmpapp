@@ -13,7 +13,7 @@ const TabContent = ({ match, history }) => {
     };
     const Component = components[ match.params.tab ];
 
-    return (<Component history={history} />);
+    return (<Component history={history} match={match} />);
 }
 
 

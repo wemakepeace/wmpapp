@@ -3,7 +3,6 @@ const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GOOGLEKEY,
     Promise: Promise,
     rate: { limit: 50 }
-
 });
 
 const extractClassAddress = (_class) => {

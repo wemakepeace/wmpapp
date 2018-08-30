@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getMaterials } from '../../../redux/actions/exchange';
+import { Link, Route } from 'react-router-dom';
+import { fetchLetterTemplates } from '../../../redux/actions/exchange';
 import {
     Header,
     Image,
@@ -11,55 +11,81 @@ import {
     Button,
     Icon
 } from 'semantic-ui-react';
-import InstructionMenu from './Menu';
+import Menu from './Menu';
 import Letter1 from './Letter1';
 import Letter2 from './Letter2';
 import Letter3 from './Letter3';
 import Overview from './Overview';
+import TabContent from './TabContent';
+
+
+const materials = [
+    {
+        name: 'Overview',
+        component: Overview,
+        sub: 'overview'
+    },
+    {
+        name: 'Letter 1',
+        component: Letter1,
+        sub: 'letter-1'
+    },
+    {
+        name: 'Letter 2',
+        component: Letter2,
+        sub: 'letter-2'
+    },
+    {
+        name: 'Letter 3',
+        component: Letter3,
+        sub: 'letter-3'
+    }
+];
+
 
 class Materials extends Component  {
     state = {
         activeItem: 'Overview',
-        letterURLs: [],
-        CurrentComponent: Letter1
+        letterURLs: []
     }
 
-    handleItemClick = (e, { component }) => {
-        this.setState({ activeItem: component })
-    }
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-    componentDidMount() {
-        return this.props.getMaterials()
-    }
+    componentDidMount = () => this.props.fetchLetterTemplates()
 
     render() {
-        const { letterURLs } = this.props.exchange;
-        const { activeItem, CurrentComponent } = this.state
-        const components = { Overview, Letter1, Letter2, Letter3 };
-
-        const Component = components[ activeItem ];
+        const { letterURLs, classRole } = this.props.exchange;
+        const { activeItem } = this.state
 
         return (
             <div>
                 <div>
-                    <InstructionMenu
+                    <Menu
+                        materials={materials}
                         activeItem={activeItem}
                         handleItemClick={this.handleItemClick}
+                        match={this.props.match}
                     />
-                    <Segment attached='bottom'>
-                        {<Component letterURLs={letterURLs}/>}
-                    </Segment>
+                    <Route
+                        path={`${this.props.match.path}/:sub`}
+                        render={(props) => (
+                            <TabContent
+                                materials={materials}
+                                letterURLs={letterURLs}
+                                classRole={classRole}
+                                {...props}
+                            />
+                        )}
+                    />
                 </div>
             </div>
         );
-    }
+    };
 }
 
 
 const mapStateToProps = ({ exchange }) => {
-    return {
-        exchange
-    }
-}
+    return { exchange }
+};
 
-export default connect(mapStateToProps, { getMaterials })(Materials);
+export default connect(mapStateToProps, { fetchLetterTemplates })(Materials);

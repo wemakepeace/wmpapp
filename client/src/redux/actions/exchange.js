@@ -19,9 +19,9 @@ const initiateExchange = (classId) => {
             (error) => {
                 const feedback = error.response.data.feedback;
                 return dispatch({ type: SEND_FEEDBACK, feedback });
-            })
-    }
-}
+            });
+    };
+};
 
 const verifyExchange = (classId, exchangeId) => {
     return dispatch => {
@@ -39,22 +39,22 @@ const verifyExchange = (classId, exchangeId) => {
               (error) => {
                 const feedback = error.response.data.feedback;
                 return dispatch({ type: SEND_FEEDBACK, feedback });
-            })
-    }
-}
+            });
+    };
+};
 
-const getMaterials = () => {
+const fetchLetterTemplates = () => {
     return dispatch => {
         return axios.get('/resources/letter_templates')
             .then((response) => response.data)
             .then(({ letterURLs }) => {
                 dispatch({ type: 'FETCH_EXCHANGE_DATA', exchange: { letterURLs } })
-            })
-    }
-}
+            });
+    };
+};
 
 export {
     initiateExchange,
     verifyExchange,
-    getMaterials
+    fetchLetterTemplates
 }
