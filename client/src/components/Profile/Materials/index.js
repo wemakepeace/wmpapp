@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 import { fetchLetterTemplates } from '../../../redux/actions/exchange';
 import {
     Header,
@@ -15,65 +15,63 @@ import Menu from './Menu';
 import Letter1 from './Letter1';
 import Letter2 from './Letter2';
 import Letter3 from './Letter3';
-import Overview from './Overview';
+import Instructions from './Instructions';
 import TabContent from './TabContent';
 
 
-const materials = [
+const content = [
     {
-        name: 'Overview',
-        component: Overview,
-        sub: 'overview'
+        name: 'Instructions',
+        component: Instructions,
+        route: 'instructions'
     },
     {
         name: 'Letter 1',
         component: Letter1,
-        sub: 'letter-1'
+        route: 'letter-1'
     },
     {
         name: 'Letter 2',
         component: Letter2,
-        sub: 'letter-2'
+        route: 'letter-2'
     },
     {
         name: 'Letter 3',
         component: Letter3,
-        sub: 'letter-3'
+        route: 'letter-3'
     }
 ];
 
 
 class Materials extends Component  {
     state = {
-        activeItem: 'Overview',
         letterURLs: []
     }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-    componentDidMount = () => this.props.fetchLetterTemplates()
+    componentDidMount = () => {
+        this.props.fetchLetterTemplates();
+    }
 
     render() {
-        const { letterURLs, classRole } = this.props.exchange;
-        const { activeItem } = this.state
+        const { classRole, letterURLs } = this.props.exchange;
+        const { match, location } = this.props;
 
         return (
             <div>
                 <div>
                     <Menu
-                        materials={materials}
-                        activeItem={activeItem}
-                        handleItemClick={this.handleItemClick}
-                        match={this.props.match}
+                        content={content}
+                        match={match}
+                        location={location}
                     />
                     <Route
-                        path={`${this.props.match.path}/:sub`}
-                        render={(props) => (
+                        path={`${match.path}/:route`}
+                        render={({ match }) => (
                             <TabContent
-                                materials={materials}
                                 letterURLs={letterURLs}
+                                content={content}
                                 classRole={classRole}
-                                {...props}
+                                match={match}
                             />
                         )}
                     />
