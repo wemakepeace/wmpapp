@@ -32,7 +32,7 @@ const content = [
         name: 'Materials',
         component: Materials,
         route: 'materials',
-        defaultChildRoute: 'overview'
+        defaultChildRoute: 'instructions'
     }
 ];
 

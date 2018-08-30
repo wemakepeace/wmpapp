@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TabContent = ({ content, classRole, match }) => {
+const TabContent = ({ content, letterURLs, classRole, match }) => {
     const { route } = match.params;
     const Component = content.find((topic) => topic.route === route).component;
 
-    return (<Component classRole={classRole} />);
+    return (<Component classRole={classRole} letterURLs={letterURLs} />);
 };
 
 

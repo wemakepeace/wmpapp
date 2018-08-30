@@ -35,8 +35,11 @@ const Body = ({ letterURLs }) => {
                 </p>
                 <h5>In case of different number of students in exchanging classes</h5>
                 <p>
-                    In the case that the classes are of different sizes, it will be necessary for the class who is the RECEIVER to either assign more than one pen pal to the some of the students or have some students write to the same pen pal. Any student who is assgined more than one pen pal will write one letter collectively to all of his or her pen pals. Please make sure both of the names of the pen pals are added in the "to" section of the letters if this is the case for any of your students.
-
+                    In the case that the classes are of different sizes, it will be necessary for the class who is the RECEIVER to either assign two Letter Friends to some of the students or have some students write to the same Letter Friend. Any student who is assgined two Letter Friends will write one letter collectively to both of his or her Letter Friends. Please make sure both of the names of the Letter Friends are added in the "to" and "from" section of the letters if this is the case for any of your students.
+                </p>
+                <h5>In case a students drops of out the Exchange</h5>
+                <p>
+                    If for any reason a students is no longer able to participate in the program, please make sure to notify the other teacher. In this case the two of you should agree on a solution. We recommend assigning the student who no longer has a Letter Friend to another student who will now have to Letter Friends to write with.
                 </p>
                 <h4>CHECK LIST</h4>
                     <ul>

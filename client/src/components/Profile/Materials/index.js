@@ -44,14 +44,16 @@ const content = [
 
 
 class Materials extends Component  {
-    state = { }
+    state = {
+        letterURLs: []
+    }
 
     componentDidMount = () => {
         this.props.fetchLetterTemplates();
     }
 
     render() {
-        const { classRole } = this.props.exchange;
+        const { classRole, letterURLs } = this.props.exchange;
         const { match, location } = this.props;
 
         return (
@@ -66,6 +68,7 @@ class Materials extends Component  {
                         path={`${match.path}/:route`}
                         render={({ match }) => (
                             <TabContent
+                                letterURLs={letterURLs}
                                 content={content}
                                 classRole={classRole}
                                 match={match}

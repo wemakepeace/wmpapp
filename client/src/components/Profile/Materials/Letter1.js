@@ -20,13 +20,19 @@ const specialContent = {
     sender: () => {
         return (
             <div>
-                <Message color='yellow'>Your class has the SENDER role in the Exchange. This means that your class will start by writing and sending Letter 1 to the other class. Once the other class receives Letter 1 from you, they will begin writing Letter 1 and these will be sent to your class.
+                <Message size='large' color='yellow'>
+                    <ul>
+                        <li>Your class has the SENDER role in the Exchange.</li>
+                        <li>This means that your class will start by writing and sending Letter 1 to the other class.</li>
+                        <li>Once the other class receives Letter 1 from you, they will begin writing Letter 1 and these will be sent to your class.</li>
+                        <li>It is important that the students write their own name clearly in the Letter.</li>
+                    </ul>
                 </Message>
                 <h4>Steps</h4>
                 <ul>
-                    <li>Step 1 - Lesson: Letter writing ss a genre</li>
+                    <li>Step 1 - Lesson: Letter writing as a genre</li>
                     <li>Step 2 - Lesson: Questions for your letter friend</li>
-                    <li>Step 3 - Writing the letters</li>
+                    <li>Step 3 - Writing Letter 1</li>
                     <li>Step 4 - Mailing the letters</li>
                     <li>Step 5 - Wait to receive Letter 1 from the other class</li>
                 </ul>
@@ -36,13 +42,18 @@ const specialContent = {
     receiver: () => {
         return (
             <div>
-                <Message color='yellow'>Your class has the RECEIVER role in the Exchange. This means that your class will wait until you receive Letter 1 from the other class before you begin writing and sending Letter 1. It is important that the students write the name of their letter friend on the Letter.
+                <Message size='large' color='yellow'>
+                    <ul>
+                        <li>Your class has the RECEIVER role in the Exchange.</li>
+                        <li>This means that your class will wait until you receive Letter 1 from the other class before you begin writing and sending Letter 1.</li>
+                        <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
+                    </ul>
                 </Message>
                 <h4>Steps</h4>
                 <ul>
-                    <li>Step 1 - Lesson: Letter writing ss a genre</li>
-                    <li>Step 2 - Lesson: Questions for your letter friend</li>
-                    <li>Step 3 - Writing the letters</li>
+                    <li>Step 1 - Lesson: Letter writing as a genre</li>
+                    <li>Step 2 - Reading Letter 1 from the other class</li>
+                    <li>Step 3 - Writing Letter 1</li>
                     <li>Step 4 - Mailing the letters</li>
                     <li>Step 5 - Wait to receive Letter 2 from the other class</li>
                 </ul>
@@ -66,15 +77,15 @@ const StepOne = () => {
 
             <h4>What is the structure of writing a letter?</h4>
             <ol>
-                <li>There is always a sender and a receiver (in this case you and your peace-friend)</li>
+                <li>There is always a sender and a receiver (in this case you and your Letter Friend)</li>
                 <li>You always begin a letter by addressing the receiver. Either by writing “Hi..”
             “Hello...” or “Dear..”.</li>
                 <li>Talk about what kinds of information you normally share in a letter.</li>
-                <li>Who you are, a boy or a girl, your age, where you live, how you live.</li>
+                <li>Who you are, your age, where you live, how you live, your family and your friends.</li>
                 <li>What kinds of things do you want to share about your life?</li>
                 <li>For instance what do you like to do? Do you have a hobby?</li>
                 <li>What is your favorite foods, favorite subject in school and why.</li>
-                <li>Never swear or use rude words. Never judge and be abusive.</li>
+                <li>Never use rude words. Never judge and be abusive.</li>
                 <li>Always ask questions and enquire to the receiver’s health and happiness.</li>
                 <li>Respond to their questions.</li>
             </ol>
@@ -83,7 +94,7 @@ const StepOne = () => {
 }
 
 
-const StepTwo = () => {
+const StepTwoSender = () => {
     return (
         <div>
             <Header as='h3'>
@@ -93,12 +104,50 @@ const StepTwo = () => {
             <h3>Questions for your letter friend</h3>
             <p>What questions do you want to ask your pen pal? And what do you want to share?</p>
             <h4>Discussion</h4>
-            <p>What do we want to know about our peace-friends and their lives? What do we want them to learn about us and our lives?</p>
+            <p>What do we want to know about our Letter Friends and their lives? What do we want them to learn about us and our lives?</p>
             <p>How can you make sure they get to know you through the letters?</p>
             <p>Write ideas and thoughts on the blackboard, so the students can draw inspiration from that while writing their letters.</p>
         </div>
     );
 }
+
+const StepTwoReceiver = () => {
+    return (
+        <div>
+            <Header as='h3'>
+                <Header.Content><Icon name='content' />STEP 2</Header.Content>
+            </Header>
+            <h3>Reading Letter 1 from the other class</h3>
+            <p>30-40 minutes</p>
+            <div>
+                <ul>
+                    <li>Hand out the letters to the students.</li>
+                    <li>The letters that are handed out will determine who will be the students' Letter Friends for the rest of the Exchange.</li>
+                    <li>In the case that the classes are of different sizes, you will need to either assign two Letter Friends to some of the students or have some of your students write to the same Letter Friend. Any student who is assgined two Letter Friends will write one letter collectively to both of his or her Letter Friends. Please make sure both of the names of the Letter Friends are added in the "to" and "from" section of the letters if this is the case for any of your students.</li>
+                    <li>If any students are sharing a Letter Friend, make sure they are sitting together while reading and writing the letters.</li>
+                    <li>Let the students have some time to read their letters and ask questions. Then tell them to share thoughts from their letters with the rest of the class.</li>
+                </ul>
+            </div>
+            <h3>Questions to the group</h3>
+            <p>5-10 minutes</p>
+            <ul>
+                <li>What have you learned about your Letter Friend?</li>
+                <li>Did anything surprise you?</li>
+                <li>What are the similarities and what are the differences in how you live your life?</li>
+                <li>What did your Letter Friend think was positive about their country?</li>
+            </ul>
+            <h3>Questions for your Letter Friend</h3>
+            <p>5-10 minutes</p>
+            <p>What questions do you want to ask your pen pal? And what do you want to share?</p>
+            <h4>Discussion</h4>
+            <p>What do we want to know about our Letter Friends and their lives? What do we want them to learn about us and our lives?</p>
+            <p>How can you make sure they get to know you through the letters?</p>
+            <p>Write ideas and thoughts on the blackboard, so the students can draw inspiration from that while writing their letters.</p>
+        </div>
+    );
+}
+
+
 
 
 const StepThree = () => {
@@ -115,7 +164,10 @@ const StepThree = () => {
                 <li>Letter 1 focuses <em>Positivity</em>.</li>
             </ul>
             <p>The first part of the letter exchange is an introduction of themselves as well as a focus on how we can use Positivity to make peace in our daily lives. Make sure you encourage the students to write full sentences.</p>
-            <p>Make sure all the students write their names clairly on the letters. If any students have identical names, make sure they include middle names or initials as well.</p>
+            <p>Make sure all the students write their names clearly in the letters.</p>
+            <p>Make sure all the students write their Letter Friend's name clearly in the letters.</p>
+            <p>If any students have identical names, make sure they include middle names or initials as well.</p>
+            <p>If any of your students are sharing a Letter Friend, make sure both students write their names in the letter.</p>
         </div>
     );
 }
@@ -128,7 +180,8 @@ const StepFour = () => {
                 <Header.Content><Icon name='content' />STEP 4</Header.Content>
             </Header>
             <h3>Mailing the letters</h3>
-            <p>Before mailing the letters please make sure that all students have written their names clearly on the letters.</p>
+            <p>Before mailing the letters please make sure that all students have written their <b>own names</b> clearly on the letters.</p>
+            <p>If your class role is RECEIVER, please make sure that the students also have written their <b>Letter Friend's name</b> clearly in the letters</p>
             <p>Post the letters to the attention of the teacher at the school and address listed on the Exchange Overview page. If in doubt double-check with the teacher via email before posting the pack in the mail.</p>
         </div>
     );
@@ -140,10 +193,10 @@ const StepFive = () => {
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 5</Header.Content>
             </Header>
-            <h3>Wait to receive Letter 1 from the other class</h3>
-            <p>Once the letters have been sent, you will need to wait until you have received the Letter 1 from the other class. This should happen within a month's time.</p>
-            <p>While waiting you are encouraged to talk to the students about the country or place where the other class is from.</p>
-            <p>Once you have received the letters, please continue to the instructions for Letter 2.</p>
+            <h3>Wait to receive letters from the other class</h3>
+            <p>Once the letters have been sent, you will need to wait until you have received new letters from the other class. This should happen within a month's time.</p>
+            <p>While waiting you are encouraged to talk to the students about what they have learned about their Letter Friends and the country or place where they are from.</p>
+            <p>Once you have received the letters, please continue to the instructions for the next letter writing.</p>
         </div>
     );
 }
@@ -158,7 +211,7 @@ const Letter1 = ({ letterURLs, classRole }) => {
             <hr style={{margin: '20px 0'}}/>
             <StepOne />
             <hr style={{margin: '20px 0'}}/>
-            <StepTwo />
+            { classRole === 'sender' ? <StepTwoSender /> : <StepTwoReceiver /> }
             <hr style={{margin: '20px 0'}}/>
             <StepThree />
             <hr style={{margin: '20px 0'}}/>
