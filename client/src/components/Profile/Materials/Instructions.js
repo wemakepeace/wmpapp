@@ -57,14 +57,13 @@ const Body = ({ letterURLs }) => {
 
 
 
-const Overview = ({ letterURLs, ...props }) => {
-    // console.log('props.match.params.sub', props.match.params.sub)
+const Instructions = ({ letterURLs, ...props }) => {
     return (
         <div>
             <Body letterURLs={letterURLs} />
         </div>
-    )
-}
+    );
+};
 
 
-export default Overview;
+export default Instructions;

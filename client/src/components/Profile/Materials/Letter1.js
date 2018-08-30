@@ -20,8 +20,8 @@ const specialContent = {
     sender: () => {
         return (
             <div>
-                <p>Your class has the SENDER role in the Exchange. This means that your class will start by writing and sending Letter 1 to the other class. Once the other class receives Letter 1 from you, they will begin writing Letter 1 and these will be sent to your class.
-                </p>
+                <Message color='yellow'>Your class has the SENDER role in the Exchange. This means that your class will start by writing and sending Letter 1 to the other class. Once the other class receives Letter 1 from you, they will begin writing Letter 1 and these will be sent to your class.
+                </Message>
                 <h4>Steps</h4>
                 <ul>
                     <li>Step 1 - Lesson: Letter writing ss a genre</li>
@@ -36,7 +36,16 @@ const specialContent = {
     receiver: () => {
         return (
             <div>
-                This is content specially written for RECEIVER
+                <Message color='yellow'>Your class has the RECEIVER role in the Exchange. This means that your class will wait until you receive Letter 1 from the other class before you begin writing and sending Letter 1. It is important that the students write the name of their letter friend on the Letter.
+                </Message>
+                <h4>Steps</h4>
+                <ul>
+                    <li>Step 1 - Lesson: Letter writing ss a genre</li>
+                    <li>Step 2 - Lesson: Questions for your letter friend</li>
+                    <li>Step 3 - Writing the letters</li>
+                    <li>Step 4 - Mailing the letters</li>
+                    <li>Step 5 - Wait to receive Letter 2 from the other class</li>
+                </ul>
             </div>
         )
     }
@@ -96,7 +105,7 @@ const StepThree = () => {
     return (
         <div>
             <Header as='h3'>
-                <Header.Content><Icon name='content' />STEP 3!!!</Header.Content>
+                <Header.Content><Icon name='content' />STEP 3</Header.Content>
             </Header>
             <h3>Writing the letters</h3>
             <p> 1 hour</p>

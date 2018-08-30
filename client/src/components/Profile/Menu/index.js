@@ -1,20 +1,20 @@
 import React from 'react';
 import { MenuLink } from './Link';
 
-export const Menu = ({ currentClass, status, ...props }) => {
-
+export const Menu = ({ content, currentClass, status, ...props }) => {
     return (
         <div className='profile-menu-column'>
-            <MenuLink name='overview' {...props} />
-            <MenuLink name='teacher' {...props} />
-            {/* Change to
-                { status === 'confirmed' ? */ }
-            { currentClass && currentClass.id ?
-                <div>
-                    <MenuLink name='class' {...props} />
-                    <MenuLink name='materials' {...props} />
-                    <MenuLink name='messages' {...props} />
-                </div> : null }
+            { content.map(({ name, route, defaultChildRoute }) => {
+                //if ((route === 'class' || route === 'materials') && status !== 'confirmed') return
+                return (
+                    <MenuLink
+                        name={name}
+                        route={route}
+                        defaultChildRoute={defaultChildRoute}
+                        key={name} {...props}
+                    />
+                )
+            })}
         </div>
     );
 }
