@@ -4,7 +4,7 @@ import { LOGOUT_SUCCESS } from '../constants/teacher';
 
 const initialState = {};
 
-// Exchange model has classAVerified and classBVerified booleans
+// Exchange model has senderVerified and receiverVerified booleans
 // Check if the current class is verified based on classRole
 const classIsVerified = (classRole, exchange) => {
     const classRoleId = `class${classRole}Verified`

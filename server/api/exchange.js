@@ -16,7 +16,7 @@ const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
  * 1.   One match is found - updates exchange instance returns exchange and matchClass
  * 2.   Multiple matches are found - finds furthest match, updates exchange instance
  *      and return exchange and matchClass
- * 3.   No match is found - Initiates new exchange, sets class to classA and returns exchange
+ * 3.   No match is found - Initiates new exchange, sets class to "sender" and returns exchange
  */
 
 app.post('/', (req, res, next) => {
@@ -25,25 +25,21 @@ app.post('/', (req, res, next) => {
     Class.findOne({
         where: { id: classId },
         attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
-        include: [
-            // { model: School },
-            // { model: Teacher }
-            { model: Teacher, attributes: [ 'id', 'email' ] }
-        ]
+        include: [ { model: Teacher, attributes: [ 'id', 'email' ] }, School ]
     })
     .then((_class) => {
         return Exchange.findMatch(_class)
         .then(exchange => {
-            // If match is found, _class will have classRole = B
+            // If match is found, _class will have classRole = 'receiver'
             if (exchange) {
                 return conn.transaction((t) => {
-                    return exchange.setClassB(_class, { transaction: t })
+                    return exchange.setReceiver(_class, { transaction: t })
                     .then(exchange => exchange.setStatus('pending', t))
                     .then(exchange => exchange.setVerificationExpiration(t))
                     .then(exchange => {
-                        // At this point exchange.classA will be the matching class
+                        // At this point exchange.sender will be the matching class
                         const classData = _class.dataValues;
-                        const matchClass = exchange.dataValues.classA.dataValues;
+                        const matchClass = exchange.dataValues.sender.dataValues;
                         const classEmail = classData.teacher.dataValues.email;
                         const matchEmail = matchClass.teacher.dataValues.email;
                         const template = 'verify';
@@ -62,9 +58,9 @@ app.post('/', (req, res, next) => {
             } else {
                 /*
                  * If no match is found, initiate new Exchange instance
-                 * and set _class as classA
+                 * and set _class as sender
                  */
-                return Exchange.create({ status: 'initiated', classAId: classId })
+                return Exchange.create({ status: 'initiated', senderId: classId })
                 .catch((error) => next(error))
             }
         })
@@ -92,7 +88,7 @@ app.post('/', (req, res, next) => {
  * run a cleanup function that voids all expired instances,
  * in which case the classes should be notified
  * If a one class has confirmed the exchange, that class will
- * be added to a new Exchnage instance as classA, and the
+ * be added to a new Exchnage instance as "sender", and the
  * class that did not confirm will be removed (not belong to any
  * exchange)
  */
@@ -115,17 +111,17 @@ app.post('/verify', (req, res, next) => {
     return Exchange.findOne({
         where: {
             id: exchangeId,
-            $or: [{ classAId: classId }, { classBId: classId }]
+            $or: [{ senderId: classId }, { receiverId: classId }]
         },
         include: [
             {
                 model: Class,
-                as: 'classA',
+                as: 'sender',
                 include: [ School, Teacher ]
             },
             {
                 model: Class,
-                as: 'classB',
+                as: 'receiver',
                 include: [ School, Teacher ]
         }]
     })
@@ -133,21 +129,21 @@ app.post('/verify', (req, res, next) => {
         return exchange.getClassRole(classId)
         .then((_classRole) => {
             classRole = _classRole;
-            matchClassRole = classRole === 'A' ? 'B' : 'A';
+            matchClassRole = classRole === 'sender' ? 'receiver' : 'sender';
             // Set class to verified = true
             const key = `class${_classRole}Verified`;
             exchange[ key ] = true;
             return exchange.save()
         })
         .then(exchange => {
-            const { classAVerified, classBVerified } = exchange.dataValues;
-            const _class = exchange.dataValues[`class${classRole}`].dataValues;
-            const matchClass = exchange.dataValues[`class${matchClassRole}`].dataValues;
+            const { senderVerified, receiverVerified } = exchange.dataValues;
+            const _class = exchange.dataValues[ classRole ].dataValues;
+            const matchClass = exchange.dataValues[ matchClassRole ].dataValues;
             const classEmail = _class.teacher.dataValues.email;
             const matchEmail = matchClass.teacher.dataValues.email;
             let template;
 
-            if (classAVerified && classBVerified) {
+            if (senderVerified && receiverVerified) {
                 return exchange.setStatus('confirmed')
                 .then(exchange => {
                     // Send email to both teachers to confirm match

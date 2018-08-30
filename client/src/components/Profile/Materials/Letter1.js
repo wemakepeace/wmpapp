@@ -16,18 +16,42 @@ const tableContent = {
     cell3: 'Empathy, positivism, love, acceptance, compassion, creativity, solution-based thinking, trouble-shooting, new skill, letter writing, processing new concepts, analytical skills.'
 };
 
+const specialContent = {
+    sender: () => {
+        return (
+            <div>
+                <p>Your class has the SENDER role in the Exchange. This means that your class will start by writing and sending Letter 1 to the other class. Once the other class receives Letter 1 from you, they will begin writing Letter 1 and these will be sent to your class.
+                </p>
+                <h4>Steps</h4>
+                <ul>
+                    <li>Step 1 - Lesson: Letter writing ss a genre</li>
+                    <li>Step 2 - Lesson: Questions for your letter friend</li>
+                    <li>Step 3 - Writing the letters</li>
+                    <li>Step 4 - Mailing the letters</li>
+                    <li>Step 5 - Wait to receive Letter 1 from the other class</li>
+                </ul>
+            </div>
+        )
+    },
+    receiver: () => {
+        return (
+            <div>
+                This is content specially written for RECEIVER
+            </div>
+        )
+    }
+}
+
 const StepOne = () => {
     return (
         <div>
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 1</Header.Content>
             </Header>
-            <h5>Letter Writing as a Genre</h5>
+            <h3>Letter writing as a genre</h3>
             <p>20 minutes</p>
-            <ul>
-                <li>Begin by sharing some facts about the genre of letter writing.</li>
-            </ul>
-            <h4>Why We Write Letters</h4>
+            <p>Begin by sharing some facts about the genre of letter writing.</p>
+            <h4>Why we write letters</h4>
             <p>In the old days people used to send each other letters as their way of communicating. This was before the telephone, emails and text messages. </p>
             <p>Letter writing is more formal than writing an email or sending a text message. Especially when you are writing to someone you have never met. Letters are normally more polite and longer than emails. Make sure you write full sentences, and try to image the person receiving your letter.</p>
 
@@ -56,18 +80,13 @@ const StepTwo = () => {
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 2</Header.Content>
             </Header>
-            <h5>What questions do you want to ask your pen pal? And what do you want to share?</h5>
             <p>5-10 minutes</p>
-
-            <h5>Brainstorm with the group</h5>
-            <ul>
-                <li>Hand out the Letter 1 Templates to all students.</li>
-                <li>Letter 1 focuses <em>Positivity</em>.</li>
-            </ul>
-            <h5>Discussion</h5>
+            <h3>Questions for your letter friend</h3>
+            <p>What questions do you want to ask your pen pal? And what do you want to share?</p>
+            <h4>Discussion</h4>
             <p>What do we want to know about our peace-friends and their lives? What do we want them to learn about us and our lives?</p>
             <p>How can you make sure they get to know you through the letters?</p>
-            <p> Write ideas and thoughts on the blackboard, so the students can draw inspiration from that while writing their letters.</p>
+            <p>Write ideas and thoughts on the blackboard, so the students can draw inspiration from that while writing their letters.</p>
         </div>
     );
 }
@@ -77,13 +96,17 @@ const StepThree = () => {
     return (
         <div>
             <Header as='h3'>
-                <Header.Content><Icon name='content' />STEP 3</Header.Content>
+                <Header.Content><Icon name='content' />STEP 3!!!</Header.Content>
             </Header>
-            <h5>Write the letters</h5>
+            <h3>Writing the letters</h3>
             <p> 1 hour</p>
-            <p>The students write their letters using the templates.</p>
+            <ul>
+                <li>Print and hand out the Letter 1 Templates to all students.</li>
+                <li>Ask the students to bring a photo of themselves to add to the letter.</li>
+                <li>Letter 1 focuses <em>Positivity</em>.</li>
+            </ul>
             <p>The first part of the letter exchange is an introduction of themselves as well as a focus on how we can use Positivity to make peace in our daily lives. Make sure you encourage the students to write full sentences.</p>
-            <p>Make sure all the students write their names clairly on the letters.</p>
+            <p>Make sure all the students write their names clairly on the letters. If any students have identical names, make sure they include middle names or initials as well.</p>
         </div>
     );
 }
@@ -95,22 +118,33 @@ const StepFour = () => {
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 4</Header.Content>
             </Header>
-            <h5>Mailing the letters</h5>
-            <p>Before mailing the letters please make sure you</p>
-            <ol>
-                <li>[TO BE CHANGED]Fill in the Student Information Sheet providing a numbered list of the students and make sure the letters are numbered according to the list.</li>
-
-                <li>Post the letters to the attention of the teacher at the school and address listed on the Exchange Overview page. If in doubt double-check with the teacher via email before posting the pack in the mail.</li>
-                <li>Wait for the next letter from the exchange class to arrive in the mail. This should happen within a month's time.</li>
-            </ol>
+            <h3>Mailing the letters</h3>
+            <p>Before mailing the letters please make sure that all students have written their names clearly on the letters.</p>
+            <p>Post the letters to the attention of the teacher at the school and address listed on the Exchange Overview page. If in doubt double-check with the teacher via email before posting the pack in the mail.</p>
         </div>
     );
 }
 
-const Letter1 = ({ letterURLs }) => {
+const StepFive = () => {
+    return (
+        <div>
+            <Header as='h3'>
+                <Header.Content><Icon name='content' />STEP 5</Header.Content>
+            </Header>
+            <h3>Wait to receive Letter 1 from the other class</h3>
+            <p>Once the letters have been sent, you will need to wait until you have received the Letter 1 from the other class. This should happen within a month's time.</p>
+            <p>While waiting you are encouraged to talk to the students about the country or place where the other class is from.</p>
+            <p>Once you have received the letters, please continue to the instructions for Letter 2.</p>
+        </div>
+    );
+}
+
+const Letter1 = ({ letterURLs, classRole }) => {
     return (
         <div>
             <OverviewTable content={tableContent} />
+            <hr style={{margin: '20px 0'}}/>
+            { specialContent[ classRole ]()}
             <span><Icon name='download' /><a href={letterURLs && letterURLs[0]} target='_blank'>Download Letter 1 Template</a></span>
             <hr style={{margin: '20px 0'}}/>
             <StepOne />
@@ -120,6 +154,8 @@ const Letter1 = ({ letterURLs }) => {
             <StepThree />
             <hr style={{margin: '20px 0'}}/>
             <StepFour />
+            <hr style={{margin: '20px 0'}}/>
+            <StepFive />
         </div>
     );
 }

@@ -7,13 +7,17 @@ import { Menu } from './Menu';
 import { removeCurrentClass } from '../../redux/actions/class';
 import Feedback from '../Feedback';
 
-const Profile = ({ ...props, currentClass, feedback }) => {
+const Profile = ({ ...props, currentClass, status, feedback }) => {
     return (
         <div className='page-content'>
             <Header {...props} />
             <div className='profile-column-container'>
                 <div className='profile-menu-column'>
-                    <Menu currentClass={currentClass} {...props} />
+                    <Menu
+                        currentClass={currentClass}
+                        status={status}
+                        {...props}
+                    />
                 </div>
                 <div className='profile-form-column'>
                     <div className='profile-form'>
@@ -29,8 +33,8 @@ const Profile = ({ ...props, currentClass, feedback }) => {
     );
 }
 
-const mapStateToProps = ({ currentClass, feedback }) => {
-    return { currentClass, feedback };
+const mapStateToProps = ({ currentClass, feedback, exchange: { status } }) => {
+    return { currentClass, feedback, status };
 };
 
 export default connect(mapStateToProps, { removeCurrentClass })(Profile);
