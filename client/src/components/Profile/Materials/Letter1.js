@@ -96,7 +96,7 @@ const StepThree = () => {
     return (
         <div>
             <Header as='h3'>
-                <Header.Content><Icon name='content' />STEP 3</Header.Content>
+                <Header.Content><Icon name='content' />STEP 3!!!</Header.Content>
             </Header>
             <h3>Writing the letters</h3>
             <p> 1 hour</p>
