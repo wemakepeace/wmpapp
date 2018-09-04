@@ -9,7 +9,8 @@
     "build:prod": "webpack -p",
     "devClient": "npx webpack-dev-server --hot --open --config webpack.config.js",
     "devServer": "PORT=8080 JWT_SECRET=foo NODE_ENV=development DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/ server.js sass --watch",
-    "start:dev": "npm run devClient & npm run devServer"
+    "start:dev": "npm run devClient & npm run devServer",
+    "start:prod": "NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart"
   },
   "proxy": "http://localhost:8080",
   "author": "",
