@@ -7,8 +7,8 @@ const initialState = {};
 // Exchange model has senderVerified and receiverVerified booleans
 // Check if the current class is verified based on classRole
 const classIsVerified = (classRole, exchange) => {
-    const classRoleId = `class${classRole}Verified`
-    const isVerified = exchange[ `class${classRole}Verified` ];
+    const classRoleId = `${classRole}Verified`
+    const isVerified = exchange[ `${classRole}Verified` ];
     return isVerified;
 };
 

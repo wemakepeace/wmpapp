@@ -191,6 +191,10 @@
     @include active($lightyellow)
 }
 
+.instructions {
+    margin: 30px 0;
+}
+
 
 @media (min-width: 1000px) {
 

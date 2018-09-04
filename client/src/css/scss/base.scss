@@ -180,6 +180,11 @@ input:focus, textarea:focus, select:focus{
     }
 }
 
+
+.underline {
+    text-decoration: underline;
+}
+
 @media (max-width: 900px) {
     .page-container {
         margin-left: 0px !important;

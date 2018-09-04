@@ -4,7 +4,11 @@ const TabContent = ({ content, letterURLs, classRole, match }) => {
     const { route } = match.params;
     const Component = content.find((topic) => topic.route === route).component;
 
-    return (<Component classRole={classRole} letterURLs={letterURLs} />);
+    return (
+        <div className='instructions'>
+            <Component classRole={classRole} letterURLs={letterURLs} />
+        </div>
+        );
 };
 
 

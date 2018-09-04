@@ -6,6 +6,7 @@ const exchangeStatusData = {
     'not started': {
         text: () => (
             <div>
+                <h3>Begin Exchange</h3>
                 <p>When you have filled in all the information, click the button to initiate an exchange.</p>
                 <p>When a match has been made you will receive an email and you will be able to see more information about the exchange on this page.</p>
                 <p>By clicking START EXCHANGE your class will be signed up to participate in the Peace Letter program.</p>
@@ -19,17 +20,18 @@ const exchangeStatusData = {
     initiated: {
         text: () => (
             <div>
+                <h3>Your class is signed up!</h3>
                 <p>Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match with.</p>
-                <p>Look out for an email and make sure to confirm the Exchange particpation once you receive the email</p>
+                <p>Look out for an email and make sure to confirm the Exchange particpation once you receive an email.</p>
             </div>
         ),
-        percent: 16,
+        percent: 33,
         label: "Initiated"
     },
     pending: {
         text: () => (
             <div>
-                <p>We have found a match for your class!</p>
+                <h3>We have found a match for your class!</h3>
                 <p>Please verify your class' participation within 7 days.</p>
                 <p>Thank you for participating!</p>
             </div>
@@ -42,31 +44,24 @@ const exchangeStatusData = {
     'partially confirmed': {
         text: () => (
             <div>
-                <p>Your paritication in the program is verified!</p>
-                <p>We are waiting for the other class to verify as well. Please be on the lookout for an email confirmation.</p>
+                <h3>Your paritication in the program is verified!</h3>
+                <p>We are waiting for the other class to verify as well.</p>
+                <p>Please be on the lookout for an email confirmation.</p>
             </div>
         ),
-        percent: 48,
+        percent: 66,
         label: "Partially Confirmed"
     },
     confirmed: {
         text: ()=> (
             <div>
-                <p>Thank you for confirming your participaiton!</p>
-                <p>You are now ready to begin the Exchange Program!</p>
+                <h3>You are now ready to begin the Exchange Program!</h3>
+                <p>Please see the instructions under Materials for next steps.</p>
+                <p>We ask that you read the instructions carefully.</p>
             </div>
         ),
-        percent: 64,
+        percent: 100,
         label: 'Confirmed'
-    },
-    inprogress: {
-        text: () => (
-            <div>
-                <p>Exchange is in progress!</p>
-            </div>
-        ),
-        percent: 80,
-        label: 'In Progress'
     },
     completed: {
         text: () => (
@@ -76,13 +71,6 @@ const exchangeStatusData = {
         ),
         percent: 100,
         label: 'Completed'
-    },
-    cancelled: {
-        text: () => (
-            <div>
-                <p>Exchange cancelled.</p>
-            </div>
-        )
     }
 }
 

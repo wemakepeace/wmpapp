@@ -13,7 +13,7 @@ const extractClassAddress = (_class) => {
         id: _class.id,
         address: address
     };
-    console.log('data', data)
+
     return data;
 };
 
@@ -27,7 +27,7 @@ const getLocationDataForMatches = (matches) => {
 
 
 const getCoordinates = (data) => {
-    return googleMapsClient.geocode({ address: '1600 Amphitheatre Parkway, Mountain View, CA' })
+    return googleMapsClient.geocode({ address: data.address })
     .asPromise()
     .then(response => {
         console.log('response', response)
@@ -68,7 +68,10 @@ const findFurthestMatch = (_class, matches) => {
     let classData = extractClassAddress(_class.dataValues);
 
     return getCoordinates(classData)
-    .then(({ location }) => location)
+    .then((data) => {
+        console.log('data====', data)
+        return data.location
+    })
     .then(classCoordinates => {
         console.log('classCoordinates', classCoordinates)
         const locationDataForMatches = getLocationDataForMatches(matches);

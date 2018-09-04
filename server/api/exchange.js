@@ -131,7 +131,7 @@ app.post('/verify', (req, res, next) => {
             classRole = _classRole;
             matchClassRole = classRole === 'sender' ? 'receiver' : 'sender';
             // Set class to verified = true
-            const key = `class${_classRole}Verified`;
+            const key = `${_classRole}Verified`;
             exchange[ key ] = true;
             return exchange.save()
         })
