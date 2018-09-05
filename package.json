@@ -13,7 +13,7 @@
     "start:dev": "npm run devClient & npm run devServer",
     "start:prod": "NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart",
     "build": "npm run clean && webpack --config webpack.config.js --progress --display-error-details",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build:prod"
   },
   "proxy": "http://localhost:8080",
   "author": "",
