@@ -4,6 +4,7 @@ const pass =  process.env.MAIL_PW;
 const host = process.env.MAIL_HOST;
 
 const wmpConfig = {
+    pool: true,
     host: host,
     port: 587,
     secure: false, // upgrade later with STARTTLS
