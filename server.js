@@ -79,7 +79,6 @@ app.get('*', (req, res, next) => {
 });
 
 const port = process.env.PORT || 3000;
-
 app.set('port', port);
 
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));

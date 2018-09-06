@@ -1,5 +1,9 @@
 const Sequelize = require('sequelize');
 
-const conn = new Sequelize(process.env.DATABASE_URL, { dialect: 'postgres' });
+const database = process.env.DATABASE_URL || 'postgres://localhost/wmp';
+
+console.log('database', database);
+
+const conn = new Sequelize(database, { dialect: 'postgres' });
 
 module.exports = conn;
