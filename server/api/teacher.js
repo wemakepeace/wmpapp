@@ -98,7 +98,7 @@ app.put('/changepassword', (req, res, next) => {
 
                     const mailOptionsVerifyPwChange = {
                         to : updatedUser.email,
-                        from: 'tempmywmp@gmail.com',
+                        from: process.env.MAIL_ID,
                         firstName: updatedUser.firstName,
                         subject : "Your password has been changed",
                         html : "Hello " + updatedUser.firstName + ",<br> This is a confirmation that the password for your We Make Peace portal account " + updatedUser.email + " has been changed."

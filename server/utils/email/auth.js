@@ -4,7 +4,7 @@ const generateEmail = (res, user, template) => {
     const content = generateTemplate(user, template);
     const mailOptions = {
         to: user.email,
-        from: process.env.MAIL_FROM,
+        from: process.env.MAIL_ID,
         ...content
 
     };

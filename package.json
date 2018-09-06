@@ -11,7 +11,7 @@
     "devClient": "npx webpack-dev-server --hot --open --config webpack.config.js",
     "devServer": "PORT=8080 JWT_SECRET=foo NODE_ENV=development DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/ server.js sass --watch",
     "start:dev": "npm run devClient & npm run devServer",
-    "start:prod": "DATABASE_URL=postgres://localhost/wmp NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart",
+    "start:prod": "NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart",
     "build": "npm run clean && webpack --config webpack.config.js --progress --display-error-details",
     "postinstall": "npm run build"
   },

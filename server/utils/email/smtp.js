@@ -1,15 +1,19 @@
 const nodemailer = require('nodemailer');
-const gmailUser = process.env.MAIL_ID;
+const mailId = process.env.MAIL_ID;
 const pass =  process.env.MAIL_PW;
-const service = process.env.SERVICE;
+const host = process.env.MAIL_HOST;
 
-const smtpTransport = nodemailer.createTransport({
-    service: service,
+const wmpConfig = {
+    host: host,
+    port: 587,
+    secure: false, // upgrade later with STARTTLS
     auth: {
-        user: gmailUser,
+        user: mailId,
         pass: pass
     }
-});
+};
+
+const smtpTransport = nodemailer.createTransport(wmpConfig);
 
 const sendEmail = (res, mailOptions) => {
     return new Promise((resolve, reject) => {
