@@ -102,13 +102,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             hash: true,
             meta: {
+                meta: {
                 name: 'viewport',
-                charset: 'UTF-8',
-                content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, ie=edge, user-scalable=no',
-                'http-equiv': 'X-UA-Compatible',
+                content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
                 viewport: 'width=device-width, initial-scale=1'
             },
-            title: 'WE MAKE PEACE portal'
+            title: 'WE MAKE PEACE Letters'
         }),
         // new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
         new webpack.optimize.OccurrenceOrderPlugin(),
