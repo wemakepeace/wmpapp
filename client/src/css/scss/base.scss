@@ -97,157 +97,50 @@ input:focus, textarea:focus, select:focus{
                 cursor: pointer;
                 margin: auto;
 
+                .select-class-item {
+                   padding-left: 13px;
+                }
+
                 .no-border {
-                   border-right: none;
-                   padding-right: 0px;
+                    border-right: none;
+                    padding-right: 0px;
+                    cursor: default !important;
+                    padding: 0;
+
+                   .select-class-label {
+                        padding-right: 0px !important;
+                        cursor: none;
+                    }
+
+                    .select-class-label:hover {
+                        text-decoration: none;
+                    }
+                }
+
+
+                // dropdown
+                .select-class {
+                    display: inline-block;
+                    margin: 0px;
+                    width: 180px;
+
+                    h5 {
+                        display: inline-block;
+                    }
+
+                    .Select.is-clearable.is-searchable.Select--single {
+                        display: inline-block;
+                    }
                 }
             }
-
-
-            span.header-menu-item.no-border.select-class-label {
-                padding-right: 0px !important;
-                cursor: none;
-            }
-
-            span.header-menu-item.select-class-item {
-                padding-left: 13px;
-            }
-
 
             span.header-menu-item:hover {
                text-decoration: underline;
             }
-
-            span.header-menu-item.no-border.select-class-label:hover {
-                text-decoration: none;
-            }
-
-            .header-menu-item.select-class {
-                display: inline-block;
-                margin: 0px;
-                width: 180px;
-
-                h5 {
-                    display: inline-block;
-                }
-
-                .Select.is-clearable.is-searchable.Select--single {
-                    display: inline-block;
-                }
-            }
-
-            span.header-menu-item.no-border {
-                cursor: default !important;
-                padding: 0;
-            }
         }
     }
 }
 
-
-@media (max-width: 1000px) {
-    span.header-menu-item {
-        font-size: 0.9em;
-    }
-}
-
-
-@media (max-width: 900px) {
-    .page-container {
-        margin-left: 0px !important;
-        margin-right: 0px !important;
-    }
-}
-
-
-@media (max-width: 800px) {
-    .feedback-inner {
-        width: 90%;
-    }
-}
-
-
-@media (max-width: 756px) {
-    .title-container {
-        .heading {
-            .title:last-child {
-               margin: 10px 2px;
-            }
-            .title {
-                margin: 0px 1px;
-                font-size: 0.8em;
-            }
-        }
-
-        .logged-in .logged-in-inner {
-            float: right;
-            font-size: 1.3em;
-            line-height: 1.3em;
-            padding: 0;
-            display: flex;
-            font-size: 1.2em;
-            text-align: center;
-
-            .header-menu-item.select-class {
-                width: 134px;
-                text-align: left;
-            }
-        }
-    }
-}
-
-@media (max-width: 650px) {
-
-    .title-container .heading {
-        padding: 10px 7px;
-    }
-
-    .title-container .heading .title h1 {
-        font-size: 3em;
-        color: #fff;
-        line-height: 1em;
-    }
-    .title-container .heading .title {
-        margin: 0;
-        font-size: 0.8em;
-    }
-    .title-container .heading .title-span {
-        background-color: inherit;
-        color: inherit;
-        margin: 0;
-        padding: 0;
-    }
-
-    .title-container .heading .title:last-child {
-        margin: 0;
-    }
-
-    .title-container .logged-in .logged-in-inner span.header-menu-item {
-        border-right: none;
-    }
-
-    .header-menu-item.select-class {
-        display: inline-block;
-        margin: 0px;
-        width: 140px;
-    }
-
-    .title-container .logged-in .logged-in-inner span.header-menu-item {
-        padding: 8px 10px;
-    }
-}
-
-
-@media (max-width: 470px) {
-    .title-container .heading .title {
-        font-size: 0.5em;
-    }
-}
-
-// Select Class dropdown component
-.select-class {
-    margin: 10px 0;
-}
 
 .select-country {
     margin: 10px 0;
@@ -280,3 +173,103 @@ input:focus, textarea:focus, select:focus{
 
 
 
+
+@media (max-width: 1000px) {
+
+    span.header-menu-item {
+        font-size: 0.9em;
+    }
+}
+
+
+@media (max-width: 900px) {
+
+    .page-container {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .feedback-inner {
+        width: 90%;
+    }
+}
+
+
+@media (max-width: 756px) {
+
+    .title-container {
+        .heading {
+            .title:last-child {
+               margin: 10px 2px;
+            }
+            .title {
+                margin: 0px 1px;
+                font-size: 0.8em;
+            }
+        }
+
+        .logged-in .logged-in-inner {
+            float: right;
+            font-size: 1.3em;
+            line-height: 1.3em;
+            padding: 0;
+            display: flex;
+            font-size: 1.2em;
+            text-align: center;
+
+            .header-menu-item.select-class {
+                width: 134px;
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+
+    .title-container {
+        .heading {
+            padding: 10px 7px;
+
+            .title {
+                margin: 0;
+                font-size: 0.8em;
+
+                h1 {
+                    font-size: 3em;
+                    color: #fff;
+                    line-height: 1em;
+                }
+            }
+
+            .title-span {
+                background-color: inherit;
+                color: inherit;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        .logged-in .logged-in-inner span.header-menu-item {
+            border-right: none;
+            padding: 8px 10px;
+        }
+    }
+
+    .header-menu-item.select-class {
+        display: inline-block;
+        margin: 0px;
+        width: 140px;
+    }
+}
+
+
+@media (max-width: 470px) {
+    .title-container .heading .title {
+        font-size: 0.5em;
+    }
+}
