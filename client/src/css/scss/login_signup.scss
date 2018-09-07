@@ -3,58 +3,68 @@
 
 
 .login-signup-container {
-    margin: 0 auto;
-    height: 345px;
+    width: 100%;
+    height: 500px;
 
-    .login-signup-form {
-        background-color: $lightyellow !important;
-        height: 100%;
-        display: flex;
-        @include form-styles
-        input { @include input-styles }
-        button { @include action-btn }
-
-        .form-container {
-            margin: auto;
-            width: 100%;
-
-            .custom-form {
-                padding: 20px 20px 0px 20px;
-            }
-
-        }
+    .landing-page-feedback {
+        height: 15px;
     }
 
-    .signup-login-tabs {
-        flex: 1;
-        display: flex;
-        cursor: pointer;
+    .login-signup {
+        margin: 0 auto;
 
-        .signup-tab, .login-tab {
+        .login-signup-form {
+            background-color: $lightyellow !important;
+            height: 100%;
+            display: flex;
+            @include form-styles
+            input { @include input-styles }
+            button { @include action-btn }
+
+            .form-container {
+                margin: auto;
+                width: 100%;
+
+                .custom-form {
+                    padding: 20px 20px 0px 20px;
+                }
+
+            }
+        }
+
+        .signup-login-tabs {
             flex: 1;
             display: flex;
+            cursor: pointer;
 
-            h3 {
-                font-size: 2em;
-                margin: auto;
-                &:hover { color: white }
+            .signup-tab, .login-tab {
+                flex: 1;
+                display: flex;
+
+                h3 {
+                    font-size: 2em;
+                    margin: auto;
+                    &:hover { color: white }
+                }
             }
-        }
 
-        .active-main {
-            @include active(none)
-        }
+            .active-main {
+                @include active(none)
+            }
 
-        .signup-tab { background-color: $lightblue; }
-        .login-tab { background-color: $peach; }
+            .signup-tab { background-color: $lightblue; }
+            .login-tab { background-color: $peach; }
+        }
     }
+
 }
 
 
 
-@media (min-width: 1000px) {
 
-    .login-signup.page-content {
+@media (min-width: 800px) {
+
+    .login-signup-container {
         width: 760px;
     }
 
@@ -71,8 +81,9 @@
 }
 
 @media (min-width: 900px) {
-    .login-signup-container {
+    .login-signup {
          display: flex;
+         height: 65%;
 
         .login-signup-form, .signup-login-tabs {
             display: flex;
@@ -93,6 +104,5 @@
         }
     }
 }
-
 
 

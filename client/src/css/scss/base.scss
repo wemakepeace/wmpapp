@@ -160,6 +160,13 @@ input:focus, textarea:focus, select:focus{
     margin: 0 auto;
 }
 
+
+@media (max-width: 800px) {
+    .feedback-inner {
+        width: 90%;
+    }
+}
+
 .error {
     color: red;
     background-color: antiquewhite;
