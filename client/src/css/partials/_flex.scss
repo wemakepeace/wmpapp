@@ -1,4 +1,24 @@
-/***/
+.centered-outer-div {
+    height: 100vh;
+    display: flex;
+
+    .centered-inner-div {
+        margin: auto;
+    }
+}
+
+@media (max-width: 800px) {
+    .centered-outer-div {
+        width: 90%;
+    }
+}
+
+@media (max-width: 400px) {
+    .centered-outer-div {
+        width: 100%;
+    }
+}
+
 
 .column-layout {
     max-width: 1300px;

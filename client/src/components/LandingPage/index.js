@@ -18,24 +18,28 @@ class SignupOrLogin extends Component {
         const Form = form === 'login' ? Login : Signup;
 
         return (
-            <div className='login-signup page-content'>
-                <Header history={history} />
-                <div className='login-signup-container'>
-                    <div className='signup-login-tabs'>
-                        <div
-                            className={`login-tab ${this.getActiveClass('login')}`}
-                            onClick={()=> this.toggleForm('login')}>
-                            <h3>LOGIN</h3>
+            <div className='centered-outer-div'>
+                <div className='centered-inner-div login-signup-container'>
+                    <Header history={history} />
+                    <div className='login-signup'>
+                        <div className='signup-login-tabs'>
+                            <div
+                                className={`login-tab ${this.getActiveClass('login')}`}
+                                onClick={()=> this.toggleForm('login')}>
+                                <h3>LOGIN</h3>
+                            </div>
+                            <div
+                                className={`signup-tab ${this.getActiveClass('signup')}`}
+                                onClick={()=> this.toggleForm('signup')}>
+                                <h3>SIGNUP</h3>
+                            </div>
                         </div>
-                        <div
-                            className={`signup-tab ${this.getActiveClass('signup')}`}
-                            onClick={()=> this.toggleForm('signup')}>
-                            <h3>SIGNUP</h3>
-                        </div>
+                        <Form history={history} />
                     </div>
-                    <Form history={history} />
+                    <div className='landing-page-feedback'>
+                        <Feedback {...feedback} />
+                    </div>
                 </div>
-                <Feedback {...feedback} />
             </div>
         );
     };

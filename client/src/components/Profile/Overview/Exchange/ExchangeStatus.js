@@ -91,7 +91,7 @@ export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick 
             <div className="flex-outer">
                 <div className="flex-inner-1">
                     <div className="flex-item border">
-                        <label>Exchange Status</label>
+                        <label>Status</label>
                     </div>
                     <div className="flex-item status">
                         <span className='status-span'>{status}</span>

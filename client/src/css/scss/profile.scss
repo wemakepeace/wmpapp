@@ -7,13 +7,27 @@
 
     .profile-menu-item {
         cursor: pointer;
-        h3 { margin: auto; }
+        color: #000;
+
+        h3 {
+            margin: auto;
+        }
+
+        h3: hover {
+            color: darkgray !important;
+        }
     }
+
+    .profile-menu-item:hover {
+        color: darkgray !important;
+    }
+
 
     .profile-menu-item:last-child {
         border-bottom: none;
     }
 }
+
 
 .profile-form-column {
     min-height: 600px;
@@ -25,7 +39,7 @@
 
     .profile-form {
         margin: 0 auto;
-        margin-top: 3%;
+        margin-top: 6%;
         margin-bottom: 3%;
 
         .profile-segment {
@@ -37,6 +51,7 @@
 
             .steps {
                display: flex;
+
                .step-list ul li {
                    list-style: none;
                 }
@@ -62,6 +77,8 @@
                 }
             }
         }
+
+
 
         .school-form {
             margin-top: 40px;
@@ -139,6 +156,7 @@
                     text-transform: uppercase;
                     font-size: 1.5em;
                     line-height: 1.2em;
+                    // margin: auto;
                 }
             }
 
@@ -199,15 +217,24 @@
 @media (min-width: 1000px) {
 
     .page-content {
-        // width: 70vw;
-
         .profile-form-column .profile-form {
             width: 65%;
         }
     }
 }
 
+@media (max-width: 1000px) {
+       .page-content {
+            .profile-form-column .profile-form {
+                width: 85%;
+            }
+    }
+}
+
+
+
 @media(min-width: 900px) {
+
     .profile-column-container {
         display: flex;
     }
@@ -217,10 +244,56 @@
 
         .profile-menu-item {
             display: flex;
-            // flex: 1;
             height: 90px;
             border-bottom: 1px dotted #000;
         }
+
+        .profile-menu-item h3:hover {
+            color: darkgray !important;
+        }
+
+        h3:hover {
+            color: darkgray !important;
+        }
+
     }
 }
 
+
+@media(max-width: 900px) {
+
+    .profile-menu-item {
+        padding: 1%;
+        border-bottom: 1px solid gray !important;
+
+        h3 {
+            color: #000;
+        }
+    }
+
+
+    .profile-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .profile-menu-item.active-profile h3 {
+        background-color: transparent;
+        color: #000;
+        padding: 0;
+    }
+}
+
+
+@media(max-width: 600px) {
+    .eight.wide.column.overview-class-details {
+        width: 100% !important;
+    }
+
+    .profile-form-column .profile-form .flex-outer .status {
+        padding: 1em;
+
+        span {
+            font-size: 1.2em;
+        }
+    }
+}

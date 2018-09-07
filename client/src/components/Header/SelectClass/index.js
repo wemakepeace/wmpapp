@@ -56,7 +56,7 @@ class SelectClass extends Component  {
                 className='header-menu-item select-class'
                 name='form-field-name'
                 value={value}
-                placeholder='Browse'
+                placeholder='Select class'
                 onChange={this.onClassSelect}
                 options={options}
                 clearable={false}

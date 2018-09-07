@@ -52,17 +52,6 @@ class Settings extends Component {
                         </p>
                         <Button negative>Delete Account</Button>
                     </Accordion.Content>
-
-                    <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleClick}>
-                        <Icon name='dropdown' />
-                        Another security thing
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 2}>
-                        <p>
-                        Three common ways for a prospective owner to acquire a dog is from pet shops, private
-                        owners, or shelters.
-                        </p>
-                    </Accordion.Content>
                 </Accordion>
             </div>
         );
