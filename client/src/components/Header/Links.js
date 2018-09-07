@@ -6,24 +6,19 @@ const Links = ({ teacher, initiateNewClass, onLogout, history }) => {
         return null;
     }
 
+
     return (
         <div className='logged-in'>
             <div className='logged-in-inner'>
-                {teacher.classes && teacher.classes ?
-                    <div>
-                        <span
-                            icon='arrow right'
-                            className='header-menu-item no-border select-class-label'>Select Class</span>
-                        <span className='header-menu-item select-class-item'>
-                            <SelectClass history={history} />
-                        </span>
-                    </div>
-                    : null
-                }
+                {teacher.classes ?
+                    <span className='header-menu-item select-class-item'>
+                        <SelectClass history={history} />
+                    </span>
+                    : null }
                  <span className='header-menu-item' onClick={initiateNewClass}>
-                    Register New Class
+                    Register Class
                 </span>
-                 <span className='header-menu-item no-border' onClick={onLogout}>
+                 <span className='header-menu-item' onClick={onLogout}>
                     Log out
                 </span>
             </div>

@@ -1,25 +1,27 @@
 @import '../partials/_colors';
 @import '../partials/_mixins';
 
+body {
+    background-color: $lightgray !important;
+    font-family: 'Archivo Black', sans-serif;
+}
+
 // TEMP: remove before production
 .ui.menu {
     margin-bottom: 0;
 }
 
 
-body {
-    background-color: $lightgray !important;
-    font-family: 'Archivo Black', sans-serif;
+.underline {
+    text-decoration: underline;
 }
 
 // Remove blue outline around selected inputs
-
 input:focus, textarea:focus, select:focus{
     outline: none;
 }
 
 // Main menu styles
-
 .ui.menu {
     font-size: 1.7rem;
     box-shadow: none;
@@ -28,11 +30,9 @@ input:focus, textarea:focus, select:focus{
 }
 
 // Reusbale standardized page-container
-
 .page-container {
     display: flex !important;
     width: 100%;
-    // height: 100vh;
     align-items: center;
     justify-content: center;
 
@@ -44,11 +44,9 @@ input:focus, textarea:focus, select:focus{
 }
 
 // Reusable title header styles, appears on Home page and Profile pages
-
 .title-container {
     display: flex;
     width: 100%;
-    // min-height: 360px;
     background-color: $pink;
     align-items: flex-end;
     margin: auto;
@@ -89,7 +87,6 @@ input:focus, textarea:focus, select:focus{
             float: right;
             font-size: 1.3em;
             line-height: 1.3em;
-            padding: 13px;
             display: flex;
             font-size: 1.7rem;
 
@@ -99,11 +96,13 @@ input:focus, textarea:focus, select:focus{
                 border-right: 1px solid #fff;
                 cursor: pointer;
                 margin: auto;
+
+                .no-border {
+                   border-right: none;
+                   padding-right: 0px;
+                }
             }
 
-            span.header-menu-item.no-border {
-               border-right: none;
-            }
 
             span.header-menu-item.no-border.select-class-label {
                 padding-right: 0px !important;
@@ -136,14 +135,116 @@ input:focus, textarea:focus, select:focus{
                     display: inline-block;
                 }
             }
+
+            span.header-menu-item.no-border {
+                cursor: default !important;
+                padding: 0;
+            }
         }
     }
-
 }
 
 
-// Select Class dropdown component
+@media (max-width: 1000px) {
+    span.header-menu-item {
+        font-size: 0.9em;
+    }
+}
 
+
+@media (max-width: 900px) {
+    .page-container {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+}
+
+
+@media (max-width: 800px) {
+    .feedback-inner {
+        width: 90%;
+    }
+}
+
+
+@media (max-width: 756px) {
+    .title-container {
+        .heading {
+            .title:last-child {
+               margin: 10px 2px;
+            }
+            .title {
+                margin: 0px 1px;
+                font-size: 0.8em;
+            }
+        }
+
+        .logged-in .logged-in-inner {
+            float: right;
+            font-size: 1.3em;
+            line-height: 1.3em;
+            padding: 0;
+            display: flex;
+            font-size: 1.2em;
+            text-align: center;
+
+            .header-menu-item.select-class {
+                width: 134px;
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+
+    .title-container .heading {
+        padding: 10px 7px;
+    }
+
+    .title-container .heading .title h1 {
+        font-size: 3em;
+        color: #fff;
+        line-height: 1em;
+    }
+    .title-container .heading .title {
+        margin: 0;
+        font-size: 0.8em;
+    }
+    .title-container .heading .title-span {
+        background-color: inherit;
+        color: inherit;
+        margin: 0;
+        padding: 0;
+    }
+
+    .title-container .heading .title:last-child {
+        margin: 0;
+    }
+
+    .title-container .logged-in .logged-in-inner span.header-menu-item {
+        border-right: none;
+    }
+
+    .header-menu-item.select-class {
+        display: inline-block;
+        margin: 0px;
+        width: 140px;
+    }
+
+    .title-container .logged-in .logged-in-inner span.header-menu-item {
+        padding: 8px 10px;
+    }
+}
+
+
+@media (max-width: 470px) {
+    .title-container .heading .title {
+        font-size: 0.5em;
+    }
+}
+
+// Select Class dropdown component
 .select-class {
     margin: 10px 0;
 }
@@ -154,24 +255,15 @@ input:focus, textarea:focus, select:focus{
 
 
 // Feedback
-
 .feedback-inner {
     width: 50%;
     margin: 0 auto;
-}
-
-
-@media (max-width: 800px) {
-    .feedback-inner {
-        width: 90%;
-    }
 }
 
 .error {
     color: red;
     background-color: antiquewhite;
     span {
-        // margin: auto;
         width: 100%;
         display: block;
     }
@@ -181,22 +273,10 @@ input:focus, textarea:focus, select:focus{
     background-color: antiquewhite;
 
     span {
-        // margin: auto;
         width: 100%;
         display: block;
     }
 }
 
-
-.underline {
-    text-decoration: underline;
-}
-
-@media (max-width: 900px) {
-    .page-container {
-        margin-left: 0px !important;
-        margin-right: 0px !important;
-    }
-}
 
 

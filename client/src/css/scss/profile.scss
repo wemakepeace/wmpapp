@@ -15,6 +15,7 @@
     }
 }
 
+
 .profile-form-column {
     min-height: 600px;
     min-height: 100vh;
@@ -199,15 +200,24 @@
 @media (min-width: 1000px) {
 
     .page-content {
-        // width: 70vw;
-
         .profile-form-column .profile-form {
             width: 65%;
         }
     }
 }
 
+@media (max-width: 1000px) {
+       .page-content {
+            .profile-form-column .profile-form {
+                width: 85%;
+            }
+    }
+}
+
+
+
 @media(min-width: 900px) {
+
     .profile-column-container {
         display: flex;
     }
@@ -217,10 +227,33 @@
 
         .profile-menu-item {
             display: flex;
-            // flex: 1;
             height: 90px;
             border-bottom: 1px dotted #000;
         }
+    }
+}
+
+
+@media(max-width: 900px) {
+
+    .profile-menu-item {
+        padding: 1%;
+        border-bottom: 1px solid gray !important;
+
+        h3 {
+            color: #000;
+        }
+    }
+
+
+    .profile-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .profile-menu-item.active-profile h3 {
+        background-color: transparent;
+        color: #000;
+        padding: 0;
     }
 }
 

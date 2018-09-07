@@ -28,7 +28,6 @@
                 .custom-form {
                     padding: 20px 20px 0px 20px;
                 }
-
             }
         }
 
@@ -38,6 +37,7 @@
             cursor: pointer;
 
             .signup-tab, .login-tab {
+                padding: 2%;
                 flex: 1;
                 display: flex;
 
@@ -97,6 +97,7 @@
             flex-direction: column;
 
             .signup-tab, .login-tab {
+
                 h3 {
                     font-size: 3em;
                 }
