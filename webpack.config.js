@@ -105,7 +105,8 @@ module.exports = {
                 name: 'viewport',
                 charset: 'UTF-8',
                 content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, ie=edge, user-scalable=no',
-                'http-equiv': 'X-UA-Compatible'
+                'http-equiv': 'X-UA-Compatible',
+                viewport: 'width=device-width, initial-scale=1'
             },
             title: 'WE MAKE PEACE portal'
         }),
@@ -115,3 +116,6 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
     ]
 };
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
