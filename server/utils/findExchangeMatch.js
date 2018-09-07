@@ -25,12 +25,10 @@ const getLocationDataForMatches = (matches) => {
 };
 
 
-
 const getCoordinates = (data) => {
     return googleMapsClient.geocode({ address: data.address })
     .asPromise()
     .then(response => {
-        console.log('response', response)
         return {
             id: data.id,
             location: response.json.results[0].geometry.location
@@ -68,12 +66,8 @@ const findFurthestMatch = (_class, matches) => {
     let classData = extractClassAddress(_class.dataValues);
 
     return getCoordinates(classData)
-    .then((data) => {
-        console.log('data====', data)
-        return data.location
-    })
+    .then((data) => data.location)
     .then(classCoordinates => {
-        console.log('classCoordinates', classCoordinates)
         const locationDataForMatches = getLocationDataForMatches(matches);
             return Promise.all(locationDataForMatches.map(data => getCoordinates(data)))
             .then(dataWithCoords => {

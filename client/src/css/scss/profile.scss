@@ -7,8 +7,21 @@
 
     .profile-menu-item {
         cursor: pointer;
-        h3 { margin: auto; }
+        color: #000;
+
+        h3 {
+            margin: auto;
+        }
+
+        h3: hover {
+            color: darkgray !important;
+        }
     }
+
+    .profile-menu-item:hover {
+        color: darkgray !important;
+    }
+
 
     .profile-menu-item:last-child {
         border-bottom: none;
@@ -26,7 +39,7 @@
 
     .profile-form {
         margin: 0 auto;
-        margin-top: 3%;
+        margin-top: 6%;
         margin-bottom: 3%;
 
         .profile-segment {
@@ -38,6 +51,7 @@
 
             .steps {
                display: flex;
+
                .step-list ul li {
                    list-style: none;
                 }
@@ -63,6 +77,8 @@
                 }
             }
         }
+
+
 
         .school-form {
             margin-top: 40px;
@@ -140,6 +156,7 @@
                     text-transform: uppercase;
                     font-size: 1.5em;
                     line-height: 1.2em;
+                    // margin: auto;
                 }
             }
 
@@ -230,6 +247,15 @@
             height: 90px;
             border-bottom: 1px dotted #000;
         }
+
+        .profile-menu-item h3:hover {
+            color: darkgray !important;
+        }
+
+        h3:hover {
+            color: darkgray !important;
+        }
+
     }
 }
 
@@ -257,3 +283,17 @@
     }
 }
 
+
+@media(max-width: 600px) {
+    .eight.wide.column.overview-class-details {
+        width: 100% !important;
+    }
+
+    .profile-form-column .profile-form .flex-outer .status {
+        padding: 1em;
+
+        span {
+            font-size: 1.2em;
+        }
+    }
+}

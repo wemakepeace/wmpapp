@@ -123,6 +123,7 @@ input:focus, textarea:focus, select:focus{
                     display: inline-block;
                     margin: 0px;
                     width: 180px;
+                    text-align: left;
 
                     h5 {
                         display: inline-block;
@@ -204,7 +205,7 @@ input:focus, textarea:focus, select:focus{
     .title-container {
         .heading {
             .title:last-child {
-               margin: 10px 2px;
+               margin: 0 1px;
             }
             .title {
                 margin: 0px 1px;
@@ -221,15 +222,15 @@ input:focus, textarea:focus, select:focus{
             font-size: 1.2em;
             text-align: center;
 
-            .header-menu-item.select-class {
-                width: 134px;
-                text-align: left;
+            span.header-menu-item.select-class {
+                width: 134px !important;
+                // text-align: left;
             }
         }
     }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 661px) {
 
     .title-container {
         .heading {
@@ -257,13 +258,14 @@ input:focus, textarea:focus, select:focus{
         .logged-in .logged-in-inner span.header-menu-item {
             border-right: none;
             padding: 8px 10px;
-        }
-    }
 
-    .header-menu-item.select-class {
-        display: inline-block;
-        margin: 0px;
-        width: 140px;
+            .select-class {
+                display: inline-block;
+                margin: 0px;
+                width: 140px;
+                // text-align: left;
+            }
+        }
     }
 }
 
