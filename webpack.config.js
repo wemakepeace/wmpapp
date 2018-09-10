@@ -10,8 +10,7 @@ const extractPlugin = new ExtractTextPlugin({
 
 module.exports = {
     entry: [
-        'webpack-hot-middleware/client',
-        './client/src/index.js',
+        './client/src/index.js'
     ],
     output: {
         path: path.join(__dirname, 'dist'),
