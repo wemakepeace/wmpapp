@@ -75,8 +75,8 @@ Teacher.prototype.destroyTokens = function() {
 };
 
 // May want to make this async since node is single threaded
-Teacher.beforeCreate((teacher, options) => {
-    if(!teacher.password) {
+Teacher.beforeCreate((teacher) => {
+    if (!teacher.password) {
         throw new Error('You need to enter a password.')
     }
     const hashedPw = saltHashPassword(teacher.password);
@@ -86,7 +86,7 @@ Teacher.beforeCreate((teacher, options) => {
 
 
 Teacher.beforeUpdate((teacher, options) => {
-    if(options.fields.indexOf('password') > -1) {
+    if (options.fields.indexOf('password') > -1) {
         const hashedPw = saltHashPassword(teacher.password);
         teacher.salt = hashedPw.salt;
         teacher.password = hashedPw.passwordHash;
