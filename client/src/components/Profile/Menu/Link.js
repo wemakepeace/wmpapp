@@ -7,9 +7,15 @@ export const MenuLink = ({ name, route, defaultChildRoute, match: { url }, locat
         `${url}/${route}/${defaultChildRoute}` :
         `${url}/${route}`;
 
+    let _class = `profile-menu-item ${getActiveClass(route)}`;
+    console.log(name)
+    if (name === 'Materials') {
+        _class += ' last-item';
+    }
+
     return (
         <Link to={routeTo}>
-            <div className={`profile-menu-item ${getActiveClass(route)}`} >
+            <div className={_class} >
                 <h3>{name.toUpperCase()}</h3>
             </div>
         </Link>

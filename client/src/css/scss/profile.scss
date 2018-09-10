@@ -22,9 +22,12 @@
         color: darkgray !important;
     }
 
+    .profile-menu-item {
+        border-bottom: 1px solid darkgray !important;
+    }
 
-    .profile-menu-item:last-child {
-        border-bottom: none;
+    .last-item {
+        border-bottom: none !important;
     }
 }
 
