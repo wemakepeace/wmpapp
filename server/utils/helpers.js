@@ -97,7 +97,7 @@ const extractDataForFrontend = (data, result) => {
             if (isObject(data[key])) {
                 // it is an object, call recursively
                 result[key] = extractDataForFrontend(data[key], {});
-            } else if (Array.isArray(data[key]) && data[key][0].hasOwnProperty('id')) {
+            } else if (Array.isArray(data[key]) && data[key].length && data[key][0].hasOwnProperty('id')) {
                 result[key] = data[key].reduce((collection, _key, index) => {
                     const id = _key.id;
                     collection[id] = extractDataForFrontend(data[key][index], {})
