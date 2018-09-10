@@ -12,6 +12,8 @@ import Teacher from './Teacher';
 import Materials from './Materials';
 
 
+import { clearFeedback } from '../../redux/actions/shared';
+
 const content = [
     {
         name: 'Overview',
@@ -37,36 +39,48 @@ const content = [
 ];
 
 
-const Profile = ({ ...props, currentClass, status, feedback }) => {
-    return (
-        <div className='page-content'>
-            <Header {...props} />
-            <div className='profile-column-container'>
-                <div className='profile-menu-column'>
-                    <Menu
-                        content={content}
-                        currentClass={currentClass}
-                        status={status}
-                        {...props}
-                    />
-                </div>
-                <div className='profile-form-column'>
-                    <div className='profile-form'>
-                        <Route
-                            path={`${props.match.path}/:route`}
-                            render={(props) => <TabContent content={content} {...props} />}
-                            {...props} />
-                        <Feedback {...feedback} />
+class Profile extends Component {
+    state = {}
+
+    componentWillReceiveProps({ feedback }) {
+        if (this.props.feedback === feedback ) {
+            this.props.clearFeedback();
+        }
+    }
+
+    render() {
+        const { match, currentClass, status, feedback } = this.props;
+        return (
+            <div className='page-content'>
+                <Header {...this.props} />
+                <div className='profile-column-container'>
+                    <div className='profile-menu-column'>
+                        <Menu
+                            content={content}
+                            currentClass={currentClass}
+                            status={status}
+                            {...this.props}
+                        />
+                    </div>
+                    <div className='profile-form-column'>
+                        <div className='profile-form'>
+                            <Route
+                                path={`${match.path}/:route`}
+                                render={(props) => <TabContent content={content} {...props} feedback={feedback} />}
+                                {...this.props} />
+
+                            <Feedback {...feedback} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 const mapStateToProps = ({ currentClass, feedback, exchange: { status } }) => {
     return { currentClass, feedback, status };
 };
 
-export default connect(mapStateToProps, { removeCurrentClass })(Profile);
+export default connect(mapStateToProps, { clearFeedback })(Profile);
 

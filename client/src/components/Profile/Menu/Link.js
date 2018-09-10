@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const MenuLink = ({ name, route, defaultChildRoute, match: { url }, location: { pathname } }) => {
-    const getActiveClass = (route) => pathname.indexOf(route) > -1 ? 'active-profile' : '';
+    const getActiveClass = (_route) => pathname.indexOf(_route) > -1 ? 'active-profile' : '';
     const routeTo = defaultChildRoute ?
         `${url}/${route}/${defaultChildRoute}` :
         `${url}/${route}`;
