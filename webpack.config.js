@@ -1,10 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
+
 
 const extractPlugin = new ExtractTextPlugin({
    filename: 'main.css'
@@ -35,19 +33,6 @@ module.exports = {
                     plugins: [ 'transform-decorators-legacy', 'transform-object-rest-spread' ]
                 }
             },
-            // {
-            //     test: /\.js$/,
-            //     exclude: /node_modules/,
-            //     use: [
-            //         {
-            //             loader: 'babel-loader',
-            //             options: {
-            //                 presets: [ 'env', 'react', 'stage-1'],
-
-            //             }
-            //         }
-            //     ]
-            // },
             {
                 test: /\.scss|css$/,
                 use: extractPlugin.extract({
@@ -82,17 +67,6 @@ module.exports = {
             }
         ]
     },
-    devServer: {
-        stats: 'errors-only',
-        open: true,
-        port: 3000,
-        compress: true,
-        hot: true,
-        proxy: {
-            // '**': 'http://localhost:8080'
-            '*': 'http://[::1]:8080'
-        }
-    },
     plugins: [
         new webpack.ProvidePlugin({ // to enable jquery
             $: 'jquery',
@@ -108,9 +82,7 @@ module.exports = {
             },
             title: 'WE MAKE PEACE portal'
         }),
-        // new CleanWebPackPlugin(['dist']), // to remove dist folder before each build,
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
     ]
 };

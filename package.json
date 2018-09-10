@@ -6,13 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build:prod": "webpack -p",
     "clean": "rm -rf dist",
-    "devClient": "npx webpack-dev-server --hot --open --config webpack.config.js",
+    "devClient": "npx webpack-dev-server --hot --open --config webpack.dev.js",
     "devServer": "PORT=8080 JWT_SECRET=foo NODE_ENV=development DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/ server.js sass --watch",
     "start:dev": "npm run devClient & npm run devServer",
     "start:prod": "NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart",
-    "build": "npm run clean && webpack --config webpack.config.js --progress --display-error-details",
+    "build": "npm run clean && webpack --config webpack.prod.js --progress --display-error-details",
     "postinstall": "npm run build"
   },
   "proxy": "http://localhost:8080",
@@ -89,6 +88,7 @@
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
     "url-loader": "^1.0.1",
+    "webpack-merge": "^4.1.4",
     "zipcodes": "^6.0.0"
   }
 }
