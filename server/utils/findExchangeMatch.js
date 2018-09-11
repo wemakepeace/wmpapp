@@ -35,7 +35,6 @@ const getCoordinates = (data) => {
         }
     })
     .catch(error => {
-        console.log('error', error)
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
         throw new Error(error);
@@ -44,12 +43,9 @@ const getCoordinates = (data) => {
 
 /* helper fn that calculates distance between coordinates */
 const calculateDistance = (location1, location2) => {
-    const kilometerPerMile = 1.609344;
     const curvature = 1.1515;
     const radlat1 = Math.PI * location1.lat / 180;
     const radlat2 = Math.PI * location2.lat / 180;
-    const radlon1 = Math.PI * location1.lng / 180;
-    const radlon2 = Math.PI * location2.lng / 180;
     const theta = location1.lng - location2.lng;
     const radtheta = Math.PI * theta / 180;
 
@@ -57,8 +53,7 @@ const calculateDistance = (location1, location2) => {
     dist = Math.acos(dist)
     dist = dist * 180 / Math.PI;
     dist = dist * 60 * curvature;
-    const totalMiles = dist * kilometerPerMile;
-    return totalMiles;
+    return dist;
 };
 
 
@@ -86,8 +81,8 @@ const findFurthestMatch = (_class, matches) => {
 
                 return matchClass;
             })
-            .then(result => {
-                return matches.find(match => match.dataValues.sender.dataValues.id === result.id);
+            .then(({ id }) => {
+                return matches.find(match => match.dataValues.sender.dataValues.id === id);
             });
     })
 };

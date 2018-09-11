@@ -84,7 +84,7 @@ Exchange.getExchangeAndMatchClass = function(classId) {
  */
 
 Exchange.findMatch = function(_class) {
-    const { teacherId, schoolId, termId, ageGroupId } = _class.dataValues;
+    const { teacherId, schoolId, termId, ageGroupId, school } = _class.dataValues;
     return Exchange.findAll({
         where: {
             status: 'initiated'
@@ -98,8 +98,13 @@ Exchange.findMatch = function(_class) {
                 termId: { $eq: termId },
                 ageGroupId: { $eq: ageGroupId }
             },
-            include: [
-                { model: School },
+                include: [
+                {
+                    model: School,
+                    where: {
+                        country: { $ne: school.country }
+                    }
+                },
                 { model: Teacher }
             ]
         }]
