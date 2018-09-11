@@ -3,7 +3,9 @@
 @import '/vendor/semantic-ui-css/semantic.min.css';
 
 @import './base.scss';
-@import './home.scss';
+@import './header.scss';
 @import './login_signup.scss';
 @import './profile.scss';
+@import './error_pages.scss';
+@import './feedback.scss';
 @import '../partials/_flex.scss';

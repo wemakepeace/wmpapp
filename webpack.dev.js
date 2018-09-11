@@ -11,8 +11,8 @@ module.exports = merge(common, {
         compress: true,
         hot: true,
         proxy: {
-            // '**': 'http://localhost:8080'
-            '*': 'http://[::1]:8080'
+            '**': 'http://localhost:8080'
+            // '*': 'http://[::1]:8080'
         }
     },
     plugins: [

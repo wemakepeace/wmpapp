@@ -1,0 +1,30 @@
+// Feedback
+.feedback-inner {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.error {
+    color: red;
+    background-color: antiquewhite;
+    span {
+        width: 100%;
+        display: block;
+    }
+}
+
+.success {
+    background-color: antiquewhite;
+
+    span {
+        width: 100%;
+        display: block;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .feedback-inner {
+        width: 90%;
+    }
+}

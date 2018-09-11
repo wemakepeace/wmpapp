@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import FormContainer from '../reusables/FormContainer';
 import CustomButton from '../reusables/CustomButton';
 import { login } from '../../redux/actions/auth';
