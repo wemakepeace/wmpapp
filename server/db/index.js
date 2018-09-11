@@ -159,7 +159,7 @@ const classes = [
     // class that will match with xx
     {
         teacherId: 3,
-        name: 'yy',
+        name: '1F',
         size: 28,
         termId: 2,
         ageGroupId: 2,
@@ -168,7 +168,7 @@ const classes = [
     // class that will not find  match
     {
         teacherId: 1,
-        name: 'xx',
+        name: '1C',
         size: 28,
         termId: 2,
         ageGroupId: 2,
@@ -213,29 +213,17 @@ const sync = () => conn.sync({ force: true, logging: console.log });
 
 const seed = () => {
     return sync()
-        .then(() => {
-            const teacherPromises = teachers.map(teacher => {
-                return Teacher.create(teacher);
-            })
-            return Promise.all(teacherPromises)
-            .then(result => {
+        .then(() => Promise.all(teachers.map(teacher => Teacher.create(teacher))))
+            .then(() => {
                 const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
                 const termPromises = termData.map(term => Term.create(term));
                 const schoolPromises = schools.map(school => School.create(school));
 
                 return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
             })
-            .then(result => {
-                const classPromises = classes.map((_class, i) => Class.create(_class));
-
-                return Promise.all(classPromises);
-            })
-            .then(classes => {
-                const exchangePromises = exchanges.map(exchange => Exchange.create(exchange));
-                return Promise.all(exchangePromises);
-            })
-        })
-        .catch(error => console.log('error', error))
+            .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
+            .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
+            .catch(error => console.log('error', error))
 }
 
 module.exports = {
