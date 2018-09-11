@@ -86,13 +86,8 @@ const changePassword = (data) => {
         return axios.put('/teacher/changepassword', data)
         .then(
             (response) => {
-                const credentials = {
-                    email: response.data.user.email,
-                    password: data.password
-                };
-
-                const feedback = response.data.feedback.messages;
-                dispatch(login(credentials, feedback));
+                const feedback = response.data.feedback;
+                return dispatch({ type: SEND_FEEDBACK, feedback })
             },
             (error) => {
                 const feedback = error.response.data.feedback;

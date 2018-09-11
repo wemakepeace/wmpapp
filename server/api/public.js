@@ -37,7 +37,14 @@ app.post('/create', (req, res, next) => {
             });
         })
         .catch((error) => {
-            error.defaultError = 'Something went wrong when creating a user.';
+            console.log('error in public api', error)
+            console.log('error message', error.message)
+            if (error.message) {
+                error.defaultError = error.message;
+            } else {
+                error.defaultError = 'Something went wrong when creating a user.';
+            }
+
             return next(error);
         });
 });

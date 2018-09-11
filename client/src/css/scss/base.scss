@@ -1,23 +1,9 @@
 @import '../partials/_colors';
-@import '../partials/_mixins';
 
 body {
     background-color: $lightgray !important;
     font-family: 'Archivo Black', sans-serif;
 }
-
-// TEMP: remove before production
-// .ui.menu {
-//     margin-bottom: 0;
-// }
-
-// // Main menu styles
-// .ui.menu {
-//     font-size: 1.7rem;
-//     box-shadow: none;
-//     border: none;
-//     min-height: 10vh;
-// }
 
 .underline {
     text-decoration: underline;
@@ -27,7 +13,6 @@ body {
 input:focus, textarea:focus, select:focus{
     outline: none;
 }
-
 
 // Reusbale standardized page-container
 .page-container {

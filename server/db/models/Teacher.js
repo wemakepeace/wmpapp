@@ -4,7 +4,8 @@ const Class = require('./Class');
 const Sequelize = conn.Sequelize;
 const phone = require('phone');
 const { extractDataForFrontend } = require('../../utils/helpers');
-const { saltHashPassword } = require('../../utils/security');
+const { saltHashPassword, validatePassword } = require('../../utils/security');
+
 
 let Teacher = conn.define('teacher', {
     firstName: {
@@ -79,6 +80,7 @@ Teacher.beforeCreate((teacher) => {
     if (!teacher.password) {
         throw new Error('You need to enter a password.')
     }
+
     const hashedPw = saltHashPassword(teacher.password);
     teacher.salt = hashedPw.salt;
     teacher.password = hashedPw.passwordHash;
