@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {  Redirect, Route } from 'react-router-dom';
 import axios from 'axios';
 
-import NoAccess from '../components/NoAccess';
+import NoAccess from '../components/error_pages/NoAccess';
 
 class PrivateRoute extends Component {
     state = {

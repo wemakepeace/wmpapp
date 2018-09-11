@@ -4,7 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import LandingPage from '../components/LandingPage';
 import Profile from '../components/Profile';
-import RequestResetPassword from '../components/RequestResetPassword';
+import RequestResetPassword from '../components/RequestResetPassword'
+import NotFoundPage from '../components/error_pages/NotFoundPage';
 import ResetPassword from '../components/ResetPassword';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
@@ -60,6 +61,7 @@ class Routes extends Component  {
                         path={match.url + 'profile'}
                         component={Profile}
                     />
+                    <Route component={NotFoundPage} />
                 </Switch>
             </div>
         );
