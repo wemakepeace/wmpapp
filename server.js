@@ -2,15 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const bodyparser = require('body-parser');
-const open = require('open');
-const { seed, models } = require('./server/db/index.js');
-const webpack =  require('webpack');
-const config =  require('./webpack.config');
-const compiler = webpack(config);
 const passport = require('passport');
-const passportJWT = require("passport-jwt");
+const passportJWT = require('passport-jwt');
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
+const { seed, models } = require('./server/db/index.js');
+const {  sendError } = require('./server/utils/feedback');
 let jwtOptions = {};
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -36,7 +33,7 @@ app.use(passport.initialize());
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
-    extended:true
+    extended: true
 }));
 
 app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
@@ -58,9 +55,6 @@ app.use('/class', passport.authenticate('jwt', { session: false }), classRoutes)
 app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeRoutes);
 app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
 
-
-const { feedback, sendError } = require('./server/utils/feedback');
-
 app.use(function (err, req, res, next) {
     console.log('errfdsjkalfhdsjklahfjkdls', err);
     let defaultError;
@@ -68,7 +62,7 @@ app.use(function (err, req, res, next) {
     if (err && err.defaultError) {
         defaultError = err.defaultError;
     } else {
-        defaultError = "Something went wrong!"
+        defaultError = 'Something went wrong!';
     }
     return sendError(500, err, defaultError, res);
 
@@ -83,4 +77,6 @@ app.set('port', port);
 
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 
-seed();
+if (process.env.ENV === 'development') {
+    seed();
+}
