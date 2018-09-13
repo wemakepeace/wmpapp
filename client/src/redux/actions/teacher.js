@@ -82,6 +82,16 @@ const updateTeacherSuccess = (teacher, feedback) => {
 const deleteTeacher = () => {
     return (dispatch) => {
         return axios.delete(`/teacher`)
+            .then(({ data }) => data)
+            .then(
+                ({ feedback }) => {
+                    console.log('feedback', feedback)
+                    dispatch({ type: SEND_FEEDBACK, feedback });
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: SEND_FEEDBACK, feedback });
+                })
     }
 }
 

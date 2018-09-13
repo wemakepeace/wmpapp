@@ -69,7 +69,6 @@ Class.createOrUpdate = function(classData, t) {
 
 Class.deleteByTeacherId = function(teacherId, t) {
     return Class.destroy({ where: { teacherId }, transaction: t })
-
 }
 
 
