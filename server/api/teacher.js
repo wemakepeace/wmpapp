@@ -193,7 +193,7 @@ app.delete('/', (req, res, next) => {
                             return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
                         }))
                     })
-                    .then(() => res.send({ feedback: { type: SUCCESS, messages: ['Account deleted.']}}))
+                    .then(() => res.send({ feedback: { type: 'deleted', messages: ['Account deleted.'] }}))
                 })// end of transaction
                 .catch(error => {
                     error.defaultError = 'Something went wrong when deleting your profile. Please try again.';

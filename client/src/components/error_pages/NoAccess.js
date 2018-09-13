@@ -2,7 +2,7 @@ import React from 'react';
 import CustomButton from '../reusables/CustomButton';
 
 const NoAccess = (props) => {
-    const redirectToHome = () => props.history.push('/')
+    const redirectToHome = () => props.history.push('/');
     const Button = CustomButton({ name: 'Go to Home Page'});
     return (
         <div className='centered-outer-div'>

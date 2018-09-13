@@ -11,10 +11,9 @@ import {
 import {
     CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
-    LOGOUT_SUCCESS,
-    LOGIN_ERROR,
     UPDATE_TEACHER_SUCCESS,
-    UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
+    USER_DELETED
+} from '../constants/teacher';
 
 const signup = data => {
     return dispatch => {

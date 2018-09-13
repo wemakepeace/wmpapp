@@ -27,7 +27,7 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     render() {
-        const { onChangePasswordClick, showChangePwForm, deleteTeacher } = this.props;
+        const { onChangePasswordClick, showChangePwForm, deleteTeacher, toggleLoader } = this.props;
         const { activeIndex } = this.state
 
         return (
@@ -51,7 +51,10 @@ class Settings extends Component {
                             This action is not reversable. Please make sure you do not have any exchanges in progress before deleting.
                         </p>
                         <Button
-                            onClick={() => deleteTeacher()}
+                            onClick={() => {
+                                toggleLoader();
+                                deleteTeacher();
+                            }}
                             negative>Delete Account</Button>
                     </Accordion.Content>
                 </Accordion>

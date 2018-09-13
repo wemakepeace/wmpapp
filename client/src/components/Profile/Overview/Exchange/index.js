@@ -47,7 +47,6 @@ class Exchange extends Component {
         const {
             feedback,
             exchange,
-            verifyExchange,
             currentClass
         } = this.props;
         const { showFeedback } = this.state;
@@ -58,7 +57,7 @@ class Exchange extends Component {
 
         return (
             <div>
-                <hr style={{margin: '20px 0'}}/>
+                <hr style={{margin: '20px 0'}} />
                 <h3 style={{margin: '30px 0'}}>Exchange Details</h3>
                 <ExchangeDetails classData={currentClass} />
                 <ExchangeStatus
@@ -82,6 +81,3 @@ const mapStateToProps = ({ currentClass, feedback, exchange }) => {
 };
 
 export default connect(mapStateToProps, { initiateExchange, verifyExchange })(Exchange);
-
-
-
