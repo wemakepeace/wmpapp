@@ -3,15 +3,13 @@ const { models, conn } = require('../db/index.js');
 const Teacher = models.Teacher;
 const Class = models.Class;
 const Exchange = models.Exchange;
-const School = models.School;
+const { generateEmail } = require('../utils/email/exchange');
 const { feedback } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
-const { sendEmail, smtpTransport } = require('../utils/email/smtp');
+const { sendEmail } = require('../utils/email/smtp');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const {
     pbkdf2,
-    saltHashPassword,
-    createToken,
     decodeToken,
     validatePassword
 } = require('../utils/security');
@@ -134,18 +132,12 @@ app.post('/logout', (req, res, next) => {
 // should delete teacher and all classes that are associated with teacher
 // this will automatically cancel all active exchanges
 
-const { generateEmail } = require('../utils/email/exchange');
-
 app.delete('/', (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const teacherId = decodeToken(token);
 
-
-    Class.findAll({
-        where: { teacherId }
-    })
+    Class.findAll({ where: { teacherId } })
     .then((classes) => {
-
         return Promise.all(classes.map((_class) => {
             return Exchange.findAll({
                 where: {
@@ -174,66 +166,47 @@ app.delete('/', (req, res, next) => {
                         return coll;
                     }, [])
                     .reduce((coll, curr) => {
+                        const dataExistsInCollection = coll.some(({ teacher: { email }}) => {
+                            return email === curr.teacher.email
+                        });
 
-                        if (!coll.some(({ teacher: { email }}) => email === curr.teacher.email)) {
-                            coll = coll.concat(curr)
+                        if (!dataExistsInCollection) {
+                            coll = coll.concat(curr);
                         }
-                        return coll
+                        return coll;
+
                     }, []);
                 })
                 .then((result) => {
                     return Class.deleteByTeacherId(teacherId, t)
                         .then(() => {
                             return Teacher.destroy({
-                                where: {
-                                    id: teacherId
-                                },
+                                where: { id: teacherId },
                                 transaction: t
                             })
                         })
                         .then(() => result)
+                })
+                .then((result) => {
+                      const template = 'exchangeCancelled';
+                        return Promise.all(result.map(data => {
+                            return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
+                        }))
                     })
-                    .then((result) => {
-                          const template = 'exchangeCancelled';
-                            return Promise.all(result.map(data => {
-                                return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
-                            }))
-                        })
-                        .then(success => res.send({ feedback: { type: SUCCESS, messages: ['Account deleted.']}}))
-                    })// end of t
-                    // delete teacher
-                    // delete classes affiliated with teacher id
+                    .then(() => res.send({ feedback: { type: SUCCESS, messages: ['Account deleted.']}}))
+                })// end of transaction
+                .catch(error => {
+                    error.defaultError = 'Something went wrong when deleting your profile. Please try again.';
 
-                    // send email to both teachers affiliated with the exchanges the teacher has been in charge of
+                    next(error);
+                })
             })
-
     })
+    .catch((error) => {
+        error.defaultError = 'Something went wrong when deleting your profile. Please try again.';
+        next(error);
+    });
 
-    // include: [{
-    //     model: Exchange,
-    //     as: 'sender',
-    //     where: {
-    //         $or: [
-    //             {
-    //                 status: { $ne: 'completed' },
-    //             },
-    //             {
-    //                 status: { $ne: 'cancelled' }
-    //             }
-    //         ]
-    //     }
-    // }]
-
-
-    // first find all classes
-    // then find all exchanges
-        // set all exchanges to cancelled if not completed
-        // send an email to other teachers
-            // Dear [name],
-            // We regret to reform you that class [class] from [school] has opted out of the exchange.
-            // If you wish to sign your class up again for a new exchange, please login to you profile here Initiate the exchange for your class. Make sure that the term dates for when you want to participate is updated.
-        // delete classes
-        // delete teacher
 });
 
 
