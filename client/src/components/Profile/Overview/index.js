@@ -5,17 +5,22 @@ import Exchange from './Exchange';
 import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 
+const exchangeActions = {
+    initiateExchange: 'Initiating Exchange',
+    verifyExchange: 'Confirming Your Exchange Participation'
+};
+
 class OverviewContainer extends Component {
     state = {
         loading: false,
-        exchangeAction: ''
+        action: ''
     }
 
-    toggleLoader(bool, exchangeAction) {
+    toggleLoader(bool, action) {
         if (bool !== undefined) {
-            this.setState({ loading: bool, exchangeAction })
+            this.setState({ loading: bool, action })
         } else {
-            this.setState({ loading: !this.state.loading, exchangeAction })
+            this.setState({ loading: !this.state.loading, action })
         }
     }
 
@@ -24,15 +29,15 @@ class OverviewContainer extends Component {
     }
 
     render() {
-        const { loading, exchangeAction } = this.state;
+        const { loading, action } = this.state;
         const { teacher, exchange, currentClass } = this.props;
         const { firstName } = teacher;
-
+        const exchangeAction = exchangeActions[ action ];
         return (
             <div>
                 <LoaderWithText
                     loading={loading}
-                    exchangeAction={exchangeAction}
+                    action={exchangeAction}
                 />
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const app = express();
 const path = require('path');
 const bodyparser = require('body-parser');
 const passport = require('passport');
@@ -8,8 +9,15 @@ const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 const { seed, models } = require('./server/db/index.js');
 const {  sendError } = require('./server/utils/feedback');
-let jwtOptions = {};
+const publicRoutes = require('./server/api/public');
+const teacherRoutes = require('./server/api/teacher');
+const classRoutes = require('./server/api/class');
+const resources = require('./server/api/resources');
+const exchangeRoutes = require('./server/api/exchange');
+const schoolRoutes = require('./server/api/school');
+const port = process.env.PORT || 3000;
 
+let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = process.env.SECRET || 'foo';
 
@@ -27,10 +35,7 @@ const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
 });
 
 passport.use(strategy);
-
-const app = express();
 app.use(passport.initialize());
-
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
     extended: true
@@ -41,13 +46,7 @@ app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
 
-const publicRoutes = require('./server/api/public');
-const teacherRoutes = require('./server/api/teacher');
-const classRoutes = require('./server/api/class');
-const resources = require('./server/api/resources');
-const exchangeRoutes = require('./server/api/exchange');
-const schoolRoutes = require('./server/api/school');
-
+// Api
 app.use('/public', publicRoutes);
 app.use('/resources', resources);
 app.use('/teacher', passport.authenticate('jwt', { session: false }), teacherRoutes);
@@ -56,7 +55,7 @@ app.use('/exchange', passport.authenticate('jwt', { session: false }), exchangeR
 app.use('/school', passport.authenticate('jwt', { session: false }), schoolRoutes);
 
 app.use(function (err, req, res, next) {
-    console.log('errfdsjkalfhdsjklahfjkdls', err);
+    console.log('error', err);
     let defaultError;
 
     if (err && err.defaultError) {
@@ -72,11 +71,10 @@ app.get('*', (req, res, next) => {
     return res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-const port = process.env.PORT || 3000;
 app.set('port', port);
 
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 
-if (process.env.ENV === 'development') {
+// if (process.env.ENV === 'development') {
     seed();
-}
+// }

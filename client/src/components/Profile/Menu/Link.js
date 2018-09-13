@@ -8,7 +8,6 @@ export const MenuLink = ({ name, route, defaultChildRoute, match: { url }, locat
         `${url}/${route}`;
 
     let _class = `profile-menu-item ${getActiveClass(route)}`;
-    console.log(name)
     if (name === 'Materials') {
         _class += ' last-item';
     }

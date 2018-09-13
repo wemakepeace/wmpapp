@@ -1,6 +1,6 @@
 import { FETCH_EXCHANGE_DATA } from '../constants/exchange';
 import { FETCH_CLASS } from '../constants/class';
-import { LOGOUT_SUCCESS } from '../constants/teacher';
+import { LOGOUT_SUCCESS, USER_DELETED } from '../constants/teacher';
 
 const initialState = {};
 
@@ -25,6 +25,7 @@ const exchange = (state=initialState, { type, exchange }) => {
             }
             return {};
         case LOGOUT_SUCCESS:
+        case USER_DELETED:
             return {};
     }
     return state;

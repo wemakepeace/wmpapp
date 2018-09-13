@@ -11,10 +11,9 @@ import {
 import {
     CREATE_TEACHER_SUCCESS,
     LOGIN_SUCCESS,
-    LOGOUT_SUCCESS,
-    LOGIN_ERROR,
     UPDATE_TEACHER_SUCCESS,
-    UPDATE_CLASS_SUCCESS  } from '../constants/teacher';
+    USER_DELETED
+} from '../constants/teacher';
 
 const signup = data => {
     return dispatch => {
@@ -78,14 +77,21 @@ const updateTeacherSuccess = (teacher, feedback) => {
     }
 };
 
-const updateClassSuccess = (updatedClass, feedback) => {
-    return {
-        type: UPDATE_CLASS_SUCCESS,
-        updatedClass,
-        feedback
-    }
-};
 
+const deleteTeacher = () => {
+    return (dispatch) => {
+        return axios.delete(`/teacher`)
+            .then(({ data }) => data)
+            .then(
+                ({ feedback }) => {
+                    dispatch({ type: USER_DELETED, feedback });
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: SEND_FEEDBACK, feedback });
+                })
+    }
+}
 
 export {
     signup,
@@ -95,5 +101,6 @@ export {
     logout,
     sendResetPasswordLink,
     resetPasswordWithToken,
-    changePassword
+    changePassword,
+    deleteTeacher
 };

@@ -1,5 +1,5 @@
 import { FETCH_CLASS, SAVE_CLASS_SUCCESS  } from '../constants/class';
-import { LOGOUT_SUCCESS } from '../constants/teacher';
+import { LOGOUT_SUCCESS, USER_DELETED } from '../constants/teacher';
 
 const initialState = {};
 
@@ -9,6 +9,7 @@ const currentClass = (state = initialState, { type, _class }) => {
         case SAVE_CLASS_SUCCESS:
             return { ..._class }
         case LOGOUT_SUCCESS:
+        case USER_DELETED:
             return {};
     }
     return state;

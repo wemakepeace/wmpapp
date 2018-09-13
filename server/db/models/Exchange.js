@@ -30,9 +30,8 @@ const Exchange = conn.define('exchange', {
  *  - pending
  *  - confirmed
  *  - cancelled
- *  - completed */
-
-
+ *  - completed
+ */
 
 // Class methods
 Exchange.getExchangeAndMatchClass = function(classId) {
@@ -123,7 +122,7 @@ Exchange.findMatch = function(_class) {
 // Instance methods
 
 Exchange.prototype.setStatus = function(status, t) {
-    return this.updateAttributes({ status: status }, { transaction: t });
+    return this.updateAttributes({ status: status }, { transaction: t })
 };
 
 Exchange.prototype.setVerificationExpiration = function(t) {
@@ -185,5 +184,26 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
         });
 };
 
+Exchange.prototype.getBasicInfo = function(t) {
+    const { senderId, receiverId } = this;
+    // should be fine since a class can only be part of one exchange....
+    return Class.findAll({
+        where: {
+            $or: [ { id: { $eq: senderId } }, { id: { $eq: receiverId } } ]
+        },
+        include: [
+            {
+                model: Teacher,
+                attributes: [ 'email', 'firstName' ]
+            },
+            {
+                model: School,
+                attributes: [ 'schoolName' ]
+            }
+        ],
+        transaction: t
+    })
+    .then(data => data);
+}
 
 module.exports = Exchange;
