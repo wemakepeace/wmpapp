@@ -1,9 +1,7 @@
 import { SAVE_CLASS_SUCCESS } from '../constants/class';
-import { FETCH_EXCHANGE_DATA } from '../constants/exchange';
 import { CLEAR_FEEDBACK, SEND_FEEDBACK } from '../constants/shared';
 import {
     CREATE_TEACHER_SUCCESS,
-    CREATE_TEACHER_ERROR,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     UPDATE_TEACHER_SUCCESS,
@@ -21,7 +19,6 @@ const feedback = (state = initialState, action) => {
         case SAVE_CLASS_SUCCESS:
         case SEND_FEEDBACK:
         case USER_DELETED:
-        // case FETCH_EXCHANGE_DATA:
             return action.feedback;
         case CLEAR_FEEDBACK:
         case LOGOUT_SUCCESS:
