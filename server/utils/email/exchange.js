@@ -43,6 +43,16 @@ const generateTemplate = (classData, matchData, template) => {
                 subject: `Class ${name} has been matched with a class from ${country}!`,
                 html: `<div><h2>Great News!</h2>You are receiving this because class ${name} has been matched with class ${exchangeClassName} from ${country}!<br /><br />Please login and confirm your class' participation within 7 days.</div>`
             };
+        },
+        exchangeCancelled: function() {
+            const { name } = classData;
+            const { firstName } = classData.teacher;
+            const { schoolName } = classData.school;
+
+            return {
+                subject: `Exchange for ${name} has been cancelled`,
+                html: `<div><h4>Dear ${firstName},</h4><br />We regret to tell you that the exchange for ${name} at ${schoolName} has been cancelled. <br /><br /> This can be due to a number of reasons. <br /><br />If you wish to sign your class up again for a new exchange, please login to you profile here Initiate the exchange for your class. Make sure that the term dates for when you want to participate is updated.</div>`
+            };
         }
     }
     return templates[ template ]();

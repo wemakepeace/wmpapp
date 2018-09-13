@@ -78,14 +78,12 @@ const updateTeacherSuccess = (teacher, feedback) => {
     }
 };
 
-const updateClassSuccess = (updatedClass, feedback) => {
-    return {
-        type: UPDATE_CLASS_SUCCESS,
-        updatedClass,
-        feedback
-    }
-};
 
+const deleteTeacher = () => {
+    return (dispatch) => {
+        return axios.delete(`/teacher`)
+    }
+}
 
 export {
     signup,
@@ -95,5 +93,6 @@ export {
     logout,
     sendResetPasswordLink,
     resetPasswordWithToken,
-    changePassword
+    changePassword,
+    deleteTeacher
 };

@@ -20,9 +20,11 @@ const sendEmail = (res, mailOptions) => {
     return new Promise((resolve, reject) => {
         return smtpTransport.sendMail(mailOptions, function(error, response) {
             if (error) {
+                console.log('error', error)
                 error.defaultError = 'Something went wrong when. Please try again.';
                 reject(error)
             }
+            console.log('response', response)
             resolve(response)
         });
     })

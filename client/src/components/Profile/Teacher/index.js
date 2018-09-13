@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Settings from './Settings';
 import { Input } from '../../reusables/Input';
-import { updateTeacher } from '../../../redux/actions/teacher';
+import { updateTeacher, deleteTeacher } from '../../../redux/actions/teacher';
 import { clearFeedback } from '../../../redux/actions/shared';
 
 class TeacherFormContainer extends Component {
@@ -102,6 +102,7 @@ class TeacherFormContainer extends Component {
                 <Settings
                     showChangePwForm={showChangePwForm}
                     onChangePasswordClick={this.onChangePasswordClick}
+                    deleteTeacher={this.props.deleteTeacher}
                 />
             </div>
         )
@@ -114,4 +115,14 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { updateTeacher, clearFeedback })(TeacherFormContainer);
+const mapDispatchToProps = (dispatch, ownProps) => {
+    console.log('ownProps', ownProps)
+    return {
+        updateTeacher: (data) => dispatch(updateTeacher(data)),
+        clearFeedback: () => dispatch(clearFeedback()),
+        deleteTeacher: () => dispatch(deleteTeacher())
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherFormContainer);

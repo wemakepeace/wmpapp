@@ -1,7 +1,8 @@
 const app = require('express').Router();
-const { models } = require('../db/index.js');
+const { models, conn } = require('../db/index.js');
 const Teacher = models.Teacher;
 const Class = models.Class;
+const Exchange = models.Exchange;
 const School = models.School;
 const { feedback } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
@@ -128,7 +129,112 @@ app.post('/logout', (req, res, next) => {
     const { id } = req.body;
     Teacher.findById(id)
     .then(user => user.destroyTokens())
-})
+});
+
+// should delete teacher and all classes that are associated with teacher
+// this will automatically cancel all active exchanges
+
+const { generateEmail } = require('../utils/email/exchange');
+
+app.delete('/', (req, res, next) => {
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const teacherId = decodeToken(token);
+
+
+    Class.findAll({
+        where: { teacherId }
+    })
+    .then((classes) => {
+
+        return Promise.all(classes.map((_class) => {
+            return Exchange.findAll({
+                where: {
+                    $or: [ { status: { $ne: 'completed' } }, { status: { $ne: 'cancelled' } } ],
+                    $or: [ { senderId: { $eq: _class.id } }, { receiverId: { $eq: _class.id } } ]
+                }
+            })
+            .then(exchanges => exchanges)
+        }))
+        .then((_exchanges) => {
+            conn.transaction((t) => {
+                // set Exchange status to cancelled
+                // fetch basic exchange and class data for all classes involved in exchange
+                return Promise.all(_exchanges.map((exchange) => {
+                    if (!exchange || !exchange.length) {
+                        return null;
+                    }
+
+                    return exchange[0].setStatus('cancelled', t)
+                    .then(_exchange => _exchange.getBasicInfo(t))
+                }))
+                .then((_result) => {
+                    // extract info and remove any duplicate
+                    return _result.reduce((coll, curr) => {
+                        if (curr) coll = coll.concat(curr);
+                        return coll;
+                    }, [])
+                    .reduce((coll, curr) => {
+
+                        if (!coll.some(({ teacher: { email }}) => email === curr.teacher.email)) {
+                            coll = coll.concat(curr)
+                        }
+                        return coll
+                    }, []);
+                })
+                .then((result) => {
+                    return Class.deleteByTeacherId(teacherId, t)
+                        .then(() => {
+                            return Teacher.destroy({
+                                where: {
+                                    id: teacherId
+                                },
+                                transaction: t
+                            })
+                        })
+                        .then(() => result)
+                    })
+                    .then((result) => {
+                          const template = 'exchangeCancelled';
+                            return Promise.all(result.map(data => {
+                                return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
+                            }))
+                        })
+                        .then(success => res.send({ feedback: { type: SUCCESS, messages: ['Account deleted.']}}))
+                    })// end of t
+                    // delete teacher
+                    // delete classes affiliated with teacher id
+
+                    // send email to both teachers affiliated with the exchanges the teacher has been in charge of
+            })
+
+    })
+
+    // include: [{
+    //     model: Exchange,
+    //     as: 'sender',
+    //     where: {
+    //         $or: [
+    //             {
+    //                 status: { $ne: 'completed' },
+    //             },
+    //             {
+    //                 status: { $ne: 'cancelled' }
+    //             }
+    //         ]
+    //     }
+    // }]
+
+
+    // first find all classes
+    // then find all exchanges
+        // set all exchanges to cancelled if not completed
+        // send an email to other teachers
+            // Dear [name],
+            // We regret to reform you that class [class] from [school] has opted out of the exchange.
+            // If you wish to sign your class up again for a new exchange, please login to you profile here Initiate the exchange for your class. Make sure that the term dates for when you want to participate is updated.
+        // delete classes
+        // delete teacher
+});
 
 
 module.exports = app;
