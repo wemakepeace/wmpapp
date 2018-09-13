@@ -89,8 +89,6 @@ class TeacherFormContainer extends Component {
             },
         ];
 
-        console.log('loading',loading)
-        console.log('deleted', deleted)
         return (
             <div>
                 <FullscreenModal

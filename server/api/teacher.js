@@ -150,6 +150,7 @@ app.delete('/', (req, res, next) => {
         .then((_exchanges) => {
             conn.transaction((t) => {
                 // set Exchange status to cancelled
+                // remove sender and receiver on exchange instances
                 // fetch basic exchange and class data for all classes involved in exchange
                 return Promise.all(_exchanges.map((exchange) => {
                     if (!exchange || !exchange.length) {
@@ -157,23 +158,25 @@ app.delete('/', (req, res, next) => {
                     }
 
                     return exchange[0].setStatus('cancelled', t)
+                    .then(_exchange => _exchange.setReceiver(null, { transaction: t }))
+                    .then(_exchange => _exchange.setSender(null, { transaction: t }))
                     .then(_exchange => _exchange.getBasicInfo(t))
                 }))
                 .then((_result) => {
                     // extract info and remove any duplicate
-                    return _result.reduce((coll, curr) => {
-                        if (curr) coll = coll.concat(curr);
-                        return coll;
+                    return _result.reduce((collection, current) => {
+                        if (current) collection = collection.concat(current);
+                        return collection;
                     }, [])
-                    .reduce((coll, curr) => {
-                        const dataExistsInCollection = coll.some(({ teacher: { email }}) => {
-                            return email === curr.teacher.email
+                    .reduce((collection, current ) => {
+                        const dataExistsInCollection = collection.some(({ teacher: { email }}) => {
+                            return email === current.teacher.email
                         });
 
                         if (!dataExistsInCollection) {
-                            coll = coll.concat(curr);
+                            collection = collection.concat(current);
                         }
-                        return coll;
+                        return collection;
 
                     }, []);
                 })
@@ -199,8 +202,8 @@ app.delete('/', (req, res, next) => {
                     error.defaultError = 'Something went wrong when deleting your profile. Please try again.';
 
                     next(error);
-                })
-            })
+                });
+            });
     })
     .catch((error) => {
         error.defaultError = 'Something went wrong when deleting your profile. Please try again.';

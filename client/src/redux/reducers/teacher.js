@@ -3,7 +3,8 @@ import {
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     CREATE_TEACHER_SUCCESS,
-    UPDATE_TEACHER_SUCCESS
+    UPDATE_TEACHER_SUCCESS,
+    USER_DELETED
 } from '../constants/teacher';
 
 
@@ -16,6 +17,7 @@ const teacher = (state = initialState, action) => {
         case LOGIN_SUCCESS:
             return { ...state, ...action.teacher };
         case LOGOUT_SUCCESS:
+        case USER_DELETED:
             return {};
         case UPDATE_TEACHER_SUCCESS:
             return {...state, ...action.teacher }

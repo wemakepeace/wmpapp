@@ -37,8 +37,6 @@ app.post('/create', (req, res, next) => {
             });
         })
         .catch((error) => {
-            console.log('error in public api', error)
-            console.log('error message', error.message)
             if (error.message) {
                 error.defaultError = error.message;
             } else {

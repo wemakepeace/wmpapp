@@ -122,12 +122,7 @@ Exchange.findMatch = function(_class) {
 // Instance methods
 
 Exchange.prototype.setStatus = function(status, t) {
-    console.log('status', status)
     return this.updateAttributes({ status: status }, { transaction: t })
-    .then(xxx => {
-        console.log('xxx',xxx)
-        return xxx
-    })
 };
 
 Exchange.prototype.setVerificationExpiration = function(t) {
