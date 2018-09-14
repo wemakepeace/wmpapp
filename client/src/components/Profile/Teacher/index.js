@@ -9,6 +9,7 @@ import FullscreenModal from '../../reusables/FullscreenModal';
 import { updateTeacher, deleteTeacher } from '../../../redux/actions/teacher';
 import { clearFeedback } from '../../../redux/actions/shared';
 
+
 class TeacherFormContainer extends Component {
     constructor(props) {
         super(props);
@@ -24,12 +25,18 @@ class TeacherFormContainer extends Component {
             phone: '',
             password: '',
             showChangePwForm: false,
-            loading: false,
-            deleted: false
+            deleting: false,
+            deleted: false,
+            showDeleteWarningModal: false
         };
 
         if (teacher && teacher.id) {
-            defaultState = { ...teacher, loading: false, deleted: false };
+            defaultState = {
+                ...teacher,
+                deleting: false,
+                deleted: false,
+                showDeleteWarningModal: false
+            };
         }
         return defaultState;
     }
@@ -53,19 +60,30 @@ class TeacherFormContainer extends Component {
 
     componentWillReceiveProps({ teacher, feedback }) {
         if (feedback && feedback.type === 'deleted') {
-            this.setState({ deleted: true, loading: false })
+            this.setState({ deleted: true, deleting: false })
         } else if (teacher && (teacher !== this.state)) {
             this.setState(this.getDefaultStateOrProps(teacher));
         }
     }
 
-    toggleLoader() {
-        this.setState({ loading: true });
+    toggleLoader(stage) {
+        // this.setState({ deleting: true });
+        this.setState({ [ stage ]: true });
     }
 
     render() {
 
-        const { firstName, lastName, email, phone, password, showChangePwForm, loading, deleted } = this.state;
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            password,
+            showChangePwForm,
+            deleting,
+            deleted,
+            showDeleteWarningModal
+        } = this.state;
         const fields = [
             {
                 label: 'First name',
@@ -91,13 +109,31 @@ class TeacherFormContainer extends Component {
 
         return (
             <div>
-                <FullscreenModal
-                    open={deleted}
-                    onClick={() => this.props.history.push('/')}
-                />
+                { showDeleteWarningModal ?
+                    <FullscreenModal
+                        open={showDeleteWarningModal}
+                        header='Are you sure you want to delete your account?'
+                        content='This action is unreversible. If you delete your profile you will lose all your information and you will not be able to login at a later time. All your registered classes and active exchanges will also be deleted. If any of your classes are currently enrolled in an exchange, please notify and explain to the teacher of the other class your reasons for ending the exchange. '
+                        buttonText1='Yes, delete my account'
+                        button1Color='red'
+                        closeAction={() => this.setState({ showDeleteWarningModal: false })}
+                        action={() => {
+                            this.toggleLoader('deleting');
+                            this.props.deleteTeacher();
+
+                        }}
+                    /> : null }
+                { deleted ?
+                    <FullscreenModal
+                        open={deleted}
+                        header='Your account has been deleted.'
+                        buttonText1='Go to Home Page'
+                        closable={false}
+                        action={() => this.props.history.push('/')}
+                    /> : null }
                 <LoaderWithText
-                    loading={loading}
-                    action='Deleting user...'
+                    loading={deleting}
+                    action='Deleting your account...'
                 />
                 <div className='profile-segment'>
                     <h2>Teacher Information</h2>

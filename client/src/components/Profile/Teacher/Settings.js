@@ -52,8 +52,7 @@ class Settings extends Component {
                         </p>
                         <Button
                             onClick={() => {
-                                toggleLoader();
-                                deleteTeacher();
+                                toggleLoader('showDeleteWarningModal');
                             }}
                             negative>Delete Account</Button>
                     </Accordion.Content>
