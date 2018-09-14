@@ -129,8 +129,8 @@ app.post('/logout', (req, res, next) => {
     .then(user => user.destroyTokens())
 });
 
-// should delete teacher and all classes that are associated with teacher
-// this will automatically cancel all active exchanges
+// deletes teacher and all classes and exchanges that are associated with teacher
+// notify both teachers of any deleted
 
 app.delete('/', (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
@@ -149,21 +149,22 @@ app.delete('/', (req, res, next) => {
         }))
         .then((_exchanges) => {
             conn.transaction((t) => {
-                // set Exchange status to cancelled
-                // remove sender and receiver on exchange instances
                 // fetch basic exchange and class data for all classes involved in exchange
+                // delete exchange instance
                 return Promise.all(_exchanges.map((exchange) => {
+                    let exchangeData;
                     if (!exchange || !exchange.length) {
                         return null;
                     }
-
-                    return exchange[0].setStatus('cancelled', t)
-                    .then(_exchange => _exchange.setReceiver(null, { transaction: t }))
-                    .then(_exchange => _exchange.setSender(null, { transaction: t }))
-                    .then(_exchange => _exchange.getBasicInfo(t))
+                    return exchange[0].getBasicInfo(t)
+                    .then((data) => {
+                        exchangeData = data;
+                        return exchange[0].destroy({ transaction: t })
+                    })
+                    .then(() => exchangeData)
                 }))
                 .then((_result) => {
-                    // extract info and remove any duplicate
+                    // extract exchange / class info and remove any duplicate info
                     return _result.reduce((collection, current) => {
                         if (current) collection = collection.concat(current);
                         return collection;
@@ -181,6 +182,8 @@ app.delete('/', (req, res, next) => {
                     }, []);
                 })
                 .then((result) => {
+                    // delete all classes affiliated with teacher
+                    // delete teacher
                     return Class.deleteByTeacherId(teacherId, t)
                         .then(() => {
                             return Teacher.destroy({
@@ -191,19 +194,27 @@ app.delete('/', (req, res, next) => {
                         .then(() => result)
                 })
                 .then((result) => {
-                      const template = 'exchangeCancelled';
-                        return Promise.all(result.map(data => {
-                            return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
-                        }))
+                    //  send email to to both teachers involved in the cancelled exchanges
+                    const template = 'exchangeCancelled';
+                    return Promise.all(result.map(data => {
+                        return generateEmail(res, data.teacher.email, template, data, null, { transaction: t })
+                    }))
+                })
+                .then(() => {
+                    res.send({
+                        feedback: {
+                            type: 'deleted',
+                            messages: ['Account deleted.']
+                        }
                     })
-                    .then(() => res.send({ feedback: { type: 'deleted', messages: ['Account deleted.'] }}))
-                })// end of transaction
-                .catch(error => {
-                    error.defaultError = 'Something went wrong when deleting your profile. Please try again.';
+                })
+            })// end of transaction
+            .catch(error => {
+                error.defaultError = 'Something went wrong when deleting your profile. Please try again.';
 
-                    next(error);
-                });
+                next(error);
             });
+        });
     })
     .catch((error) => {
         error.defaultError = 'Something went wrong when deleting your profile. Please try again.';

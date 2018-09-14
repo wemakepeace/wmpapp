@@ -185,8 +185,7 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
 };
 
 Exchange.prototype.getBasicInfo = function(t) {
-    const { senderId, receiverId } = this;
-    // should be fine since a class can only be part of one exchange....
+    const { senderId, receiverId, id } = this;
     return Class.findAll({
         where: {
             $or: [ { id: { $eq: senderId } }, { id: { $eq: receiverId } } ]
@@ -203,7 +202,6 @@ Exchange.prototype.getBasicInfo = function(t) {
         ],
         transaction: t
     })
-    .then(data => data);
-}
+};
 
 module.exports = Exchange;
