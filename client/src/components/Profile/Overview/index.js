@@ -42,7 +42,7 @@ class OverviewContainer extends Component {
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can edit your teacher profile, manage all your enrolled classes or register a new class.</p>
-                    <p>Once your class has been matched with another class and both participating classes have confirmed the participation, you will be able to access the Instructions and Materials needed.</p>
+                    <p>Once a class has been matched with another class and both participating classes have confirmed the participation, you will be able to access the Instructions and Materials needed.</p>
                 </div>
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>

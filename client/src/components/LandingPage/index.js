@@ -4,6 +4,8 @@ import Login from '../Login';
 import Signup from '../Signup';
 import Feedback from '../Feedback';
 
+import { map } from '../../../../assets/images/map.jpg';
+
 class SignupOrLogin extends Component {
 
     state = { form: 'login' }

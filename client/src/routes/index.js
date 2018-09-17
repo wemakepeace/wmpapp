@@ -30,13 +30,15 @@ class Routes extends Component  {
     };
 
     render() {
-        const { match, history, teacher } = this.props;
+        const { match, history, teacher, location } = this.props;
         const { loading } = this.state;
+        const containerClass = location.pathname === '/' ? 'background page-container' : 'page-container';
+
         return (
             <div>
                 <WPMenu />
                 <LoaderWithText loading={loading} action='Fetching your profile..' />
-                <div className='page-container'>
+                <div className={containerClass}>
                     <Switch>
                         <Route
                             key={1}

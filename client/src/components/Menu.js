@@ -20,8 +20,10 @@ class WPMenu extends Component {
                         <Menu.Item onClick={this.handleItemClick}>
                             Menu
                         </Menu.Item>
+                        <span>Beta release under continuous development</span>
                     </Menu.Menu>
                 </Menu>
+                <div className='beta'><Icon name='warning' />Beta release under continuous development</div>
                 <Menu attached='top' inverted className={menuClass} stackable>
                     <Menu.Menu position='left' className={menuClass}>
                         <Menu.Item className='close-mobile-menu' onClick={this.handleItemClick}>
