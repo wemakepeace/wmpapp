@@ -10,7 +10,7 @@ import ResetPassword from '../components/ResetPassword';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
 
-import WPMenu from '../components/Menu';
+import WPMenu from '../components/Menu2';
 
 class Routes extends Component  {
     state = { loading: true }

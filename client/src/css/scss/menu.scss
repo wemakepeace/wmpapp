@@ -1,7 +1,12 @@
 @import '../partials/_fonts';
 
-.ui.inverted.stackable.wp-menu.menu {
+.menu {
     border-radius: 0 !important;
+}
+
+
+.ui[class*="top attached"].menu {
+    margin-top: 0px;
 }
 
 .right.menu, .left.menu {
@@ -18,4 +23,21 @@
         }
 
     }
+}
+
+.hamburger, .close-mobile-menu {
+    display: none !important;
+}
+
+
+@media (max-width: 768px) {
+
+    .hamburger, .close-mobile-menu {
+        display: block !important;
+    }
+
+    .wp-menu.hide.menu {
+        display: none !important;
+    }
+
 }
