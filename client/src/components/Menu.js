@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Icon } from 'semantic-ui-react'
+import { Menu, Dropdown, Icon, Segment } from 'semantic-ui-react'
 
 class WPMenu extends Component {
     state = { showMobileMenu: false }
@@ -10,13 +10,13 @@ class WPMenu extends Component {
     render() {
         const { showMobileMenu } = this.state
         const collapsed = window.innerWidth < 768 ? true : false;
-
+        console.log('showMobileMenu', showMobileMenu)
         return (
-            <div>
+            <Segment inverted style={{borderRadius: '0'}}>
             { collapsed && !showMobileMenu
                 ? <div onClick={this.handleItemClick}>Menu</div>
                 : <Menu inverted className='wp-menu' stackable>
-                    <Menu.Menu position='left' className='wp-menu'>
+                    <Menu.Menu position='left' className='wp-menu' inverted>
                         { showMobileMenu
                             ? <Menu.Item onClick={this.handleItemClick}>
                                 <Icon name='close' color='white' />
@@ -76,7 +76,7 @@ class WPMenu extends Component {
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu> }
-            </div>
+            </Segment>
         )
     }
 }
