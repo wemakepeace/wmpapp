@@ -1,0 +1,24 @@
+@import '../partials/_fonts';
+
+
+.ui.inverted.stackable.wp-menu.menu {
+    border-radius: 0 !important;
+}
+
+.right.menu, .left.menu {
+    .item {
+        font-family: $raleway !important;
+
+        font-weight: 500;
+
+    }
+
+    .dropdown {
+        .item {
+            a {
+                color: #000 !important;
+            }
+        }
+
+    }
+}

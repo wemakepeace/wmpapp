@@ -94,6 +94,7 @@ class ClassFormsContainer extends Component {
                         classData={this.state.class}
                         onInputChange={this.onInputChange}
                     />
+                    <br /><br />
                     <SchoolForm
                         school={this.state.school}
                         onInputChange={this.onInputChange}

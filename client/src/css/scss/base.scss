@@ -1,8 +1,10 @@
 @import '../partials/_colors';
+@import '../partials/_fonts';
 
 body {
     background-color: $lightgray !important;
     font-family: 'Archivo Black', sans-serif;
+    // font-family: $raleway, sans-serif;
 }
 
 .underline {
