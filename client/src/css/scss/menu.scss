@@ -1,0 +1,43 @@
+@import '../partials/_fonts';
+
+.menu {
+    border-radius: 0 !important;
+}
+
+
+.ui[class*="top attached"].menu {
+    margin-top: 0px;
+}
+
+.right.menu, .left.menu {
+    .item {
+        font-family: $raleway !important;
+        font-weight: 500;
+    }
+
+    .dropdown {
+        .item {
+            a {
+                color: #000 !important;
+            }
+        }
+
+    }
+}
+
+.hamburger, .close-mobile-menu {
+    display: none !important;
+}
+
+
+@media (max-width: 768px) {
+
+    .hamburger, .close-mobile-menu {
+        display: block !important;
+    }
+
+    .wp-menu.hide.menu {
+        display: none !important;
+    }
+
+}

@@ -10,6 +10,7 @@ import ResetPassword from '../components/ResetPassword';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
 
+import WPMenu from '../components/Menu2';
 
 class Routes extends Component  {
     state = { loading: true }
@@ -32,6 +33,8 @@ class Routes extends Component  {
         const { match, history } = this.props;
 
         return (
+            <div>
+            <WPMenu />
             <div className='page-container'>
                 <Switch>
                     <Route
@@ -63,6 +66,7 @@ class Routes extends Component  {
                     />
                     <Route component={NotFoundPage} />
                 </Switch>
+            </div>
             </div>
         );
     };
