@@ -3,25 +3,30 @@ import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Icon, Segment } from 'semantic-ui-react'
 
 class WPMenu extends Component {
-    state = { showMobileMenu: false }
+    state = {
+        showMobileMenu: false
+    }
 
     handleItemClick = (e) => this.setState({ showMobileMenu: !this.state.showMobileMenu })
 
     render() {
         const { showMobileMenu } = this.state
-        const collapsed = window.innerWidth < 768 ? true : false;
-        console.log('showMobileMenu', showMobileMenu)
+        const menuClass = showMobileMenu ? 'wp-menu show' : 'wp-menu hide';
+
         return (
-            <Segment inverted style={{borderRadius: '0'}}>
-            { collapsed && !showMobileMenu
-                ? <div onClick={this.handleItemClick}>Menu</div>
-                : <Menu inverted className='wp-menu' stackable>
-                    <Menu.Menu position='left' className='wp-menu' inverted>
-                        { showMobileMenu
-                            ? <Menu.Item onClick={this.handleItemClick}>
-                                <Icon name='close' color='white' />
-                            </Menu.Item>
-                            : null }
+            <div>
+                <Menu attached='top' inverted stackable className='hamburger'>
+                    <Menu.Menu position='left'>
+                        <Menu.Item onClick={this.handleItemClick}>
+                            Menu
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+                <Menu attached='top' inverted className={menuClass} stackable>
+                    <Menu.Menu position='left' className={menuClass}>
+                        <Menu.Item className='close-mobile-menu' onClick={this.handleItemClick}>
+                            <Icon name='close' />
+                        </Menu.Item>
                         <Menu.Item>
                             <a href='//wemakepeace.org/'>Home</a>
                         </Menu.Item>
@@ -75,8 +80,8 @@ class WPMenu extends Component {
                             <Link to='/profile/overview'>My Profile</Link>
                         </Menu.Item>
                     </Menu.Menu>
-                </Menu> }
-            </Segment>
+                </Menu>
+            </div>
         )
     }
 }

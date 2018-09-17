@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import LandingPage from '../components/LandingPage';
 import Profile from '../components/Profile';
 import RequestResetPassword from '../components/RequestResetPassword'
 import NotFoundPage from '../components/error_pages/NotFoundPage';
 import ResetPassword from '../components/ResetPassword';
+import WPMenu from '../components/Menu';
+import { LoaderWithText } from '../components/reusables/LoaderWithText';
 import { fetchTeacher } from '../redux/actions/teacher';
 import { fetchClass } from '../redux/actions/class';
-
-import WPMenu from '../components/Menu2';
 
 class Routes extends Component  {
     state = { loading: true }
@@ -30,51 +30,57 @@ class Routes extends Component  {
     };
 
     render() {
-        const { match, history } = this.props;
-
+        const { match, history, teacher } = this.props;
+        const { loading } = this.state;
         return (
             <div>
-            <WPMenu />
-            <div className='page-container'>
-                <Switch>
-                    <Route
-                        key={1}
-                        exact path={match.url + 'test'}
-                        render={() => <ResetPassword />}
-                    />
-                    <Route
-                        key={2}
-                        exact path={match.url}
-                        // passes feedback
-                        render={() => <LandingPage {...this.props} />}
-                    />
-                    <Route
-                        key={3}
-                        exact path={match.url + 'reset'}
-                        component={RequestResetPassword}
-                    />
-                    <Route
-                        key={4}
-                        path={match.url + 'reset/:token'}
-                        component={ResetPassword}
-                    />
-                    <PrivateRoute
-                        loading={this.state.loading}
-                        key={5}
-                        path={match.url + 'profile'}
-                        component={Profile}
-                    />
-                    <Route component={NotFoundPage} />
-                </Switch>
-            </div>
+                <WPMenu />
+                <LoaderWithText loading={loading} action='Fetching your profile..' />
+                <div className='page-container'>
+                    <Switch>
+                        <Route
+                            key={1}
+                            exact path={match.url + 'test'}
+                            component={ResetPassword}
+                        />
+                        <Route
+                            key={2}
+                            exact path={match.url}
+                            render={() => {
+                                if (teacher && teacher.id) {
+                                    return <Redirect to='/profile/overview' />;
+                                }
+                                return (<LandingPage {...this.props} />)
+                            }}
+                        />
+                        <Route
+                            key={3}
+                            exact path={match.url + 'reset'}
+                            component={RequestResetPassword}
+                        />
+                        <Route
+                            key={4}
+                            path={match.url + 'reset/:token'}
+                            component={ResetPassword}
+                        />
+                        <PrivateRoute
+                            loading={this.state.loading}
+                            key={5}
+                            path={match.url + 'profile'}
+                            component={Profile}
+                        />
+                        <Route component={NotFoundPage} />
+                    </Switch>
+                </div>
             </div>
         );
     };
 };
 
-const mapStateToProps = ({ feedback }) => {
+const mapStateToProps = ({ feedback, teacher }) => {
     return {
-        feedback
+        feedback,
+        teacher
     }
 }
 
