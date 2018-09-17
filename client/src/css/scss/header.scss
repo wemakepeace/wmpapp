@@ -19,7 +19,7 @@
         }
 
         .title:last-child {
-           margin: 15px 4px;
+           margin: 12px 4px;
         }
 
         .title:first-child {
@@ -113,11 +113,16 @@
 
         .heading {
             .title:last-child {
-               margin: 0 1px;
+               margin: 8px 1px !important;
             }
+
             .title {
                 margin: 0px 1px;
                 font-size: 0.8em;
+            }
+            .title-span {
+
+                margin-left: 2px !important;
             }
         }
 
@@ -132,48 +137,44 @@
 
             span.header-menu-item.select-class {
                 width: 134px !important;
-                // text-align: left;
             }
         }
 }
 
 @media (max-width: 661px) {
+    .heading {
+        padding: 10px 7px;
 
-    // .title-container {
-        .heading {
-            padding: 10px 7px;
+        .title {
+            margin: 0;
+            font-size: 0.8em;
 
-            .title {
-                margin: 0;
-                font-size: 0.8em;
-
-                h1 {
-                    font-size: 3em;
-                    color: #fff;
-                    line-height: 1em;
-                }
-            }
-
-            .title-span {
-                background-color: inherit;
-                color: inherit;
-                margin: 0;
-                padding: 0;
+            h1 {
+                font-size: 3em;
+                color: #fff;
+                line-height: 1em;
             }
         }
 
-        .logged-in .logged-in-inner span.header-menu-item {
-            border-right: none;
-            padding: 8px 10px;
-
-            .select-class {
-                display: inline-block;
-                margin: 0px;
-                width: 140px;
-                // text-align: left;
-            }
+        .title-span {
+            background-color: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0;
         }
-    // }
+    }
+
+    .logged-in .logged-in-inner span.header-menu-item {
+        border-right: none;
+        padding: 8px 10px;
+
+        .select-class {
+            display: inline-block;
+            margin: 0px;
+            width: 140px;
+            // text-align: left;
+        }
+    }
 }
 
 @media (max-width: 470px) {
