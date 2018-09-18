@@ -52,7 +52,7 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
         }
     ];
 
-
+    console.log('country', country)
     return (
         <div>
             <h2> School Mailing Address</h2>

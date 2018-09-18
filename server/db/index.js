@@ -217,7 +217,7 @@ const seed = () => {
             .then(() => {
                 const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
                 const termPromises = termData.map(term => Term.create(term));
-                const schoolPromises = schools.map(school => School.create(school));
+                const schoolPromises = schools.map(school => School.createOrUpdate(school));
 
                 return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
             })

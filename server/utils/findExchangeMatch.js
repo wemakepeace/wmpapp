@@ -35,6 +35,11 @@ const getCoordinates = (data) => {
         }
     })
     .catch(error => {
+        console.log('error', error)
+        // [TODO]
+        // if we are not able to get the lat long of an address,
+        // we should get coords for a place such as the city or country.
+
         const defaultError = 'Something went wrong when initiating exchange.';
         error.defaultError = defaultError;
         throw new Error(error);
@@ -59,7 +64,6 @@ const calculateDistance = (location1, location2) => {
 
 const findFurthestMatch = (_class, matches) => {
     let classData = extractClassAddress(_class.dataValues);
-
     return getCoordinates(classData)
     .then((data) => data.location)
     .then(classCoordinates => {
@@ -78,7 +82,7 @@ const findFurthestMatch = (_class, matches) => {
                     return result;
 
                 }, { id: null, distance: 0 });
-
+                console.log('matchClass', matchClass)
                 return matchClass;
             })
             .then(({ id }) => {
