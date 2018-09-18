@@ -5,7 +5,6 @@
     border-radius: 0 !important;
 }
 
-
 .ui[class*="top attached"].menu {
     margin-top: 0px;
 }
@@ -15,10 +14,10 @@
         font-family: $raleway !important;
         font-weight: 500;
         a {
-            -o-transition:.5s;
-            -ms-transition:.5s;
-            -moz-transition:.5s;
-            -webkit-transition:.5s;
+            -o-transition: color .5s ease;
+            -ms-transition: color .5s ease;
+            -moz-transition: color .5s ease;
+            -webkit-transition: color .5s ease;
             transition: color .5s ease;
         }
     }
@@ -27,17 +26,16 @@
         .item {
             a {
                 color: #000 !important;
-                -o-transition:.5s;
-                -ms-transition:.5s;
-                -moz-transition:.5s;
-                -webkit-transition:.5s;
+                -o-transition: color .5s ease;
+                -ms-transition: color .5s ease;
+                -moz-transition: color .5s ease;
+                -webkit-transition: color .5s ease;
                 transition: color .5s ease;
             }
             a:hover {
                 color: $pink !important;
             }
         }
-
     }
 }
 

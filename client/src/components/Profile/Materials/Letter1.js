@@ -2,9 +2,6 @@ import React from 'react';
 import { OverviewTable } from './OverviewTable'
 import {
     Header,
-    Image,
-    Form,
-    Segment,
     Message,
     Button,
     Icon
@@ -202,12 +199,19 @@ const StepFive = () => {
 }
 
 const Letter1 = ({ letterURLs, classRole }) => {
+    // letter1 is slightly different depending on classRole
+    const letterURL = letterURLs && letterURLs.letter1[ classRole ];
     return (
         <div>
             <OverviewTable content={tableContent} />
             <hr style={{margin: '20px 0'}}/>
             { specialContent[ classRole ]()}
-            <span><Icon name='download' /><a href={letterURLs && letterURLs[0]} target='_blank'>Download Letter 1 Template</a></span>
+            <div className='div-centered-content'>
+                <button className='roll-button'>
+                    <a href={letterURL} target='_blank'>
+                    <Icon name='download'/>Download Letter 1 Template</a>
+                </button>
+            </div>
             <hr style={{margin: '20px 0'}}/>
             <StepOne />
             <hr style={{margin: '20px 0'}}/>

@@ -186,15 +186,19 @@ const StepFourReceiver = () => {
     );
 }
 
-
-
 const Letter3 = ({ letterURLs, classRole }) => {
+    const letterURL = letterURLs && letterURLs.letter3;
     return (
         <div>
             <OverviewTable content={tableContent} />
             <hr style={{margin: '20px 0'}}/>
             { specialContent[ classRole ]()}
-            <span><Icon name='download' /><a href={letterURLs && letterURLs[1]} target='_blank'>Download Letter 3 Template</a></span>
+            <div className='div-centered-content'>
+                <button className='roll-button'>
+                    <a href={letterURL} target='_blank'>
+                    <Icon name='download'/>Download Letter 3 Template</a>
+                </button>
+            </div>
             <hr style={{margin: '20px 0'}}/>
             { classRole === 'sender' ? <StepOneSender /> : <StepOneReceiver /> }
             <hr style={{margin: '20px 0'}}/>

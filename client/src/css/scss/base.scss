@@ -15,6 +15,12 @@ input:focus, textarea:focus, select:focus{
     outline: none;
 }
 
+
+.ui.yellow.large.message {
+    color: #000;
+}
+
+
 // Reusbale standardized page-container
 .page-container {
     display: flex !important;

@@ -1,0 +1,22 @@
+.roll-button {
+    background-color: $pink;
+    border: 2px solid $pink;
+    padding: 10px;
+    margin: 40px;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-transition: background-color 1s ease;
+    -moz-transition: background-color 1s ease;
+    -o-transition: background-color 1s ease;
+    transition: background-color 1s ease;
+    a {
+        color: #fff;
+    }
+}
+
+.roll-button:hover {
+    background-color: transparent;
+    a {
+        color: $pink;
+    }
+}
