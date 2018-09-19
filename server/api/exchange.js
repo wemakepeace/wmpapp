@@ -1,22 +1,20 @@
 const app = require('express').Router();
 const { models } = require('../db');
 const Class = models.Class;
-const AgeGroup = models.AgeGroup;
-const Term = models.Term;
 const School = models.School;
 const Teacher = models.Teacher;
 const Exchange = models.Exchange;
 const conn = require('../db/conn');
-const { feedback, sendError } = require('../utils/feedback');
 const { generateEmail } = require('../utils/email/exchange');
-const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 
 /*
- * Handles the following cases:
- * 1.   One match is found - updates exchange instance returns exchange and matchClass
- * 2.   Multiple matches are found - finds furthest match, updates exchange instance
- *      and return exchange and matchClass
- * 3.   No match is found - Initiates new exchange, sets class to "sender" and returns exchange
+ * Handles following cases:
+ *      1. One match is found:
+ *      Updates exchange instance returns exchange and matchClass
+ *      2. Multiple matches are found:
+ *      Finds furthest match, updates exchange instance and returns exchange and matchClass
+ *      3.No match is found:
+ *      Initiates new exchange, sets class to "sender" and returns exchange
  */
 
 app.post('/', (req, res, next) => {

@@ -48,6 +48,7 @@ class ClassFormsContainer extends Component {
     }
 
     onInputChange = (value, key, objName) => {
+
         this.setState({
             [ objName ]: {
                 ...this.state[ objName ],

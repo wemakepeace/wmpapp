@@ -1,6 +1,6 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
-const postcode = require('postcode-validator');
+const getCoordinates = require('../utils/helpers');
 
 const School = conn.define('school', {
      schoolName: {
@@ -19,21 +19,7 @@ const School = conn.define('school', {
         type: Sequelize.STRING,
     },
     zip: {
-        type: conn.Sequelize.STRING,
-        // validate: {
-            // notEmpty: { msg: 'Please fill out zip code.'},
-            // isZip(value) {
-            //     if (value === '') {
-            //         return
-            //     }
-
-            //     const zipValid = postcode.validate(value, 'US');
-
-            //     if (!zipValid) {
-            //         throw new Error('The zip code you entered is not valid')
-            //     }
-            // }
-        // }
+        type: conn.Sequelize.STRING
     },
     city: {
         type: Sequelize.STRING,
@@ -49,24 +35,32 @@ const School = conn.define('school', {
         validate: {
             notEmpty: { msg: 'Please fill out country.'}
         }
-    }
+    },
+    lat: Sequelize.FLOAT,
+    lng: Sequelize.FLOAT
 });
 
 // Class methods
 
+/*
+ * Will either create a new school instance or update an existing school
+ * Will calculate the coordinates for the school address
+*/
 School.createOrUpdate = function(schoolData, t) {
-    if (schoolData && schoolData.country) schoolData.country = schoolData.country.value;
-    if (schoolData.id === null) {
-        return School.create(schoolData, { transaction: t });
-    } else {
-        return School.findById(schoolData.id)
-            .then(school => school.update(schoolData, { transaction: t }));
-    }
+    return getCoordinates(schoolData)
+    .then((data) => {
+        return data.location
+    })
+    .then((coordinates) => {
+        schoolData.lat = coordinates.lat;
+        schoolData.lng = coordinates.lng;
+        if (!schoolData.id) {
+            return School.create(schoolData, { transaction: t });
+        } else {
+            return School.findById(schoolData.id)
+                .then(school => school.update(schoolData, { transaction: t }));
+        }
+    })
 };
-
-
-// Instance methods
-
-
 
 module.exports = School;
