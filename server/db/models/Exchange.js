@@ -80,6 +80,7 @@ Exchange.getExchangeAndMatchClass = function(classId) {
  * Find all classes that:
  * - have the same termId and ageGroupId
  * - do not belong to the current teacher or school
+ * - are not from the same country
  */
 
 Exchange.findMatch = function(_class) {

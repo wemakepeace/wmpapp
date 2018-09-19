@@ -1,6 +1,6 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
-const postcode = require('postcode-validator');
+const getCoordinates = require('../utils/helpers');
 
 const School = conn.define('school', {
      schoolName: {
@@ -36,51 +36,16 @@ const School = conn.define('school', {
             notEmpty: { msg: 'Please fill out country.'}
         }
     },
-    lat: Sequelize.STRING,
-    lng: Sequelize.STRING
+    lat: Sequelize.FLOAT,
+    lng: Sequelize.FLOAT
 });
-
-const countries = require('country-list');
-
-const extractGeocodeString = (data) => {
-    const { zip, country, address1, city } = data;
-    const countryName = countries().getName(country);
-    const geocodeString = `${address1}, ${city}, ${countryName}`;
-    return geocodeString;
-};
-
-const googleMapsClient = require('@google/maps').createClient({
-    key: process.env.GOOGLEKEY,
-    Promise: Promise,
-    rate: { limit: 50 }
-});
-
-
-const getCoordinates = (data) => {
-    const geocodeString = extractGeocodeString(data);
-    return googleMapsClient.geocode({ address: geocodeString })
-    .asPromise()
-    .then(response => {
-        console.log('response.json.results[0].geometry.location', response.json.results[0].geometry.location)
-        return {
-            id: data.id,
-            location: response.json.results[0].geometry.location
-        }
-    })
-    .catch(error => {
-        console.log('error', error)
-        // [TODO]
-        // if we are not able to get the lat long of an address,
-        // we should get coords for a place such as the city or country.
-
-        const defaultError = 'Something went wrong when initiating exchange.';
-        error.defaultError = defaultError;
-        throw new Error(error);
-    });
-}
 
 // Class methods
 
+/*
+ * Will either create a new school instance or update an existing school
+ * Will calculate the coordinates for the school address
+*/
 School.createOrUpdate = function(schoolData, t) {
     return getCoordinates(schoolData)
     .then((data) => {
@@ -90,15 +55,12 @@ School.createOrUpdate = function(schoolData, t) {
         schoolData.lat = coordinates.lat;
         schoolData.lng = coordinates.lng;
         if (!schoolData.id) {
-            return School.create(schoolData);
+            return School.create(schoolData, { transaction: t });
         } else {
             return School.findById(schoolData.id)
-                .then(school => school.update(schoolData));
+                .then(school => school.update(schoolData, { transaction: t }));
         }
     })
 };
-
-
-// Instance methods
 
 module.exports = School;

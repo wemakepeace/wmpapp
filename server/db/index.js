@@ -5,7 +5,6 @@ const AgeGroup = require('./models/AgeGroup');
 const Term = require('./models/Term');
 const School = require('./models/School');
 const Exchange = require('./models/Exchange');
-
 const ageGroupData = require('../constants/ageGroups');
 const termData = require('../constants/terms');
 
@@ -20,9 +19,6 @@ Term.hasMany(Class);
 
 Class.belongsTo(School);
 School.hasMany(Class);
-
-// Exchange.belongsTo(Class, { as:  'classA' }); // creates classAId on Exchange
-// Exchange.belongsTo(Class, { as:  'classB' }); // creates classBId on Exchange
 
 Exchange.belongsTo(Class, { as:  'sender' }); // creates senderId on Exchange
 Exchange.belongsTo(Class, { as:  'receiver' }); // creates receiverId on Exchange
