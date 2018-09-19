@@ -50,9 +50,8 @@
             font-size: 1.7rem;
 
 
-            span.header-menu-item {
+            .header-menu-item {
                 padding: 8px 20px;
-                border-right: 1px solid #fff;
                 cursor: pointer;
                 margin: auto;
 
@@ -81,7 +80,7 @@
                 .select-class {
                     display: inline-block;
                     margin: 0px;
-                    width: 180px;
+                    width: 220px;
                     text-align: left;
 
                     h5 {
@@ -94,35 +93,38 @@
                 }
             }
 
-            span.header-menu-item:hover {
+            .header-menu-item:hover {
                text-decoration: underline;
             }
         }
     }
 }
+
+
 @media (max-width: 1000px) {
 
-    span.header-menu-item {
-        font-size: 0.9em;
+    .header-menu-item {
+        font-size: 0.8em;
+        padding: 0px 8px !important;
+
+        .select-class {
+            width: 140px !important;
+        }
     }
+
+    .title-container .heading .title h1 {
+        font-size: 2em;
+        color: #fff;
+        line-height: 0.9;
+    }
+
 }
 
 
-@media (max-width: 756px) {
+@media (max-width: 768px) {
 
         .heading {
-            .title:last-child {
-               margin: 8px 1px !important;
-            }
-
-            .title {
-                margin: 0px 1px;
-                font-size: 0.8em;
-            }
-            .title-span {
-
-                margin-left: 2px !important;
-            }
+            display: none;
         }
 
         .logged-in .logged-in-inner {
@@ -134,50 +136,51 @@
             font-size: 1.2em;
             text-align: center;
 
-            span.header-menu-item.select-class {
-                width: 134px !important;
+            span.header-menu-item.select-class-item {
+               display: flex;
             }
-        }
-}
 
-@media (max-width: 661px) {
-    .heading {
-        padding: 10px 7px;
 
-        .title {
-            margin: 0;
-            font-size: 0.8em;
+            .header-menu-item {
+               font-size: 0.8em;
 
-            h1 {
-                font-size: 3em;
-                color: #fff;
-                line-height: 1em;
             }
         }
 
-        .title-span {
-            background-color: inherit;
-            color: inherit;
-            margin: 0;
-            padding: 0;
-        }
+
+    .title-container .logged-in .logged-in-inner {
+        float: none;
+        margin: 0 auto;
+        width: 60%;
+        padding: 16px 0;
     }
 
-    .logged-in .logged-in-inner span.header-menu-item {
-        border-right: none;
-        padding: 8px 10px;
+    .logged-in .logged-in-inner .header-menu-item {
 
         .select-class {
             display: inline-block;
             margin: 0px;
             width: 140px;
-            // text-align: left;
         }
     }
 }
 
-@media (max-width: 470px) {
-    .heading .title {
-        font-size: 0.5em;
+
+@media (max-width: 640px) {
+    .title-container .logged-in .logged-in-inner {
+        width: 80%;
+    }
+
+}
+
+@media (max-width: 570px) {
+    .title-container .logged-in .logged-in-inner {
+        width: 90%;
+    }
+}
+
+@media (max-width: 490px) {
+    .title-container .logged-in .logged-in-inner {
+        width: 100%;
     }
 }

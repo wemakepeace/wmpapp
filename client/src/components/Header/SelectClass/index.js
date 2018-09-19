@@ -53,7 +53,7 @@ class SelectClass extends Component  {
 
         return (
             <Select
-                className='header-menu-item select-class'
+                className='select-class'
                 name='form-field-name'
                 value={value}
                 placeholder='Select class'
