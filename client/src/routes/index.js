@@ -37,7 +37,10 @@ class Routes extends Component  {
         return (
             <div>
                 <WPMenu />
-                <LoaderWithText loading={loading} action='Fetching your profile..' />
+                <LoaderWithText
+                    loading={loading}
+                    text='Fetching your profile..'
+                />
                 <div className={containerClass}>
                     <Switch>
                         <Route

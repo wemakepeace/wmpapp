@@ -27,7 +27,7 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     render() {
-        const { onChangePasswordClick, showChangePwForm, deleteTeacher, toggleLoader } = this.props;
+        const { deleteTeacher, toggleLoader, onChangePassword } = this.props;
         const { activeIndex } = this.state
 
         return (
@@ -39,7 +39,7 @@ class Settings extends Component {
                         Change password
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
-                        <ChangePassword />
+                        <ChangePassword onChangePassword={onChangePassword} />
                     </Accordion.Content>
 
                     <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>

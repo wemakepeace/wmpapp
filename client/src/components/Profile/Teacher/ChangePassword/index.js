@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import FormContainer from '../../../reusables/FormContainer';
 import CustomButton from '../../../reusables/CustomButton';
-import { changePassword } from '../../../../redux/actions/teacher';
 import { Input } from '../../../reusables/Input';
+
 
 const ChangePasswordButton = CustomButton({ name: 'Change Password' });
 const inputs = [
@@ -26,8 +25,8 @@ const inputs = [
 
 const Form = FormContainer({ Input, CustomButton: ChangePasswordButton });
 
-const ResetPassword = ({ changePassword }) => {
-    const onSubmit = (passwords) => changePassword(passwords)
+const ChangePassword = ({ onChangePassword }) => {
+    const onSubmit = (passwords) => onChangePassword(passwords)
 
     return (
         <div>
@@ -37,5 +36,4 @@ const ResetPassword = ({ changePassword }) => {
     );
 }
 
-
-export default connect(null, { changePassword })(ResetPassword);
+export default ChangePassword;

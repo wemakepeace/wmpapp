@@ -37,7 +37,7 @@ class OverviewContainer extends Component {
             <div>
                 <LoaderWithText
                     loading={loading}
-                    action={exchangeAction}
+                    text={exchangeAction}
                 />
                 <div className='profile-segment'>
                     <h2>{`Welcome, ${firstName}`}!</h2>

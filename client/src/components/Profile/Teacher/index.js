@@ -6,9 +6,8 @@ import Settings from './Settings';
 import { Input } from '../../reusables/Input';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import FullscreenModal from '../../reusables/FullscreenModal';
-import { updateTeacher, deleteTeacher } from '../../../redux/actions/teacher';
+import { updateTeacher, deleteTeacher, changePassword } from '../../../redux/actions/teacher';
 import { clearFeedback } from '../../../redux/actions/shared';
-
 
 class TeacherFormContainer extends Component {
     constructor(props) {
@@ -27,7 +26,8 @@ class TeacherFormContainer extends Component {
             showChangePwForm: false,
             deleting: false,
             deleted: false,
-            showDeleteWarningModal: false
+            showDeleteWarningModal: false,
+            loadingChangePassword: false
         };
 
         if (teacher && teacher.id) {
@@ -35,55 +35,53 @@ class TeacherFormContainer extends Component {
                 ...teacher,
                 deleting: false,
                 deleted: false,
-                showDeleteWarningModal: false
+                showDeleteWarningModal: false,
+                loadingChangePassword: false
             };
         }
         return defaultState;
     }
 
-    onInputChange = (value, key) => {
-        this.setState({ [ key ]: value })
+    componentWillReceiveProps = ({ teacher, feedback }) => {
+        console.log('feedback', feedback)
+        if (feedback && feedback.type === 'deleted') {
+            return this.setState({ deleted: true, deleting: false });
+        } else if (teacher && (teacher !== this.state)) {
+            return this.setState(this.getDefaultStateOrProps(teacher));
+        }
+
+        this.setState({ loadingChangePassword: false });
     }
 
-    onChangePasswordClick = () => {
-        this.props.clearFeedback();
-        this.setState({ showChangePwForm: !this.state.showChangePwForm })
+    onChangePassword = (data) => {
+        this.toggleLoader('loadingChangePassword');
+        this.props.changePassword(data);
     }
 
     onSubmit = () => {
         const data = this.state;
         data.className = this.props.teacher.classes.name;
         this.props.updateTeacher(data);
-        this.setState({ showChangePwForm: false })
-
+        this.setState({ showChangePwForm: false });
     }
 
-    componentWillReceiveProps({ teacher, feedback }) {
-        if (feedback && feedback.type === 'deleted') {
-            this.setState({ deleted: true, deleting: false })
-        } else if (teacher && (teacher !== this.state)) {
-            this.setState(this.getDefaultStateOrProps(teacher));
-        }
-    }
+    onInputChange = (value, key) => this.setState({ [ key ]: value })
 
-    toggleLoader(stage) {
-        // this.setState({ deleting: true });
-        this.setState({ [ stage ]: true });
-    }
+    toggleLoader = (state) => this.setState({ [ state ]: true })
 
     render() {
-
         const {
             firstName,
             lastName,
             email,
             phone,
             password,
-            showChangePwForm,
             deleting,
             deleted,
-            showDeleteWarningModal
+            showDeleteWarningModal,
+            loadingChangePassword
         } = this.state;
+
         const fields = [
             {
                 label: 'First name',
@@ -109,6 +107,22 @@ class TeacherFormContainer extends Component {
 
         return (
             <div>
+                <LoaderWithText
+                    text='Changing your password'
+                    loading={loadingChangePassword}
+                />
+                <LoaderWithText
+                    loading={deleting}
+                    text='Deleting your account...'
+                />
+                { deleted ?
+                    <FullscreenModal
+                        open={deleted}
+                        header='Your account has been deleted.'
+                        buttonText1='Go to Home Page'
+                        closable={false}
+                        action={() => this.props.history.push('/')}
+                    /> : null }
                 { showDeleteWarningModal ?
                     <FullscreenModal
                         open={showDeleteWarningModal}
@@ -123,18 +137,6 @@ class TeacherFormContainer extends Component {
 
                         }}
                     /> : null }
-                { deleted ?
-                    <FullscreenModal
-                        open={deleted}
-                        header='Your account has been deleted.'
-                        buttonText1='Go to Home Page'
-                        closable={false}
-                        action={() => this.props.history.push('/')}
-                    /> : null }
-                <LoaderWithText
-                    loading={deleting}
-                    action='Deleting your account...'
-                />
                 <div className='profile-segment'>
                     <h2>Teacher Information</h2>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
@@ -152,10 +154,9 @@ class TeacherFormContainer extends Component {
                     </div>
                 </div>
                 <Settings
-                    showChangePwForm={showChangePwForm}
-                    onChangePasswordClick={this.onChangePasswordClick}
                     deleteTeacher={this.props.deleteTeacher}
                     toggleLoader={this.toggleLoader.bind(this)}
+                    onChangePassword={this.onChangePassword.bind(this)}
                 />
             </div>
         )
@@ -172,8 +173,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updateTeacher: (data) => dispatch(updateTeacher(data)),
         clearFeedback: () => dispatch(clearFeedback()),
-        deleteTeacher: () => dispatch(deleteTeacher())
-
+        deleteTeacher: () => dispatch(deleteTeacher()),
+        changePassword: (data) => dispatch(changePassword(data))
     }
 }
 

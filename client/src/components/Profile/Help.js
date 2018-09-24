@@ -54,7 +54,7 @@ class Help extends Component {
             <div>
                 <LoaderWithText
                     loading={loading}
-                    action={supportAction}
+                    text={supportAction}
                 />
                 <div className='profile-segment'>
                     <div>
