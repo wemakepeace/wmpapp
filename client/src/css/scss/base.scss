@@ -15,6 +15,14 @@ input:focus, textarea:focus, select:focus{
     outline: none;
 }
 
+// To avoid zoom on phones
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+textarea {
+  font-size: 16px;
+}
 
 .ui.yellow.large.message {
     color: #000;
