@@ -4,14 +4,13 @@ import Links from './Links';
 import { logout } from '../../redux/actions/teacher';
 import { removeCurrentClass, fetchClass } from '../../redux/actions/class';
 
-const HeaderContainer = ({ teacher, history, logout, fetchClass }) => {
+const HeaderContainer = ({ teacher, history, logout, fetchClass, removeCurrentClass }) => {
     const onLogout = () => {
         logout(teacher.id);
         history.push('/');
     }
 
     const initiateNewClass = () => {
-        const newClass = true;
         removeCurrentClass();
         history.push('/profile/class');
     }
@@ -36,9 +35,8 @@ const HeaderContainer = ({ teacher, history, logout, fetchClass }) => {
     );
 }
 
-
 const mapStateToProps = ({ teacher }) => {
     return { teacher }
 };
 
-export default connect(mapStateToProps, { logout, fetchClass })(HeaderContainer);
+export default connect(mapStateToProps, { logout, removeCurrentClass, fetchClass })(HeaderContainer);

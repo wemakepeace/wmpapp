@@ -4,16 +4,18 @@ import { Button, Form, TextArea } from 'semantic-ui-react';
 import { LoaderWithText } from '../reusables/LoaderWithText';
 import SelectClass from '../reusables/SelectClassDropdown';
 import { fetchClass } from '../../redux/actions/class';
+import { sendFeedback } from '../../redux/actions/shared';
+import { sendSupportMessage } from '../../redux/actions/teacher';
 
-const exchangeActions = {
-    initiateExchange: 'Initiating Exchange',
-    verifyExchange: 'Confirming Your Exchange Participation'
+const supportActions = {
+    sendingMessage: 'Submitting your message...'
 };
 
 class Help extends Component {
     state = {
         loading: false,
         action: '',
+        title: '',
         message: ''
     }
 
@@ -25,6 +27,19 @@ class Help extends Component {
         }
     }
 
+    onSubmitMessage() {
+        const { teacher, exchange, currentClass } = this.props;
+        const { title, message } = this.state;
+        const content = { teacher, exchange, currentClass, message, title };
+
+        if (!currentClass || !currentClass.id) {
+            return this.props.sendFeedback({ type: 'error', messages: ['You have to select a class'] })
+        }
+
+        this.toggleLoader(true, 'sendingMessage');
+        this.props.sendSupportMessage(content);
+    }
+
     componentWillReceiveProps() {
         this.toggleLoader(false, "");
     }
@@ -33,13 +48,13 @@ class Help extends Component {
         const { loading, action } = this.state;
         const { teacher, exchange, currentClass, fetchClass } = this.props;
         const { firstName } = teacher;
-        const exchangeAction = exchangeActions[ action ];
-        console.log(this.state.message)
+        const supportAction = supportActions[ action ];
+
         return (
             <div>
                 <LoaderWithText
                     loading={loading}
-                    action={exchangeAction}
+                    action={supportAction}
                 />
                 <div className='profile-segment'>
                     <div>
@@ -75,12 +90,22 @@ class Help extends Component {
                             />
                         </Form.Field>
                         <Form.Field>
+                            <Form.Input
+                                type='text'
+                                onChange={(ev) => this.setState({ title: ev.target.value })}
+                                placeholder='Brief description of your inquiry'
+                            />
+                        </Form.Field>
+                        <Form.Field>
                             <TextArea
                                 onChange={(ev) => this.setState({ message: ev.target.value })}
                                 placeholder='Explain to us in detail what you are wondering about.'
                             />
                         </Form.Field>
-                        <Button type='submit'>Submit</Button>
+                        <Button
+                            type='submit'
+                            onClick={this.onSubmitMessage.bind(this)}
+                        >Submit</Button>
                     </Form>
                 </div>
             </div>
@@ -96,4 +121,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchClass })(Help);
+export default connect(mapStateToProps, { fetchClass, sendSupportMessage, sendFeedback })(Help);

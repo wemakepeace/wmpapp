@@ -1,9 +1,5 @@
 import React from 'react';
-// import SelectClass from './SelectClass';
 import SelectClass from '../reusables/SelectClassDropdown';
-
-
-
 
 const Links = ({ teacher, initiateNewClass, onLogout, history, fetchClass }) => {
     if (!teacher || !teacher.id) {
