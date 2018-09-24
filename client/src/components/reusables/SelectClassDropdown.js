@@ -2,25 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Async } from 'react-select';
-import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
+import { fetchClass, removeCurrentClass } from '../../redux/actions/class';
 
 class SelectClass extends Component  {
-    state = {
-        selected: '',
-        options: []
+    constructor(props) {
+        super(props);
+        this.state = this.getDefaultState(props)
     }
 
-    onClassSelect = (selected) => {
-        if (selected === null) {
-            this.setState({ selected })
-            return this.props.removeCurrentClass();
-        }
-
-        this.props.fetchClass(selected.value);
-
-        if (this.props.history.location.pathname !== '/profile/overview') {
-            this.props.history.push('/profile/overview');
-        }
+    getDefaultState = (props) => {
+        const options = props.teacher.classes;
+        const { currentClass: { id } } = props;
+        return this.setSelected(options, id);
     }
 
     setSelected = (options, id) => {
@@ -32,24 +25,20 @@ class SelectClass extends Component  {
             });
         }
 
-        this.setState({ selected, options });
+        return { selected, options };
     }
 
-    componentDidMount() {
-        const options = this.props.teacher.classes;
-        const { currentClass: { id } } = this.props;
-        this.setSelected(options, id);
-    }
-
-    componentWillReceiveProps({ teacher, currentClass}) {
+    componentWillReceiveProps = ({ teacher, currentClass}) => {
         const options = teacher.classes;
         const { id } = currentClass;
-        this.setSelected(options, id);
+        const state = this.setSelected(options, id);
+        this.setState(state);
     }
 
     render() {
         const { selected, options } = this.state;
         const value = selected && selected.value;
+        const { onClassSelect } = this.props;
 
         return (
             <Select
@@ -57,7 +46,7 @@ class SelectClass extends Component  {
                 name='form-field-name'
                 value={value}
                 placeholder='Select class'
-                onChange={this.onClassSelect}
+                onChange={onClassSelect}
                 options={options}
                 clearable={false}
                 searchable={false}

@@ -58,24 +58,22 @@ class Materials extends Component  {
 
         return (
             <div>
-                <div>
-                    <Menu
-                        content={content}
-                        match={match}
-                        location={location}
-                    />
-                    <Route
-                        path={`${match.path}/:route`}
-                        render={({ match }) => (
-                            <TabContent
-                                letterURLs={letterURLs}
-                                content={content}
-                                classRole={classRole}
-                                match={match}
-                            />
-                        )}
-                    />
-                </div>
+                <Menu
+                    content={content}
+                    match={match}
+                    location={location}
+                />
+                <Route
+                    path={`${match.path}/:route`}
+                    render={({ match }) => (
+                        <TabContent
+                            letterURLs={letterURLs}
+                            content={content}
+                            classRole={classRole}
+                            match={match}
+                        />
+                    )}
+                />
             </div>
         );
     };

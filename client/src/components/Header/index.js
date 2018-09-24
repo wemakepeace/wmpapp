@@ -1,19 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
 import Links from './Links';
 import { logout } from '../../redux/actions/teacher';
-import { removeCurrentClass } from '../../redux/actions/class';
+import { removeCurrentClass, fetchClass } from '../../redux/actions/class';
 
-const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
+const HeaderContainer = ({ teacher, history, logout, fetchClass, removeCurrentClass }) => {
     const onLogout = () => {
         logout(teacher.id);
         history.push('/');
     }
 
     const initiateNewClass = () => {
-        const newClass = true;
         removeCurrentClass();
         history.push('/profile/class');
     }
@@ -31,15 +28,15 @@ const HeaderContainer = ({ teacher, history, removeCurrentClass, logout }) => {
                 teacher={teacher}
                 onLogout={onLogout}
                 initiateNewClass={initiateNewClass}
+                fetchClass={fetchClass}
                 history={history}
             />
         </div>
     );
 }
 
-
 const mapStateToProps = ({ teacher }) => {
     return { teacher }
 };
 
-export default connect(mapStateToProps, { logout, removeCurrentClass })(HeaderContainer);
+export default connect(mapStateToProps, { logout, removeCurrentClass, fetchClass })(HeaderContainer);

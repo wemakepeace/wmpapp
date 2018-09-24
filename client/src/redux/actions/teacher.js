@@ -89,7 +89,24 @@ const deleteTeacher = () => {
                 (error) => {
                     const feedback = error.response.data.feedback;
                     dispatch({ type: SEND_FEEDBACK, feedback });
-                })
+                });
+    }
+}
+
+const sendSupportMessage = (content) => {
+    console.log('content', content)
+    return dispatch => {
+        return axios.post('/teacher/support', content)
+            .then(({ data }) => data)
+            .then(
+                ({ feedback }) => {
+                    console.log('feedback', feedback)
+                    dispatch({ type: SEND_FEEDBACK, feedback });
+                },
+                (error) => {
+                    const feedback = error.response.data.feedback;
+                    dispatch({ type: SEND_FEEDBACK, feedback });
+                });
     }
 }
 
@@ -102,5 +119,6 @@ export {
     sendResetPasswordLink,
     resetPasswordWithToken,
     changePassword,
-    deleteTeacher
+    deleteTeacher,
+    sendSupportMessage
 };

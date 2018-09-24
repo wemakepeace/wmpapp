@@ -7,7 +7,7 @@ const { generateEmail } = require('../utils/email/exchange');
 const { feedback } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail } = require('../utils/email/smtp');
-const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
+const { SUCCESS } = require('../constants/feedbackTypes');
 const {
     pbkdf2,
     decodeToken,
@@ -95,7 +95,7 @@ app.put('/changepassword', (req, res, next) => {
 
                     updatedUser.destroyTokens();
 
-                    const mailOptionsVerifyPwChange = {
+                    const mailOptions = {
                         to : updatedUser.email,
                         from: process.env.MAIL_ID,
                         firstName: updatedUser.firstName,
@@ -103,12 +103,14 @@ app.put('/changepassword', (req, res, next) => {
                         html : "Hello " + updatedUser.firstName + ",<br> This is a confirmation that the password for your We Make Peace portal account " + updatedUser.email + " has been changed."
                     }
 
-                    sendEmail(res, mailOptionsVerifyPwChange)
+                    return sendEmail(res, mailOptions)
+                    .then(() => {
+                        res.send({
+                            user: updatedUser,
+                            feedback: feedback(SUCCESS, ['Your password has been reset.'])
+                        });
+                    });
 
-                    res.send({
-                        user:updatedUser,
-                        feedback: feedback(SUCCESS, ['Your password has been reset.'])
-                    })
                 })
                 .catch(error => {
                     error.defaultError = 'Internal server error. Please try resetting your password  again.';;
@@ -223,5 +225,32 @@ app.delete('/', (req, res, next) => {
 
 });
 
+app.post('/support', (req, res, next) => {
+   const { exchange, currentClass, teacher, message, title } = req.body;
+   const mailOptions = {
+        to: process.env.MAIL_ID,
+        from: process.env.MAIL_ID,
+        subject: 'SUPPORT MESSAGE',
+        html:
+            `Teacher id: ${teacher.id}<br />
+            email: ${teacher.email}<br />
+            Class id: ${currentClass.id}<br />
+            Exchange id: ${exchange && exchange.id}<br />
+            Title: ${title}<br />
+            Message: ${message}`
+    }
+
+    return sendEmail(res, mailOptions)
+    .then(() => {
+        res.send({
+            feedback: feedback(SUCCESS, ['Your message has been sent.'])
+        });
+    })
+    .catch((error) => {
+        const defaultError = 'Something went wrong when sending your message';
+        error.defaultError = defaultError;
+        next(error);
+    });
+});
 
 module.exports = app;
