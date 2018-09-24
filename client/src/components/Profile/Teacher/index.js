@@ -23,38 +23,37 @@ class TeacherFormContainer extends Component {
             email: '',
             phone: '',
             password: '',
-            showChangePwForm: false,
-            deleting: false,
-            deleted: false,
+            idDeleting: false,
+            isDeleted: false,
             showDeleteWarningModal: false,
-            loadingChangePassword: false
+            isChangingPassword: false
         };
 
         if (teacher && teacher.id) {
             defaultState = {
                 ...teacher,
-                deleting: false,
-                deleted: false,
+                isDeleting: false,
+                isDeleted: false,
                 showDeleteWarningModal: false,
-                loadingChangePassword: false
+                isChangingPassword: false
             };
         }
         return defaultState;
     }
 
     componentWillReceiveProps = ({ teacher, feedback }) => {
-        console.log('feedback', feedback)
+
         if (feedback && feedback.type === 'deleted') {
-            return this.setState({ deleted: true, deleting: false });
+            return this.setState({ isDeleted: true, isDeleting: false });
         } else if (teacher && (teacher !== this.state)) {
             return this.setState(this.getDefaultStateOrProps(teacher));
         }
 
-        this.setState({ loadingChangePassword: false });
+        this.setState({ isChangingPassword: false });
     }
 
     onChangePassword = (data) => {
-        this.toggleLoader('loadingChangePassword');
+        this.toggleLoader('isChangingPassword');
         this.props.changePassword(data);
     }
 
@@ -62,7 +61,6 @@ class TeacherFormContainer extends Component {
         const data = this.state;
         data.className = this.props.teacher.classes.name;
         this.props.updateTeacher(data);
-        this.setState({ showChangePwForm: false });
     }
 
     onInputChange = (value, key) => this.setState({ [ key ]: value })
@@ -76,10 +74,10 @@ class TeacherFormContainer extends Component {
             email,
             phone,
             password,
-            deleting,
-            deleted,
+            isDeleting,
+            isDeleted,
             showDeleteWarningModal,
-            loadingChangePassword
+            isChangingPassword
         } = this.state;
 
         const fields = [
@@ -109,15 +107,15 @@ class TeacherFormContainer extends Component {
             <div>
                 <LoaderWithText
                     text='Changing your password'
-                    loading={loadingChangePassword}
+                    loading={isChangingPassword}
                 />
                 <LoaderWithText
-                    loading={deleting}
+                    loading={isDeleting}
                     text='Deleting your account...'
                 />
-                { deleted ?
+                { isDeleted ?
                     <FullscreenModal
-                        open={deleted}
+                        open={isDeleted}
                         header='Your account has been deleted.'
                         buttonText1='Go to Home Page'
                         closable={false}
@@ -132,7 +130,7 @@ class TeacherFormContainer extends Component {
                         button1Color='red'
                         closeAction={() => this.setState({ showDeleteWarningModal: false })}
                         action={() => {
-                            this.toggleLoader('deleting');
+                            this.toggleLoader('isDeleting');
                             this.props.deleteTeacher();
 
                         }}

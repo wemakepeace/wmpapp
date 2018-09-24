@@ -43,7 +43,7 @@ class FullscreenModal extends Component {
                             ? <div className='close-modal'>
                                 <span onClick={()=>closeAction()}>No, take me back</span>
                             </div>
-                            : null
+                            : <div></div>
                         }
                     </Modal.Actions>
                 </Modal>

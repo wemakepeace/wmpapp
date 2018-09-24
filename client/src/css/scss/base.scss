@@ -29,6 +29,10 @@ textarea {
     color: #000;
 }
 
+// fix semantic ui bug on modals
+.ui.tiny.modal {
+    padding: 10px;
+}
 
 // Reusbale standardized page-container
 .page-container {
