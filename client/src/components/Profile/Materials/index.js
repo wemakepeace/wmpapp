@@ -44,12 +44,15 @@ const content = [
 
 
 class Materials extends Component  {
-    state = {
-        letterURLs: []
-    }
+    state = {}
 
     componentDidMount = () => {
-        this.props.fetchLetterTemplates();
+        return this.props.fetchLetterTemplates()
+        .then(() => {
+            if (this.props.history.location.pathname === '/profile/materials') {
+                this.props.history.push('materials/instructions');
+            }
+        });
     }
 
     render() {

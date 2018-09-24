@@ -11,7 +11,7 @@ const supportActions = {
     sendingMessage: 'Submitting your message...'
 };
 
-class Help extends Component {
+class Support extends Component {
     state = {
         loading: false,
         action: '',
@@ -121,4 +121,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchClass, sendSupportMessage, sendFeedback })(Help);
+export default connect(mapStateToProps, { fetchClass, sendSupportMessage, sendFeedback })(Support);

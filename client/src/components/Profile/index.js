@@ -10,7 +10,7 @@ import Overview from './Overview';
 import Class from './Class';
 import Teacher from './Teacher';
 import Materials from './Materials';
-import Help from './Help';
+import Support from './Support';
 
 
 import { clearFeedback } from '../../redux/actions/shared';
@@ -38,9 +38,9 @@ const content = [
         defaultChildRoute: 'instructions'
     },
     {
-        name: 'Help',
-        component: Help,
-        route: 'help'
+        name: 'Support',
+        component: Support,
+        route: 'support'
     }
 ];
 

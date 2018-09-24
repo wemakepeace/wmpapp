@@ -94,13 +94,11 @@ const deleteTeacher = () => {
 }
 
 const sendSupportMessage = (content) => {
-    console.log('content', content)
     return dispatch => {
         return axios.post('/teacher/support', content)
             .then(({ data }) => data)
             .then(
                 ({ feedback }) => {
-                    console.log('feedback', feedback)
                     dispatch({ type: SEND_FEEDBACK, feedback });
                 },
                 (error) => {

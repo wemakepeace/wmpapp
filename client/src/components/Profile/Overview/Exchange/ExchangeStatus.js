@@ -56,7 +56,7 @@ const exchangeStatusData = {
         text: ()=> (
             <div>
                 <h3>You are now ready to begin the Exchange Program!</h3>
-                <p>Please see the instructions under Materials for next steps.</p>
+                <p>Please see the instructions under Materials for next steps or click <a href='/#/profile/materials/instructions'>here</a>.</p>
                 <p>We ask that you read the instructions carefully.</p>
             </div>
         ),
