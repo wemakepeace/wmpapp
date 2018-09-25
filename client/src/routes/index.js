@@ -39,7 +39,7 @@ class Routes extends Component  {
                 <WPMenu />
                 <LoaderWithText
                     loading={loading}
-                    text='Fetching your profile..'
+                    text='Loading..'
                 />
                 <div className={containerClass}>
                     <Switch>
