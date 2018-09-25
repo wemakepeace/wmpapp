@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import FormContainer from '../reusables/FormContainer';
 import CustomButton from '../reusables/CustomButton';
 import { login } from '../../redux/actions/auth';
@@ -36,6 +37,9 @@ const LoginContainer = ({ login, match, history, feedback }) => {
         <div className='login-signup-form'>
             <div className='form-container'>
                 <Form onSubmit={onSubmit} inputs={inputs} />
+                <div style={{padding: '0px 0px 20px 20px'}}>
+                    <Link to='reset'>Forgot your password?</Link>
+                </div>
             </div>
         </div>
     );

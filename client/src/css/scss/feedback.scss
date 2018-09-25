@@ -1,14 +1,9 @@
 // Feedback
 .feedback-inner {
-    width: 50%;
     margin: 0 auto;
-    line-height: 3;
+    line-height: 2;
 }
 
-
-.feedback {
-
-}
 
 .error {
     color: red;
@@ -16,6 +11,7 @@
     span {
         width: 100%;
         display: block;
+        text-align: center;
     }
 }
 

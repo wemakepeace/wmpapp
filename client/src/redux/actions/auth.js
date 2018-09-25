@@ -4,18 +4,13 @@ import { SEND_FEEDBACK } from '../constants/shared';
 import { setToken } from '../../utils/helpers';
 
 
-const login = (data, specialFeedback) => {
+const login = (data) => {
     return dispatch => {
         return axios.post('/public/login', data )
             .then(response => response.data)
             .then(
                 ({ teacher, token, feedback }) => {
                     setToken(token);
-
-                    // if (specialFeedback) {
-                    //     feedback.messages = specialFeedback;
-                    // }
-
                     return dispatch(loginSuccess(teacher, feedback));
                 },
                 (error) => {
@@ -48,6 +43,7 @@ const logout = (id) => {
 
 
 const sendResetPasswordLink = email => {
+    console.log('email', email)
     return dispatch => {
         return axios.post('/public/resetrequest', email)
             .then(
