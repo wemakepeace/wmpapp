@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FormContainer from '../reusables/FormContainer';
 import CustomButton from '../reusables/CustomButton';
-import { login } from '../../redux/actions/auth';
+import { login } from '../../redux/actions/teacher';
 import { LoginSignupInput } from '../reusables/LoginSignupInput';
 
 const LoginButton = CustomButton({ name: 'LOGIN' });
@@ -26,11 +26,11 @@ const Form = FormContainer({ Input: LoginSignupInput, CustomButton: LoginButton 
 const LoginContainer = ({ login, match, history, feedback }) => {
     const onSubmit = (credentials) => {
         return login(credentials)
-            .then(({ feedback: { type } }) => {
-                if (type === 'success') {
-                    history.push('/profile/overview');
-                }
-            });
+        .then(({ feedback: { type } }) => {
+            if (type === 'success') {
+                history.push('/profile/overview');
+            }
+        });
     }
 
     return (

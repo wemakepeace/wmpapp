@@ -46,10 +46,10 @@ const verifyExchange = (classId, exchangeId) => {
 const fetchLetterTemplates = () => {
     return dispatch => {
         return axios.get('/resources/letter_templates')
-            .then((response) => response.data)
-            .then(({ letterURLs }) => {
-                dispatch({ type: 'FETCH_EXCHANGE_DATA', exchange: { letterURLs } })
-            });
+        .then((response) => response.data)
+        .then(({ letterURLs }) => {
+            dispatch({ type: 'FETCH_EXCHANGE_DATA', exchange: { letterURLs } })
+        });
     };
 };
 

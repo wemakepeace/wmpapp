@@ -6,21 +6,21 @@ import { SEND_FEEDBACK } from '../constants/shared';
 const fetchClass = (id) => {
     return dispatch => {
         return axios.get(`/class/${id}`)
-            .then(response => response.data)
-            .then(
-                ({ _class, exchange, classRole, feedback}) => {
-                    localStorage.setItem('currentClass', _class.id);
-                    return dispatch({
-                        type: FETCH_CLASS,
-                        _class,
-                        exchange,
-                        classRole
-                    });
-                },
-                (error) => {
-                    const feedback = error.response.data.feedback;
-                    return dispatch({ type: SEND_FEEDBACK, feedback });
+        .then(response => response.data)
+        .then(
+            ({ _class, exchange, classRole }) => {
+                localStorage.setItem('currentClass', _class.id);
+                return dispatch({
+                    type: FETCH_CLASS,
+                    _class,
+                    exchange,
+                    classRole
                 });
+            },
+            (error) => {
+                const feedback = error.response.data.feedback;
+                return dispatch({ type: SEND_FEEDBACK, feedback });
+            });
     };
 };
 
@@ -44,15 +44,15 @@ const removeCurrentClass = () => {
 const saveClass = (classData, schoolData) => {
     return dispatch => {
         return axios.post(`/class`, { classData, schoolData })
-            .then(response => response.data)
-            .then(
-                ({ _class, school, feedback }) => {
-                    return dispatch(saveClassSuccess(_class, school, feedback));
-                },
-                (error) => {
-                    const feedback = error.response.data.feedback;
-                    return dispatch({ type: SEND_FEEDBACK, feedback });
-                });
+        .then(response => response.data)
+        .then(
+            ({ _class, school, feedback }) => {
+                return dispatch(saveClassSuccess(_class, school, feedback));
+            },
+            (error) => {
+                const feedback = error.response.data.feedback;
+                return dispatch({ type: SEND_FEEDBACK, feedback });
+            });
     };
 };
 
