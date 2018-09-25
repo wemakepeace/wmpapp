@@ -42,7 +42,8 @@ class OverviewContainer extends Component {
                 <div className='profile-segment'>
                     <h2>{`Welcome, ${firstName}`}!</h2>
                     <p>Here you can edit your teacher profile, manage all your enrolled classes or register a new class.</p>
-                    <p>Once a class has been matched with another class and both participating classes have confirmed the participation, you will be able to access the Instructions and Materials needed.</p>
+                    <p>Once a class has been matched with another class and both participating classes have confirmed the participation, you will be able to access the Instructions and Materials in the main menu.</p>
+                    <p>If you need a refresher on how the program works, see <a href='//wemakepeace.org/peace-letter-program' targer='_blank'>here</a>.</p>
                 </div>
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
