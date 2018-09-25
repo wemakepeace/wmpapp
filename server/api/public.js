@@ -16,9 +16,10 @@ const {
 
 
 app.post('/create', (req, res, next) => {
-    const { data } = req.body;
+    let { data } = req.body;
     const { password, confirmPassword } = data;
     const errorMessage = validatePassword(password, confirmPassword);
+    data.email = data.email.toLowerCase();
 
     if (errorMessage) {
         return next({ defaultError: errorMessage });
@@ -51,7 +52,7 @@ app.post('/login', (req, res, next) => {
     const { email, password } = req.body;
 
     return Teacher.findOne({
-        where: { email },
+        where: { email: email.toLowerCase() },
         include: [ {
                 model: Class,
                 include: [ School ]
