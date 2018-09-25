@@ -101,7 +101,7 @@ app.post('/login', (req, res, next) => {
 // Reset Password
 
 app.post('/resetrequest', (req, res, next) => {
-    const { email } = req.body;
+    const email = req.body.email.toLowerCase();
 
     async.waterfall([
         function(done) {

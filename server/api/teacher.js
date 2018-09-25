@@ -15,7 +15,6 @@ const {
 } = require('../utils/security');
 
 app.get('/', (req, res, next) => {
-    /* Have to verify that this is secure .... */
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);
 
@@ -38,8 +37,9 @@ app.get('/', (req, res, next) => {
 
 
 app.put('/', (req, res, next) => {
-    const data = req.body;
+    let data = req.body;
     const { id } = data;
+    data.email = req.body.email.toLowerCase();
 
     Teacher.findById(id)
     .then(user => {
@@ -59,12 +59,12 @@ app.put('/', (req, res, next) => {
             .catch(error => {
                 error.defaultError = 'Something went wrong when updating your profile.';
                 return next(error);
-            })
+            });
     })
     .catch(error => {
         error.defaultError = 'Something went wrong when updating your profile.';
         return next(error);
-    })
+    });
 });
 
 
