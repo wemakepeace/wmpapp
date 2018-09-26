@@ -6,7 +6,7 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 const extractGeocodeString = (data) => {
-    const { zip, country, address1, city } = data;
+    const { country, address1, city } = data;
     const countryName = countries().getName(country);
     const geocodeString = `${address1}, ${city}, ${countryName}`;
     return geocodeString;

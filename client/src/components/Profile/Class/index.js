@@ -63,9 +63,9 @@ class ClassFormsContainer extends Component {
         } else {
             const schoolId = ev.value;
             return axios.get(`/school/${schoolId}`)
-                .then(({ data }) => {
-                    this.setState({ school: data })
-                });
+            .then(({ data }) => {
+                this.setState({ school: data })
+            });
         }
     }
 
@@ -77,6 +77,9 @@ class ClassFormsContainer extends Component {
     }
 
     componentWillReceiveProps({ currentClass }) {
+        // don't update state if we are in the process of creating a new class
+        if (!currentClass || !currentClass.id) return
+        // do update state if the currentClass is different from the previous class
         if (currentClass && (currentClass.id !== this.state.class.id)) {
             this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
         }

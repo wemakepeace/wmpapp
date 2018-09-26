@@ -40,27 +40,34 @@ const School = conn.define('school', {
     lng: Sequelize.FLOAT
 });
 
-// Class methods
+// Hooks
 
-/*
- * Will either create a new school instance or update an existing school
- * Will calculate the coordinates for the school address
-*/
-School.createOrUpdate = function(schoolData, t) {
-    return getCoordinates(schoolData)
+// Will calculate and save the coordinates for the school address
+School.afterCreate((school) => {
+    return getCoordinates(school)
     .then((data) => {
         return data.location
     })
     .then((coordinates) => {
-        schoolData.lat = coordinates.lat;
-        schoolData.lng = coordinates.lng;
-        if (!schoolData.id) {
-            return School.create(schoolData, { transaction: t });
-        } else {
-            return School.findById(schoolData.id)
-                .then(school => school.update(schoolData, { transaction: t }));
-        }
-    })
+        school.lat = coordinates.lat;
+        school.lng = coordinates.lng;
+    });
+});
+
+// Class methods
+
+// Will either create a new school instance or update an existing school
+School.createOrUpdate = function(schoolData, t) {
+    const country = schoolData.country && schoolData.country.value;
+    schoolData.country = country;
+
+    if (!schoolData.id) {
+        return School.create(schoolData, { transaction: t });
+    } else {
+        return School.findById(schoolData.id)
+        .then((school) => school.update(schoolData, { transaction: t }));
+    }
 };
+
 
 module.exports = School;
