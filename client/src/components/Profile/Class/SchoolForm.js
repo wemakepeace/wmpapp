@@ -1,6 +1,6 @@
 import React from 'react';
 import countries from 'country-list';
-import { AsyncSelectInput } from '../AsyncSelectInput';
+import { AsyncSelectInput } from '../../reusables/AsyncSelectInput';
 import { fetchData } from '../../../utils/fetchData'
 import { Input } from '../../reusables/Input';
 
@@ -74,6 +74,7 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
                 />)) }
             <AsyncSelectInput
                 name='country'
+                label='Country'
                 value={country}
                 onChange={onInputChange}
                 loadOptions={fetchData}
