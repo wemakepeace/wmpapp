@@ -16,9 +16,11 @@ const exchange = (state=initialState, { type, exchange }) => {
     switch(type) {
         case FETCH_EXCHANGE_DATA:
         case FETCH_CLASS:
+            if (!exchange) {
+                return {}
+            }
             if (exchange) {
                 return {
-                    ...state,
                     ...exchange,
                     classIsVerified: classIsVerified(exchange.classRole, exchange)
                 };

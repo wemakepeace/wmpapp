@@ -109,7 +109,6 @@ const signup = data => {
                 dispatch(signupSuccess(teacher, feedback));
             },
             (error) => {
-                // TODO handle error messages
                 const feedback = error.response.data.feedback;
                 dispatch({ type: SEND_FEEDBACK, feedback});
             })
