@@ -76,9 +76,9 @@ class ClassFormsContainer extends Component {
         this.props.saveClass(classData, schoolData);
     }
 
-    componentWillReceiveProps({ currentClass }) {
+    componentWillReceiveProps({ currentClass, feedback }) {
         // don't update state if we are in the process of creating a new class
-        if (!currentClass || !currentClass.id) return
+        if (feedback && feedback.type) return
         // do update state if the currentClass is different from the previous class
         if (currentClass && (currentClass.id !== this.state.class.id)) {
             this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
@@ -117,8 +117,8 @@ class ClassFormsContainer extends Component {
     }
 }
 
-const mapStateToProps = ({ teacher, currentClass }) => {
-    return { teacher, currentClass };
+const mapStateToProps = ({ teacher, currentClass, feedback }) => {
+    return { teacher, currentClass, feedback };
 };
 
 const toBeDispatched = { saveClass, removeCurrentClass };
