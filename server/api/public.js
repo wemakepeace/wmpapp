@@ -14,7 +14,6 @@ const {
     createToken,
     validatePassword } = require('../utils/security');
 
-
 app.post('/create', (req, res, next) => {
     let { data } = req.body;
     const { password, confirmPassword } = data;
