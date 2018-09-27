@@ -76,5 +76,12 @@ app.set('port', port);
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 
 // if (process.env.ENV === 'development') {
-    seed();
+    // seed();
 // }
+
+
+if (process.env.NODE_ENV !== 'test') {
+    seed();
+}
+
+module.exports = app;
