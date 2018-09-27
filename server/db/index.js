@@ -218,15 +218,8 @@ const seed = () => {
                 return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises])
                 .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
                 .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
-                .catch(error => {
-                    console.log('error', error)
-                    throw new Error(error)
-                })
-            })
-            .catch(error => {
-                console.log('error', error)
-                throw new Error(error)
-            })
+                .catch(error => throw new Error(error));
+            .catch(error => throw new Error(error));
 }
 
 module.exports = {

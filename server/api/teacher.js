@@ -17,7 +17,7 @@ const {
 app.get('/', (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const id = decodeToken(token);
-    console.log('==========being called id', id)
+
     return Teacher.getTeacherAndAssociations(id)
         .then((teacher) => {
             if (!teacher){
