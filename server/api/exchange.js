@@ -27,14 +27,14 @@ app.post('/', (req, res, next) => {
     })
     .then((_class) => {
         return Exchange.findMatch(_class)
-        .then(exchange => {
+        .then((exchange) => {
             // If match is found, _class will have classRole = 'receiver'
             if (exchange) {
                 return conn.transaction((t) => {
                     return exchange.setReceiver(_class, { transaction: t })
-                    .then(exchange => exchange.setStatus('pending', t))
-                    .then(exchange => exchange.setVerificationExpiration(t))
-                    .then(exchange => {
+                    .then((exchange) => exchange.setStatus('pending', t))
+                    .then((exchange) => exchange.setVerificationExpiration(t))
+                    .then((exchange) => {
                         // At this point exchange.sender will be the matching class
                         const classData = _class.dataValues;
                         const matchClass = exchange.dataValues.sender.dataValues;

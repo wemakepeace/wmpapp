@@ -21,14 +21,14 @@ const sendEmail = (res, mailOptions) => {
         return smtpTransport.sendMail(mailOptions, function(error, response) {
 
             if (error) {
-                console.log('error', error)
+                console.log('error', error);
                 error.defaultError = 'Something went wrong when. Please try again.';
-                reject(error)
+                reject(error);
             }
-            console.log('response', response)
-            resolve(response)
+            console.log('response', response);
+            resolve(response);
         });
-    })
+    });
 };
 
 module.exports = {

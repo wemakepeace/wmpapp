@@ -46,11 +46,12 @@ const School = conn.define('school', {
 School.afterCreate((school) => {
     return getCoordinates(school)
     .then((data) => {
-        return data.location
+        return data.location;
     })
     .then((coordinates) => {
         school.lat = coordinates.lat;
         school.lng = coordinates.lng;
+        school.save();
     });
 });
 

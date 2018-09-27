@@ -169,8 +169,16 @@ const classes = [
         termId: 2,
         ageGroupId: 2,
         schoolId: 5
+    },
+    {
+        teacherId: 2,
+        name: '1Z',
+        size: 28,
+        termId: 2,
+        ageGroupId: 2,
+        schoolId: 4
     }
-]
+];
 
 const date = new Date();
 const expires = date.setDate(date.getDate() + 7);
@@ -202,8 +210,7 @@ const exchanges = [
         status: 'initiated',
         senderId: 6
     }
-]
-
+];
 
 const sync = () => conn.sync({ force: true, logging: console.log });
 
@@ -219,7 +226,7 @@ const seed = () => {
             })
             .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
             .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
-            .catch(error => console.log('error', error))
+            .catch(error => console.log('error', error));
 }
 
 module.exports = {

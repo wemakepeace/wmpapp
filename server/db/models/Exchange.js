@@ -25,7 +25,8 @@ const Exchange = conn.define('exchange', {
 });
 
 
-/*  Exchange statuses:
+/*
+ * Exchange statuses:
  *  - initiated
  *  - pending
  *  - confirmed
@@ -116,7 +117,7 @@ Exchange.findMatch = function(_class) {
         } else {
             return null;
         }
-    })
+    });
 }
 
 
