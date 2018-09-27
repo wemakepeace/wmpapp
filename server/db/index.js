@@ -215,11 +215,18 @@ const seed = () => {
                 const termPromises = termData.map(term => Term.create(term));
                 const schoolPromises = schools.map(school => School.createOrUpdate(school));
 
-                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
+                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises])
+                .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
+                .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
+                .catch(error => {
+                    console.log('error', error)
+                    throw new Error(error)
+                })
             })
-            .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
-            .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
-            .catch(error => console.log('error', error))
+            .catch(error => {
+                console.log('error', error)
+                throw new Error(error)
+            })
 }
 
 module.exports = {
