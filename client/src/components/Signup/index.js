@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FormContainer from '../reusables/FormContainer';
 import CustomButton from '../reusables/CustomButton';
-import Feedback from '../Feedback';
 import { signup } from '../../redux/actions/teacher';
 import { LoginSignupInput } from '../reusables/LoginSignupInput';
 
@@ -33,15 +32,8 @@ const inputs = [
 ];
 const Form = FormContainer({ Input: LoginSignupInput, CustomButton: SignupButton });
 
-const SignupContainer = ({ signup, feedback }) => {
-    const onSubmit = (data) => {
-        return signup(data)
-            .then(({ feedback: { type } }) => {
-                if (type === 'success') {
-                    history.push('/profile/overview');
-                }
-            });
-    }
+const SignupContainer = ({ signup }) => {
+    const onSubmit = (data) => signup(data);
 
     return (
         <div className='login-signup-form'>

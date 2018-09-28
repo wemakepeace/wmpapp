@@ -15,6 +15,7 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
         state,
         country
     } = school;
+
     const schoolDropdownValue = !schoolName
         ? { label: 'New address', id: 'newaddress' }
         : { label: schoolName, value: id };
