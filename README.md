@@ -41,8 +41,8 @@ select * from [tablename];
 
 ### Features
 
-###Login
-###Signup: Validates passwords (Minimum 8 characters)
+#### Login
+#### Signup: Validates passwords (Minimum 8 characters)
 Forgot password: Link with token gets sent to email (if email exist in database), and user can reset password by clicking link as long as token remains valid. Sends email notification if password is changed for security measure.
 
 ###Create teacher profile
