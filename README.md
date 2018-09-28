@@ -97,6 +97,9 @@ AWS EC2 instance, RDS/PostgreSQL database, S3 data storage
 * [Webpack](https://webpack.js.org/) - Module bundler
 
 
+## Feedback
+We welcome any feedback, on product or code or both! Please email exhange@wemakepeace.org
+
 ## Authors
 
 * **Kris Alnes** - *Initial work* - [kjalnes](https://github.com/kjalnes)
