@@ -42,16 +42,20 @@ select * from [tablename];
 ### Features
 
 #### Login
-#### Signup:
-Validates passwords (Minimum 8 characters)
-Forgot password: Link with token gets sent to email (if email exist in database), and user can reset password by clicking link as long as token remains valid. Sends email notification if password is changed for security measure.
+Token based login. Email is username and password needed.
+
+#### Forgot password
+Link with token gets sent to email (if email exist in database), and user can reset password by clicking link as long as token remains valid. Sends email notification if password is changed for security measure.
+
+#### Signup
+Only emails that have not been registered before.
+Validates passwords (Minimum 8 characters).
 
 #### Create teacher profile
 Teacher details: First name, last name, email, phone number
 Change password: Requires current password, and sends email notification if password is changed for security measure.
 
 Delete account: GDPR compliant. User can delete all information. Deleting teacher profile will also delete all classes registered by teacher, and set the status of any current exchanges (that are not completed)  to ‘cancelled’, and notify the teachers of the exchanging classes via email.
-
 
 #### Register class
 Teacher can register as many classes as they wish, and teacher can manage their enrolled classes in the same teacher profile.
@@ -66,7 +70,6 @@ When a class is initiates an exchange, there are two possible scenarios:
 1. Match is made:
 If there is a class match, the exchange status will be set to ‘PENDING’, and the two teachers of the exchanging classes will be emailed and given one week to confirm the participation. This can be done on the Overview page by clicking a button that says ‘Confirm Participation’.
 Once both teachers confirm, the exchange status will be set to ‘CONFIRMED’ and the teachers will be granted access to the materials. The materials will then be available under the main menu.
-
 In the case that one of the teachers of a match does not confirm the participation, that class will be removed from that exchange, and the exchange status will be set to ‘INITIATED’ so that the class that did confirm will keep the opportunity to be matched with a different class.
 
 2. A match is not made:
