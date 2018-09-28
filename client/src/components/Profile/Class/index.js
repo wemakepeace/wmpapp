@@ -36,7 +36,7 @@ class ClassFormsContainer extends Component {
             }
         };
 
-        if (currentClass && currentClass.id) {
+        if (currentClass && currentClass.name) {
             defaultState.class = { ...currentClass };
         }
 
@@ -58,7 +58,10 @@ class ClassFormsContainer extends Component {
     }
 
     fetchSchool = (ev) => {
+        console.log('ev', ev)
         if (!ev || ev.value === 'newaddress') {
+            console.log('ev.value', ev.value)
+            console.log(this.state.class)
             this.setState(this.getDefaultStateOrProps(this.state.class))
         } else {
             const schoolId = ev.value;
