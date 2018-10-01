@@ -46,9 +46,9 @@ class ClassFormsContainer extends Component {
         }
 
         return defaultState;
-    }
+    };
 
-    componentWillReceiveProps({ currentClass, feedback }) {
+    componentWillReceiveProps = ({ currentClass, feedback }) => {
         // don't update state if we are in the process of creating a new class
         if (feedback && feedback.type === 'error') {
             return this.setState({ loading: false });
@@ -57,7 +57,7 @@ class ClassFormsContainer extends Component {
     }
 
     onInputChange = (value, key, objName) => {
-
+        // objName is either class or school
         this.setState({
             [ objName ]: {
                 ...this.state[ objName ],
@@ -67,14 +67,14 @@ class ClassFormsContainer extends Component {
     }
 
     fetchSchool = (ev) => {
+        // keep state if user choses 'new address' from school dropdown
+        // in the middle of filling out forms
         if (!ev || ev.value === 'newaddress') {
             this.setState(this.getDefaultStateOrProps(this.state.class))
         } else {
             const schoolId = ev.value;
             return axios.get(`/school/${schoolId}`)
-            .then(({ data }) => {
-                this.setState({ school: data })
-            });
+                .then(({ data }) => this.setState({ school: data }));
         }
     }
 
@@ -87,7 +87,7 @@ class ClassFormsContainer extends Component {
     }
 
 
-    toggleLoader() {
+    toggleLoader = () =>{
         this.setState({ loading: !this.state.loading });
     }
 
@@ -125,8 +125,8 @@ class ClassFormsContainer extends Component {
                 </div>
             </div>
         );
-    }
-}
+    };
+};
 
 const mapStateToProps = ({ teacher, currentClass, feedback }) => {
     return { teacher, currentClass, feedback };

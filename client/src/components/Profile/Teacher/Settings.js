@@ -27,7 +27,7 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     render() {
-        const { deleteTeacher, toggleWarningModal, onChangePassword } = this.props;
+        const { toggleWarningModal, onChangePassword } = this.props;
         const { activeIndex } = this.state
 
         return (

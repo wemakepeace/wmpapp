@@ -90,6 +90,7 @@ class TeacherFormContainer extends Component {
             loader,
             modal
         } = this.state;
+        const { deleteTeacher, history } = this.props;
 
         const fields = [
             {
@@ -121,12 +122,6 @@ class TeacherFormContainer extends Component {
         };
 
         const modalContent = {
-            isDeleted: {
-                header: 'Your account has been deleted.',
-                buttonText1: 'Go to Home Page',
-                closable: false,
-                action: () => this.props.history.push('/')
-            },
             showWarningModal: {
                 header: 'Are you sure you want to delete your account?',
                 content: 'This action is unreversible. If you delete your profile you will lose all your information and you will not be able to login at a later time. All your registered classes and active exchanges will also be deleted. If any of your classes are currently enrolled in an exchange, please notify and explain to the teacher of the other class your reasons for ending the exchange.',
@@ -135,16 +130,22 @@ class TeacherFormContainer extends Component {
                 closeAction: () => this.toggleModal(false, 'showWarningModal'),
                 action: () => {
                     this.toggleLoader('deletingAccount');
-                    this.props.deleteTeacher();
+                    deleteTeacher();
                 }
+            },
+            isDeleted: {
+                header: 'Your account has been deleted.',
+                buttonText1: 'Go to Home Page',
+                closable: false,
+                action: () => history.push('/')
             }
         }
 
         return (
             <div>
                 <LoaderWithText
-                    text={loaderContent[ loader.loaderType ]}
                     loading={loader.isOpen}
+                    text={loaderContent[ loader.loaderType ]}
                 />
                 <FullscreenModal
                     open={modal.isOpen}
@@ -156,31 +157,30 @@ class TeacherFormContainer extends Component {
                     { fields.map((field) => (
                         <Input
                             {...field}
-                            onInputChange={this.onInputChange}
                             key={field.name}
+                            onInputChange={this.onInputChange}
                         />)) }
                     <div className='form-row'>
                         <Button
-                            className='large-custom-btn'
                             size='large'
+                            className='large-custom-btn'
                             onClick={()=>this.onSubmit()}>Save</Button>
                     </div>
                 </div>
                 <Settings
-                    deleteTeacher={this.props.deleteTeacher}
                     toggleWarningModal={this.toggleModal.bind(this)}
                     onChangePassword={this.onChangePassword.bind(this)}
                 />
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
 const mapStateToProps = (state) => {
     return {
         teacher: state.teacher
-    }
-}
+    };
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -188,7 +188,7 @@ const mapDispatchToProps = (dispatch) => {
         clearFeedback: () => dispatch(clearFeedback()),
         deleteTeacher: () => dispatch(deleteTeacher()),
         changePassword: (data) => dispatch(changePassword(data))
-    }
-}
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeacherFormContainer);
