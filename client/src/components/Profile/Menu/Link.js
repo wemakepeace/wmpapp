@@ -1,13 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const MenuLink = ({ name, route, defaultChildRoute, match: { url }, location: { pathname } }) => {
-    const getActiveClass = (_route) => pathname.indexOf(_route) > -1 ? 'active-profile' : '';
+export const MenuLink = (props) => {
+
+    const {
+        name,
+        route,
+        defaultChildRoute,
+        match: { url },
+        location: { pathname }
+    } = props;
+
     const routeTo = defaultChildRoute ?
         `${url}/${route}/${defaultChildRoute}` :
         `${url}/${route}`;
 
+    const getActiveClass = (_route) => {
+        return pathname.indexOf(_route) > -1 ? 'active-profile' : '';
+    }
+
     let _class = `profile-menu-item ${getActiveClass(route)}`;
+
     if (name === 'Support') {
         _class += ' last-item';
     }

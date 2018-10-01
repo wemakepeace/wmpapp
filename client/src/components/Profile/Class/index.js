@@ -124,8 +124,8 @@ class ClassFormsContainer extends Component {
                             onClick={this.submitData}>SAVE</Button>
                     </div>
                     { currentClass && currentClass.id ?
-                        <Message>
-                            If you have not yet enrolled your class in the program, please follow the instructions on the <Link to='/#/profile/overview/'>Overview</Link> page.
+                        <Message size='large' color='yellow'>
+                            You can initiate and manage your class' exchange participation on the <Link to='/#/profile/overview/'>Overview</Link> page.
                         </Message> : null
                     }
                 </div>

@@ -33,7 +33,10 @@ const exchange = (state=initialState, { type, exchange }) => {
 
             return {};
         case FETCH_LETTER_URLS:
-            return { ...state, ...exchange }
+            return {
+                ...state,
+                ...exchange
+            }
         case LOGOUT_SUCCESS:
         case USER_DELETED:
             return {};

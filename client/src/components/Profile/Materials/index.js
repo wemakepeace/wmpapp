@@ -47,12 +47,14 @@ class Materials extends Component  {
     state = {}
 
     componentDidMount = () => {
-        return this.props.fetchLetterTemplates()
-        .then(() => {
-            if (this.props.history.location.pathname === '/profile/materials') {
-                this.props.history.push('materials/instructions');
-            }
-        });
+        if (!this.props.exchange.letterURLs) {
+            return this.props.fetchLetterTemplates()
+            .then(() => {
+                if (this.props.history.location.pathname === '/profile/materials') {
+                    this.props.history.push('materials/instructions');
+                }
+            });
+        }
     }
 
     render() {
