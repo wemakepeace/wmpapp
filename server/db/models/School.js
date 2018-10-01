@@ -66,8 +66,6 @@ School.beforeUpdate((school, options) => {
 
 // Will either create a new school instance or update an existing school
 School.createOrUpdate = function(schoolData, t) {
-    console.log('schoolData.id', schoolData.id)
-    console.log('schoolData', schoolData)
     if (!schoolData.id) {
         return School.create(schoolData, { transaction: t });
     } else {
