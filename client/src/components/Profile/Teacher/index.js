@@ -6,8 +6,12 @@ import Settings from './Settings';
 import { Input } from '../../reusables/Input';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import FullscreenModal from '../../reusables/FullscreenModal';
-import { updateTeacher, deleteTeacher, changePassword } from '../../../redux/actions/teacher';
 import { clearFeedback } from '../../../redux/actions/shared';
+import {
+    updateTeacher,
+    deleteTeacher,
+    changePassword
+} from '../../../redux/actions/teacher';
 
 class TeacherFormContainer extends Component {
     constructor(props) {
@@ -23,49 +27,58 @@ class TeacherFormContainer extends Component {
             email: '',
             phone: '',
             password: '',
-            idDeleting: false,
-            isDeleted: false,
-            showDeleteWarningModal: false,
-            isChangingPassword: false
+            loader: {
+                isOpen: false,
+                loaderType: 'savingData'
+            },
+            modal: {
+                isOpen: false,
+                modalType: 'showWarningModal'
+            }
         };
 
         if (teacher && teacher.id) {
             defaultState = {
-                ...teacher,
-                isDeleting: false,
-                isDeleted: false,
-                showDeleteWarningModal: false,
-                isChangingPassword: false
+                ...defaultState,
+                ...teacher
             };
         }
         return defaultState;
     }
 
     componentWillReceiveProps = ({ teacher, feedback }) => {
-
         if (feedback && feedback.type === 'deleted') {
-            return this.setState({ isDeleted: true, isDeleting: false });
+            return this.setState({
+                loader: { isOpen: false },
+                modal: {
+                    isOpen: true,
+                    modalType:
+                    'isDeleted'
+                }
+            });
         } else if (teacher && (teacher !== this.state)) {
             return this.setState(this.getDefaultStateOrProps(teacher));
         }
 
-        this.setState({ isChangingPassword: false });
+        this.setState({ loader: { isOpen: false } });
     }
 
     onChangePassword = (data) => {
-        this.toggleLoader('isChangingPassword');
+        this.toggleLoader('changingPassword');
         this.props.changePassword(data);
     }
 
     onSubmit = () => {
         const data = this.state;
-        data.className = this.props.teacher.classes.name;
+        this.toggleLoader('savingData');
         this.props.updateTeacher(data);
     }
 
     onInputChange = (value, key) => this.setState({ [ key ]: value })
 
-    toggleLoader = (state) => this.setState({ [ state ]: true })
+    toggleLoader = (loaderType) => this.setState({ loader: { isOpen: true, loaderType } })
+
+    toggleModal = (isOpen, modalType) => this.setState({ modal: { isOpen, modalType } })
 
     render() {
         const {
@@ -74,10 +87,8 @@ class TeacherFormContainer extends Component {
             email,
             phone,
             password,
-            isDeleting,
-            isDeleted,
-            showDeleteWarningModal,
-            isChangingPassword
+            loader,
+            modal
         } = this.state;
 
         const fields = [
@@ -103,38 +114,42 @@ class TeacherFormContainer extends Component {
             },
         ];
 
+        const loaderContent = {
+            savingData: 'Saving...',
+            changingPassword: 'Changing your password...',
+            deletingAccount: 'Deleting your account...'
+        };
+
+        const modalContent = {
+            isDeleted: {
+                header: 'Your account has been deleted.',
+                buttonText1: 'Go to Home Page',
+                closable: false,
+                action: () => this.props.history.push('/')
+            },
+            showWarningModal: {
+                header: 'Are you sure you want to delete your account?',
+                content: 'This action is unreversible. If you delete your profile you will lose all your information and you will not be able to login at a later time. All your registered classes and active exchanges will also be deleted. If any of your classes are currently enrolled in an exchange, please notify and explain to the teacher of the other class your reasons for ending the exchange.',
+                buttonText1: 'Yes, delete my account',
+                button1Color: 'red',
+                closeAction: () => this.toggleModal(false, 'showWarningModal'),
+                action: () => {
+                    this.toggleLoader('deletingAccount');
+                    this.props.deleteTeacher();
+                }
+            }
+        }
+
         return (
             <div>
                 <LoaderWithText
-                    text='Changing your password'
-                    loading={isChangingPassword}
+                    text={loaderContent[ loader.loaderType ]}
+                    loading={loader.isOpen}
                 />
-                <LoaderWithText
-                    loading={isDeleting}
-                    text='Deleting your account...'
+                <FullscreenModal
+                    open={modal.isOpen}
+                    {...modalContent[ modal.modalType ]}
                 />
-                { isDeleted ?
-                    <FullscreenModal
-                        open={isDeleted}
-                        header='Your account has been deleted.'
-                        buttonText1='Go to Home Page'
-                        closable={false}
-                        action={() => this.props.history.push('/')}
-                    /> : null }
-                { showDeleteWarningModal ?
-                    <FullscreenModal
-                        open={showDeleteWarningModal}
-                        header='Are you sure you want to delete your account?'
-                        content='This action is unreversible. If you delete your profile you will lose all your information and you will not be able to login at a later time. All your registered classes and active exchanges will also be deleted. If any of your classes are currently enrolled in an exchange, please notify and explain to the teacher of the other class your reasons for ending the exchange. '
-                        buttonText1='Yes, delete my account'
-                        button1Color='red'
-                        closeAction={() => this.setState({ showDeleteWarningModal: false })}
-                        action={() => {
-                            this.toggleLoader('isDeleting');
-                            this.props.deleteTeacher();
-
-                        }}
-                    /> : null }
                 <div className='profile-segment'>
                     <h2>Teacher Information</h2>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
@@ -153,7 +168,7 @@ class TeacherFormContainer extends Component {
                 </div>
                 <Settings
                     deleteTeacher={this.props.deleteTeacher}
-                    toggleLoader={this.toggleLoader.bind(this)}
+                    toggleWarningModal={this.toggleModal.bind(this)}
                     onChangePassword={this.onChangePassword.bind(this)}
                 />
             </div>

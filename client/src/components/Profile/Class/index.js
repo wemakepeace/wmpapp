@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Button } from 'semantic-ui-react';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
+import { LoaderWithText } from '../../reusables/LoaderWithText';
 import { saveClass, removeCurrentClass } from '../../../redux/actions/class';
-
 
 class ClassFormsContainer extends Component {
     constructor(props) {
@@ -33,7 +33,8 @@ class ClassFormsContainer extends Component {
                 zip: '',
                 state: '',
                 country: ''
-            }
+            },
+            loading: false
         };
 
         if (currentClass && currentClass.name) {
@@ -45,6 +46,14 @@ class ClassFormsContainer extends Component {
         }
 
         return defaultState;
+    }
+
+    componentWillReceiveProps({ currentClass, feedback }) {
+        // don't update state if we are in the process of creating a new class
+        if (feedback && feedback.type === 'error') {
+            return this.setState({ loading: false });
+        }
+        this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
     }
 
     onInputChange = (value, key, objName) => {
@@ -73,19 +82,25 @@ class ClassFormsContainer extends Component {
         let classData = this.state.class;
         let schoolData = this.state.school;
         classData.teacherId = this.props.teacher.id;
+        this.toggleLoader();
         this.props.saveClass(classData, schoolData);
     }
 
-    componentWillReceiveProps({ currentClass, feedback }) {
-        // don't update state if we are in the process of creating a new class
-        if (feedback && feedback.type === 'error') return
-        this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
+
+    toggleLoader() {
+        this.setState({ loading: !this.state.loading });
     }
 
     render() {
         const { currentClass, teacher: { id } } = this.props;
+        const { loading } = this.state;
+
         return (
             <div className='profile-segment'>
+                <LoaderWithText
+                    loading={loading}
+                    text='Saving...'
+                />
                 <div>
                     { currentClass && currentClass.id ?
                         <h2>Information & Settings for Class {currentClass.name}</h2> :

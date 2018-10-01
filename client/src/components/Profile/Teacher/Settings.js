@@ -27,7 +27,7 @@ class Settings extends Component {
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
     render() {
-        const { deleteTeacher, toggleLoader, onChangePassword } = this.props;
+        const { deleteTeacher, toggleWarningModal, onChangePassword } = this.props;
         const { activeIndex } = this.state
 
         return (
@@ -52,7 +52,7 @@ class Settings extends Component {
                         </p>
                         <Button
                             onClick={() => {
-                                toggleLoader('showDeleteWarningModal');
+                                toggleWarningModal(true, 'showWarningModal');
                             }}
                             negative>Delete Account</Button>
                     </Accordion.Content>
