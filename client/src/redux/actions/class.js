@@ -42,6 +42,7 @@ const removeCurrentClass = () => {
  */
 
 const saveClass = (classData, schoolData) => {
+    schoolData.country = schoolData.country.value || schoolData.country;
     return dispatch => {
         return axios.post(`/class`, { classData, schoolData })
         .then(response => response.data)

@@ -49,7 +49,6 @@ const logout = (id) => {
 
 
 const sendResetPasswordLink = email => {
-    console.log('email', email)
     return dispatch => {
         return axios.post('/public/resetrequest', email)
         .then(

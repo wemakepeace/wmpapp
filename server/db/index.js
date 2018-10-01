@@ -64,7 +64,7 @@ const schools = [
         zip: '6017',
         city: 'Ålesund',
         state: null,
-        country: { value: 'NO' }
+        country: 'NO'
     },
     {
         schoolName: 'PS 66',
@@ -72,7 +72,7 @@ const schools = [
         zip: '06340',
         city: 'Groton',
         state: 'CT',
-        country: { value: 'US' }
+        country: 'US'
     },
     {
         schoolName: 'Lerstad Barneskole',
@@ -81,7 +81,7 @@ const schools = [
         zip: '6014',
         city: 'Ålesund',
         state: 'Møre og Romsdal',
-        country: { value: 'NO' }
+        country: 'NO'
     },
     {
         schoolName: 'Enghaveskolen',
@@ -90,7 +90,7 @@ const schools = [
         zip: '5200',
         city: 'Odense',
         state: '',
-        country: { value: 'DK' }
+        country: 'DK'
     },
     {
         schoolName: 'Trinity Primary and Preschool',
@@ -99,7 +99,7 @@ const schools = [
         zip: '',
         city: 'Kampala',
         state: '',
-        country: { value: 'UG' }
+        country: 'UG'
     }
 ];
 

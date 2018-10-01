@@ -58,10 +58,7 @@ class ClassFormsContainer extends Component {
     }
 
     fetchSchool = (ev) => {
-        console.log('ev', ev)
         if (!ev || ev.value === 'newaddress') {
-            console.log('ev.value', ev.value)
-            console.log(this.state.class)
             this.setState(this.getDefaultStateOrProps(this.state.class))
         } else {
             const schoolId = ev.value;
@@ -81,16 +78,12 @@ class ClassFormsContainer extends Component {
 
     componentWillReceiveProps({ currentClass, feedback }) {
         // don't update state if we are in the process of creating a new class
-        if (feedback && feedback.type) return
-        // do update state if the currentClass is different from the previous class
-        if (currentClass && (currentClass.id !== this.state.class.id)) {
-            this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
-        }
+        if (feedback && feedback.type === 'error') return
+        this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
     }
 
     render() {
         const { currentClass, teacher: { id } } = this.props;
-
         return (
             <div className='profile-segment'>
                 <div>
