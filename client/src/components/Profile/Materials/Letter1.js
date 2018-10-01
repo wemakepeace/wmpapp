@@ -200,6 +200,9 @@ const StepFive = () => {
 
 const Letter1 = ({ letterURLs, classRole }) => {
     // letter1 is slightly different depending on classRole
+
+    console.log('classRole', classRole)
+    console.log('specialContent[ classRole ]()', specialContent[ classRole ]())
     const letterURL = letterURLs && letterURLs.letter1[ classRole ];
     return (
         <div>

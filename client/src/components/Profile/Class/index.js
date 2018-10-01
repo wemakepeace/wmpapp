@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Button, Message } from 'semantic-ui-react';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
@@ -122,6 +123,11 @@ class ClassFormsContainer extends Component {
                             size='large'
                             onClick={this.submitData}>SAVE</Button>
                     </div>
+                    { currentClass && currentClass.id ?
+                        <Message>
+                            If you have not yet enrolled your class in the program, please follow the instructions on the <Link to='/#/profile/overview/'>Overview</Link> page.
+                        </Message> : null
+                    }
                 </div>
             </div>
         );
