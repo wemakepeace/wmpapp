@@ -37,6 +37,11 @@ psql
 \c wmp
 select * from [tablename];
 ```
+
+BDD Testing
+```
+npm run test
+```
 ## About the app
 
 ### Features

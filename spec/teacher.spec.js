@@ -3,6 +3,7 @@ const request = require('supertest');
 const should = require('should');
 
 let token;
+let id;
 
 beforeAll((done) => {
   request(app)
@@ -15,6 +16,7 @@ beforeAll((done) => {
     .end((err, response) => {
         if (err) return done(err);
         token = response.body.token; // save the token
+        id = response.body.teacher.id;
         done();
     });
 });
@@ -81,7 +83,30 @@ describe('GET /teacher', () => {
     });
 });
 
+describe('PUT /teacher', () => {
+    it('Updates first name and last name', function(done) {
+        return request(app)
+            .put('/teacher')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                firstName: 'Super',
+                lastName: 'Mario',
+                id: id
+            })
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect(firstNameIsSuper)
+            .expect(lastNameIsMario)
+            .end(function(err, response) {
+                if (err) return done(err);
+                done();
+            });
+    });
+});
+
 const hasTeacher = ({ body }) => body.should.have.property('teacher');
 const hasFirstName = ({ body: { teacher } }) => teacher.should.have.property('firstName');
 const hasLastName = ({ body: { teacher } }) => teacher.should.have.property('lastName');
-const doesNotHavePassword = ({ body }) => body.teacher.should.not.have.property('password');
+const doesNotHavePassword = ({ body: teacher }) => teacher.should.not.have.property('password');
+const firstNameIsSuper = ({ body: teacher }) => teacher.firstName === 'Super';
+const lastNameIsMario = ({ body: teacher }) => teacher.lastName === 'Mario';

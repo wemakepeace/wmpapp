@@ -35,6 +35,7 @@ app.post('/', (req, res, next) => {
                     .then((exchange) => exchange.setStatus('pending', t))
                     .then((exchange) => exchange.setVerificationExpiration(t))
                     .then((exchange) => {
+                        console.log('exchange======', exchange)
                         // At this point exchange.sender will be the matching class
                         const classData = _class.dataValues;
                         const matchClass = exchange.dataValues.sender.dataValues;

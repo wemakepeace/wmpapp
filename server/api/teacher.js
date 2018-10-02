@@ -38,8 +38,9 @@ app.get('/', (req, res, next) => {
 
 app.put('/', (req, res, next) => {
     let data = req.body;
-    const { id } = data;
-    data.email = req.body.email.toLowerCase();
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const id = decodeToken(token);
+    if (data && data.email) data.email = req.body.email.toLowerCase();
 
     Teacher.findById(id)
     .then(user => {

@@ -4,7 +4,7 @@ const should = require('should');
 const uuid = require('uuid/v1');
 
 describe('POST /public', () => {
-    it('Succeeds when credentials are correct', function(done) {
+    it('Login succeeds when credentials are correct', function(done) {
         request(app)
         .post('/public/login')
         .send({ email: 'k@m.com', password: 'z' })
@@ -66,7 +66,7 @@ describe('POST /public', () => {
         .post('/public/create')
         .send({
             data: {
-                email: 't@m.com',
+                email: 'tom@m.com',
                 password: '',
                 confirmPassword: '',
                 firstName: 'Leo',
@@ -130,7 +130,6 @@ describe('POST /public', () => {
         .set('Accept', 'application/json')
         .expect(200)
         .end(function(err, res) {
-            console.log('res', res)
             if (err) return done(err);
                 done();
         });
