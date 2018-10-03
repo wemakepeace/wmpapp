@@ -26,7 +26,11 @@ app.get('/agegroups', (req, res, next) => {
 });
 
 app.get('/terms', (req, res, next) => {
-    return Term.findAll()
+    return Term.findAll({ where: {
+        expires: {
+            $gt: new Date()
+        }
+    }})
         .then(terms => {
             const data = terms.map(term => {
                 return {

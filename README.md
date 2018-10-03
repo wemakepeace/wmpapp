@@ -58,6 +58,8 @@ Validates passwords (Minimum 8 characters).
 
 #### Create teacher profile
 Teacher details: First name, last name, email, phone number
+
+#### Account Settings
 Change password: Requires current password, and sends email notification if password is changed for security measure.
 
 Delete account: GDPR compliant. User can delete all information. Deleting teacher profile will also delete all classes registered by teacher, and set the status of any current exchanges (that are not completed)  to ‘cancelled’, and notify the teachers of the exchanging classes via email.

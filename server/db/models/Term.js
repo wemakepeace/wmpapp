@@ -4,7 +4,8 @@ const Sequelize = conn.Sequelize;
 const Term = conn.define('term', {
     name: {
         type: Sequelize.STRING
-    }
+    },
+    expires: Sequelize.DATE
 });
 
 Term.prototype.formatForSelect = function() {
