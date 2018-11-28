@@ -9,14 +9,10 @@
     -moz-transition: background-color 1s ease;
     -o-transition: background-color 1s ease;
     transition: background-color 1s ease;
-    a {
-        color: #fff;
-    }
+    color: #fff;
 }
 
 .roll-button:hover {
     background-color: transparent;
-    a {
-        color: $pink;
-    }
+    color: $pink;
 }

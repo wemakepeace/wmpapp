@@ -28,13 +28,6 @@ const specialContent = {
                         <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
                     </ul>
                 </Message>
-                <h4>Steps</h4>
-                <ul>
-                    <li>Step 1 - Lesson: Reading the letters</li>
-                    <li>Step 2 - Lesson: Questions for your letter friend</li>
-                    <li>Step 3 - Writing the letters</li>
-                    <li>Step 4 - Wait to receive Letter 2 from the other class</li>
-                </ul>
             </div>
         )
     },
@@ -48,13 +41,6 @@ const specialContent = {
                         <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
                     </ul>
                 </Message>
-                <h4>Steps</h4>
-                <ul>
-                    <li>Step 1 - Reading the letters</li>
-                    <li>Step 2 - Writing the letters</li>
-                    <li>Step 3 - Mailing the letters</li>
-                    <li>Step 4 - Wait to receive Letter 3 from the other class</li>
-                </ul>
             </div>
         )
     }
@@ -172,15 +158,17 @@ const Letter2 = ({ letterURLs, classRole }) => {
     const letterURL = letterURLs && letterURLs.letter2;
     return (
         <div>
-            <OverviewTable content={tableContent} />
-            <hr style={{margin: '20px 0'}}/>
+            <h1>Instructions Letter 2</h1>
+            <p>Download and print the letter template and follow the instructions below for writing and sending the second letter.</p>
             { specialContent[ classRole ]()}
             <div className='div-centered-content'>
-                <button className='roll-button'>
-                    <a href={letterURL} target='_blank'>
-                    <Icon name='download'/>Download Letter 2 Template</a>
-                </button>
+                <a href={letterURL} target='_blank'>
+                    <button className='roll-button'>
+                        <Icon name='download'/>Download Letter 2 Template
+                    </button>
+                </a>
             </div>
+            <OverviewTable content={tableContent} />
             <hr style={{margin: '20px 0'}}/>
             { classRole === 'sender' ? <StepOneSender /> : <StepOneReceiver /> }
             <hr style={{margin: '20px 0'}}/>

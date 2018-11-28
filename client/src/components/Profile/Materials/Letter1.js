@@ -25,14 +25,14 @@ const specialContent = {
                         <li>It is important that the students write their own name clearly in the Letter.</li>
                     </ul>
                 </Message>
-                <h4>Steps</h4>
+                {/*<h4>Steps</h4>
                 <ul>
                     <li>Step 1 - Lesson: Letter writing as a genre</li>
                     <li>Step 2 - Lesson: Questions for your letter friend</li>
                     <li>Step 3 - Writing Letter 1</li>
                     <li>Step 4 - Mailing the letters</li>
                     <li>Step 5 - Wait to receive Letter 1 from the other class</li>
-                </ul>
+                </ul>*/}
             </div>
         )
     },
@@ -46,14 +46,14 @@ const specialContent = {
                         <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
                     </ul>
                 </Message>
-                <h4>Steps</h4>
+                {/*<h4>Steps</h4>
                 <ul>
                     <li>Step 1 - Lesson: Letter writing as a genre</li>
                     <li>Step 2 - Reading Letter 1 from the other class</li>
                     <li>Step 3 - Writing Letter 1</li>
                     <li>Step 4 - Mailing the letters</li>
                     <li>Step 5 - Wait to receive Letter 2 from the other class</li>
-                </ul>
+                </ul>*/}
             </div>
         )
     }
@@ -203,15 +203,17 @@ const Letter1 = ({ letterURLs, classRole }) => {
     const letterURL = letterURLs && letterURLs.letter1[ classRole ];
     return (
         <div>
-            <OverviewTable content={tableContent} />
-            <hr style={{margin: '20px 0'}}/>
+            <h1>Instructions Letter 1</h1>
+            <p>Download and print the letter template and follow the instructions below for writing and sending the first letter.</p>
             { specialContent[ classRole ]()}
             <div className='div-centered-content'>
-                <button className='roll-button'>
-                    <a href={letterURL} target='_blank'>
-                    <Icon name='download'/>Download Letter 1 Template</a>
-                </button>
+                <a href={letterURL} target='_blank'>
+                    <button className='roll-button'>
+                        <Icon name='download'/>Download Letter 1 Template
+                    </button>
+                </a>
             </div>
+            <OverviewTable content={tableContent} />
             <hr style={{margin: '20px 0'}}/>
             <StepOne />
             <hr style={{margin: '20px 0'}}/>
