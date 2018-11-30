@@ -55,14 +55,15 @@ class OverviewContainer extends Component {
                     <p>If you need a refresher on how the program works, see <a href='//wemakepeace.org/peace-letter-program' targer='_blank'>here</a>.</p>
                 </div>
                 <div className='overview-actions'>
-                    <div>
+
                     { teacher && teacher.classes ?
-                        <React.Fragment>
-                            <h2>Select class</h2>
-                            <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
-                        </React.Fragment> : null
+                        <div>
+                            <React.Fragment>
+                                <h2>Select class</h2>
+                                <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
+                            </React.Fragment>
+                        </div>  : null
                     }
-                    </div>
                     <div>
                         <button className='roll-button'>
                             <RegisterClass history={history}/>
