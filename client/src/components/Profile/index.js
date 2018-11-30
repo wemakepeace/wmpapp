@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { Image } from 'semantic-ui-react';
 import Header from '../Header';
 import TabContent from './TabContent';
 import { Menu } from './Menu';
@@ -11,6 +12,7 @@ import Class from './Class';
 import Teacher from './Teacher';
 import Materials from './Materials';
 import Support from './Support';
+import SubHeader from './SubHeader';
 
 
 import { clearFeedback } from '../../redux/actions/shared';
@@ -55,20 +57,22 @@ class Profile extends Component {
     }
 
     render() {
-        const { match, currentClass, status, feedback } = this.props;
+        const { match, history, currentClass, status, feedback, teacher } = this.props;
         return (
             <div className='page-content'>
-                <Header {...this.props} />
+                <Header />
                 <div className='profile-column-container'>
-                    <div className='profile-menu-column'>
-                        <Menu
-                            content={content}
-                            currentClass={currentClass}
-                            status={status}
-                            {...this.props}
-                        />
-                    </div>
+                    <Menu
+                        content={content}
+                        status={status}
+                        {...this.props}
+                    />
                     <div className='profile-form-column'>
+                        <SubHeader
+                            teacher={teacher}
+                            currentClass={currentClass}
+                            history={history} />
+                        <Image className='profile-logo' src='../../../../assets/logos/WMPlogo_transparent.png' />
                         <div className='profile-form'>
                             <Route
                                 path={`${match.path}/:route`}
@@ -84,8 +88,8 @@ class Profile extends Component {
     }
 }
 
-const mapStateToProps = ({ currentClass, feedback, exchange: { status } }) => {
-    return { currentClass, feedback, status };
+const mapStateToProps = ({ currentClass, feedback, exchange: { status }, teacher }) => {
+    return { currentClass, feedback, status, teacher };
 };
 
 export default connect(mapStateToProps, { clearFeedback })(Profile);

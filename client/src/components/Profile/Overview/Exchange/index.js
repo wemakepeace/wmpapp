@@ -57,14 +57,15 @@ class Exchange extends Component {
 
         return (
             <div>
-                <hr style={{margin: '20px 0'}} />
-                <h3 style={{margin: '30px 0'}}>Exchange Details</h3>
-                <ExchangeDetails classData={currentClass} />
+                <h2>Exchange Overview for Class {currentClass.name}</h2>
                 <ExchangeStatus
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
                     status={exchange && exchange.status}
                     classIsVerified={exchange.classIsVerified}
                 />
+                {/*<hr style={{margin: '20px 0'}} />
+                <h3 style={{margin: '30px 0'}}>Exchange Details</h3>
+                <ExchangeDetails classData={currentClass} />*/}
                 { showFeedback && (feedback && feedback.type) ?
                     <Feedback {...feedback} /> : null }
             </div>

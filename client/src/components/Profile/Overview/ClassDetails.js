@@ -14,7 +14,8 @@ const ClassDetails = ({ classData, teacher, title }) => {
 
     return (
         <div>
-            <h3 style={{marginBottom: '18px'}}>{title} {classData && classData.name || null}</h3>
+            <h2>{title}</h2>
+            <h3 style={{marginBottom: '18px'}}>Class {classData && classData.name || null} from {getCountryName(school.country)}</h3>
             <div className='div-display-inline-block'>
                 <div className='inner-box-inline-block'>
                     <div>

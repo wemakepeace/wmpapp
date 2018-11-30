@@ -15,62 +15,53 @@ const exchangeStatusData = {
         buttonText: 'START EXCHANGE',
         action: "initiateExchange",
         percent: 0,
-        label: 'Not started'
+        label: 'Exchange not started'
     },
     initiated: {
         text: () => (
             <div>
-                <h3>Your class is signed up!</h3>
-                <p>Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match with.</p>
-                <p>Look out for an email and make sure to confirm the Exchange particpation once you receive an email.</p>
+                <h3>Your class has been signed up!</h3>
+                <p>Your class is signed up to participate in the Peace Letter Exchange Program, and we are currently searching for a class to match your class with.</p>
+                <p>Look out for an email and make sure to confirm the particpation in the exchange once you receive an email.</p>
             </div>
         ),
-        percent: 33,
-        label: "Initiated"
+        percent: 25,
+        label: "Your class is signed up!"
     },
     pending: {
         text: () => (
             <div>
-                <h3>We have found a match for your class!</h3>
-                <p>Please verify your class' participation within 7 days.</p>
-                <p>Thank you for participating!</p>
+                <h3>Great news! We have found a match for your class!</h3>
+                <p>Please verify your class' participation within 7 days by clicking the button below.</p>
             </div>
         ),
         buttonText: "Confirm Exchange Participation",
         action: "verifyExchange",
-        percent: 32,
-        label: "Pending"
+        percent: 50,
+        label: "Awaiting participation confirmation"
     },
     'partially confirmed': {
         text: () => (
             <div>
-                <h3>Your paritication in the program is verified!</h3>
-                <p>We are waiting for the other class to verify as well.</p>
+                <h3>Your paritication in the program is confirmed!</h3>
+                <p>We are waiting for the other class to confirm their participation as well.</p>
                 <p>Please be on the lookout for an email confirmation.</p>
+                <p>Once both classes have confirmed you will be granted access to the program materials and ready to start the exchange.</p>
             </div>
         ),
-        percent: 66,
-        label: "Partially Confirmed"
+        percent: 75,
+        label: "Waiting for the other class to confirm"
     },
     confirmed: {
         text: ()=> (
             <div>
-                <h3>You are now ready to begin the Exchange Program!</h3>
-                <p>Please see the instructions under Materials for next steps or click <a href='/#/profile/materials/instructions'>here</a>.</p>
-                <p>We ask that you read the instructions carefully.</p>
+                <h3>Congrats! You are now ready to begin the Exchange Program!</h3>
+                <p>Please see the instructions under Materials for next steps <a href='/#/profile/materials/instructions'>here</a>.</p>
+                <p>Have fun and make sure to communicate with the other teacher and most of all, have fun!</p>
             </div>
         ),
         percent: 100,
-        label: 'Confirmed'
-    },
-    completed: {
-        text: () => (
-            <div>
-                <p>Exchange completed!</p>
-            </div>
-        ),
-        percent: 100,
-        label: 'Completed'
+        label: 'Ready to begin the program!'
     }
 }
 
@@ -89,33 +80,25 @@ export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick 
     return (
         <div>
             <div className="flex-outer">
-                <div className="flex-inner-1">
-                    <div className="flex-item border">
-                        <label>Status</label>
-                    </div>
-                    <div className="flex-item status">
-                        <span className='status-span'>{status}</span>
-                    </div>
-                </div>
                 <div className="flex-inner-3">
                     <div className="flex-item border">
-                        <label>Next Steps</label>
+                        <label>Next steps</label>
                     </div>
                     <div className="flex-item">
                         {details.text()}
                     </div>
+                    <div className="flex-item">
+                        { details.buttonText && !classIsVerified ?
+                            <Button
+                                className='large-custom-btn center-btn'
+                                size='large'
+                                onClick={() => onExchangeActionClick(details.action)}>
+                                {details.buttonText}
+                            </Button> : null }
+                    </div>
                 </div>
             </div>
             <ProgressBar percent={details.percent} label={details.label} />
-            <div className="btn-wrapper">
-            { details.buttonText && !classIsVerified ?
-                <Button
-                    className='large-custom-btn center-btn'
-                    size='large'
-                    onClick={() => onExchangeActionClick(details.action)}>
-                    {details.buttonText}
-                </Button> : null }
-            </div>
         </div>
     );
 }

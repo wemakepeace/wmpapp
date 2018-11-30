@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Image } from 'semantic-ui-react';
 import Exchange from './Exchange';
 import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
+import SelectClass from '../../reusables/SelectClassDropdown';
+import RegisterClass from '../../reusables/RegisterClass';
+import { fetchClass } from '../../../redux/actions/class';
+import peaceGirlImg from '../../../../../assets/images/peacegirl.png';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
@@ -14,6 +18,10 @@ class OverviewContainer extends Component {
     state = {
         loading: false,
         action: ''
+    }
+
+     onClassSelect(selected){
+        this.props.fetchClass(selected.value);
     }
 
     toggleLoader(bool, action) {
@@ -30,11 +38,12 @@ class OverviewContainer extends Component {
 
     render() {
         const { loading, action } = this.state;
-        const { teacher, exchange, currentClass } = this.props;
+        const { teacher, exchange, currentClass, history } = this.props;
         const { firstName } = teacher;
         const exchangeAction = exchangeActions[ action ];
+
         return (
-            <div>
+            <div className='overview'>
                 <LoaderWithText
                     loading={loading}
                     text={exchangeAction}
@@ -45,6 +54,22 @@ class OverviewContainer extends Component {
                     <p>Once a class has been matched with another class and both participating classes have confirmed the participation, you will be able to access the Instructions and Materials in the main menu.</p>
                     <p>If you need a refresher on how the program works, see <a href='//wemakepeace.org/peace-letter-program' targer='_blank'>here</a>.</p>
                 </div>
+                <div className='overview-actions'>
+                    <div>
+                    { teacher && teacher.classes ?
+                        <React.Fragment>
+                            <h2>Select class</h2>
+                            <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
+                        </React.Fragment> : null
+                    }
+                    </div>
+                    <div>
+                        <button className='roll-button'>
+                            <RegisterClass history={history}/>
+                        </button>
+                    </div>
+                </div>
+                <Exchange toggleLoader={this.toggleLoader.bind(this)} />
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
                     <Grid.Column width={8} className='overview-class-details'>
@@ -60,7 +85,6 @@ class OverviewContainer extends Component {
                             title='Exchange Class '/>
                     </Grid.Column>
                 </Grid>
-                <Exchange toggleLoader={this.toggleLoader.bind(this)} />
             </div>
         );
     }
@@ -74,4 +98,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps)(OverviewContainer);
+export default connect(mapStateToProps, { fetchClass })(OverviewContainer);

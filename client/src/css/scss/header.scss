@@ -18,7 +18,7 @@
         }
 
         .title:last-child {
-           margin: 12px 4px;
+            margin: 8px 4px;
         }
 
         .title:first-child {
@@ -26,7 +26,7 @@
         }
 
         .title h1 {
-            font-size: 3em;
+            font-size: 2em;
             color: #fff;
             line-height: 0.9;
         }
@@ -38,6 +38,8 @@
         }
     }
     .logged-in {
+
+        display: none;
         flex: 1;
         font-size: 15px;
         color: white;

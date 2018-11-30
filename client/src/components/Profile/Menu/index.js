@@ -1,7 +1,8 @@
 import React from 'react';
 import { MenuLink } from './Link';
 
-export const Menu = ({ content, currentClass, status, ...props }) => {
+export const Menu = ({  content, status, ...props }) => {
+
     return (
         <div className='profile-menu-column'>
             { content.map(({ name, route, defaultChildRoute }) => {
