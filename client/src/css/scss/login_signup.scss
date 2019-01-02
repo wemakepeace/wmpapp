@@ -59,7 +59,6 @@
                     -moz-transition: color .3s ease;
                     -webkit-transition: color .3s ease;
                     transition: color .3s ease;
-                    &:hover { color: white }
                 }
             }
 
@@ -102,7 +101,7 @@
          }
 
         .login-signup-form {
-            flex: 2;
+            flex: 3;
         }
 
         .signup-login-tabs {
@@ -113,6 +112,14 @@
                 h3 {
                     font-size: 3em;
                 }
+
+            }
+
+            .login-tab:hover {
+                background-color: rgba(255, 217, 185, 0.8);
+            }
+            .signup-tab:hover {
+                background-color: rgba(192,219,226, 0.8);
             }
         }
     }
