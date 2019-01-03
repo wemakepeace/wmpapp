@@ -28,7 +28,7 @@ const findFurthestMatch = (_class, matches) => {
         };
 
         const distance =  calculateDistance(classCoordinates, currCoords);
-
+        console.log('distance', distance)
         if (distance > result.distance) {
             result.id = exchangeId;
             result.distance = distance;

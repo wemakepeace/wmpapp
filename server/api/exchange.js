@@ -22,7 +22,7 @@ app.post('/', (req, res, next) => {
 
     Class.findOne({
         where: { id: classId },
-        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId'],
+        attributes: ['id', 'name', 'teacherId', 'schoolId', 'termId', 'ageGroupId', 'size'],
         include: [ { model: Teacher, attributes: [ 'id', 'email' ] }, School ]
     })
     .then((_class) => {
