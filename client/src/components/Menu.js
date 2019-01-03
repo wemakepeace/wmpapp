@@ -10,7 +10,8 @@ class WPMenu extends Component {
     handleItemClick = (e) => this.setState({ showMobileMenu: !this.state.showMobileMenu })
 
     render() {
-        const { showMobileMenu } = this.state
+        const { showMobileMenu } = this.state;
+        const { loggedIn } = this.props;
         const menuClass = showMobileMenu ? 'wp-menu show' : 'wp-menu hide';
 
         return (
@@ -78,12 +79,15 @@ class WPMenu extends Component {
                             <a href='//wemakepeace.org/contact/'>Contact</a>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to='/profile/overview'>My Profile</Link>
+                            { loggedIn ?
+                                <Link to='/profile/overview'>My Profile</Link> :
+                                <Link to='/'>Login</Link>
+                            }
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
             </div>
-        )
+        );
     }
 }
 

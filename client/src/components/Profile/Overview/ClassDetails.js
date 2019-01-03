@@ -37,6 +37,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
                     <br />
                     <label><b>School Address</b></label>
                     <div>
+                        <span>{teacher.firstName || null} {teacher.lastName || null}</span><br />
                         <span>{school.schoolName || null}</span><br />
                         <span>{school.address1 || null} {school.address2 || null}</span><br />
                         <span>{school.zip || null} {school.city || null}</span><br />

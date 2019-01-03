@@ -45,6 +45,7 @@ const ClassForm = ({ classData, onInputChange }) => {
     return (
         <div>
             <p>Please fill in information about your class.</p>
+            <p>Once your class has been matched with another class and both classes have confirmed the participation, you will be able to access the Instructions and Materials neccessary.</p>
             { fields.map((field) => (
                 <Input
                     {...field}

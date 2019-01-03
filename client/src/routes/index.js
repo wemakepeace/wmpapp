@@ -36,7 +36,7 @@ class Routes extends Component  {
 
         return (
             <div>
-                <WPMenu />
+                <WPMenu loggedIn={teacher && teacher.id ? true : false } />
                 <LoaderWithText
                     loading={loading}
                     text='Loading..'

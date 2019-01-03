@@ -56,9 +56,10 @@ const SchoolForm = ({ school, teacherId, onInputChange, fetchSchool }) => {
     return (
         <div>
             <h2> School Mailing Address</h2>
-            <p>This address will be used when sending letters to your class.</p>
+            <p>This address will be used when the exchange class is mailing letters to your class.</p>
             <AsyncSelectInput
                 name='school'
+                label={'Select school or create new'}
                 value={schoolDropdownValue}
                 onChange={fetchSchool}
                 loadOptions={fetchData}
