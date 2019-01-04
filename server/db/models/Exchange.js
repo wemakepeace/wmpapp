@@ -70,22 +70,25 @@ Exchange.getExchangeAndMatchClass = function(classId) {
                         exchangeClass.teacher = teacher.dataValues;
                         exchange.dataValues.exchangeClass = exchangeClass
                         return extractDataForFrontend(exchange.dataValues, {});
-                    })
+                    });
 
-                })
-        })
-    })
+                });
+        });
+    });
 }
+
 
 /*
  * Find all classes that:
- * - have the same termId and ageGroupId
+ * - have the same ageGroupId
+ * - the difference in class size is less than or equal 5 students
  * - do not belong to the current teacher or school
  * - are not from the same country
  */
 
 Exchange.findMatch = function(_class) {
-    const { teacherId, schoolId, termId, ageGroupId, school } = _class.dataValues;
+    const { teacherId, schoolId, ageGroupId, school, size } = _class.dataValues;
+
     return Exchange.findAll({
         where: {
             status: 'initiated'
@@ -96,8 +99,13 @@ Exchange.findMatch = function(_class) {
             where: {
                 teacherId: { $ne: teacherId },
                 schoolId: { $ne: schoolId },
-                termId: { $eq: termId },
-                ageGroupId: { $eq: ageGroupId }
+                ageGroupId: { $eq: ageGroupId },
+                size:  {
+                    $and: {
+                        $gte: (size * 1) - 5,
+                        $lte: (size * 1) + 5
+                    }
+                }
             },
                 include: [
                 {
@@ -111,7 +119,8 @@ Exchange.findMatch = function(_class) {
         }]
     })
     .then((matchingClasses) => {
-        // If matching classes are found
+
+        // If matching classes are found, select the one furthest away
         if (matchingClasses && matchingClasses.length) {
             return findFurthestMatch(_class, matchingClasses);
         } else {
@@ -181,7 +190,7 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
                         exchangeClass.teacher = teacher.dataValues;
                         this.dataValues.exchangeClass = exchangeClass
                         return extractDataForFrontend(this.dataValues, {});
-                    })
+                    });
                 });
         });
 };
@@ -203,7 +212,7 @@ Exchange.prototype.getBasicInfo = function(t) {
             }
         ],
         transaction: t
-    })
+    });
 };
 
 module.exports = Exchange;

@@ -20,8 +20,10 @@ Term.hasMany(Class);
 Class.belongsTo(School);
 School.hasMany(Class);
 
-Exchange.belongsTo(Class, { as:  'sender' }); // creates senderId on Exchange
-Exchange.belongsTo(Class, { as:  'receiver' }); // creates receiverId on Exchange
+// creates senderId on Exchange
+Exchange.belongsTo(Class, { as:  'sender' });
+// creates receiverId on Exchange
+Exchange.belongsTo(Class, { as:  'receiver' });
 
 
 const teachers = [
@@ -109,14 +111,12 @@ const classes = [
         name: '1A',
         size: 30,
         ageGroupId:1,
-        termId: 1,
         schoolId: 2
     },
     {
         teacherId: 4,
         name: '4E',
         size: 28,
-        termId: 1,
         ageGroupId: 1,
         schoolId: 4
     },
@@ -124,7 +124,6 @@ const classes = [
         teacherId: 5,
         name: '5G',
         size: 28,
-        termId: 1,
         ageGroupId: 1,
         schoolId: 5
     },
@@ -133,7 +132,6 @@ const classes = [
         name: '1B',
         size: 28,
         ageGroupId: 1,
-        termId: 1,
         schoolId: 1
     },
     {
@@ -141,14 +139,12 @@ const classes = [
         name: '3F',
         size: 28,
         ageGroupId: 1,
-        termId: 1,
         schoolId: 2
     },
     {
         teacherId: 2,
         name: '4E',
         size: 28,
-        termId: 2,
         ageGroupId: 2,
         schoolId: 3
     },
@@ -157,7 +153,6 @@ const classes = [
         teacherId: 3,
         name: '1F',
         size: 28,
-        termId: 2,
         ageGroupId: 2,
         schoolId: 1
     },
@@ -166,7 +161,6 @@ const classes = [
         teacherId: 1,
         name: '1C',
         size: 28,
-        termId: 2,
         ageGroupId: 2,
         schoolId: 5
     },
@@ -174,7 +168,6 @@ const classes = [
         teacherId: 2,
         name: '1Z',
         size: 28,
-        termId: 2,
         ageGroupId: 2,
         schoolId: 4
     }

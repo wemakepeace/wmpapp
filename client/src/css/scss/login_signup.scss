@@ -1,5 +1,6 @@
 @import '../partials/_mixins';
 @import '../partials/_colors';
+@import '../partials/_fonts';
 
 
 .background {
@@ -59,6 +60,7 @@
                     -moz-transition: color .3s ease;
                     -webkit-transition: color .3s ease;
                     transition: color .3s ease;
+                    letter-spacing: 0.05em;
                 }
             }
 

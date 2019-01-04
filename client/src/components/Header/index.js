@@ -1,7 +1,10 @@
 import React from 'react';
+import SubHeader from './SubHeader';
 
-const HeaderContainer = () => {
+const HeaderContainer = (props) => {
+
     return (
+        <div>
         <div className='title-container'>
             <div className='heading'>
                 <div className='title'><h1>WE</h1></div>
@@ -10,6 +13,8 @@ const HeaderContainer = () => {
                     <h1><span className='title-span'>PEACE LETTERS</span></h1>
                 </div>
             </div>
+        </div>
+        <SubHeader className='mobile-subheader' {...props} />
         </div>
     );
 }

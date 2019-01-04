@@ -1,9 +1,6 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
 const { extractDataForFrontend } = require('../../utils/helpers');
-const AgeGroup = require('./AgeGroup');
-const Term = require('./Term');
-const School = require('./School');
 
 
 const Class = conn.define('class', {
@@ -14,11 +11,12 @@ const Class = conn.define('class', {
         }
     },
     size: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        // type: Sequelize.STRING,
         validate: {
             notEmpty: { msg: 'Please fill out class size.'},
             isInteger(value) {
-                if (Number(value) === NaN) {
+                if (isNaN(value)) {
                     throw new Error('Class size must be a number.')
                 }
             }
