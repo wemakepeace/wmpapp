@@ -4,7 +4,7 @@
 
 .subheader {
     display: grid;
-    grid-template-columns: 70% 18% 12%;
+    grid-template-columns: 65% auto auto;;
     background-color: #f7f7f7;
     border-bottom: 1px solid darkgray;
     font-size: 1.3em;
@@ -17,20 +17,18 @@
         padding: 6px 0 0 20px;
         border-right: 1px solid gray;
     }
+
+    .subheader-menu-item {
+        cursor: pointer;
+        padding: 6px 5px;
+        border-right: 1px solid gray;
+    }
+
+    .subheader-menu-item:hover {
+        text-decoration: underline;
+        background-color: lightgoldenrodyellow;
+    }
 }
-
-
-.subheader-menu-item {
-    cursor: pointer;
-    padding: 6px 0;
-    border-right: 1px solid gray;
-}
-
-.subheader-menu-item:hover {
-    text-decoration: underline;
-    background-color: lightgoldenrodyellow;
-}
-
 
 .profile-menu-column {
     flex: 1;
@@ -44,26 +42,24 @@
     .profile-menu-item {
         cursor: pointer;
         color: #000;
-
-        h3 {
-            margin: auto;
-        }
-
-        h3: hover {
-            color: darkgray !important;
-        }
     }
 
     .profile-menu-item:hover {
-        color: darkgray !important;
+        h3 {
+            color: $pink !important;
+        }
     }
+
+    .active-profile:hover {
+        h3 {
+            color: #000 !important;
+        }
+    }
+
+
 
     .profile-menu-item {
         border-bottom: 1px solid darkgray !important;
-    }
-
-    .last-item {
-        border-bottom: none !important;
     }
 }
 
@@ -93,15 +89,17 @@
         .overview-actions {
             display: flex;
             flex-direction: row;
+            margin-top: 20px;
         }
 
-        .overview-actions:first-child div{
+        .overview-actions div:first-child {
             flex: 1;
             margin: 0 auto;
         }
 
-        .overview-actions:nth-child(2) div {
-            flex: 2;
+        .overview-actions div:nth-child(2) {
+            flex: 2 !important;
+
             .roll-button {
                 width: 80%;
             }
@@ -291,27 +289,6 @@
 
 
 
-// .mobile-menu {
-//     .mobile-menu-container {
-//         position: absolute;
-//         top: 180px;
-//         left: 0;
-//         z-index: 99;
-//         opacity: 0.9;
-//         display: flex;
-//         align-items: center;
-//         width: 100%;
-//         color: white;
-//         display: flex;
-//     }
-//     .mobile-menu-body {
-//         display: flex;
-//         flex-direction: column;
-//         align-items: center;
-//         width: 100vw;
-//         transition: filter 0.5s ease;
-//     }
-// }
 
 
 @media (min-width: 1000px) {
@@ -347,17 +324,24 @@
         flex-direction: column;
 
         .profile-menu-item {
-            display: flex;
-            height: 90px;
+            padding: 15px 10px;
             border-bottom: 1px dotted #000;
+
+            h3 {
+                display: inline;
+            }
         }
 
         .profile-menu-item h3:hover {
-            color: darkgray !important;
+            color: $pink !important;
         }
 
         h3:hover {
-            color: darkgray !important;
+            color: $pink !important;
+        }
+
+        .profile-menu-item.active-profile h3:hover {
+            color: #000 !important;
         }
 
     }
@@ -367,7 +351,7 @@
 
     .subheader.mobile-subheader {
         display: grid;
-        grid-template-columns: 62% 26% 12%;
+        // grid-template-columns: 62% 26% 12%;
 
         .user-details {
             padding: 6px 0 0 13px;
@@ -424,6 +408,20 @@
     }
 }
 
+@media(max-width: 700px) {
+    .subheader.mobile-subheader {
+        grid-template-columns: 55% auto auto;
+
+        .subheader-menu-item, .user-details {
+            font-size: 0.8em;
+        }
+
+        .user-details {
+            padding: 6px 0 0 7px;
+        }
+    }
+}
+
 @media(max-width: 600px) {
     .eight.wide.column.overview-class-details {
         width: 100% !important;
@@ -434,6 +432,16 @@
 
         span {
             font-size: 1.2em;
+        }
+    }
+}
+
+@media(max-width: 500px) {
+    .subheader.mobile-subheader {
+        grid-template-columns: 50% auto auto;
+
+        .subheader-menu-item, .user-details {
+            font-size: 0.7em;
         }
     }
 }

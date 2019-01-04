@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import Exchange from './Exchange';
+import ExchangeProgress from './ExchangeProgress';
 import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import { fetchClass } from '../../../redux/actions/class';
 import peaceGirlImg from '../../../../../assets/images/peacegirl.png';
-import { SegmentOne } from './SegmentOne';
+import AboutProgramAccordion from './AboutProgramAccordion';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
@@ -50,25 +50,27 @@ class OverviewContainer extends Component {
                     loading={loading}
                     text={exchangeAction}
                 />
-                <SegmentOne
-                    firstName={firstName}
-                    showSegmentOne={showSegmentOne}
-                    toggleSegmentOne={() => this.setState({ showSegmentOne: !showSegmentOne })}
-                />
-                <div className='overview-actions'>
-                    { teacher && teacher.classes ?
+                <div className='profile-segment'>
+                    <h2>{`Welcome, ${firstName}`}!</h2>
+                    <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
+                </div>
+                <AboutProgramAccordion />
+                <div className='profile-segment'>
+                    <div className='overview-actions'>
+                        { teacher && teacher.classes ?
+                            <div>
+                                <React.Fragment>
+                                    <h2>Select class</h2>
+                                    <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
+                                </React.Fragment>
+                            </div>  : null
+                        }
                         <div>
-                            <React.Fragment>
-                                <h2>Select class</h2>
-                                <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
-                            </React.Fragment>
-                        </div>  : null
-                    }
-                    <div>
-                        <button className='roll-button'><RegisterClass history={history}/></button>
+                            <button className='roll-button'><RegisterClass history={history}/></button>
+                        </div>
                     </div>
                 </div>
-                <Exchange toggleLoader={this.toggleLoader.bind(this)} />
+                <ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
                     <Grid.Column width={8} className='overview-class-details'>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Instructions = ({ letterURLs, ...props }) => {
+const Information = ({ letterURLs, ...props }) => {
     return (
         <div>
             <h4>ABOUT THE PEACE LETTER PROGRAM</h4>
@@ -61,4 +61,4 @@ const Instructions = ({ letterURLs, ...props }) => {
 };
 
 
-export default Instructions;
+export default Information;

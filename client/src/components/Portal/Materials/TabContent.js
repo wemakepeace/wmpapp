@@ -1,6 +1,7 @@
 import React from 'react';
+import content from './content';
 
-const TabContent = ({ content, letterURLs, classRole, match }) => {
+const TabContent = ({ letterURLs, classRole, match }) => {
     const { route } = match.params;
     const Component = content.find((topic) => topic.route === route).component;
 
