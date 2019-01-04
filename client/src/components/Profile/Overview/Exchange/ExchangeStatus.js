@@ -87,7 +87,7 @@ export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick 
                     <div className="flex-item">
                         {details.text()}
                     </div>
-                    <div className="flex-item">
+                    <div className="flex-item center">
                         { details.buttonText && !classIsVerified ?
                             <Button
                                 className='large-custom-btn center-btn'

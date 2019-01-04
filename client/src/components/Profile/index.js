@@ -5,14 +5,16 @@ import { Image } from 'semantic-ui-react';
 import Header from '../Header';
 import TabContent from './TabContent';
 import { Menu } from './Menu';
-import { removeCurrentClass } from '../../redux/actions/class';
 import Feedback from '../Feedback';
 import Overview from './Overview';
 import Class from './Class';
 import Teacher from './Teacher';
 import Materials from './Materials';
 import Support from './Support';
-import SubHeader from './SubHeader';
+import SubHeader from '../Header/SubHeader';
+import { removeCurrentClass } from '../../redux/actions/class';
+import { logout } from '../../redux/actions/teacher';
+
 
 
 import { clearFeedback } from '../../redux/actions/shared';
@@ -57,10 +59,19 @@ class Profile extends Component {
     }
 
     render() {
-        const { match, history, currentClass, status, feedback, teacher } = this.props;
+        const {
+            match,
+            history,
+            currentClass,
+            status,
+            feedback,
+            teacher,
+            logout
+        } = this.props;
+
         return (
             <div className='page-content'>
-                <Header />
+                <Header {...this.props} />
                 <div className='profile-column-container'>
                     <Menu
                         content={content}
@@ -71,7 +82,11 @@ class Profile extends Component {
                         <SubHeader
                             teacher={teacher}
                             currentClass={currentClass}
-                            history={history} />
+                            history={history}
+                            content={content}
+                            className='web-subheader'
+                            {...this.props}
+                        />
                         <Image className='profile-logo' src='../../../../assets/logos/WMPlogo_transparent.png' />
                         <div className='profile-form'>
                             <Route
@@ -92,5 +107,5 @@ const mapStateToProps = ({ currentClass, feedback, exchange: { status }, teacher
     return { currentClass, feedback, status, teacher };
 };
 
-export default connect(mapStateToProps, { clearFeedback })(Profile);
+export default connect(mapStateToProps, { clearFeedback, logout })(Profile);
 
