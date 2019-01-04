@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import Exchange from './Exchange';
+import ExchangeProgress from './ExchangeProgress';
 import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
@@ -64,7 +64,7 @@ class OverviewContainer extends Component {
                         <button className='roll-button'><RegisterClass history={history}/></button>
                     </div>
                 </div>
-                <Exchange toggleLoader={this.toggleLoader.bind(this)} />
+                <ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
                     <Grid.Column width={8} className='overview-class-details'>

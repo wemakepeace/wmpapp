@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import LandingPage from '../components/LandingPage';
-import Profile from '../components/Profile';
+import Portal from '../components/Portal';
 import RequestResetPassword from '../components/RequestResetPassword'
 import NotFoundPage from '../components/error_pages/NotFoundPage';
 import ResetPassword from '../components/ResetPassword';
@@ -53,7 +53,7 @@ class Routes extends Component  {
                             exact path={match.url}
                             render={() => {
                                 if (teacher && teacher.id) {
-                                    return <Redirect to='/profile/overview' />;
+                                    return <Redirect to='/portal/overview' />;
                                 }
                                 return (<LandingPage {...this.props} />)
                             }}
@@ -71,8 +71,8 @@ class Routes extends Component  {
                         <PrivateRoute
                             loading={this.state.loading}
                             key={5}
-                            path={match.url + 'profile'}
-                            component={Profile}
+                            path={match.url + 'portal'}
+                            component={Portal}
                         />
                         <Route component={NotFoundPage} />
                     </Switch>

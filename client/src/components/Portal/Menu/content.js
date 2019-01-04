@@ -3,6 +3,7 @@ import Class from '../Class';
 import Teacher from '../Teacher';
 import Materials from '../Materials';
 import Support from '../Support';
+import ExchangeDetails from '../ExchangeDetails';
 
 const content = [
     {
@@ -12,7 +13,7 @@ const content = [
     },
     {
         name: 'Exchange Details',
-        component: Class,
+        component: ExchangeDetails,
         route: 'exchange-details'
     },
     {

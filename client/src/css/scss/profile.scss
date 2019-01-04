@@ -50,6 +50,14 @@
         }
     }
 
+    .active-profile:hover {
+        h3 {
+            color: #000 !important;
+        }
+    }
+
+
+
     .profile-menu-item {
         border-bottom: 1px solid darkgray !important;
     }
