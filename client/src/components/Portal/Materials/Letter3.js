@@ -176,7 +176,7 @@ const Letter3 = ({ letterURLs, classRole }) => {
     const letterURL = letterURLs && letterURLs.letter3;
     return (
         <div>
-            <h1>Instructions Letter 3</h1>
+            <h1>Instructions for Letter 3</h1>
             <p>Download and print the letter template and follow the instructions below for writing and sending the third and last letter.</p>
             { specialContent[ classRole ]()}
             <div className='div-centered-content'>

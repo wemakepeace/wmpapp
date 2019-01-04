@@ -12,35 +12,8 @@ import {
     Icon
 } from 'semantic-ui-react';
 import Menu from './Menu';
-import Letter1 from './Letter1';
-import Letter2 from './Letter2';
-import Letter3 from './Letter3';
-import Instructions from './Instructions';
 import TabContent from './TabContent';
-
-
-const content = [
-    {
-        name: 'Instructions',
-        component: Instructions,
-        route: 'instructions'
-    },
-    {
-        name: 'Letter 1',
-        component: Letter1,
-        route: 'letter-1'
-    },
-    {
-        name: 'Letter 2',
-        component: Letter2,
-        route: 'letter-2'
-    },
-    {
-        name: 'Letter 3',
-        component: Letter3,
-        route: 'letter-3'
-    }
-];
+import content from './content';
 
 
 class Materials extends Component  {
@@ -50,7 +23,7 @@ class Materials extends Component  {
         if (!this.props.exchange.letterURLs) {
             return this.props.fetchLetterTemplates()
             .then(() => {
-                if (this.props.history.location.pathname === '/profile/materials') {
+                if (this.props.history.location.pathname === '/portal/materials') {
                     this.props.history.push('materials/instructions');
                 }
             });
@@ -58,11 +31,22 @@ class Materials extends Component  {
     }
 
     render() {
-        const { classRole, letterURLs } = this.props.exchange;
+        const { classRole, letterURLs, status } = this.props.exchange;
         const { match, location } = this.props;
+
+        // if (status !== 'confirmed') {
+        //     return (
+        //         <div>
+        //             <h3>Material & Instructions</h3>
+        //             <p>Once your class is matched with an exchanging class and both teachers have confirmed the participation, you will be granted access to all materials and instructions needed for the program.</p>
+        //         </div>
+        //     );
+        // }
+
 
         return (
             <div>
+                <h2>Materials & Instructions</h2>
                 <Menu
                     content={content}
                     match={match}

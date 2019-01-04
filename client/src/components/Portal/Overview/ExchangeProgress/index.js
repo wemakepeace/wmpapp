@@ -63,9 +63,6 @@ class Exchange extends Component {
                     status={exchange && exchange.status}
                     classIsVerified={exchange.classIsVerified}
                 />
-                {/*<hr style={{margin: '20px 0'}} />
-                <h3 style={{margin: '30px 0'}}>Exchange Details</h3>
-                <ExchangeDetails classData={currentClass} />*/}
                 { showFeedback && (feedback && feedback.type) ?
                     <Feedback {...feedback} /> : null }
             </div>

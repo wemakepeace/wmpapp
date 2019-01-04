@@ -89,15 +89,17 @@
         .overview-actions {
             display: flex;
             flex-direction: row;
+            margin-top: 20px;
         }
 
-        .overview-actions:first-child div{
+        .overview-actions div:first-child {
             flex: 1;
             margin: 0 auto;
         }
 
-        .overview-actions:nth-child(2) div {
-            flex: 2;
+        .overview-actions div:nth-child(2) {
+            flex: 2 !important;
+
             .roll-button {
                 width: 80%;
             }

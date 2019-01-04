@@ -80,7 +80,7 @@ class WPMenu extends Component {
                         </Menu.Item>
                         <Menu.Item>
                             { loggedIn ?
-                                <Link to='/profile/overview'>My Profile</Link> :
+                                <Link to='/portal/overview'>My Profile</Link> :
                                 <Link to='/'>Login</Link>
                             }
                         </Menu.Item>

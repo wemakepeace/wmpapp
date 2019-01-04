@@ -25,7 +25,6 @@ class Profile extends Component {
             match,
             history,
             currentClass,
-            status,
             feedback,
             teacher,
             logout
@@ -35,7 +34,7 @@ class Profile extends Component {
             <div className='page-content'>
                 <Header {...this.props} />
                 <div className='profile-column-container'>
-                    <Menu status={status} {...this.props} />
+                    <Menu {...this.props} />
                     <div className='profile-form-column'>
                         <SubHeader
                             className='web-subheader'
@@ -65,11 +64,10 @@ class Profile extends Component {
     }
 }
 
-const mapStateToProps = ({ currentClass, feedback, exchange: { status }, teacher }) => {
+const mapStateToProps = ({ currentClass, feedback, teacher }) => {
     return {
         currentClass,
         feedback,
-        status,
         teacher
     };
 };

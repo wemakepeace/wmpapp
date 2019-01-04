@@ -17,20 +17,20 @@ const content = [
         route: 'exchange-details'
     },
     {
-        name: 'Teacher Profile',
-        component: Teacher,
-        route: 'teacher-profile'
-    },
-    {
         name: 'Class Profile',
         component: Class,
         route: 'class-profile'
     },
     {
+        name: 'Teacher Profile',
+        component: Teacher,
+        route: 'teacher-profile'
+    },
+    {
         name: 'Materials',
         component: Materials,
         route: 'materials',
-        defaultChildRoute: 'instructions'
+        defaultChildRoute: 'information'
     },
     {
         name: 'Support',

@@ -28,7 +28,7 @@ const LoginContainer = ({ login, match, history, feedback }) => {
         return login(credentials)
         .then(({ feedback: { type } }) => {
             if (type === 'success') {
-                history.push('/profile/overview');
+                history.push('/portal/overview');
             }
         });
     }

@@ -104,7 +104,7 @@ class ClassFormsContainer extends Component {
                 />
                 <div>
                     { currentClass && currentClass.id ?
-                        <h2>Information & Settings for Class {currentClass.name}</h2> :
+                        <h2>Information & Settings for Class {currentClass.name} at {currentClass.school.schoolName}</h2> :
                         <h2> Register New Class </h2> }
                     <ClassForm
                         classData={this.state.class}
@@ -125,7 +125,7 @@ class ClassFormsContainer extends Component {
                     </div>
                     { currentClass && currentClass.id ?
                         <Message size='large' color='yellow'>
-                            You can manage your class' exchange participation on the <Link to='/#/profile/overview/'>Overview</Link> page.
+                            You can manage your class' exchange participation on the <Link to='/#/portal/overview/'>Overview</Link> page.
                         </Message> : null
                     }
                 </div>

@@ -50,18 +50,24 @@ class OverviewContainer extends Component {
                     loading={loading}
                     text={exchangeAction}
                 />
-                <AboutProgramAccordion firstName={firstName} />
-                <div className='overview-actions'>
-                    { teacher && teacher.classes ?
+                <div className='profile-segment'>
+                    <h2>{`Welcome, ${firstName}`}!</h2>
+                    <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
+                </div>
+                <AboutProgramAccordion />
+                <div className='profile-segment'>
+                    <div className='overview-actions'>
+                        { teacher && teacher.classes ?
+                            <div>
+                                <React.Fragment>
+                                    <h2>Select class</h2>
+                                    <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
+                                </React.Fragment>
+                            </div>  : null
+                        }
                         <div>
-                            <React.Fragment>
-                                <h2>Select class</h2>
-                                <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
-                            </React.Fragment>
-                        </div>  : null
-                    }
-                    <div>
-                        <button className='roll-button'><RegisterClass history={history}/></button>
+                            <button className='roll-button'><RegisterClass history={history}/></button>
+                        </div>
                     </div>
                 </div>
                 <ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
