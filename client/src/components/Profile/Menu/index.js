@@ -1,7 +1,8 @@
 import React from 'react';
 import { MenuLink } from './Link';
+import content from './content';
 
-export const Menu = ({  content, status, ...props }) => {
+export const Menu = ({ status, ...props }) => {
 
     return (
         <div className='profile-menu-column web-menu'>

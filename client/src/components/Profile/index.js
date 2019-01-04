@@ -3,51 +3,13 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Image } from 'semantic-ui-react';
 import Header from '../Header';
+import SubHeader from '../Header/SubHeader';
 import TabContent from './TabContent';
 import { Menu } from './Menu';
 import Feedback from '../Feedback';
-import Overview from './Overview';
-import Class from './Class';
-import Teacher from './Teacher';
-import Materials from './Materials';
-import Support from './Support';
-import SubHeader from '../Header/SubHeader';
 import { removeCurrentClass } from '../../redux/actions/class';
 import { logout } from '../../redux/actions/teacher';
-
-
-
 import { clearFeedback } from '../../redux/actions/shared';
-
-const content = [
-    {
-        name: 'Overview',
-        component: Overview,
-        route: 'overview'
-    },
-    {
-        name: 'Teacher',
-        component: Teacher,
-        route: 'teacher'
-    },
-    {
-        name: 'Class',
-        component: Class,
-        route: 'class'
-    },
-    {
-        name: 'Materials',
-        component: Materials,
-        route: 'materials',
-        defaultChildRoute: 'instructions'
-    },
-    {
-        name: 'Support',
-        component: Support,
-        route: 'support'
-    }
-];
-
 
 class Profile extends Component {
     state = {}
@@ -73,27 +35,27 @@ class Profile extends Component {
             <div className='page-content'>
                 <Header {...this.props} />
                 <div className='profile-column-container'>
-                    <Menu
-                        content={content}
-                        status={status}
-                        {...this.props}
-                    />
+                    <Menu status={status} {...this.props} />
                     <div className='profile-form-column'>
                         <SubHeader
-                            teacher={teacher}
-                            currentClass={currentClass}
-                            history={history}
-                            content={content}
                             className='web-subheader'
+                            currentClass={currentClass}
+                            teacher={teacher}
+                            history={history}
                             {...this.props}
                         />
-                        <Image className='profile-logo' src='../../../../assets/logos/WMPlogo_transparent.png' />
+                        <Image
+                            className='profile-logo'
+                            src='../../../../assets/logos/WMPlogo_transparent.png'
+                        />
                         <div className='profile-form'>
                             <Route
                                 path={`${match.path}/:route`}
-                                render={(props) => <TabContent content={content} {...props} feedback={feedback} />}
-                                {...this.props} />
-
+                                render={(props) => (
+                                        <TabContent feedback={feedback} {...props} />
+                                    )}
+                                {...this.props}
+                            />
                             <Feedback {...feedback} />
                         </div>
                     </div>
@@ -104,7 +66,12 @@ class Profile extends Component {
 }
 
 const mapStateToProps = ({ currentClass, feedback, exchange: { status }, teacher }) => {
-    return { currentClass, feedback, status, teacher };
+    return {
+        currentClass,
+        feedback,
+        status,
+        teacher
+    };
 };
 
 export default connect(mapStateToProps, { clearFeedback, logout })(Profile);

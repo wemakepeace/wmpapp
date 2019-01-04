@@ -8,7 +8,7 @@ import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import { fetchClass } from '../../../redux/actions/class';
 import peaceGirlImg from '../../../../../assets/images/peacegirl.png';
-import { SegmentOne } from './SegmentOne';
+import AboutProgramAccordion from './AboutProgramAccordion';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
@@ -50,11 +50,7 @@ class OverviewContainer extends Component {
                     loading={loading}
                     text={exchangeAction}
                 />
-                <SegmentOne
-                    firstName={firstName}
-                    showSegmentOne={showSegmentOne}
-                    toggleSegmentOne={() => this.setState({ showSegmentOne: !showSegmentOne })}
-                />
+                <AboutProgramAccordion firstName={firstName} />
                 <div className='overview-actions'>
                     { teacher && teacher.classes ?
                         <div>
