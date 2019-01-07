@@ -5,11 +5,11 @@ import content from './content';
 export const Menu = ({ ...props }) => {
     return (
         <div className='profile-menu-column web-menu'>
-            { content.mainMenuContent.map(({ name, route, shouldDisplayAlways, defaultChildRoute }) => {
+            { content.mainMenuContent.map(({ name, path, shouldDisplayAlways, defaultChildRoute }) => {
                 return (
                     <MenuLink
                         name={name}
-                        route={route}
+                        path={path}
                         defaultChildRoute={defaultChildRoute}
                         shouldDisplayAlways={shouldDisplayAlways}
                         key={name}
@@ -20,11 +20,11 @@ export const Menu = ({ ...props }) => {
             { props.classIsSelected ?
                 <div>
                     <div className='profile-menu-item '><label className='menu-label'>Class Menu</label></div>
-                    { content.classMenuContent.map(({ name, route, shouldDisplayAlways, defaultChildRoute }) => {
+                    { content.classMenuContent.map(({ name, path, shouldDisplayAlways, defaultChildRoute }) => {
                         return (
                             <MenuLink
                                 name={name}
-                                route={route}
+                                path={path}
                                 defaultChildRoute={defaultChildRoute}
                                 shouldDisplayAlways={shouldDisplayAlways}
                                 key={name}

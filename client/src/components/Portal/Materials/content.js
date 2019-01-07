@@ -7,22 +7,22 @@ const content = [
     {
         name: 'General Information',
         component: Information,
-        route: 'information'
+        path: 'information'
     },
     {
         name: 'Letter 1',
         component: Letter1,
-        route: 'letter-1'
+        path: 'letter-1'
     },
     {
         name: 'Letter 2',
         component: Letter2,
-        route: 'letter-2'
+        path: 'letter-2'
     },
     {
         name: 'Letter 3',
         component: Letter3,
-        route: 'letter-3'
+        path: 'letter-3'
     }
 ];
 

@@ -9,19 +9,19 @@ const mainMenuContent = [
     {
         name: 'Overview',
         component: Overview,
-        route: 'overview',
+        path: 'overview',
         shouldDisplayAlways: true
     },
     {
         name: 'Teacher Profile',
         component: Teacher,
-        route: 'teacher-profile',
+        path: 'teacher-profile',
         shouldDisplayAlways: true
     },
     {
         name: 'Support',
         component: Support,
-        route: 'support',
+        path: 'support',
         shouldDisplayAlways: true
     }
 ];
@@ -30,19 +30,19 @@ const classMenuContent = [
     {
         name: 'Exchange Details',
         component: ExchangeDetails,
-        route: 'exchange-details',
+        path: 'exchange-details',
         shouldDisplayAlways: false
     },
     {
         name: 'Class Profile',
         component: Class,
-        route: 'class-profile',
+        path: 'class-profile',
         shouldDisplayAlways: false
     },
     {
         name: 'Materials',
         component: Materials,
-        route: 'materials',
+        path: 'materials',
         defaultChildRoute: 'information',
         shouldDisplayAlways: false
     }

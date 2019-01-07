@@ -53,7 +53,7 @@ class Materials extends Component  {
                     location={location}
                 />
                 <Route
-                    path={`${match.path}/:route`}
+                    path={`${match.path}/:path`}
                     render={({ match }) => (
                         <TabContent
                             letterURLs={letterURLs}

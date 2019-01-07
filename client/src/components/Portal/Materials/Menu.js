@@ -4,16 +4,16 @@ import { Input, Menu, Segment } from 'semantic-ui-react'
 
 const InstructionMenu = ({ content, match, location }) => {
 
-    const isActive = (route) => location.pathname.indexOf(route) > -1;
+    const isActive = (path) => location.pathname.indexOf(path) > -1;
     return (
         <Menu attached='top' tabular stackable>
             {
-                content.map(({ name, component, route }) => (
+                content.map(({ name, component, path }) => (
                     <Menu.Item
                         name={name}
                         as={Link}
-                        to={`${match.url}/${route}`}
-                        active={isActive(route)}
+                        to={`${match.url}/${path}`}
+                        active={isActive(path)}
                         key={name}
                     />
                 ))

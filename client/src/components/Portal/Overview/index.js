@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
 import ExchangeProgress from './ExchangeProgress';
 import ClassDetails from './ClassDetails';
@@ -9,6 +10,8 @@ import RegisterClass from '../../reusables/RegisterClass';
 import { fetchClass } from '../../../redux/actions/class';
 import peaceGirlImg from '../../../../../assets/images/peacegirl.png';
 import AboutProgramAccordion from './AboutProgramAccordion';
+
+import ClassProfile from '../ClassProfile';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
@@ -40,7 +43,7 @@ class OverviewContainer extends Component {
 
     render() {
         const { loading, action, showSegmentOne } = this.state;
-        const { teacher, exchange, currentClass, history } = this.props;
+        const { teacher, exchange, currentClass, history, match } = this.props;
         const { firstName } = teacher;
         const exchangeAction = exchangeActions[ action ];
 
@@ -54,7 +57,7 @@ class OverviewContainer extends Component {
                     <h2>{`Welcome, ${firstName}`}!</h2>
                     <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
                 </div>
-                <AboutProgramAccordion />
+                {/*<AboutProgramAccordion />*/}
                 <div className='profile-segment'>
                     <div className='overview-actions'>
                         { teacher && teacher.classes ?
@@ -86,6 +89,14 @@ class OverviewContainer extends Component {
                             title='Exchange Class '/>
                     </Grid.Column>
                 </Grid>
+                <Route
+                    path={`${match.path}/:childpath`}
+                    render={(props) => (
+                        <ClassProfile {...props} />
+                        )}
+                    {...this.props}
+                />
+
             </div>
         );
     }

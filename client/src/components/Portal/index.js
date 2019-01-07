@@ -52,7 +52,7 @@ class Profile extends Component {
                         />
                         <div className='profile-form'>
                             <Route
-                                path={`${match.path}/:route`}
+                                path={`${match.path}/:path`}
                                 render={(props) => (
                                         <TabContent feedback={feedback} {...props} />
                                     )}

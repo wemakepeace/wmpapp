@@ -5,7 +5,7 @@ export const MenuLink = (props) => {
 
     const {
         name,
-        route,
+        path,
         defaultChildRoute,
         classIsSelected,
         shouldDisplayAlways,
@@ -13,16 +13,15 @@ export const MenuLink = (props) => {
         location: { pathname }
     } = props;
 
-    console.log('classIsSelected', classIsSelected)
     const routeTo = defaultChildRoute ?
-        `${url}/${route}/${defaultChildRoute}` :
-        `${url}/${route}`;
+        `${url}/${path}/${defaultChildRoute}` :
+        `${url}/${path}`;
 
-    const getActiveClass = (_route) => {
-        return pathname.indexOf(_route) > -1 ? 'active-profile' : '';
+    const getActiveClass = (_path) => {
+        return pathname.indexOf(_path) > -1 ? 'active-profile' : '';
     }
 
-    let _class = `profile-menu-item ${getActiveClass(route)}`;
+    let _class = `profile-menu-item ${getActiveClass(path)}`;
 
     if (name === 'Support') {
         _class += ' last-item';
