@@ -5,38 +5,47 @@ import Materials from '../Materials';
 import Support from '../Support';
 import ExchangeDetails from '../ExchangeDetails';
 
-const content = [
+const mainMenuContent = [
     {
         name: 'Overview',
         component: Overview,
-        route: 'overview'
-    },
-    {
-        name: 'Exchange Details',
-        component: ExchangeDetails,
-        route: 'exchange-details'
-    },
-    {
-        name: 'Class Profile',
-        component: Class,
-        route: 'class-profile'
+        route: 'overview',
+        shouldDisplayAlways: true
     },
     {
         name: 'Teacher Profile',
         component: Teacher,
-        route: 'teacher-profile'
+        route: 'teacher-profile',
+        shouldDisplayAlways: true
+    },
+    {
+        name: 'Support',
+        component: Support,
+        route: 'support',
+        shouldDisplayAlways: true
+    }
+];
+
+const classMenuContent = [
+    {
+        name: 'Exchange Details',
+        component: ExchangeDetails,
+        route: 'exchange-details',
+        shouldDisplayAlways: false
+    },
+    {
+        name: 'Class Profile',
+        component: Class,
+        route: 'class-profile',
+        shouldDisplayAlways: false
     },
     {
         name: 'Materials',
         component: Materials,
         route: 'materials',
-        defaultChildRoute: 'information'
-    },
-    {
-        name: 'Support',
-        component: Support,
-        route: 'support'
+        defaultChildRoute: 'information',
+        shouldDisplayAlways: false
     }
 ];
 
-export default content;
+export default { mainMenuContent, classMenuContent };

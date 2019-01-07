@@ -2,7 +2,8 @@ import React from 'react';
 import content from './Menu/content';
 
 const TabContent = ({ ...props }) => {
-    const Component = content.find((topic) => topic.route === props.match.params.route).component;
+    const allPages = [...content.mainMenuContent, ...content.classMenuContent]
+    const Component = allPages.find((topic) => topic.route === props.match.params.route).component;
 
     return (<Component {...props} />);
 }

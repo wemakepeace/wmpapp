@@ -7,10 +7,13 @@ export const MenuLink = (props) => {
         name,
         route,
         defaultChildRoute,
+        classIsSelected,
+        shouldDisplayAlways,
         match: { url },
         location: { pathname }
     } = props;
 
+    console.log('classIsSelected', classIsSelected)
     const routeTo = defaultChildRoute ?
         `${url}/${route}/${defaultChildRoute}` :
         `${url}/${route}`;
@@ -25,11 +28,14 @@ export const MenuLink = (props) => {
         _class += ' last-item';
     }
 
-    return (
-        <Link to={routeTo}>
-            <div className={_class} >
-                <h3>{name.toUpperCase()}</h3>
-            </div>
-        </Link>
-    );
+    if (classIsSelected || shouldDisplayAlways) {
+        return (
+            <Link to={routeTo}>
+                <div className={_class} >
+                    <h3>{name.toUpperCase()}</h3>
+                </div>
+            </Link>
+        );
+    }
+    return null;
 }

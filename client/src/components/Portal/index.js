@@ -34,7 +34,10 @@ class Profile extends Component {
             <div className='page-content'>
                 <Header {...this.props} />
                 <div className='profile-column-container'>
-                    <Menu {...this.props} />
+                    <Menu
+                        classIsSelected={currentClass && currentClass.id ? true : false}
+                        {...this.props}
+                    />
                     <div className='profile-form-column'>
                         <SubHeader
                             className='web-subheader'
