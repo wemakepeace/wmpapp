@@ -1,7 +1,7 @@
 import React from 'react';
-import { fetchData } from '../../../utils/fetchData';
-import { Input } from '../../reusables/Input';
-import { AsyncSelectInput } from '../../reusables/AsyncSelectInput';
+import { fetchData } from '../../../../utils/fetchData';
+import { Input } from '../../../reusables/Input';
+import { AsyncSelectInput } from '../../../reusables/AsyncSelectInput';
 
 const ClassForm = ({ classData, onInputChange }) => {
     const {

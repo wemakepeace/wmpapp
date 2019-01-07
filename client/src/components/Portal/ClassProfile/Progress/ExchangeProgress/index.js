@@ -57,7 +57,6 @@ class Exchange extends Component {
 
         return (
             <div>
-                <h2>Exchange Overview for Class {currentClass.name}</h2>
                 <ExchangeStatus
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
                     status={exchange && exchange.status}

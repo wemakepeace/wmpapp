@@ -2,6 +2,10 @@
 @import '../partials/_colors';
 
 
+.class-portal-tab {
+    margin-top: 50px;
+}
+
 .subheader {
     display: grid;
     grid-template-columns: 65% auto auto;;
@@ -25,8 +29,8 @@
     }
 
     .subheader-menu-item:hover {
-        text-decoration: underline;
         background-color: lightgoldenrodyellow;
+        color: $pink !important;
     }
 }
 
@@ -47,6 +51,7 @@
     .profile-menu-item:hover {
         h3 {
             color: $pink !important;
+
         }
     }
 
@@ -358,7 +363,7 @@
             font-size: 0.9em;
         }
 
-        .subheader-menu-item {
+        .subheader-menu-item h3 {
            font-size: 0.9em;
         }
     }
@@ -413,7 +418,7 @@
         grid-template-columns: 55% auto auto;
 
         .subheader-menu-item, .user-details {
-            font-size: 0.8em;
+            font-size: 0.9em;
         }
 
         .user-details {
@@ -441,7 +446,7 @@
         grid-template-columns: 50% auto auto;
 
         .subheader-menu-item, .user-details {
-            font-size: 0.7em;
+            // font-size: 0.7em;
         }
     }
 }

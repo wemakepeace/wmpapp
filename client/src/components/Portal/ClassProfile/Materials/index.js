@@ -45,7 +45,7 @@ class Materials extends Component  {
 
 
         return (
-            <div>
+            <div className='class-portal-tab'>
                 <h2>Materials & Instructions</h2>
                 <Menu
                     content={content}

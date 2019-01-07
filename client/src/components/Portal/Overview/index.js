@@ -2,15 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import ExchangeProgress from './ExchangeProgress';
-import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import { fetchClass } from '../../../redux/actions/class';
-import peaceGirlImg from '../../../../../assets/images/peacegirl.png';
-import AboutProgramAccordion from './AboutProgramAccordion';
-
 import ClassProfile from '../ClassProfile';
 
 const exchangeActions = {
@@ -73,7 +68,7 @@ class OverviewContainer extends Component {
                         </div>
                     </div>
                 </div>
-                <ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
+                {/*<ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
                     <Grid.Column width={8} className='overview-class-details'>
@@ -89,10 +84,11 @@ class OverviewContainer extends Component {
                             title='Exchange Class '/>
                     </Grid.Column>
                 </Grid>
+            */}
                 <Route
                     path={`${match.path}/:childpath`}
                     render={(props) => (
-                        <ClassProfile {...props} />
+                        <ClassProfile {...this.props} {...props} toggleLoader={this.toggleLoader.bind(this) }/>
                         )}
                     {...this.props}
                 />

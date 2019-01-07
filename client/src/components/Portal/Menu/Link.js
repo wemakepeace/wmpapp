@@ -8,7 +8,7 @@ export const MenuLink = (props) => {
         path,
         defaultChildRoute,
         classIsSelected,
-        shouldDisplayAlways,
+        hidden,
         match: { url },
         location: { pathname }
     } = props;
@@ -27,11 +27,11 @@ export const MenuLink = (props) => {
         _class += ' last-item';
     }
 
-    if (classIsSelected || shouldDisplayAlways) {
+    if (!hidden) {
         return (
             <Link to={routeTo}>
                 <div className={_class} >
-                    <h3>{name.toUpperCase()}</h3>
+                    <h3>{name}</h3>
                 </div>
             </Link>
         );

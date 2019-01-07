@@ -10,6 +10,7 @@ import Feedback from '../Feedback';
 import { removeCurrentClass } from '../../redux/actions/class';
 import { logout } from '../../redux/actions/teacher';
 import { clearFeedback } from '../../redux/actions/shared';
+import ClassForm from './ClassProfile/Class';
 
 class Profile extends Component {
     state = {}
@@ -34,10 +35,7 @@ class Profile extends Component {
             <div className='page-content'>
                 <Header {...this.props} />
                 <div className='profile-column-container'>
-                    <Menu
-                        classIsSelected={currentClass && currentClass.id ? true : false}
-                        {...this.props}
-                    />
+                    <Menu {...this.props} />
                     <div className='profile-form-column'>
                         <SubHeader
                             className='web-subheader'

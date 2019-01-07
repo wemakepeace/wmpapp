@@ -1,4 +1,4 @@
-import Overview from '../Overview';
+import Progress from '../Progress';
 import Class from '../Class';
 import Teacher from '../Teacher';
 import Materials from '../Materials';
@@ -8,7 +8,7 @@ import ExchangeDetails from '../ExchangeDetails';
 const content = [
     {
         name: 'Progress',
-        component: ExchangeDetails,
+        component: Progress,
         path: 'progress'
     },
     {

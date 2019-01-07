@@ -1,51 +1,42 @@
 import Overview from '../Overview';
-import Class from '../Class';
+import ClassForm from '../ClassProfile/Class';
 import Teacher from '../Teacher';
 import Materials from '../Materials';
 import Support from '../Support';
 import ExchangeDetails from '../ExchangeDetails';
+import AboutProgram from '../AboutProgram';
 
 const mainMenuContent = [
     {
         name: 'Overview',
         component: Overview,
         path: 'overview',
-        shouldDisplayAlways: true
+        defaultChildRoute: 'progress',
+    },
+    {
+        name: 'About the Program',
+        component: AboutProgram,
+        path: 'about-program',
     },
     {
         name: 'Teacher Profile',
         component: Teacher,
         path: 'teacher-profile',
-        shouldDisplayAlways: true
     },
     {
         name: 'Support',
         component: Support,
         path: 'support',
-        shouldDisplayAlways: true
-    }
-];
-
-const classMenuContent = [
-    {
-        name: 'Exchange Details',
-        component: ExchangeDetails,
-        path: 'exchange-details',
-        shouldDisplayAlways: false
     },
     {
-        name: 'Class Profile',
-        component: Class,
-        path: 'class-profile',
-        shouldDisplayAlways: false
-    },
-    {
-        name: 'Materials',
-        component: Materials,
-        path: 'materials',
-        defaultChildRoute: 'information',
-        shouldDisplayAlways: false
+        name: 'Register New Class',
+        component: ClassForm,
+        path: 'new-class',
+        hidden: true
     }
+
 ];
 
-export default { mainMenuContent, classMenuContent };
+
+
+export default { mainMenuContent };

@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { Button, Message } from 'semantic-ui-react';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
-import { LoaderWithText } from '../../reusables/LoaderWithText';
-import { saveClass, removeCurrentClass } from '../../../redux/actions/class';
+import { LoaderWithText } from '../../../reusables/LoaderWithText';
+import { saveClass, removeCurrentClass } from '../../../../redux/actions/class';
 
 class ClassFormsContainer extends Component {
     constructor(props) {
