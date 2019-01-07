@@ -6,7 +6,7 @@ const RegisterClass = ({ removeCurrentClass, history }) => {
 
     const initiateNewClass = () => {
         removeCurrentClass();
-        history.push('/portal/class');
+        history.push('/portal/class-profile');
     }
 
     return (
