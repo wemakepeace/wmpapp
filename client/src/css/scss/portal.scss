@@ -129,16 +129,27 @@
 
         }
 
+        a.active.item {
+            background-color: #fbfaf8 !important;
+        }
+
         .class-profile {
             background-color: #fbfaf8;
             padding: 20px;
 
 
+
             .class-portal-tab {
                 padding-top: 30px;
+
+                .materials-content {
+                    padding: 1em;
+                }
+
+                .ui.styled.accordion .accordion .content, .ui.styled.accordion .content {
+                    padding: 0;
+                }
             }
-
-
         }
 
         .progress-bar {

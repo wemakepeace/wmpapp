@@ -52,6 +52,7 @@ class MyClasses extends Component {
                     <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
                 </div>
+
                 <div className='profile-segment'>
                     <div className='exchange-actions'>
                         { teacher && teacher.classes ?
@@ -67,6 +68,7 @@ class MyClasses extends Component {
                         </div>
                     </div>
                 </div>
+                <hr className='bottom-margin-hr' />
                 <Route
                     path={`${match.path}/:childpath`}
                     render={(props) => (

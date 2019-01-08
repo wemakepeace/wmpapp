@@ -1,5 +1,6 @@
 import React from 'react';
 import content from './content';
+import { Input, Menu, Segment } from 'semantic-ui-react'
 
 
 const TabContent = (props) => {
@@ -7,9 +8,9 @@ const TabContent = (props) => {
         const Component = content.find((topic) => topic.path === props.match.params.childpath).component;
 
         return (
-             <div className='class-profile'>
+             <Segment attached='bottom' className='class-profile'>
                 <Component {...props} />
-            </div>
+            </Segment>
         );
     }
     return null;
