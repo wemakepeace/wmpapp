@@ -49,7 +49,7 @@ class MyClasses extends Component {
                     text={exchangeAction}
                 />
                 <div className='profile-segment'>
-                    <h2>{`Welcome, ${firstName}`}!</h2>
+                    <h3>{`Welcome, ${firstName}`}!</h3>
                     <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
                 </div>
                 <div className='profile-segment'>

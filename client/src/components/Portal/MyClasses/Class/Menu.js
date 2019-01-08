@@ -21,7 +21,6 @@ export default class ClassMenu extends Component {
         const { activeItem } = this.state
 
         return (
-            <div>
                 <Menu pointing secondary>
                     <Menu.Item
                         name='progress'
@@ -52,7 +51,6 @@ export default class ClassMenu extends Component {
                         onClick={this.handleItemClick}
                     />
                 </Menu>
-            </div>
         );
     }
 }

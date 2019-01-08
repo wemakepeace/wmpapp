@@ -46,14 +46,6 @@ const specialContent = {
                         <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
                     </ul>
                 </Message>
-                {/*<h4>Steps</h4>
-                <ul>
-                    <li>Step 1 - Lesson: Letter writing as a genre</li>
-                    <li>Step 2 - Reading Letter 1 from the other class</li>
-                    <li>Step 3 - Writing Letter 1</li>
-                    <li>Step 4 - Mailing the letters</li>
-                    <li>Step 5 - Wait to receive Letter 2 from the other class</li>
-                </ul>*/}
             </div>
         )
     }

@@ -14,7 +14,7 @@ import Menu from './Menu';
 import TabContent from './TabContent';
 import content from './content';
 import { fetchLetterTemplates } from '../../../../../redux/actions/exchange';
-
+import Accordion from './Accordion';
 
 class Materials extends Component  {
     state = {}
@@ -47,7 +47,8 @@ class Materials extends Component  {
         return (
             <div className='class-portal-tab'>
                 <h3>Materials & Instructions</h3>
-                <Menu
+                <Accordion letterURLs={letterURLs} classRole={classRole} />
+                {/*<Menu
                     content={content}
                     match={match}
                     location={location}
@@ -62,7 +63,7 @@ class Materials extends Component  {
                             match={match}
                         />
                     )}
-                />
+                />*/}
             </div>
         );
     };

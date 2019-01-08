@@ -81,16 +81,13 @@ export const Status = ({ status, classIsVerified, onExchangeActionClick }) => {
         <div>
             <div className="flex-outer">
                 <div className="flex-inner-3">
-                    <div className="flex-item border">
-                        <label>Next steps</label>
-                    </div>
                     <div className="flex-item">
                         {details.text()}
                     </div>
-                    <div className="flex-item center">
+                    <div className="flex-item">
                         { details.buttonText && !classIsVerified ?
                             <Button
-                                className='large-custom-btn center-btn'
+                                className='large-custom-btn'
                                 size='large'
                                 onClick={() => onExchangeActionClick(details.action)}>
                                 {details.buttonText}

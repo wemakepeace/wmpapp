@@ -2,9 +2,6 @@
 @import '../partials/_colors';
 
 
-.class-portal-tab {
-    margin-top: 50px;
-}
 
 .subheader {
     display: grid;
@@ -110,6 +107,9 @@
             }
         }
 
+        .ui.menu {
+            margin: 1rem 0 0 !important;
+        }
 
         .profile-segment {
             padding-bottom: 15px;
@@ -125,12 +125,25 @@
                    list-style: none;
                 }
             }
+
+
+        }
+
+        .class-profile {
+            background-color: #fbfaf8;
+            padding: 20px;
+
+
+            .class-portal-tab {
+                padding-top: 30px;
+            }
+
+
         }
 
         .progress-bar {
             font-size: 20px;
             padding-bottom: 20px;
-            margin: 0px 20px 40px 20px;
             line-height: 1.5em;
 
             .ui.progress:first-child {
