@@ -5,7 +5,7 @@ import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
-import ClassProfile from './ClassProfile';
+import Class from './Class';
 import { fetchClass } from '../../../redux/actions/class';
 
 const exchangeActions = {
@@ -70,7 +70,7 @@ class MyClasses extends Component {
                 <Route
                     path={`${match.path}/:childpath`}
                     render={(props) => (
-                        <ClassProfile
+                        <Class
                             {...this.props}
                             {...props}
                             toggleLoader={this.toggleLoader.bind(this)}

@@ -1,5 +1,5 @@
 import MyClasses from '../MyClasses';
-import ClassForm from '../MyClasses/ClassProfile/Class';
+import ClassForm from '../MyClasses/Class/ClassForm';
 import Teacher from '../Teacher';
 import Support from '../Support';
 import AboutProgram from '../AboutProgram';

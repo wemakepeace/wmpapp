@@ -8,7 +8,7 @@ import SchoolForm from './SchoolForm';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
 import { saveClass, removeCurrentClass } from '../../../../../redux/actions/class';
 
-class ClassFormsContainer extends Component {
+class ClassForms extends Component {
     constructor(props) {
         super(props);
         const { currentClass } = props;
@@ -140,6 +140,6 @@ const mapStateToProps = ({ teacher, currentClass, feedback }) => {
 
 const toBeDispatched = { saveClass, removeCurrentClass };
 
-export default connect(mapStateToProps, toBeDispatched )(ClassFormsContainer);
+export default connect(mapStateToProps, toBeDispatched )(ClassForms);
 
 

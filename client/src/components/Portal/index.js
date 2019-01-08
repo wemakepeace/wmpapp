@@ -10,7 +10,7 @@ import Feedback from '../Feedback';
 import { removeCurrentClass } from '../../redux/actions/class';
 import { logout } from '../../redux/actions/teacher';
 import { clearFeedback } from '../../redux/actions/shared';
-import ClassForm from './MyClasses/ClassProfile/Class';
+import ClassForms from './MyClasses/Class/ClassForms';
 
 class Profile extends Component {
     state = {}

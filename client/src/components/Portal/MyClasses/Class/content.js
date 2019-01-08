@@ -1,5 +1,5 @@
 import Progress from './Progress';
-import ClassForm from './Class';
+import ClassForms from './ClassForms';
 import Materials from './Materials';
 import ExchangeDetails from './ExchangeDetails';
 
@@ -16,7 +16,7 @@ const content = [
     },
     {
         name: 'Class Profile',
-        component: ClassForm,
+        component: ClassForms,
         path: 'class-profile'
     },
     {
