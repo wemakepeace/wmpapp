@@ -1,9 +1,7 @@
-import Progress from '../Progress';
-import ClassForm from '../ProfileClass/Class';
-import Teacher from '../Teacher';
-import Materials from '../Materials';
-import Support from '../Support';
-import ExchangeDetails from '../ExchangeDetails';
+import Progress from './Progress';
+import ClassForm from './Class';
+import Materials from './Materials';
+import ExchangeDetails from './ExchangeDetails';
 
 const content = [
     {

@@ -1,9 +1,9 @@
 import Overview from '../Overview';
 import ClassForm from '../ClassProfile/Class';
 import Teacher from '../Teacher';
-import Materials from '../Materials';
+import Materials from '../ClassProfile/Materials';
 import Support from '../Support';
-import ExchangeDetails from '../ExchangeDetails';
+import ExchangeDetails from '../ClassProfile/ExchangeDetails';
 import AboutProgram from '../AboutProgram';
 
 const mainMenuContent = [
