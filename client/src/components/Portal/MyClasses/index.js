@@ -5,8 +5,8 @@ import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
 import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
+import ClassProfile from './ClassProfile';
 import { fetchClass } from '../../../redux/actions/class';
-import ClassProfile from '../ClassProfile';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
@@ -52,7 +52,6 @@ class MyClasses extends Component {
                     <h2>{`Welcome, ${firstName}`}!</h2>
                     <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
                 </div>
-                {/*<AboutProgramAccordion />*/}
                 <div className='profile-segment'>
                     <div className='exchange-actions'>
                         { teacher && teacher.classes ?
@@ -68,28 +67,15 @@ class MyClasses extends Component {
                         </div>
                     </div>
                 </div>
-                {/*<ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
-                <hr style={{margin: '20px 0'}} />
-                <Grid colums={2}>
-                    <Grid.Column width={8} className='class-details'>
-                        <ClassDetails
-                            classData={currentClass}
-                            teacher={teacher}
-                            title='Your Class '/>
-                    </Grid.Column>
-                    <Grid.Column width={8} className='class-details'>
-                        <ClassDetails
-                            classData={exchange.exchangeClass}
-                            teacher={exchange.exchangeClass && exchange.exchangeClass.teacher}
-                            title='Exchange Class '/>
-                    </Grid.Column>
-                </Grid>
-            */}
                 <Route
                     path={`${match.path}/:childpath`}
                     render={(props) => (
-                        <ClassProfile {...this.props} {...props} toggleLoader={this.toggleLoader.bind(this) }/>
-                        )}
+                        <ClassProfile
+                            {...this.props}
+                            {...props}
+                            toggleLoader={this.toggleLoader.bind(this)}
+                        />
+                    )}
                     {...this.props}
                 />
 

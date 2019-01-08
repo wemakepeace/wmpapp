@@ -1,9 +1,7 @@
 import MyClasses from '../MyClasses';
-import ClassForm from '../ClassProfile/Class';
+import ClassForm from '../MyClasses/ClassProfile/Class';
 import Teacher from '../Teacher';
-import Materials from '../ClassProfile/Materials';
 import Support from '../Support';
-import ExchangeDetails from '../ClassProfile/ExchangeDetails';
 import AboutProgram from '../AboutProgram';
 
 const mainMenuContent = [

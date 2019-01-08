@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Feedback from '../../../../Feedback';
+import Feedback from '../../../../../Feedback';
 import ExchangeDetails from './ExchangeDetails';
 import { ExchangeStatus } from './ExchangeStatus';
-import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
+import { initiateExchange, verifyExchange } from '../../../../../../redux/actions/exchange';
 
 
 class Exchange extends Component {

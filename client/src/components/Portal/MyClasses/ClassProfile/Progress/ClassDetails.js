@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCountryName } from '../../../../utils/helpers';
+import { getCountryName } from '../../../../../utils/helpers';
 
 const ClassDetails = ({ classData, teacher, title }) => {
     let school;

@@ -4,9 +4,9 @@ import { Route } from 'react-router-dom';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
 import ExchangeProgress from './ExchangeProgress';
 import ClassDetails from './ClassDetails';
-import { LoaderWithText } from '../../../reusables/LoaderWithText';
-import SelectClass from '../../../reusables/SelectClassDropdown';
-import RegisterClass from '../../../reusables/RegisterClass';
+import { LoaderWithText } from '../../../../reusables/LoaderWithText';
+import SelectClass from '../../../../reusables/SelectClassDropdown';
+import RegisterClass from '../../../../reusables/RegisterClass';
 
 
 const Progress = ({ currentClass, teacher, exchange, toggleLoader }) => {

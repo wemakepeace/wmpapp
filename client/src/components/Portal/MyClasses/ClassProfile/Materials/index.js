@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Route, Redirect } from 'react-router-dom';
-import { fetchLetterTemplates } from '../../../../redux/actions/exchange';
 import {
     Header,
     Image,
@@ -14,6 +13,7 @@ import {
 import Menu from './Menu';
 import TabContent from './TabContent';
 import content from './content';
+import { fetchLetterTemplates } from '../../../../../redux/actions/exchange';
 
 
 class Materials extends Component  {
