@@ -1,4 +1,4 @@
-import Progress from './Progress';
+import ExchangeProgress from './ExchangeProgress';
 import ClassForms from './ClassForms';
 import Materials from './Materials';
 import ExchangeDetails from './ExchangeDetails';
@@ -6,7 +6,7 @@ import ExchangeDetails from './ExchangeDetails';
 const content = [
     {
         name: 'Progress',
-        component: Progress,
+        component: ExchangeProgress,
         path: 'progress'
     },
     {

@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import ExchangeProgress from './ExchangeProgress';
+import Progress from './Progress';
 import ClassDetails from './ClassDetails';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
 import SelectClass from '../../../../reusables/SelectClassDropdown';
 import RegisterClass from '../../../../reusables/RegisterClass';
 
 
-const Progress = ({ currentClass, teacher, exchange, toggleLoader }) => {
+const ExchangeProgress = ({ currentClass, teacher, exchange, toggleLoader }) => {
     return (
         <div className='class-portal-tab'>
-            <ExchangeProgress toggleLoader={toggleLoader} />
+            <Progress toggleLoader={toggleLoader} />
             <hr style={{margin: '20px 0'}} />
             <Grid colums={2}>
                 <Grid.Column width={8} className='overview-class-details'>
@@ -32,4 +32,4 @@ const Progress = ({ currentClass, teacher, exchange, toggleLoader }) => {
     );
 }
 
-export default Progress;
+export default ExchangeProgress;

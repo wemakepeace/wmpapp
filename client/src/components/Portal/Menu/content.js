@@ -1,5 +1,5 @@
 import MyClasses from '../MyClasses';
-import ClassForm from '../MyClasses/Class/ClassForm';
+import ClassForms from '../MyClasses/Class/ClassForms';
 import Teacher from '../Teacher';
 import Support from '../Support';
 import AboutProgram from '../AboutProgram';
@@ -12,14 +12,14 @@ const mainMenuContent = [
         defaultChildRoute: 'progress',
     },
     {
-        name: 'About the Program',
-        component: AboutProgram,
-        path: 'about-program',
-    },
-    {
         name: 'Teacher Profile',
         component: Teacher,
         path: 'teacher-profile',
+    },
+    {
+        name: 'About the Program',
+        component: AboutProgram,
+        path: 'about-program',
     },
     {
         name: 'Support',
@@ -28,7 +28,7 @@ const mainMenuContent = [
     },
     {
         name: 'Register New Class',
-        component: ClassForm,
+        component: ClassForms,
         path: 'new-class',
         hidden: true
     }
