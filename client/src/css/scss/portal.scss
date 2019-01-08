@@ -1,21 +1,22 @@
 @import '../partials/_mixins';
 @import '../partials/_colors';
 
-
+img.ui.image.profile-logo {
+    display: none;
+}
 
 .subheader {
     display: grid;
     grid-template-columns: 65% auto auto;;
     background-color: #f7f7f7;
     border-bottom: 1px solid darkgray;
-    font-size: 1.3em;
     text-align: center;
     width: 100%;
 
 
     .user-details {
         text-align: left !important;
-        padding: 6px 0 0 20px;
+        padding: 6px 0 0 8px;
         border-right: 1px solid gray;
     }
 
@@ -59,9 +60,19 @@
     }
 
 
-
     .profile-menu-item {
         border-bottom: 1px solid darkgray !important;
+
+        i.long.arrow.alternate.right.icon {
+            float: right;
+            display: none;
+        }
+    }
+    .active-profile {
+        i.long.arrow.alternate.right.icon  {
+
+            display: block !important;
+        }
     }
 }
 
@@ -332,7 +343,8 @@
 @media (max-width: 1000px) {
        .page-content {
             .profile-form-column .profile-form {
-                width: 85%;
+                // width: 85%;
+                width: 93%;
             }
     }
 }
@@ -340,10 +352,6 @@
 
 
 @media(min-width: 900px) {
-    .subheader.mobile-subheader {
-        display: none;
-    }
-
 
     .profile-column-container {
         display: flex;
@@ -380,7 +388,6 @@
 
     .subheader.mobile-subheader {
         display: grid;
-        // grid-template-columns: 62% 26% 12%;
 
         .user-details {
             padding: 6px 0 0 13px;
@@ -388,20 +395,18 @@
         }
 
         .subheader-menu-item h3 {
-           font-size: 0.9em;
+           font-size: 1em;
         }
-    }
-
-    .subheader.web-subheader, img.ui.image.profile-logo {
-        display: none;
     }
 
     .profile-menu-column .profile-menu-item {
         border-bottom: 1px solid darkgray !important;
     }
 
-    .profile-menu-item h3 {
-        font-size: 1em;
+    .profile-menu-item {
+        h3 {
+            font-size: 1em;
+        }
     }
 
     .user-details.mobile {
@@ -472,5 +477,13 @@
         .subheader-menu-item, .user-details {
             // font-size: 0.7em;
         }
+    }
+
+    .profile-form-column .profile-form .class-profile {
+        // padding: 0px;
+    }
+
+    .ui.message {
+        // padding: 0.5em 0;
     }
 }

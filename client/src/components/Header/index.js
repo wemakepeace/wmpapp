@@ -2,7 +2,6 @@ import React from 'react';
 import SubHeader from './SubHeader';
 
 const HeaderContainer = (props) => {
-
     return (
         <div>
             <div className='title-container'>
@@ -14,9 +13,7 @@ const HeaderContainer = (props) => {
                     </div>
                 </div>
             </div>
-            { props.teacher && props.teacher.firstName ?
-                <SubHeader className='mobile-subheader' {...props} /> :
-            null }
+            <SubHeader className='mobile-subheader' {...props} />
         </div>
     );
 }

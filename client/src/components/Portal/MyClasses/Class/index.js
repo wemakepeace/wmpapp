@@ -8,6 +8,7 @@ const ClassProfile = (props) => {
     return (
         <div>
             <h2>Exchange Overview for Class {props.currentClass.name}</h2>
+            <br />
             <Menu {...props} />
             <TabContent {...props} />
         </div>

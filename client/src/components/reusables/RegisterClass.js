@@ -10,7 +10,7 @@ const RegisterClass = ({ removeCurrentClass, history }) => {
     }
 
     return (
-        <span onClick={initiateNewClass}>Register New Class</span>
+        <span onClick={initiateNewClass}>New Class</span>
     );
 }
 

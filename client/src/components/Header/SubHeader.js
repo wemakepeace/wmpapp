@@ -3,19 +3,24 @@ import { connect } from 'react-redux';
 import RegisterClass from '../reusables/RegisterClass';
 import { logout } from '../../redux/actions/teacher';
 
-const SubHeader = ({ teacher, currentClass, className, logout, history, location: { pathname } }) => {
+const SubHeader = ({ teacher, currentClass, className, logout, history, location }) => {
 
     const onLogout = () => {
         logout(teacher.id);
         history.push('/');
     }
+
     const activeItem = () => {
-        if(pathname === '/portal/new-class') {
+        if (location && location.pathname === '/portal/new-class') {
             return 'active-profile'
         }
         return '';
     }
-    activeItem()
+
+    if (!teacher || !teacher.id) {
+        return null;
+    }
+
     return (
         <div className={`subheader ${className}`}>
             <div className='user-details'>

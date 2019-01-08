@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Image } from 'semantic-ui-react';
 import Header from '../Header';
-import SubHeader from '../Header/SubHeader';
 import TabContent from './TabContent';
 import { Menu } from './Menu';
 import Feedback from '../Feedback';
@@ -22,14 +21,7 @@ class Profile extends Component {
     }
 
     render() {
-        const {
-            match,
-            history,
-            currentClass,
-            feedback,
-            teacher,
-            logout
-        } = this.props;
+        const { match, feedback } = this.props;
 
         return (
             <div className='page-content'>
@@ -37,13 +29,6 @@ class Profile extends Component {
                 <div className='profile-column-container'>
                     <Menu {...this.props} />
                     <div className='profile-form-column'>
-                        <SubHeader
-                            className='web-subheader'
-                            currentClass={currentClass}
-                            teacher={teacher}
-                            history={history}
-                            {...this.props}
-                        />
                         <Image
                             className='profile-logo'
                             src='../../../../assets/logos/WMPlogo_transparent.png'
