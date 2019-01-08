@@ -58,7 +58,7 @@ class Support extends Component {
                 />
                 <div className='profile-segment'>
                     <div>
-                        <h2>Questions & Answers</h2>
+                        <h3>Questions & Answers</h3>
                         <p>Please look through to see if any questions you may have are answered below.</p>
                     </div>
                     <hr style={{margin: '20px 0'}} />

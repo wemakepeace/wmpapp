@@ -152,7 +152,7 @@ class TeacherFormContainer extends Component {
                     {...modalContent[ modal.modalType ]}
                 />
                 <div className='profile-segment'>
-                    <h2>Teacher Information</h2>
+                    <h3>Teacher Profile</h3>
                     <p>All information you give will be kept safe and secure for your privacy.</p>
                     { fields.map((field) => (
                         <Input

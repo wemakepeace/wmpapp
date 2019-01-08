@@ -18,6 +18,7 @@ class AboutProgramAccordion extends Component {
         const { activeIndex } = this.state;
         return (
             <div>
+                <h3>About the Peace Letter Program</h3>
                 <Accordion>
                     <Accordion.Title
                         active={activeIndex === 0}

@@ -32,7 +32,7 @@ class Settings extends Component {
 
         return (
             <div className='profile-segment'>
-                <h2>Security Settings</h2>
+                <h3>Security Settings</h3>
                 <Accordion fluid styled>
                     <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
                         <Icon name='dropdown' />

@@ -5,7 +5,7 @@ import SelectClass from '../../reusables/SelectClassDropdown';
 const SupportForm = ({ onSubmitMessage, fetchClass, setState }) => {
     return (
         <div>
-            <h2>Need our assistance?</h2>
+            <h3>Need our assistance?</h3>
             <p>If your class is enrolled in an ongoing exchange, we always encourage you to reach out to the other class' teacher before getting in touch with us.</p>
             <p>If you do need our assistance, feel free to submit your problem, and we will get back to you as soon as we are able to.</p>
             <Form>
