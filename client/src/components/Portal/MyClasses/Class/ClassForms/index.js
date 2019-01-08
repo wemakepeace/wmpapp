@@ -97,14 +97,14 @@ class ClassForms extends Component {
         const { loading } = this.state;
 
         return (
-            <div className='profile-segment'>
+            <div className='class-portal-tab'>
                 <LoaderWithText
                     loading={loading}
                     text='Saving...'
                 />
                 <div>
                     { currentClass && currentClass.id ?
-                        <h2>Information & Settings for Class {currentClass.name} at {currentClass.school.schoolName}</h2> :
+                        <h3>Information & Settings for Class {currentClass.name} at {currentClass.school.schoolName}</h3> :
                         <h2> Register New Class </h2> }
                     <ClassForm
                         classData={this.state.class}

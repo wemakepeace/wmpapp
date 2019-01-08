@@ -46,7 +46,7 @@ class Materials extends Component  {
 
         return (
             <div className='class-portal-tab'>
-                <h2>Materials & Instructions</h2>
+                <h3>Materials & Instructions</h3>
                 <Menu
                     content={content}
                     match={match}

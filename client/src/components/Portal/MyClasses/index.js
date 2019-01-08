@@ -57,7 +57,7 @@ class MyClasses extends Component {
                         { teacher && teacher.classes ?
                             <div>
                                 <React.Fragment>
-                                    <h2>Select class</h2>
+                                    <h4>Select class</h4>
                                     <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
                                 </React.Fragment>
                             </div>  : null

@@ -66,7 +66,7 @@ const exchangeStatusData = {
 }
 
 
-export const ExchangeStatus = ({ status, classIsVerified, onExchangeActionClick }) => {
+export const Status = ({ status, classIsVerified, onExchangeActionClick }) => {
     if (status === 'pending' && classIsVerified) {
         status = 'partially confirmed';
     }

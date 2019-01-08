@@ -1,35 +1,79 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
-import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import Progress from './Progress';
-import ClassDetails from './ClassDetails';
-import { LoaderWithText } from '../../../../reusables/LoaderWithText';
-import SelectClass from '../../../../reusables/SelectClassDropdown';
-import RegisterClass from '../../../../reusables/RegisterClass';
+import Feedback from '../../../../Feedback';
+import { Status } from './Status';
+import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
 
 
-const ExchangeProgress = ({ currentClass, teacher, exchange, toggleLoader }) => {
-    return (
-        <div className='class-portal-tab'>
-            <Progress toggleLoader={toggleLoader} />
-            <hr style={{margin: '20px 0'}} />
-            <Grid colums={2}>
-                <Grid.Column width={8} className='overview-class-details'>
-                    <ClassDetails
-                        classData={currentClass}
-                        teacher={teacher}
-                        title='Your Class '/>
-                </Grid.Column>
-                <Grid.Column width={8} className='overview-class-details'>
-                    <ClassDetails
-                        classData={exchange.exchangeClass}
-                        teacher={exchange.exchangeClass && exchange.exchangeClass.teacher}
-                        title='Exchange Class '/>
-                </Grid.Column>
-            </Grid>
-        </div>
-    );
-}
+class Progress extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            percent: 20,
+            showFeedback: false
+        }
+    }
 
-export default ExchangeProgress;
+    initiate(id) {
+        return this.props.initiateExchange(id);
+    }
+
+    /*
+     * An exchange can be in one of these four stages:
+     * 1.   Not started
+     * 2.   Initiated (no match has been found, waiting for another class to sign up that matches)
+     * 3.   Pending (match has been made, but we are waiting for one or both classes to confirm exchange)
+     * 4.   Confirmed (both classes has confirmed, ready to begin exchange)
+     */
+
+    onExchangeActionClick(exchangeAction) {
+        const { currentClass: { id } } = this.props;
+        const { exchange, toggleLoader } = this.props;
+        const exchangeId = exchange && exchange.id;
+        // toggleLoader will submit action based on current exchange status
+        // either intiateExchange or verifyExchange
+        toggleLoader(true, exchangeAction);
+        return this.props[ exchangeAction ](id, exchangeId);
+    }
+
+    componentWillReceiveProps({ feedback }) {
+        if (feedback && feedback.type === 'error') {
+            this.setState({ showFeedback: true });
+        }
+    }
+
+    render() {
+        const {
+            feedback,
+            exchange,
+            currentClass
+        } = this.props;
+        const { showFeedback } = this.state;
+
+        if (!currentClass || !currentClass.id) {
+            return null;
+        }
+
+        return (
+            <div className='class-portal-tab'>
+                <Status
+                    onExchangeActionClick={this.onExchangeActionClick.bind(this)}
+                    status={exchange && exchange.status}
+                    classIsVerified={exchange.classIsVerified}
+                />
+                { showFeedback && (feedback && feedback.type) ?
+                    <Feedback {...feedback} /> : null }
+            </div>
+        );
+    };
+};
+
+const mapStateToProps = ({ currentClass, feedback, exchange }) => {
+    return {
+        currentClass,
+        feedback,
+        exchange
+    };
+};
+
+export default connect(mapStateToProps, { initiateExchange, verifyExchange })(Progress);
