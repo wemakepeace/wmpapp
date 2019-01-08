@@ -125,7 +125,7 @@ class ClassFormsContainer extends Component {
                     </div>
                     { currentClass && currentClass.id ?
                         <Message size='large' color='yellow'>
-                            You can manage your class' exchange participation on the <Link to='/#/portal/overview/'>Overview</Link> page.
+                            You can manage your class' exchange participation on the <Link to='/#/portal/my-classes/progress'>My Classes</Link> page.
                         </Message> : null
                     }
                 </div>

@@ -13,7 +13,7 @@ const exchangeActions = {
     verifyExchange: 'Confirming Your Exchange Participation'
 };
 
-class OverviewContainer extends Component {
+class MyClasses extends Component {
     state = {
         loading: false,
         action: '',
@@ -43,7 +43,7 @@ class OverviewContainer extends Component {
         const exchangeAction = exchangeActions[ action ];
 
         return (
-            <div className='overview'>
+            <div className='my-classes'>
                 <LoaderWithText
                     loading={loading}
                     text={exchangeAction}
@@ -54,7 +54,7 @@ class OverviewContainer extends Component {
                 </div>
                 {/*<AboutProgramAccordion />*/}
                 <div className='profile-segment'>
-                    <div className='overview-actions'>
+                    <div className='exchange-actions'>
                         { teacher && teacher.classes ?
                             <div>
                                 <React.Fragment>
@@ -71,13 +71,13 @@ class OverviewContainer extends Component {
                 {/*<ExchangeProgress toggleLoader={this.toggleLoader.bind(this)} />
                 <hr style={{margin: '20px 0'}} />
                 <Grid colums={2}>
-                    <Grid.Column width={8} className='overview-class-details'>
+                    <Grid.Column width={8} className='class-details'>
                         <ClassDetails
                             classData={currentClass}
                             teacher={teacher}
                             title='Your Class '/>
                     </Grid.Column>
-                    <Grid.Column width={8} className='overview-class-details'>
+                    <Grid.Column width={8} className='class-details'>
                         <ClassDetails
                             classData={exchange.exchangeClass}
                             teacher={exchange.exchangeClass && exchange.exchangeClass.teacher}
@@ -106,4 +106,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchClass })(OverviewContainer);
+export default connect(mapStateToProps, { fetchClass })(MyClasses);

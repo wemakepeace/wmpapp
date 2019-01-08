@@ -91,18 +91,18 @@
         margin-top: 6%;
         margin-bottom: 3%;
 
-        .overview-actions {
+        .exchange-actions {
             display: flex;
             flex-direction: row;
             margin-top: 20px;
         }
 
-        .overview-actions div:first-child {
+        .exchange-actions div:first-child {
             flex: 1;
             margin: 0 auto;
         }
 
-        .overview-actions div:nth-child(2) {
+        .exchange-actions div:nth-child(2) {
             flex: 2 !important;
 
             .roll-button {
@@ -428,7 +428,7 @@
 }
 
 @media(max-width: 600px) {
-    .eight.wide.column.overview-class-details {
+    .eight.wide.column.class-details {
         width: 100% !important;
     }
 

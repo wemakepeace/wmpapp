@@ -1,4 +1,4 @@
-import Overview from '../Overview';
+import MyClasses from '../MyClasses';
 import ClassForm from '../ClassProfile/Class';
 import Teacher from '../Teacher';
 import Materials from '../ClassProfile/Materials';
@@ -8,9 +8,9 @@ import AboutProgram from '../AboutProgram';
 
 const mainMenuContent = [
     {
-        name: 'Overview',
-        component: Overview,
-        path: 'overview',
+        name: 'My Classes',
+        component: MyClasses,
+        path: 'my-classes',
         defaultChildRoute: 'progress',
     },
     {
