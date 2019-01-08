@@ -1,7 +1,6 @@
 import React from 'react';
-import content from './content';
-import { Input, Menu, Segment } from 'semantic-ui-react'
-
+import content from './Menu/content';
+import { Segment } from 'semantic-ui-react'
 
 const TabContent = (props) => {
     if (props && props.match) {

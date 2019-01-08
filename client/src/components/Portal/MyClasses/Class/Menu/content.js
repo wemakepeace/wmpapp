@@ -1,7 +1,7 @@
-import ExchangeProgress from './ExchangeProgress';
-import ClassForms from './ClassForms';
-import Materials from './Materials';
-import ExchangeDetails from './ExchangeDetails';
+import ExchangeProgress from '../ExchangeProgress';
+import ClassForms from '../ClassForms';
+import Materials from '../Materials';
+import ExchangeDetails from '../ExchangeDetails';
 
 const content = [
     {

@@ -19,7 +19,6 @@ export default class ClassMenu extends Component {
 
     render() {
         const { activeItem } = this.state
-        /*<Menu pointing secondary stackable>*/
         return (
 
                 <Menu attached='top' tabular stackable>
