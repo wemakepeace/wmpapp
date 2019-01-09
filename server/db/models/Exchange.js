@@ -111,7 +111,8 @@ Exchange.findMatch = function(_class) {
                 {
                     model: School,
                     where: {
-                        country: { $ne: school.country }
+                        country: { $ne: school.country },
+                        continent: { $ne: school.continent }
                     }
                 },
                 { model: Teacher }

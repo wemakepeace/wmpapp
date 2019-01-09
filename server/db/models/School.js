@@ -1,6 +1,7 @@
 const conn = require('../conn');
 const Sequelize = conn.Sequelize;
 const getCoordinates = require('../utils/helpers');
+const lookup = require('country-code-lookup');
 
 const School = conn.define('school', {
      schoolName: {
@@ -36,6 +37,9 @@ const School = conn.define('school', {
             notEmpty: { msg: 'Please fill out country.'}
         }
     },
+    continent: {
+        type: Sequelize.STRING,
+    },
     lat: Sequelize.FLOAT,
     lng: Sequelize.FLOAT
 });
@@ -49,6 +53,9 @@ School.beforeCreate((school) => {
     .then((coordinates) => {
         school.lat = coordinates.lat;
         school.lng = coordinates.lng;
+    })
+    .then(() => {
+        school.continent = lookup.byIso(school.country).continent;
     });
 });
 
@@ -58,6 +65,9 @@ School.beforeUpdate((school, options) => {
     .then((coordinates) => {
         school.lat = coordinates.lat;
         school.lng = coordinates.lng;
+    })
+    .then(() => {
+        school.continent = lookup.byIso(school.country).continent;
     });
 });
 
