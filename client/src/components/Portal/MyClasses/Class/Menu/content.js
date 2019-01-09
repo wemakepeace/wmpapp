@@ -22,8 +22,7 @@ const content = [
     {
         name: 'Materials',
         component: Materials,
-        path: 'materials',
-        defaultChildRoute: 'information'
+        path: 'materials'
     }
 ];
 

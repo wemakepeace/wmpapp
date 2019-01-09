@@ -47,7 +47,7 @@ export default class ClassMenu extends Component {
                         name='materials'
                         active={activeItem === 'materials'}
                         as={Link}
-                        to='materials/information'
+                        to='materials'
                         onClick={this.handleItemClick}
                     />
                 </Menu>

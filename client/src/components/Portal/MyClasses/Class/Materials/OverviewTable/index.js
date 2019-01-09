@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, Header } from 'semantic-ui-react';
+import content from './content';
 
-
-export const OverviewTable = ({ content }) => (
+const OverviewTable = ({ letterName }) => (
   <Table basic='very' celled collapsing>
     <Table.Body>
       <Table.Row>
@@ -14,7 +14,7 @@ export const OverviewTable = ({ content }) => (
           </Header>
         </Table.Cell>
         <Table.Cell>
-            {content.cell1}
+            {content[ letterName ].cell1}
         </Table.Cell>
       </Table.Row>
       <Table.Row>
@@ -26,7 +26,7 @@ export const OverviewTable = ({ content }) => (
           </Header>
         </Table.Cell>
         <Table.Cell>
-          {content.cell2}
+          {content[ letterName ].cell2}
         </Table.Cell>
       </Table.Row>
       <Table.Row>
@@ -38,9 +38,12 @@ export const OverviewTable = ({ content }) => (
           </Header>
         </Table.Cell>
         <Table.Cell>
-          {content.cell3}
+          {content[ letterName ].cell3}
         </Table.Cell>
       </Table.Row>
     </Table.Body>
   </Table>
 );
+
+
+export default OverviewTable;

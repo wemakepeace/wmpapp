@@ -5,15 +5,31 @@ import Letter1 from '../Letter1';
 import Letter2 from '../Letter2';
 import Letter3 from '../Letter3';
 
-export default class AccordionExampleStandard extends Component {
-    state = { activeIndex: -1 }
+class InstructionsAccordion extends Component {
+    state = {
+        activeIndex: -1,
+        paths: ['information', 'letter-1', 'letter-2', 'letter-3']
+    }
 
     handleClick = (e, titleProps) => {
-        const { index } = titleProps
-        const { activeIndex } = this.state
-        const newIndex = activeIndex === index ? -1 : index
+        const { index } = titleProps;
+        const { activeIndex, paths } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        if (activeIndex === index) {
+            this.props.history.push('/portal/my-classes/materials');
+        } else {
+            this.props.history.push(`/portal/my-classes/materials/${paths[ index ]}`);
+        }
 
         this.setState({ activeIndex: newIndex })
+    }
+
+    componentDidMount() {
+        const { childpath } = this.props.match.params;
+        const { paths } = this.state;
+
+        this.setState({ activeIndex: paths.indexOf(childpath) });
     }
 
     render() {
@@ -76,3 +92,5 @@ export default class AccordionExampleStandard extends Component {
         );
     }
 }
+
+export default InstructionsAccordion;

@@ -1,20 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { Link, Route, Redirect } from 'react-router-dom';
-import {
-    Header,
-    Image,
-    Form,
-    Segment,
-    Message,
-    Button,
-    Icon
-} from 'semantic-ui-react';
-// import Menu from './XXXMenu';
-// import TabContent from './TabContent';
-// import content from './XXXMenu/content';
-import { fetchLetterTemplates } from '../../../../../redux/actions/exchange';
+import { Route } from 'react-router-dom';
 import InstructionsAccordion from './InstructionsAccordion';
+import { fetchLetterTemplates } from '../../../../../redux/actions/exchange';
 
 class Materials extends Component  {
     state = {}
@@ -32,7 +20,7 @@ class Materials extends Component  {
 
     render() {
         const { classRole, letterURLs, status, exchangeClass } = this.props.exchange;
-        const { match, location } = this.props;
+        const { match, location, history } = this.props;
 
         // if (status !== 'confirmed') {
         //     return (
@@ -49,27 +37,30 @@ class Materials extends Component  {
                 <p>The following instructions are designed to guide you through the Peace Letter exchange process. It’s pretty simple. Please read and follow these basic steps below to make sure the process go smoothly.</p>
 
                 <p>The program consists of three rounds of letters. Each of the letters will discuss different topics and there are lessons that you as the teacher will go through. Please take the time to implement the lesson plans, as they are a vital part of ensuring a valuable exchange experience for you and your students. On this page you will find both the downloadable letter templates and the instructions for each of the letters. Please make sure you read the instructions for each letter carefully.</p>
-                <InstructionsAccordion
-                    letterURLs={letterURLs}
-                    classRole={classRole}
-                    exchangeClass={exchangeClass}
-                />
-                {/*<Menu
-                    content={content}
-                    match={match}
-                    location={location}
-                />
                 <Route
-                    path={`${match.path}/:path`}
+                    exact path={`${match.path}`}
                     render={({ match }) => (
-                        <TabContent
-                            letterURLs={letterURLs}
-                            content={content}
-                            classRole={classRole}
+                        <InstructionsAccordion
+                            history={history}
                             match={match}
+                            letterURLs={letterURLs}
+                            classRole={classRole}
+                            exchangeClass={exchangeClass}
                         />
                     )}
-                />*/}
+                />
+                <Route
+                    path={`${match.path}/:childpath`}
+                    render={({ match }) => (
+                        <InstructionsAccordion
+                            history={history}
+                            match={match}
+                            letterURLs={letterURLs}
+                            classRole={classRole}
+                            exchangeClass={exchangeClass}
+                        />
+                    )}
+                />
             </div>
         );
     };

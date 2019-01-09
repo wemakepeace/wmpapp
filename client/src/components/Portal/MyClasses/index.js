@@ -26,9 +26,9 @@ class MyClasses extends Component {
 
     toggleLoader(bool, action) {
         if (bool !== undefined) {
-            this.setState({ loading: bool, action })
+            this.setState({ loading: bool, action });
         } else {
-            this.setState({ loading: !this.state.loading, action })
+            this.setState({ loading: !this.state.loading, action });
         }
     }
 
@@ -50,9 +50,8 @@ class MyClasses extends Component {
                 />
                 <div className='profile-segment'>
                     <h3>{`Welcome, ${firstName}`}!</h3>
-                    <p>Here you can create or edit your teacher profile, manage all your enrolled classes or register a new class.</p>
+                    <p>Here you can manage all your enrolled classes or register a new class.</p>
                 </div>
-
                 <div className='profile-segment'>
                     <div className='exchange-actions'>
                         { teacher && teacher.classes ?
@@ -64,7 +63,9 @@ class MyClasses extends Component {
                             </div>  : null
                         }
                         <div>
-                            <button className='roll-button'><RegisterClass history={history}/></button>
+                            <button className='roll-button'>
+                                <RegisterClass history={history}/>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -76,11 +77,10 @@ class MyClasses extends Component {
                             {...this.props}
                             {...props}
                             toggleLoader={this.toggleLoader.bind(this)}
-                        />
-                    )}
+                        />)
+                    }
                     {...this.props}
                 />
-
             </div>
         );
     }
