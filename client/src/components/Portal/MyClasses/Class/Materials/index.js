@@ -31,7 +31,7 @@ class Materials extends Component  {
     }
 
     render() {
-        const { classRole, letterURLs, status } = this.props.exchange;
+        const { classRole, letterURLs, status, exchangeClass } = this.props.exchange;
         const { match, location } = this.props;
 
         // if (status !== 'confirmed') {
@@ -43,11 +43,14 @@ class Materials extends Component  {
         //     );
         // }
 
-
         return (
             <div className='class-portal-tab'>
                 <h3>Materials & Instructions</h3>
-                <Accordion letterURLs={letterURLs} classRole={classRole} />
+                <Accordion
+                    letterURLs={letterURLs}
+                    classRole={classRole}
+                    exchangeClass={exchangeClass}
+                />
                 {/*<Menu
                     content={content}
                     match={match}

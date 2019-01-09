@@ -1,5 +1,6 @@
 import React from 'react';
 import { OverviewTable } from './OverviewTable'
+import Address from './Address';
 import {
     Header,
     Image,
@@ -13,38 +14,44 @@ import {
 const tableContent = {
     cell1: 'Blackboard, Letter 2 Templates',
     cell2: 'Reading, listening, sharing, letter writing.',
-    cell3: 'Empathy, positivism, love, acceptance, compassion, creativity, solution-based thinking, trouble-shooting, new skill, letter writing, processing new concepts, analytical skills.'
+    cell3: 'Empathy, positivity, love, acceptance, compassion, creativity, solution-based thinking, trouble-shooting, new skill, letter writing, processing new concepts, analytical skills.'
 };
 
-const specialContent = {
-    sender: () => {
-        return (
-            <div>
-                <Message size='large' color='yellow'>
-                    <ul>
-                        <li>Your class has the SENDER role in the Exchange.</li>
-                        <li>If you have received Letter 1 from the other class you are ready to begin writing Letter 2.</li>
-                        <li>Once the other class receives Letter 2 from you, they will begin writing Letter 2 and these will be sent to your class. </li>
-                        <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
-                    </ul>
-                </Message>
-            </div>
-        )
-    },
-    receiver: () => {
-        return (
-            <div>
-                <Message size='large' color='yellow'>
-                    <ul>
-                        <li>Your class has the RECEIVER role in the Exchange.</li>
-                        <li>This means that your class will wait until you receive Letter 2 from the other class before you begin writing Letter 2.</li>
-                        <li>It is important that the students write their own name and the name of their letter friend clearly in the Letter.</li>
-                    </ul>
-                </Message>
-            </div>
-        )
+
+const getSpecialContent = (role) => {
+    const content = {
+        sender: () => {
+            return (
+                <p>
+                    Your class has the SENDER role in the Exchange.<br />
+                    If you have received Letter 1 from the other class you are ready to begin writing Letter 2.<br />
+                    Once the other class receives Letter 2 from you, they will begin writing Letter 2 and these will be sent to your class. <br />
+                    It is important that the students write their own name and the name of their letter friend clearly on every page in the Letter.<br />
+                </p>
+            );
+        },
+        receiver: () => {
+            return (
+                <p>
+                    Your class has the RECEIVER role in the Exchange.<br />
+                    This means that your class will wait until you receive Letter 2 from the other class before you begin writing Letter 2.<br />
+                    It is important that the students write their own name and the name of their letter friend clearly in the Letter.<br />
+                </p>
+            );
+        }
     }
+
+    return (
+        <div>
+            <Message size='large' color='yellow'>
+                <h3><Icon name='info' />Important Information</h3>
+                {content[ role ]()}
+            </Message>
+        </div>
+    );
 }
+
+
 
 const StepOneSender = () => {
     return (
@@ -125,7 +132,8 @@ const StepTwo = () => {
 }
 
 
-const StepThree = () => {
+const StepThree = ({ exchangeClass }) => {
+    const { school, teacher, name } = exchangeClass;
     return (
         <div>
             <Header as='h3'>
@@ -133,8 +141,10 @@ const StepThree = () => {
             </Header>
             <h3>Mailing the letters</h3>
             <p>Before mailing the letters please make sure that all students have written their <b>own names</b> clearly on the letters.</p>
-            <p>Please make sure that the students also have written their <b>Letter Friend's name</b> clearly in the letters</p>
-            <p>Post the letters to the attention of the teacher at the school and address listed on the Exchange Overview page. If in doubt double-check with the teacher via email before posting the pack in the mail.</p>
+            <p>Please make sure that the students also have written their <b>Letter Friend's name</b> clearly in the letters.</p>
+            <p>Make sure that each students' letter has been stapled or clipped together.</p>
+            <p>Post the letters to the attention of the teacher and class at the school. If in doubt double-check with the teacher via email before posting the pack in the mail.</p>
+            <Address classData={exchangeClass} />
         </div>
     );
 }
@@ -154,13 +164,13 @@ const StepFour = () => {
 }
 
 
-const Letter2 = ({ letterURLs, classRole }) => {
+const Letter2 = ({ letterURLs, classRole, exchangeClass }) => {
     const letterURL = letterURLs && letterURLs.letter2;
     return (
         <div>
             <h1>Instructions for Letter 2</h1>
             <p>Download and print the letter template and follow the instructions below for writing and sending the second letter.</p>
-            { specialContent[ classRole ]()}
+            {getSpecialContent(classRole)}
             <div className='div-centered-content'>
                 <a href={letterURL} target='_blank'>
                     <button className='roll-button'>
@@ -174,7 +184,7 @@ const Letter2 = ({ letterURLs, classRole }) => {
             <hr style={{margin: '20px 0'}}/>
             <StepTwo />
             <hr style={{margin: '20px 0'}}/>
-            <StepThree />
+            <StepThree exchangeClass={exchangeClass} />
             <hr style={{margin: '20px 0'}}/>
             <StepFour />
         </div>

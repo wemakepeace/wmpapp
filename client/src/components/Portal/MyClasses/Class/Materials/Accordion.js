@@ -18,7 +18,7 @@ export default class AccordionExampleStandard extends Component {
 
     render() {
         const { activeIndex } = this.state
-        const { letterURLs, classRole } = this.props;
+        const { letterURLs, classRole, exchangeClass } = this.props;
         return (
             <Accordion styled fluid>
                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -27,7 +27,7 @@ export default class AccordionExampleStandard extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
                     <div className='materials-content'>
-                        <Information />
+                        <Information exchangeClass={exchangeClass} />
                     </div>
                 </Accordion.Content>
 
@@ -37,7 +37,11 @@ export default class AccordionExampleStandard extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 1}>
                     <div className='materials-content'>
-                        <Letter1 letterURLs={letterURLs} classRole={classRole} />
+                        <Letter1
+                            letterURLs={letterURLs}
+                            classRole={classRole}
+                            exchangeClass={exchangeClass}
+                        />
                     </div>
                 </Accordion.Content>
 
@@ -47,7 +51,11 @@ export default class AccordionExampleStandard extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 2}>
                     <div className='materials-content'>
-                        <Letter2 letterURLs={letterURLs} classRole={classRole} />
+                        <Letter2
+                            letterURLs={letterURLs}
+                            classRole={classRole}
+                            exchangeClass={exchangeClass}
+                        />
                     </div>
                 </Accordion.Content>
 
@@ -57,7 +65,11 @@ export default class AccordionExampleStandard extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 3}>
                     <div className='materials-content'>
-                        <Letter3 letterURLs={letterURLs} classRole={classRole} />
+                        <Letter3
+                            letterURLs={letterURLs}
+                            classRole={classRole}
+                            exchangeClass={exchangeClass}
+                        />
                     </div>
                 </Accordion.Content>
             </Accordion>
