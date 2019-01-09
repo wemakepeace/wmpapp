@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { ProgressBar } from './ProgressBar';
 import { getCountryName } from '../../../../../utils/helpers';
 
@@ -34,7 +34,7 @@ const exchangeStatusData = {
             return (
                 <div>
                     <h3>Great news! Your class has been matched with a class from {getCountryName(country)} </h3>
-                    <p>You can check out the other class details under <a href='/#/portal/my-classes/exchange-details'>Exchange Details</a></p>
+                    <p>You can check out the other class details under <a href='/#/portal/my-classes/exchange-details'>Exchange Details</a>.</p>
                     <p>Please verify your class' participation within 7 days.</p>
                 </div>
             );
@@ -108,7 +108,7 @@ export const Status = ({ status, classIsVerified, onExchangeActionClick, exchang
                                 className='large-custom-btn'
                                 size='large'
                                 onClick={() => onExchangeActionClick(details.action)}>
-                                {details.buttonText}
+                                <Icon name='check' />{details.buttonText}
                             </Button> : null }
                     </div>
                 </div>

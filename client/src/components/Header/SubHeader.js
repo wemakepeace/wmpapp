@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
 import RegisterClass from '../reusables/RegisterClass';
 import { logout } from '../../redux/actions/teacher';
 
@@ -24,6 +25,7 @@ const SubHeader = ({ teacher, currentClass, className, logout, history, location
     return (
         <div className={`subheader ${className}`}>
             <div className='user-details'>
+                <Icon name='user' />
                 Logged in as {teacher && teacher.firstName} {currentClass && currentClass.name ? <span>for Class {currentClass && currentClass.name}</span> : null}
             </div>
             <div className={`subheader-menu-item ${activeItem()}`} >
