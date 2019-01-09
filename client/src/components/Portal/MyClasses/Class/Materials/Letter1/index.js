@@ -1,6 +1,6 @@
 import React from 'react';
-import { OverviewTable } from './OverviewTable'
-import Address from './Address';
+import { OverviewTable } from '../OverviewTable'
+import Address from '../Address';
 import {
     Header,
     Message,
@@ -46,10 +46,6 @@ const getSpecialContent = (role) => {
     );
 }
 
-
-const specialContent = {
-
-}
 
 const StepOne = () => {
     return (

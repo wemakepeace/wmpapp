@@ -1,7 +1,7 @@
-import Letter1 from './Letter1';
-import Letter2 from './Letter2';
-import Letter3 from './Letter3';
-import Information from './Information';
+import Letter1 from '../Letter1';
+import Letter2 from '../Letter2';
+import Letter3 from '../Letter3';
+import Information from '../InstructionsAccordion/Information';
 
 const content = [
     {

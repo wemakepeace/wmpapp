@@ -1,5 +1,5 @@
 import React from 'react';
-import content from './content';
+import content from './XXXMenu/content';
 
 const TabContent = ({ letterURLs, classRole, match }) => {
     const { path } = match.params;

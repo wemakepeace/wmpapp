@@ -3,19 +3,6 @@ import React from 'react';
 const Information = ({ letterURLs, ...props }) => {
     return (
         <div>
-            <h4>ABOUT THE PEACE LETTER PROGRAM</h4>
-            <p>
-                Thank you for signing your class up to participate in the Peace Letter Program! We hope you and your students will share meaningful experiences with your Peace Letter exchange class.
-            </p>
-            <p>
-                The following instructions are designed to guide you through the Peace Letter exchange process. It’s pretty simple. Please read and follow these basic steps below to make sure the process go smoothly.
-            </p>
-            <p>
-                The program consists of three rounds of letters. Each of the letters will discuss different topics and there are lessons that you as the teacher will go through.
-                Please take the time to implement the lesson plans, as they are a vital part of ensuring a valuable exchange experience for you and your students.
-                On this page you will find both the letter templates and the instructions for each of the letters. Please make sure you read the instructions for each letter carefully.
-            </p>
-            <h4>IMPORTANT INFORMATION</h4>
             <h5 className='underline'>Class roles</h5>
             <p>
                 Both classes participating in the Exchange will be given a role, either as <b>SENDER</b> or <b>RECEIVER</b>. If your role is SENDER, then your class will begin the Excange by writing and sendting Letter 1.

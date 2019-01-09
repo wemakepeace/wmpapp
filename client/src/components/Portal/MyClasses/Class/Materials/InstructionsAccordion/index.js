@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Accordion, Icon } from 'semantic-ui-react';
 import Information from './Information';
-import Letter1 from './Letter1';
-import Letter2 from './Letter2';
-import Letter3 from './Letter3';
+import Letter1 from '../Letter1';
+import Letter2 from '../Letter2';
+import Letter3 from '../Letter3';
 
 export default class AccordionExampleStandard extends Component {
     state = { activeIndex: -1 }
@@ -23,7 +23,7 @@ export default class AccordionExampleStandard extends Component {
             <Accordion styled fluid>
                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
                     <Icon name='dropdown' />
-                    General Information
+                    Important Information
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
                     <div className='materials-content'>
