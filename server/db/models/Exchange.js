@@ -83,7 +83,7 @@ Exchange.getExchangeAndMatchClass = function(classId) {
  * - have the same ageGroupId
  * - the difference in class size is less than or equal 5 students
  * - do not belong to the current teacher or school
- * - are not from the same country
+ * - are not from the same continent
  */
 
 Exchange.findMatch = function(_class) {
@@ -111,7 +111,6 @@ Exchange.findMatch = function(_class) {
                 {
                     model: School,
                     where: {
-                        country: { $ne: school.country },
                         continent: { $ne: school.continent }
                     }
                 },

@@ -62,6 +62,7 @@
     "csprng": "^0.1.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
+    "flag-icon-css": "^3.2.1",
     "jsonwebtoken": "^8.2.0",
     "nodemailer": "^4.6.4",
     "normalize.css": "^8.0.0",

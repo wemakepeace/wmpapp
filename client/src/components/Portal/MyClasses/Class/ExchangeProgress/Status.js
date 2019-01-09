@@ -33,7 +33,7 @@ const exchangeStatusData = {
             const { name, school: { country } } = exchange.exchangeClass;
             return (
                 <div>
-                    <h3>Great news! Your class has been matched with a class from {getCountryName(country)} </h3>
+                    <h3>Great news! Your class has been matched with a class from {getCountryName(country)} <span className={`flag-icon flag-icon-${country.toLowerCase()}`}></span></h3>
                     <p>You can check out the other class details under <a href='/#/portal/my-classes/exchange-details'>Exchange Details</a>.</p>
                     <p>Please verify your class' participation within 7 days.</p>
                 </div>
@@ -70,7 +70,7 @@ const exchangeStatusData = {
             return (
                 <div>
                     <h3>Congrats! You are now ready to begin the Exchange Program</h3>
-                    <p>Your class will be exchanging letters with class {name} from {getCountryName(country)}.</p>
+                    <p>Your class will be exchanging letters with class {name} from {getCountryName(country)} <span className={`flag-icon flag-icon-${country.toLowerCase()}`}></span>.</p>
                     <p>The exchange class teacher is {firstName} {lastName}.</p>
                     <p>Please see the instructions under Materials for next steps <a href='/#/portal/my-classes/materials/information'>here</a>.</p>
                     <p>Make sure to connect with the other teacher via their email address {email}, and most importantly of all have fun.</p>

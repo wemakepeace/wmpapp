@@ -1,6 +1,7 @@
 import React from 'react';
 import { getCountryName } from '../../../../../utils/helpers';
 
+
 const ClassDetails = ({ classData, teacher, title }) => {
     let school;
 
@@ -16,6 +17,9 @@ const ClassDetails = ({ classData, teacher, title }) => {
         <div>
             <h3 style={{textDecoration: 'underline'}}>{title}</h3>
             <h4 style={{marginBottom: '18px'}}>Class {classData && classData.name || null} from {getCountryName(school.country)}</h4>
+            <div className='flag-outer'>
+                <div className={`flag-icon flag-icon-${school.country.toLowerCase()}`}></div>
+            </div>
             <div className='div-display-inline-block'>
                 <div className='inner-box-inline-block'>
                     <div>
@@ -35,7 +39,9 @@ const ClassDetails = ({ classData, teacher, title }) => {
             { classData && classData.school && classData.school.schoolName
                 ? <div>
                     <br />
-                    <label><b>School Address</b></label>
+                    <label><b>School Name</b></label><br />
+                    <span>{school.schoolName || null}</span><br /><br />
+                    <label><b>Address</b></label>
                     <div>
                         <span>{teacher.firstName || null} {teacher.lastName || null}</span><br />
                         <span>{school.schoolName || null}</span><br />

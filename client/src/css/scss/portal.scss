@@ -154,6 +154,18 @@ img.ui.image.profile-logo {
             .class-portal-tab {
                 padding-top: 30px;
 
+                .flag-outer {
+                    height: 100%;
+                    margin: 10px 0 20px;
+
+                    .flag-icon {
+                        background-size: contain;
+                        background-position: 0;
+                        width: 100%;
+                        line-height: 4em;
+                    }
+                }
+
                 .materials-content {
                     padding: 1em;
                 }
