@@ -34,7 +34,7 @@ export const MenuLink = (props) => {
                 <div className={_class} >
                     <div className='portal-menu-item'>
                         <h3>{name}</h3>
-                        <Icon name='long arrow alternate right' />
+                        <Icon name='long arrow right' />
                     </div>
                 </div>
             </Link>

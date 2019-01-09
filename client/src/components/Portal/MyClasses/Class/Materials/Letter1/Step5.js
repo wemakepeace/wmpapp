@@ -1,10 +1,10 @@
 import React from 'react';
 import { Header, Icon } from 'semantic-ui-react';
 
-
 const Step5 = () => {
     return (
         <div>
+            <hr style={{margin: '20px 0'}} />
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 5</Header.Content>
             </Header>

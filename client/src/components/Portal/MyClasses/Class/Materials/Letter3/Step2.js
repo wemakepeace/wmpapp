@@ -4,9 +4,11 @@ import { Header, Icon } from 'semantic-ui-react';
 const Step2 = () => {
     return (
         <div>
+            <hr style={{margin: '20px 0'}} />
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 2</Header.Content>
             </Header>
+
             <h5>Writing the letters</h5>
             <p>1 hour</p>
             <ul>
@@ -22,6 +24,7 @@ const Step2 = () => {
             <p>Why are we still not always treating each other as equals?</p>
             <p>What can we do to change that?</p>
             <p>Give the students time to think and write a reply. These are not simple questions. They can also take the templates home and finish the letter as homework. Make sure you encourage the students to write full sentences.</p>
+
             <h5>NOTE</h5>
             <p>This is the last letter facilitated through the Peace Letter program. There is allocated space on the last page of Letter 3 where the students can share their private mail address with each other. Make sure the students have the permission from their parents to write their home address in the box.</p>
             <p>If they do not wish to continue the exchange they can leave it blank.</p>

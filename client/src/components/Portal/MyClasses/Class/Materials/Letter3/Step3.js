@@ -6,6 +6,7 @@ import Address from '../Address';
 const Step3 = ({ exchangeClass }) => {
     return (
         <div>
+            <hr style={{margin: '20px 0'}} />
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 3</Header.Content>
             </Header>

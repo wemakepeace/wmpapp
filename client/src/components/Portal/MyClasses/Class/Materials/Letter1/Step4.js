@@ -7,6 +7,7 @@ const Step4 = ({ exchangeClass }) => {
     const { school, teacher, name } = exchangeClass;
     return (
         <div>
+            <hr style={{margin: '20px 0'}} />
             <Header as='h3'>
                 <Header.Content><Icon name='content' />STEP 4</Header.Content>
             </Header>
