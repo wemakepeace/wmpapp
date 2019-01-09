@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from 'semantic-ui-react';
 
 export const MenuLink = (props) => {
 
@@ -31,7 +32,10 @@ export const MenuLink = (props) => {
         return (
             <Link to={routeTo}>
                 <div className={_class} >
-                    <h3>{name}</h3>
+                    <div className='portal-menu-item'>
+                        <h3>{name}</h3>
+                        <Icon name='long arrow alternate right' />
+                    </div>
                 </div>
             </Link>
         );

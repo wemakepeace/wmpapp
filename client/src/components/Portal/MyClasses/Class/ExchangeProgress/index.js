@@ -60,6 +60,7 @@ class Progress extends Component {
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
                     status={exchange && exchange.status}
                     classIsVerified={exchange.classIsVerified}
+                    exchange={exchange}
                 />
                 { showFeedback && (feedback && feedback.type) ?
                     <Feedback {...feedback} /> : null }
