@@ -44,7 +44,10 @@ class InstructionsAccordion extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
                     <div className='materials-content'>
-                        <Information exchangeClass={exchangeClass} />
+                        <Information
+                            exchangeClass={exchangeClass}
+                            url={materials && materials.importantInformation}
+                        />
                     </div>
                 </Accordion.Content>
 

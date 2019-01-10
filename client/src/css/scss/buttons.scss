@@ -2,7 +2,6 @@
     background-color: $pink;
     border: 2px solid $pink;
     padding: 10px;
-    // margin: 40px;
     margin: 30px 40px;
     text-transform: uppercase;
     cursor: pointer;
@@ -18,4 +17,9 @@
     color: $pink;
 }
 
-
+button.roll-button.download {
+    margin: 0;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}

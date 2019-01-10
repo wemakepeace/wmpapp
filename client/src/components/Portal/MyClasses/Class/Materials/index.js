@@ -10,8 +10,6 @@ const Materials = ({ exchange, match, location, history }) => {
          <div className='class-portal-tab'>
             <h3>Materials & Instructions</h3>
             <p>The following instructions are designed to guide you through the Peace Letter exchange process. It’s pretty simple. Please read and follow these basic steps below to make sure the process go smoothly.</p>
-
-            <p>The program consists of three rounds of letters. Each of the letters will discuss different topics and there are lessons that you as the teacher will go through. Please take the time to implement the lesson plans, as they are a vital part of ensuring a valuable exchange experience for you and your students. On this page you will find both the downloadable letter templates and the instructions for each of the letters. Please make sure you read the instructions for each letter carefully.</p>
             <Route
                 exact path={`${match.path}`}
                 render={({ match }) => (

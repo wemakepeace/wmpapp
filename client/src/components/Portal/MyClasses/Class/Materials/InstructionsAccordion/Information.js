@@ -1,8 +1,18 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 
-const Information = ({ letterURLs, ...props }) => {
+const Information = ({ url }) => {
     return (
         <div>
+            <div>
+                <a href={url} target='_blank'>
+                    <button className='roll-button download'>
+                        <Icon name='download'/>Download Information Sheet
+                    </button>
+                </a>
+            </div>
+            <h5 className='underline'>What to expect</h5>
+            <p>The program consists of three rounds of letters. Each of the letters will discuss different topics and there are lessons that you as the teacher will go through. Please take the time to implement the lesson plans, as they are a vital part of ensuring a valuable exchange experience for you and your students. On this page you will find both the downloadable letter templates and the instructions for each of the letters. Please make sure you read the instructions for each letter carefully.</p>
             <h5 className='underline'>Class roles</h5>
             <p>
                 Both classes participating in the Exchange will be given a role, either as <b>SENDER</b> or <b>RECEIVER</b>. If your role is SENDER, then your class will begin the Excange by writing and sendting Letter 1.

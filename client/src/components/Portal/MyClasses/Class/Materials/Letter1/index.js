@@ -10,18 +10,27 @@ import Step5 from './Step5';
 
 const Letter1 = ({ classRole, exchangeClass, materials }) => {
     const letterURL = materials && materials.letter1;
+    const instructionsURL = materials && materials.instruction1;
+
     return (
         <div>
-            <h1>Instructions for Letter 1</h1>
-            <p>Download and print the letter template and follow the instructions below for writing and sending the first letter.</p>
-            <ImportantMessage classRole={classRole} />
-            <div className='div-centered-content'>
+            <h2>Materials Letter 1</h2>
+            <p>Download and print the letter template.</p>
+            <p>You can download the instructions for letter 1 as well, or you can follow the instructions below for writing and sending the first letter.</p>
+            <div>
                 <a href={letterURL} target='_blank'>
-                    <button className='roll-button'>
-                        <Icon name='download'/>Download Letter 1 Template
+                    <button className='roll-button download'>
+                        <Icon name='download'/>Letter 1 Template
+                    </button>
+                </a>
+                <a href={instructionsURL} target='_blank'>
+                    <button className='roll-button download'>
+                        <Icon name='download'/>Letter 1 Instructions
                     </button>
                 </a>
             </div>
+            <h2>Instructions Letter 1</h2>
+            <ImportantMessage classRole={classRole} />
             <OverviewTable letterName='letter1' />
             <Step1 />
             <Step2 classRole={classRole} />
