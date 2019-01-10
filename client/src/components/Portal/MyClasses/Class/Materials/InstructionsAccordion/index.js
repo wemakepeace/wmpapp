@@ -28,13 +28,14 @@ class InstructionsAccordion extends Component {
     componentDidMount() {
         const { childpath } = this.props.match.params;
         const { paths } = this.state;
-
+        const { classRole } = this.props;
         this.setState({ activeIndex: paths.indexOf(childpath) });
     }
 
     render() {
         const { activeIndex } = this.state
-        const { letterURLs, classRole, exchangeClass } = this.props;
+        const { classRole, exchangeClass, materials } = this.props;
+
         return (
             <Accordion styled fluid>
                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -43,7 +44,10 @@ class InstructionsAccordion extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
                     <div className='materials-content'>
-                        <Information exchangeClass={exchangeClass} />
+                        <Information
+                            exchangeClass={exchangeClass}
+                            url={materials && materials.importantInformation}
+                        />
                     </div>
                 </Accordion.Content>
 
@@ -54,7 +58,7 @@ class InstructionsAccordion extends Component {
                 <Accordion.Content active={activeIndex === 1}>
                     <div className='materials-content'>
                         <Letter1
-                            letterURLs={letterURLs}
+                            materials={materials && materials.letter1}
                             classRole={classRole}
                             exchangeClass={exchangeClass}
                         />
@@ -68,7 +72,7 @@ class InstructionsAccordion extends Component {
                 <Accordion.Content active={activeIndex === 2}>
                     <div className='materials-content'>
                         <Letter2
-                            letterURLs={letterURLs}
+                            materials={materials && materials.letter2}
                             classRole={classRole}
                             exchangeClass={exchangeClass}
                         />
@@ -82,7 +86,7 @@ class InstructionsAccordion extends Component {
                 <Accordion.Content active={activeIndex === 3}>
                     <div className='materials-content'>
                         <Letter3
-                            letterURLs={letterURLs}
+                            materials={materials && materials.letter3}
                             classRole={classRole}
                             exchangeClass={exchangeClass}
                         />

@@ -34,6 +34,35 @@ const getFileFromAWS = (file, folder) => {
     });
 };
 
+
+const getMaterialsAWS = (classRole) => {
+    const templateFolder = `letter_templates/${classRole}`;
+    const instructionsFolder = `instructions/${classRole}`;
+
+    const letters = ['letter_1.pdf', 'letter_2.pdf', 'letter_3.pdf'];
+    const instructions = ['instructions_letter_1.pdf', 'instructions_letter_2.pdf', 'instructions_letter_3.pdf']
+
+    const importantInformationPromise = getFileFromAWS('important_information.pdf', 'instructions');
+    const letterPromises = letters.map((letter) => getFileFromAWS(letter, templateFolder));
+    const instructionPromises = instructions.map((instruction) => getFileFromAWS(instruction, instructionsFolder));
+
+    return Promise.all([importantInformationPromise, ...instructionPromises, ...letterPromises ])
+   .then(([ importantInformation, instruction1, instruction2, instruction3, letter1, letter2, letter3 ]) => {
+        const materials = {
+            importantInformation,
+            letter1: { instruction1, letter1 },
+            letter2: { instruction2, letter2 },
+            letter3: { instruction3, letter3 }
+        }
+        return materials;
+   })
+   .catch(error => {
+        throw 'Something went wrong when fetching data. Please refresh.'
+    });
+
+}
+
 module.exports = {
-    getFileFromAWS
+    getFileFromAWS,
+    getMaterialsAWS
 };

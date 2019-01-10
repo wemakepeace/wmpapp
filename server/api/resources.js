@@ -6,6 +6,7 @@ const { getFileFromAWS } = require('../utils/aws/helpers');
 const { sendError } = require('../utils/feedback');
 const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
 const countries = require('country-list');
+const { getMaterialsAWS } = require('../utils/aws/helpers');
 
 // Fetch agegroups and format for FE
 app.get('/agegroups', (req, res, next) => {
@@ -92,6 +93,21 @@ app.get('/letter_templates', (req, res, next) => {
                 next(error);
             });
 });
+
+
+app.get('/materials/:classRole', (req, res, next) => {
+    const { classRole } = req.params;
+    return getMaterialsAWS(classRole)
+        .then(materials => {
+              res.send({ materials });
+        })
+        .catch(error => {
+            error.defaultError = 'Something went wrong when fetching data. Please refresh.'
+            next(error);
+        });
+});
+
+
 
 module.exports = app;
 

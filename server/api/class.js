@@ -7,6 +7,7 @@ const AgeGroup = models.AgeGroup;
 const Term = models.Term;
 const Exchange = models.Exchange;
 const { feedback } = require('../utils/feedback');
+const { getMaterialsAWS } = require('../utils/aws/helpers');
 const { SUCCESS } = require('../constants/feedbackTypes');
 
 
@@ -20,17 +21,22 @@ app.get('/:id', (req, res, next) => {
     const classId = req.params.id;
     const associations = [ AgeGroup, Term, School ];
 
+    // Fetches Exchange and the match class if any, based on classId
     return Promise.all([
         Class.getClassWithAssociations(classId, associations),
         Exchange.getExchangeAndMatchClass(classId)
     ])
         .then(([ _class, exchange ]) => {
-            // Fetches Exchange and the match class if any, based on classId
-            res.send({
-                feedback: feedback(SUCCESS, []),
-                exchange,
-                _class
-            });
+            return getMaterialsAWS(exchange.classRole)
+                .then(materials => {
+                    exchange.materials = materials;
+                    res.send({
+                        feedback: feedback(SUCCESS, []),
+                        exchange,
+                        _class
+                    });
+                })
+                .catch(error => next(error));
         })
         .catch(error => next(error));
 });

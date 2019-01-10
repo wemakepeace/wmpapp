@@ -8,21 +8,29 @@ import Step4 from './Step4';
 import { Icon } from 'semantic-ui-react';
 
 
-const Letter2 = ({ letterURLs, classRole, exchangeClass }) => {
-    const letterURL = letterURLs && letterURLs.letter2;
+const Letter2 = ({ classRole, exchangeClass, materials }) => {
+    const letterURL = materials && materials.letter2;
+    const instructionsURL = materials && materials.instruction2;
 
     return (
         <div>
-            <h1>Instructions for Letter 2</h1>
-            <p>Download and print the letter template and follow the instructions below for writing and sending the second letter.</p>
-            <ImportantMessage classRole={classRole} />
-            <div className='div-centered-content'>
+            <h2>Materials Letter 2</h2>
+            <p>Download and print the letter template.</p>
+            <p>You can download the instructions for letter 2 as well, or you can follow the instructions below for writing and sending the first letter.</p>
+            <div>
                 <a href={letterURL} target='_blank'>
-                    <button className='roll-button'>
-                        <Icon name='download'/>Download Letter 2 Template
+                    <button className='roll-button download'>
+                        <Icon name='download'/>Letter 2 Template
+                    </button>
+                </a>
+                <a href={instructionsURL} target='_blank'>
+                    <button className='roll-button download'>
+                        <Icon name='download'/>Letter 2 Instructions
                     </button>
                 </a>
             </div>
+            <h2>Instructions Letter 2</h2>
+            <ImportantMessage classRole={classRole} />
             <OverviewTable letterName='letter2' />
             <Step1 classRole={classRole} />
             <Step2 />
