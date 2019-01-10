@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_EXCHANGE_DATA, FETCH_LETTER_URLS } from '../constants/exchange';
+import { FETCH_EXCHANGE_DATA } from '../constants/exchange';
 import { SEND_FEEDBACK } from '../constants/shared';
 
 
@@ -43,18 +43,7 @@ const verifyExchange = (classId, exchangeId) => {
     };
 };
 
-const fetchLetterTemplates = () => {
-    return dispatch => {
-        return axios.get('/resources/letter_templates')
-        .then((response) => response.data)
-        .then(({ letterURLs }) => {
-            dispatch({ type: FETCH_LETTER_URLS, exchange: { letterURLs }})
-        });
-    };
-};
-
 export {
     initiateExchange,
-    verifyExchange,
-    fetchLetterTemplates
+    verifyExchange
 }

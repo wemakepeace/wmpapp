@@ -107,13 +107,8 @@ Exchange.findMatch = function(_class) {
                     }
                 }
             },
-                include: [
-                {
-                    model: School,
-                    where: {
-                        continent: { $ne: school.continent }
-                    }
-                },
+            include: [
+                { model: School, where: { continent: { $ne: school.continent } } },
                 { model: Teacher }
             ]
         }]
@@ -152,7 +147,6 @@ Exchange.prototype.getClassRole = function(classId) {
              return reject();
         }
     });
-
 };
 
 // returns the id of the other class participating in exchange, if any
@@ -188,7 +182,7 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
                         exchangeClass = exchangeClass.dataValues;
                         exchangeClass.school = school.dataValues;
                         exchangeClass.teacher = teacher.dataValues;
-                        this.dataValues.exchangeClass = exchangeClass
+                        this.dataValues.exchangeClass = exchangeClass;
                         return extractDataForFrontend(this.dataValues, {});
                     });
                 });
@@ -197,19 +191,17 @@ Exchange.prototype.getExchangeAndMatchClass = function(classId) {
 
 Exchange.prototype.getBasicInfo = function(t) {
     const { senderId, receiverId, id } = this;
+
     return Class.findAll({
         where: {
-            $or: [ { id: { $eq: senderId } }, { id: { $eq: receiverId } } ]
+            $or: [
+                { id: { $eq: senderId } },
+                { id: { $eq: receiverId } }
+            ]
         },
         include: [
-            {
-                model: Teacher,
-                attributes: [ 'email', 'firstName' ]
-            },
-            {
-                model: School,
-                attributes: [ 'schoolName' ]
-            }
+            { model: Teacher, attributes: [ 'email', 'firstName' ] },
+            { model: School, attributes: [ 'schoolName' ] }
         ],
         transaction: t
     });

@@ -8,9 +8,8 @@ import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './Step5';
 
-const Letter1 = ({ letterURLs, classRole, exchangeClass }) => {
-    const letterURL = letterURLs && letterURLs.letter1[ classRole ];
-
+const Letter1 = ({ classRole, exchangeClass, materials }) => {
+    const letterURL = materials && materials.letter1;
     return (
         <div>
             <h1>Instructions for Letter 1</h1>

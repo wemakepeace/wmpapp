@@ -8,9 +8,8 @@ import Step4 from './Step4';
 import { Icon } from 'semantic-ui-react';
 
 
-const Letter2 = ({ letterURLs, classRole, exchangeClass }) => {
-    const letterURL = letterURLs && letterURLs.letter2;
-
+const Letter2 = ({ classRole, exchangeClass, materials }) => {
+    const letterURL = materials && materials.letter2;
     return (
         <div>
             <h1>Instructions for Letter 2</h1>
