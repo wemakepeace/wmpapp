@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import Feedback from '../../../../Feedback';
 import { Status } from './Status';
 import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
-
-
+import { LoaderWithText } from '../../../../reusables/LoaderWithText';
 
 
 class Progress extends Component {
@@ -12,13 +11,28 @@ class Progress extends Component {
         super(props);
         this.state = {
             percent: 20,
-            showFeedback: false
+            showFeedback: false,
+            loading: false,
+            action: '',
+            exchangeActions:{
+                initiateExchange: 'Initiating Exchange',
+                verifyExchange: 'Confirming Your Exchange Participation'
+            }
         }
     }
 
-    initiate(id) {
-        return this.props.initiateExchange(id);
+    toggleLoader(bool, action) {
+        if (bool !== undefined) {
+            this.setState({ loading: bool, action });
+        } else {
+            this.setState({ loading: !this.state.loading, action });
+        }
     }
+
+    componentWillReceiveProps() {
+    }
+
+
 
     /*
      * An exchange can be in one of these four stages:
@@ -30,11 +44,11 @@ class Progress extends Component {
 
     onExchangeActionClick(exchangeAction) {
         const { currentClass: { id } } = this.props;
-        const { exchange, toggleLoader } = this.props;
+        const { exchange } = this.props;
         const exchangeId = exchange && exchange.id;
         // toggleLoader will submit action based on current exchange status
         // either intiateExchange or verifyExchange
-        toggleLoader(true, exchangeAction);
+        this.toggleLoader(true, exchangeAction);
         return this.props[ exchangeAction ](id, exchangeId);
     }
 
@@ -42,6 +56,8 @@ class Progress extends Component {
         if (feedback && feedback.type === 'error') {
             this.setState({ showFeedback: true });
         }
+        this.toggleLoader(false, "");
+
     }
 
     render() {
@@ -51,6 +67,10 @@ class Progress extends Component {
             currentClass
         } = this.props;
         const { showFeedback } = this.state;
+        const { loading, action } = this.state;
+        const exchangeAction = this.state.exchangeActions[ action ];
+
+
 
         if (!currentClass || !currentClass.id) {
             return null;
@@ -58,6 +78,10 @@ class Progress extends Component {
 
         return (
             <div className='class-portal-tab'>
+                <LoaderWithText
+                    loading={loading}
+                    text={exchangeAction}
+                />
                 <Status
                     onExchangeActionClick={this.onExchangeActionClick.bind(this)}
                     status={exchange && exchange.status}
