@@ -27,16 +27,24 @@ app.get('/:id', (req, res, next) => {
         Exchange.getExchangeAndMatchClass(classId)
     ])
         .then(([ _class, exchange ]) => {
-            return getMaterialsAWS(exchange.classRole)
-                .then(materials => {
-                    exchange.materials = materials;
-                    res.send({
-                        feedback: feedback(SUCCESS, []),
-                        exchange,
-                        _class
-                    });
-                })
-                .catch(error => next(error));
+            if (exchange && exchange.id) {
+                return getMaterialsAWS(exchange.classRole)
+                    .then(materials => {
+                        exchange.materials = materials;
+                        res.send({
+                            feedback: feedback(SUCCESS, []),
+                            exchange,
+                            _class
+                        });
+                    })
+                    .catch(error => next(error));
+            } else {
+                res.send({
+                    feedback: feedback(SUCCESS, []),
+                    exchange,
+                    _class
+                });
+            }
         })
         .catch(error => next(error));
 });

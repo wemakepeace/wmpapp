@@ -6,12 +6,41 @@ import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import Class from './Class';
-import { fetchClass } from '../../../redux/actions/class';
+import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
 
 const exchangeActions = {
     initiateExchange: 'Initiating Exchange',
     verifyExchange: 'Confirming Your Exchange Participation'
 };
+
+
+const Overview = ({ teacher, onClassSelect, history }) => {
+    return (
+        <div>
+            <div className='profile-segment'>
+                <h3>{`Welcome, ${teacher.firstName}`}!</h3>
+                <p>Here you can manage all your enrolled classes or register a new class.</p>
+            </div>
+            <div className='profile-segment'>
+                <div className='exchange-actions'>
+                    { teacher && teacher.classes ?
+                        <div>
+                            <React.Fragment>
+                                <h4>Select class</h4>
+                                <SelectClass onClassSelect={onClassSelect} />
+                            </React.Fragment>
+                        </div>  : null
+                    }
+                    <div>
+                        <button className='roll-button'>
+                            <RegisterClass history={history}/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 class MyClasses extends Component {
     state = {
@@ -22,6 +51,7 @@ class MyClasses extends Component {
 
      onClassSelect(selected){
         this.props.fetchClass(selected.value);
+        this.props.history.push(`${this.props.match.url}/${selected.value}/progress`);
     }
 
     toggleLoader(bool, action) {
@@ -39,7 +69,6 @@ class MyClasses extends Component {
     render() {
         const { loading, action, showSegmentOne } = this.state;
         const { teacher, exchange, currentClass, history, match } = this.props;
-        const { firstName } = teacher;
         const exchangeAction = exchangeActions[ action ];
 
         return (
@@ -48,30 +77,8 @@ class MyClasses extends Component {
                     loading={loading}
                     text={exchangeAction}
                 />
-                <div className='profile-segment'>
-                    <h3>{`Welcome, ${firstName}`}!</h3>
-                    <p>Here you can manage all your enrolled classes or register a new class.</p>
-                </div>
-                <div className='profile-segment'>
-                    <div className='exchange-actions'>
-                        { teacher && teacher.classes ?
-                            <div>
-                                <React.Fragment>
-                                    <h4>Select class</h4>
-                                    <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
-                                </React.Fragment>
-                            </div>  : null
-                        }
-                        <div>
-                            <button className='roll-button'>
-                                <RegisterClass history={history}/>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <hr className='bottom-margin-hr' />
                 <Route
-                    path={`${match.path}/:childpath`}
+                    path={`${match.path}/:classId`}
                     render={(props) => (
                         <Class
                             {...this.props}
@@ -80,6 +87,16 @@ class MyClasses extends Component {
                         />)
                     }
                     {...this.props}
+                />
+                <Route
+                    exact path={`${match.path}`}
+                    render={(props) => (
+                        <Overview
+                            {...this.props}
+                            {...props}
+                            onClassSelect={this.onClassSelect.bind(this)}
+                        />)
+                    }
                 />
             </div>
         );
@@ -94,4 +111,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchClass })(MyClasses);
+export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(MyClasses);

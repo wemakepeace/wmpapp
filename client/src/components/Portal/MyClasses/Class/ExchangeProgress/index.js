@@ -5,6 +5,8 @@ import { Status } from './Status';
 import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
 
 
+
+
 class Progress extends Component {
     constructor(props) {
         super(props);

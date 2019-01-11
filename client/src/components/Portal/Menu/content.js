@@ -3,14 +3,12 @@ import ClassForms from '../MyClasses/Class/ClassForms';
 import Teacher from '../Teacher';
 import Support from '../Support';
 import AboutProgram from '../AboutProgram';
-import Class from '../MyClasses/Class';
 
 const mainMenuContent = [
     {
         name: 'My Classes',
         component: MyClasses,
-        path: 'my-classes',
-        defaultChildRoute: 'progress',
+        path: 'my-classes'
     },
     {
         name: 'Teacher Profile',
@@ -32,14 +30,7 @@ const mainMenuContent = [
         component: ClassForms,
         path: 'new-class',
         hidden: true
-    },
-    {
-        name: 'Class Profile',
-        component: Class,
-        path: 'class',
-        hidden: true
     }
-
 ];
 
 
