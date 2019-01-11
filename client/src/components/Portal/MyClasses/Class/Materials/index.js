@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { Message } from 'semantic-ui-react';
 import InstructionsAccordion from './InstructionsAccordion';
 
 const Materials = ({ exchange, match, location, history }) => {
     const { classRole, status, exchangeClass, materials } = exchange;
+
+    if (!exchangeClass || !exchangeClass.id) {
+        return (
+            <div>
+                <h3>Materials & Instructions</h3>
+                <Message color='yellow'>
+                    Once your class has been matched with another class and both teachers have confirmed the participation, you will be granted access to all necessary materials and instructions here.
+                </Message>
+            </div>
+        );
+    }
 
     return (
          <div className='class-portal-tab'>
