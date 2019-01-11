@@ -37,9 +37,8 @@ class Profile extends Component {
                             <Route
                                 path={`${match.path}/:path`}
                                 render={(props) => (
-                                        <TabContent feedback={feedback} {...props} />
+                                        <TabContent feedback={feedback} {...this.props} {...props} />
                                     )}
-                                {...this.props}
                             />
                             <Feedback {...feedback} />
                         </div>

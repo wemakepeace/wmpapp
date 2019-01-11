@@ -3,6 +3,7 @@ import ClassForms from '../MyClasses/Class/ClassForms';
 import Teacher from '../Teacher';
 import Support from '../Support';
 import AboutProgram from '../AboutProgram';
+import Class from '../MyClasses/Class';
 
 const mainMenuContent = [
     {
@@ -30,6 +31,12 @@ const mainMenuContent = [
         name: 'Register New Class',
         component: ClassForms,
         path: 'new-class',
+        hidden: true
+    },
+    {
+        name: 'Class Profile',
+        component: Class,
+        path: 'class',
         hidden: true
     }
 

@@ -15,8 +15,8 @@ const ExhangeDetails = ({ currentClass, teacher, exchange }) => {
                 </Grid.Column>
                 <Grid.Column width={8} className='overview-class-details'>
                     <ClassDetails
-                        classData={exchange.exchangeClass}
-                        teacher={exchange.exchangeClass && exchange.exchangeClass.teacher}
+                        classData={exchange && exchange.exchangeClass}
+                        teacher={exchange && exchange.exchangeClass && exchange.exchangeClass.teacher}
                         title='Exchange Class '/>
                 </Grid.Column>
             </Grid>

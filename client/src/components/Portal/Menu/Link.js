@@ -6,6 +6,7 @@ export const MenuLink = (props) => {
 
     const {
         name,
+        currentClass,
         path,
         defaultChildRoute,
         classIsSelected,
@@ -18,9 +19,7 @@ export const MenuLink = (props) => {
         `${url}/${path}/${defaultChildRoute}` :
         `${url}/${path}`;
 
-    const getActiveClass = (_path) => {
-        return pathname.indexOf(_path) > -1 ? 'active-profile' : '';
-    }
+    const getActiveClass = (_path) => pathname.indexOf(_path) > -1 ? 'active-profile' : '';
 
     let _class = `profile-menu-item ${getActiveClass(path)}`;
 
@@ -33,7 +32,10 @@ export const MenuLink = (props) => {
             <Link to={routeTo}>
                 <div className={_class} >
                     <div className='portal-menu-item'>
+                        { path === 'my-classes' || path === 'class' && (currentClass && currentClass.name) ?
+                        <h3>{name} ( {currentClass.name} )</h3> :
                         <h3>{name}</h3>
+                        }
                         <Icon name='long arrow right' />
                     </div>
                 </div>
