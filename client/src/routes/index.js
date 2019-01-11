@@ -53,7 +53,7 @@ class Routes extends Component  {
                             exact path={match.url}
                             render={() => {
                                 if (teacher && teacher.id) {
-                                    return <Redirect to='/portal/my-classes/progress' />;
+                                    return <Redirect to='/portal/my-classes' />;
                                 }
                                 return (<LandingPage {...this.props} />)
                             }}
