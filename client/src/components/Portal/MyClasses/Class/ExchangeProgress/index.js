@@ -5,7 +5,6 @@ import { Status } from './Status';
 import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
 
-
 class Progress extends Component {
     constructor(props) {
         super(props);
@@ -21,6 +20,14 @@ class Progress extends Component {
         }
     }
 
+    componentWillReceiveProps({ feedback }) {
+        if (feedback && feedback.type === 'error') {
+            this.setState({ showFeedback: true });
+        }
+        this.setState({ loading: false})
+
+    }
+
     toggleLoader(bool, action) {
         if (bool !== undefined) {
             this.setState({ loading: bool, action });
@@ -28,11 +35,6 @@ class Progress extends Component {
             this.setState({ loading: !this.state.loading, action });
         }
     }
-
-    componentWillReceiveProps() {
-    }
-
-
 
     /*
      * An exchange can be in one of these four stages:
@@ -43,8 +45,7 @@ class Progress extends Component {
      */
 
     onExchangeActionClick(exchangeAction) {
-        const { currentClass: { id } } = this.props;
-        const { exchange } = this.props;
+        const { currentClass: { id }, exchange } = this.props;
         const exchangeId = exchange && exchange.id;
         // toggleLoader will submit action based on current exchange status
         // either intiateExchange or verifyExchange
@@ -52,13 +53,6 @@ class Progress extends Component {
         return this.props[ exchangeAction ](id, exchangeId);
     }
 
-    componentWillReceiveProps({ feedback }) {
-        if (feedback && feedback.type === 'error') {
-            this.setState({ showFeedback: true });
-        }
-        this.toggleLoader(false, "");
-
-    }
 
     render() {
         const {
@@ -66,11 +60,8 @@ class Progress extends Component {
             exchange,
             currentClass
         } = this.props;
-        const { showFeedback } = this.state;
-        const { loading, action } = this.state;
+        const { showFeedback, loading, action } = this.state;
         const exchangeAction = this.state.exchangeActions[ action ];
-
-
 
         if (!currentClass || !currentClass.id) {
             return null;

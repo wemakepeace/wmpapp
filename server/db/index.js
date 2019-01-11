@@ -181,7 +181,8 @@ const exchanges = [
         status: 'pending',
         senderId: 1,
         receiverId: 2,
-        verifyExchangeExpires: expires
+        verifyExchangeExpires: expires,
+        receiverVerified: true
     },
     {
         status: 'initiated',

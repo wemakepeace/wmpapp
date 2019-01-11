@@ -37,8 +37,8 @@ class Profile extends Component {
                             <Route
                                 path={`${match.path}/:path`}
                                 render={(props) => (
-                                        <TabContent feedback={feedback} {...this.props} {...props} />
-                                    )}
+                                    <TabContent feedback={feedback} {...this.props} {...props} />
+                                )}
                             />
                             <Feedback {...feedback} />
                         </div>
@@ -57,5 +57,5 @@ const mapStateToProps = ({ currentClass, feedback, teacher }) => {
     };
 };
 
-export default connect(mapStateToProps, { clearFeedback, logout })(Profile);
+export default connect(mapStateToProps, { clearFeedback, logout, removeCurrentClass })(Profile);
 

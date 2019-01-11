@@ -11,7 +11,8 @@ export const MenuLink = (props) => {
         classIsSelected,
         hidden,
         match: { url },
-        location: { pathname }
+        location: { pathname },
+        removeCurrentClass
     } = props;
 
     const getActiveClass = (_path) => pathname.indexOf(_path) > -1 ? 'active-profile' : '';
@@ -20,7 +21,7 @@ export const MenuLink = (props) => {
 
     if (!hidden) {
         return (
-            <Link to={routeTo}>
+            <Link to={routeTo} onClick={removeCurrentClass}>
                 <div className={_class} >
                     <div className='portal-menu-item'>
                         { path === 'my-classes' && (currentClass && currentClass.name) ?
