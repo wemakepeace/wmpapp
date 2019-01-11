@@ -8,8 +8,7 @@ const mainMenuContent = [
     {
         name: 'My Classes',
         component: MyClasses,
-        path: 'my-classes',
-        defaultChildRoute: 'progress',
+        path: 'my-classes'
     },
     {
         name: 'Teacher Profile',
@@ -32,7 +31,6 @@ const mainMenuContent = [
         path: 'new-class',
         hidden: true
     }
-
 ];
 
 

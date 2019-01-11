@@ -18,39 +18,39 @@ export default class ClassMenu extends Component {
     }
 
     render() {
-        const { activeItem } = this.state
-        return (
+        const { activeItem } = this.state;
 
-                <Menu attached='top' tabular stackable>
-                    <Menu.Item
-                        name='progress'
-                        active={activeItem === 'progress'}
-                        as={Link}
-                        to='/portal/my-classes/progress'
-                       onClick={this.handleItemClick}
-                    />
-                    <Menu.Item
-                        name='exchange details'
-                        active={activeItem === 'exchange-details'}
-                        as={Link}
-                        to='/portal/my-classes/exchange-details'
-                        onClick={this.handleItemClick}
-                    />
-                    <Menu.Item
-                        name='class profile'
-                        active={activeItem === 'class-profile'}
-                        as={Link}
-                        to='/portal/my-classes/class-profile'
-                        onClick={this.handleItemClick}
-                    />
-                    <Menu.Item
-                        name='materials'
-                        active={activeItem === 'materials'}
-                        as={Link}
-                        to='materials'
-                        onClick={this.handleItemClick}
-                    />
-                </Menu>
+        return (
+            <Menu attached='top' tabular stackable>
+                <Menu.Item
+                    name='progress'
+                    active={activeItem === 'progress'}
+                    as={Link}
+                    to='progress'
+                   onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                    name='exchange details'
+                    active={activeItem === 'exchange-details'}
+                    as={Link}
+                    to='exchange-details'
+                    onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                    name='class profile'
+                    active={activeItem === 'class-profile'}
+                    as={Link}
+                    to='class-profile'
+                    onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                    name='materials'
+                    active={activeItem === 'materials'}
+                    as={Link}
+                    to='materials'
+                    onClick={this.handleItemClick}
+                />
+            </Menu>
         );
     }
 }

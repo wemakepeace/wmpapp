@@ -1,89 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { Grid, Image, Accordion, Icon } from 'semantic-ui-react';
-import { LoaderWithText } from '../../reusables/LoaderWithText';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import Class from './Class';
-import { fetchClass } from '../../../redux/actions/class';
+import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
 
-const exchangeActions = {
-    initiateExchange: 'Initiating Exchange',
-    verifyExchange: 'Confirming Your Exchange Participation'
-};
-
-class MyClasses extends Component {
-    state = {
-        loading: false,
-        action: '',
-        showSegmentOne: false
+const Overview = ({ teacher, fetchClass, history, match }) => {
+     const onClassSelect = (selected) => {
+        fetchClass(selected.value);
+        history.push(`${match.url}/${selected.value}/progress`);
     }
 
-     onClassSelect(selected){
-        this.props.fetchClass(selected.value);
-    }
-
-    toggleLoader(bool, action) {
-        if (bool !== undefined) {
-            this.setState({ loading: bool, action });
-        } else {
-            this.setState({ loading: !this.state.loading, action });
-        }
-    }
-
-    componentWillReceiveProps() {
-        this.toggleLoader(false, "");
-    }
-
-    render() {
-        const { loading, action, showSegmentOne } = this.state;
-        const { teacher, exchange, currentClass, history, match } = this.props;
-        const { firstName } = teacher;
-        const exchangeAction = exchangeActions[ action ];
-
-        return (
-            <div className='my-classes'>
-                <LoaderWithText
-                    loading={loading}
-                    text={exchangeAction}
-                />
-                <div className='profile-segment'>
-                    <h3>{`Welcome, ${firstName}`}!</h3>
-                    <p>Here you can manage all your enrolled classes or register a new class.</p>
-                </div>
-                <div className='profile-segment'>
-                    <div className='exchange-actions'>
-                        { teacher && teacher.classes ?
-                            <div>
-                                <React.Fragment>
-                                    <h4>Select class</h4>
-                                    <SelectClass onClassSelect={this.onClassSelect.bind(this)} />
-                                </React.Fragment>
-                            </div>  : null
-                        }
+    return (
+        <div>
+            <div className='profile-segment'>
+                <h3>{`Welcome, ${teacher.firstName}`}!</h3>
+                <p>Here you can manage all your enrolled classes or register a new class.</p>
+            </div>
+            <div className='profile-segment'>
+                <div className='exchange-actions'>
+                    { teacher && teacher.classes ?
                         <div>
-                            <button className='roll-button'>
-                                <RegisterClass history={history}/>
-                            </button>
-                        </div>
+                            <React.Fragment>
+                                <h4>Select class</h4>
+                                <SelectClass onClassSelect={onClassSelect} />
+                            </React.Fragment>
+                        </div>  : null
+                    }
+                    <div>
+                        <button className='roll-button'>
+                            <RegisterClass history={history}/>
+                        </button>
                     </div>
                 </div>
-                <hr className='bottom-margin-hr' />
-                <Route
-                    path={`${match.path}/:childpath`}
-                    render={(props) => (
-                        <Class
-                            {...this.props}
-                            {...props}
-                            toggleLoader={this.toggleLoader.bind(this)}
-                        />)
-                    }
-                    {...this.props}
-                />
             </div>
-        );
-    }
+        </div>
+    )
+}
+
+const MyClasses = ({ match, ...props }) => {
+    return (
+        <div className='my-classes'>
+            <Route
+                path={`${match.path}/:classId`}
+                render={ (_props) => <Class {...props} {..._props} /> }
+            />
+            <Route
+                exact path={`${match.path}`}
+                render={(_props) => <Overview {...props} {..._props} /> }
+            />
+        </div>
+    );
 }
 
 const mapStateToProps = ({ teacher, currentClass, exchange }) => {
@@ -94,4 +62,4 @@ const mapStateToProps = ({ teacher, currentClass, exchange }) => {
     };
 };
 
-export default connect(mapStateToProps, { fetchClass })(MyClasses);
+export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(MyClasses);
