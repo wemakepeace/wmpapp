@@ -210,17 +210,17 @@ const sync = () => conn.sync({ force: true, logging: console.log });
 
 const seed = () => {
     return sync()
-        .then(() => Promise.all(teachers.map(teacher => Teacher.create(teacher))))
-            .then(() => {
-                const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
-                const termPromises = termData.map(term => Term.create(term));
-                const schoolPromises = schools.map(school => School.createOrUpdate(school));
+        // .then(() => Promise.all(teachers.map(teacher => Teacher.create(teacher))))
+        //     .then(() => {
+        //         const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
+        //         const termPromises = termData.map(term => Term.create(term));
+        //         const schoolPromises = schools.map(school => School.createOrUpdate(school));
 
-                return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
-            })
-            .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
-            .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
-            .catch(error => console.log('error', error));
+        //         return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
+        //     })
+        //     .then(() => Promise.all(classes.map((_class) => Class.create(_class))))
+        //     .then(() => Promise.all(exchanges.map(exchange => Exchange.create(exchange))))
+        //     .catch(error => console.log('error', error));
 }
 
 module.exports = {
