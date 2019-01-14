@@ -210,10 +210,16 @@ const sync = () => conn.sync({ force: true, logging: console.log });
 
 const seed = () => {
     return sync()
+        .then(() => {
+            const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
+            const termPromises = termData.map(term => Term.create(term));
+            return Promise.all([...ageGroupPromises, ...termPromises]);
+        })
+        .catch(error => console.log('error', error));
         // .then(() => Promise.all(teachers.map(teacher => Teacher.create(teacher))))
         //     .then(() => {
-        //         const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
-        //         const termPromises = termData.map(term => Term.create(term));
+                // const ageGroupPromises = ageGroupData.map(group => AgeGroup.create(group));
+                // const termPromises = termData.map(term => Term.create(term));
         //         const schoolPromises = schools.map(school => School.createOrUpdate(school));
 
         //         return Promise.all([...ageGroupPromises, ...termPromises, ...schoolPromises]);
