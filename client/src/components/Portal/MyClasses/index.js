@@ -20,14 +20,12 @@ const Overview = ({ teacher, fetchClass, history, match }) => {
             </div>
             <div className='profile-segment'>
                 <div className='exchange-actions'>
-                    { teacher && teacher.classes ?
-                        <div>
-                            <React.Fragment>
-                                <h4>Select class</h4>
-                                <SelectClass onClassSelect={onClassSelect} />
-                            </React.Fragment>
-                        </div>  : null
-                    }
+                    <div>
+                        <React.Fragment>
+                            <h4>Select class</h4>
+                            <SelectClass onClassSelect={onClassSelect} />
+                        </React.Fragment>
+                    </div>
                     <div>
                         <button className='roll-button'>
                             <RegisterClass history={history}/>
