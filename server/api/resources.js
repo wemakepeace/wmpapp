@@ -1,11 +1,11 @@
 const app = require('express').Router();
+const countries = require('country-list');
 const AgeGroup = require('../db/models/AgeGroup');
 const Term = require('../db/models/Term');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { getFileFromAWS } = require('../utils/aws/helpers');
 const { sendError } = require('../utils/feedback');
-const { SUCCESS, ERROR } = require('../constants/feedbackTypes');
-const countries = require('country-list');
+const { SUCCESS, ERROR } = require('../db/firstSeed/feedbackTypes');
 const { getMaterialsAWS } = require('../utils/aws/helpers');
 
 // Fetch agegroups and format for FE

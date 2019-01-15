@@ -1,4 +1,4 @@
-const { ERROR } = require('../constants/feedbackTypes');
+const { ERROR } = require('../db/firstSeed/feedbackTypes');
 
 const feedback = (type, messages) => {
     return { type, messages }

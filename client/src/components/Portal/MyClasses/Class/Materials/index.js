@@ -7,7 +7,7 @@ import InstructionsAccordion from './InstructionsAccordion';
 const Materials = ({ exchange, match, location, history }) => {
     const { classRole, status, exchangeClass, materials } = exchange;
 
-    if (!exchangeClass || !exchangeClass.id) {
+    if (!exchange || exchange.status !== 'confirmed') {
         return (
             <div>
                 <h3>Materials & Instructions</h3>

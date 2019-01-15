@@ -8,7 +8,7 @@ const Term = models.Term;
 const Exchange = models.Exchange;
 const { feedback } = require('../utils/feedback');
 const { getMaterialsAWS } = require('../utils/aws/helpers');
-const { SUCCESS } = require('../constants/feedbackTypes');
+const { SUCCESS } = require('../db/firstSeed/feedbackTypes');
 
 
 app.get('/', (req, res, next) => {
