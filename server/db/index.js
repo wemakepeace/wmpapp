@@ -25,9 +25,11 @@ Exchange.belongsTo(Class, { as:  'sender' });
 Exchange.belongsTo(Class, { as:  'receiver' });
 
 
-const sync = () => conn.sync({ logging: console.log });
-const productionsSeed = () => {
-    return sync()
+const sync = (forceBool) => conn.sync({ force: forceBool, logging: console.log });
+const productionsSeed = (sync) => {
+    return function() {
+        return sync(false);
+    }
 }
 
 let seed;
@@ -35,9 +37,9 @@ let seed;
 
 /* Uncomment before deploying */
 if (process.env.NODE_ENV === 'development') {
-    seed =  developmentSeed;
+    seed =  developmentSeed(sync);
 } else {
-    seed =  productionsSeed;
+    seed =  productionsSeed(sync);
 }
 
 module.exports = {
