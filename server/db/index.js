@@ -34,11 +34,11 @@ let seed;
 
 
 /* Uncomment before deploying */
-// if (process.env.NODE_ENV === 'development') {
-    // seed =  developmentSeed;
-// } else {
+if (process.env.NODE_ENV === 'development') {
+    seed =  developmentSeed;
+} else {
     seed =  productionsSeed;
-// }
+}
 
 module.exports = {
     sync,

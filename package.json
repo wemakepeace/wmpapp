@@ -81,6 +81,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.78.3",
     "sequelize": "^4.37.6",
+    "sequelize-cli": "^5.4.0",
     "webpack-merge": "^4.1.4"
   }
 }
