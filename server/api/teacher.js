@@ -7,7 +7,7 @@ const { generateEmail } = require('../utils/email/exchange');
 const { feedback } = require('../utils/feedback');
 const { extractDataForFrontend } = require('../utils/helpers');
 const { sendEmail } = require('../utils/email/smtp');
-const { SUCCESS } = require('../constants/feedbackTypes');
+const { SUCCESS } = require('../db/firstSeed/feedbackTypes');
 const {
     pbkdf2,
     decodeToken,

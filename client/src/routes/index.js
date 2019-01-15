@@ -44,11 +44,6 @@ class Routes extends Component  {
                 <div className={containerClass}>
                     <Switch>
                         <Route
-                            key={1}
-                            exact path={match.url + 'test'}
-                            component={ResetPassword}
-                        />
-                        <Route
                             key={2}
                             exact path={match.url}
                             render={() => {

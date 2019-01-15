@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Accordion, Icon } from 'semantic-ui-react';
 import Information from './Information';
 import Letter1 from '../Letter1';
@@ -12,14 +13,16 @@ class InstructionsAccordion extends Component {
     }
 
     handleClick = (e, titleProps) => {
+        e.preventDefault()
         const { index } = titleProps;
+        const { classId } = this.props;
         const { activeIndex, paths } = this.state;
         const newIndex = activeIndex === index ? -1 : index;
 
         if (activeIndex === index) {
-            this.props.history.push('/portal/my-classes/materials');
+            this.props.history.push(`/portal/my-classes/${classId}/materials`);
         } else {
-            this.props.history.push(`/portal/my-classes/materials/${paths[ index ]}`);
+            this.props.history.push(`/portal/my-classes/${classId}/materials/${paths[ index ]}`);
         }
 
         this.setState({ activeIndex: newIndex })
@@ -38,7 +41,7 @@ class InstructionsAccordion extends Component {
 
         return (
             <Accordion styled fluid>
-                <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick.bind(this)}>
                     <Icon name='dropdown' />
                     Important Information
                 </Accordion.Title>
@@ -97,4 +100,10 @@ class InstructionsAccordion extends Component {
     }
 }
 
-export default InstructionsAccordion;
+const mapStateToProps = ({ currentClass }) => {
+    return {
+        classId: currentClass.id
+    }
+}
+
+export default connect(mapStateToProps)(InstructionsAccordion);
