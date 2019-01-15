@@ -3,7 +3,7 @@ const environment = process.env.NODE_ENV;
 let conn;
 
 if (environment === 'development' || environment === 'test') {
-    conn = new Sequelize(process.env.DATABASE_URL, { logging: true, dialect: 'postgres' });
+    conn = new Sequelize(process.env.DEV_DATABASE_URL, { logging: true, dialect: 'postgres' });
 } else {
     const sequelizeProductionConfig = require('../../sequelize.config.js');
     conn = new Sequelize(sequelizeProductionConfig);

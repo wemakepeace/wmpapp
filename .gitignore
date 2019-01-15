@@ -4,3 +4,4 @@ node_modules
 .env_old
 sequelize.config.js
 server/db/config.json
+server/db/config.js
