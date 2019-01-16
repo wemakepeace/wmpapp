@@ -11,12 +11,16 @@ const { sendEmail } = require('../utils/email/smtp');
 // verifyExchangeExpires date stamp has expired (7 days)
 
 // 0 0 0 * * *
-cron.schedule('00 59 * * * *', function() {
+
+const date = new Date();
+
+cron.schedule('00 10 * * * *', function() {
 
     Exchange.findAll({
         where: {
             status: 'pending',
-            verifyExchangeExpires: { $lte: new Date() }
+            // verifyExchangeExpires: { $lte: new Date() }
+            verifyExchangeExpires: { $lte: date.setDate(date.getDate() + 8) }
         },
         include: [
             {

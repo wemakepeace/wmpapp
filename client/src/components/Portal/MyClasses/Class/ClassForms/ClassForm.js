@@ -60,6 +60,7 @@ const ClassForm = ({ classData, onInputChange }) => {
                     objName='class'
                     key={field.name}
                 />)) }
+            <br /><br />
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
+import { Button, Message } from 'semantic-ui-react';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
@@ -54,6 +54,7 @@ class ClassForms extends Component {
         if (feedback && feedback.type === 'error') {
             return this.setState({ loading: false });
         }
+
         this.setState(this.getDefaultStateOrProps(currentClass, currentClass.school));
     }
 
@@ -82,6 +83,7 @@ class ClassForms extends Component {
     submitData = () => {
         let classData = this.state.class;
         let schoolData = this.state.school;
+        const { showMessage } = this.state;
         classData.teacherId = this.props.teacher.id;
         this.toggleLoader();
         this.props.saveClass(classData, schoolData);
@@ -98,10 +100,7 @@ class ClassForms extends Component {
 
         return (
             <div className='class-portal-tab'>
-                <LoaderWithText
-                    loading={loading}
-                    text='Saving...'
-                />
+                <LoaderWithText loading={loading} text='Saving...' />
                 <div>
                     { currentClass && currentClass.id ?
                         <h3>Information & Settings for Class {currentClass.name} at {currentClass.school.schoolName}</h3> :
@@ -110,7 +109,6 @@ class ClassForms extends Component {
                         classData={this.state.class}
                         onInputChange={this.onInputChange}
                     />
-                    <br /><br />
                     <SchoolForm
                         school={this.state.school}
                         onInputChange={this.onInputChange}
@@ -123,6 +121,8 @@ class ClassForms extends Component {
                             size='large'
                             onClick={this.submitData}>SAVE</Button>
                     </div>
+                    {currentClass && currentClass.id ?
+                        <Message color='yellow'>You can manage your class' exchange participation <Link to={`/portal/my-classes/${currentClass.id}`}>here</Link>.</Message> : null}
                 </div>
             </div>
         );
