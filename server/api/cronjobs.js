@@ -10,7 +10,8 @@ const { sendEmail } = require('../utils/email/smtp');
 // will cancel all pending exchanges that has not been confirmed by both teacher before the
 // verifyExchangeExpires date stamp has expired (7 days)
 
-cron.schedule('0 0 0 * * *', function() {
+// 0 0 0 * * *
+cron.schedule('00 59 * * * *', function() {
 
     Exchange.findAll({
         where: {
