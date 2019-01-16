@@ -16,6 +16,8 @@ const resources = require('./server/api/resources');
 const exchangeRoutes = require('./server/api/exchange');
 const schoolRoutes = require('./server/api/school');
 const port = process.env.PORT || 3000;
+const cronjobs = require('./server/api/cronjobs');
+
 
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -37,9 +39,8 @@ const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({
-    extended: true
-}));
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use('/jobs', cronjobs);
 
 app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
