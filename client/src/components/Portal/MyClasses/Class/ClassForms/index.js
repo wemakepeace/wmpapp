@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Button, Message } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import ClassForm from './ClassForm';
 import SchoolForm from './SchoolForm';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
@@ -123,11 +123,6 @@ class ClassForms extends Component {
                             size='large'
                             onClick={this.submitData}>SAVE</Button>
                     </div>
-                    { currentClass && currentClass.id ?
-                        <Message size='large' color='yellow'>
-                            You can manage your class' exchange participation on the <Link to={`/#/portal/my-classes/${currentClass.id}/progress`}>My Classes</Link> page.
-                        </Message> : null
-                    }
                 </div>
             </div>
         );

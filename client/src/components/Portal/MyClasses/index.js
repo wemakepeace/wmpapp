@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
 import Class from './Class';
 import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
 
-const Overview = ({ teacher, fetchClass, history, match }) => {
+const Overview = ({ teacher, fetchClass, history, match, currentClass }) => {
      const onClassSelect = (selected) => {
         fetchClass(selected.value);
-        history.push(`${match.url}/${selected.value}/progress`);
+    }
+
+    if (currentClass && currentClass.id) {
+        return (
+            <Redirect to={`${match.url}/${currentClass.id}/progress`} />
+        );
     }
 
     return (

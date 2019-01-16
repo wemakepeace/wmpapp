@@ -1,11 +1,16 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import content from './Menu/content';
 
 const TabContent = ({ ...props }) => {
     const allPages = [...content.mainMenuContent];
-    const Component = allPages.find((topic) => topic.path === props.match.params.path).component;
+    const ComponentData = allPages.find((topic) => topic.path === props.match.params.path);
 
-    return (<Component {...props} />);
+    if (ComponentData) {
+        return (<ComponentData.component {...props} />);
+    } else {
+        return <Redirect to='/portal/my-classes' />;
+    }
 }
 
 
