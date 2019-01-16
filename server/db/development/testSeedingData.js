@@ -172,12 +172,11 @@ const exchanges = [
         verifyExchangeExpires: alreadyExpired
     },
     {
-        status: 'initiated',
-        senderId: 4
-    },
-    {
-        status: 'initiated',
-        senderId: 5
+        status: 'pending',
+        senderId: 4,
+        receiverId: 5,
+        receiverVerified: true,
+        verifyExchangeExpires: alreadyExpired
     },
     {
         status: 'initiated',
