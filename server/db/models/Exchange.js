@@ -6,25 +6,6 @@ const Teacher = require('./Teacher');
 const { extractDataForFrontend } = require('../../utils/helpers');
 const { findFurthestMatch } = require('../../utils/findExchangeMatch');
 
-const Exchange = conn.define('exchange', {
-     status: {
-        type: Sequelize.STRING,
-        validate: {
-            notEmpty: { msg: '.....'}
-        }
-    },
-    senderVerified: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-    },
-    receiverVerified: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-    },
-    verifyExchangeExpires: Sequelize.DATE
-});
-
-
 /*
  * Exchange statuses:
  *  - initiated
@@ -33,6 +14,20 @@ const Exchange = conn.define('exchange', {
  *  - cancelled
  *  - completed
  */
+
+const Exchange = conn.define('exchange', {
+    status: Sequelize.STRING,
+    verifyExchangeExpires: Sequelize.DATE,
+    senderVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+    receiverVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    }
+});
+
 
 // Class methods
 Exchange.getExchangeAndMatchClass = function(classId) {

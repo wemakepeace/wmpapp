@@ -142,11 +142,19 @@ const classes = [
         size: 28,
         ageGroupId: 2,
         schoolId: 4
+    },
+    {
+        teacherId: 2,
+        name: '3Af',
+        size: 28,
+        ageGroupId: 2,
+        schoolId: 5
     }
 ];
 
 const date = new Date();
 const expires = date.setDate(date.getDate() + 7);
+const alreadyExpired = date.setDate(date.getDate() - 8);
 
 const exchanges = [
     {
@@ -157,8 +165,11 @@ const exchanges = [
         receiverVerified: true
     },
     {
-        status: 'initiated',
-        senderId: 3
+        status: 'pending',
+        senderId: 3,
+        receiverId: 9,
+        senderVerified: true,
+        verifyExchangeExpires: alreadyExpired
     },
     {
         status: 'initiated',

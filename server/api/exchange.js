@@ -1,10 +1,10 @@
 const app = require('express').Router();
+const conn = require('../db/conn');
 const { models } = require('../db');
 const Class = models.Class;
 const School = models.School;
 const Teacher = models.Teacher;
 const Exchange = models.Exchange;
-const conn = require('../db/conn');
 const { generateEmail } = require('../utils/email/exchange');
 
 /*
