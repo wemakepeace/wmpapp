@@ -202,4 +202,5 @@ Exchange.prototype.getBasicInfo = function(t) {
     });
 };
 
+
 module.exports = Exchange;
