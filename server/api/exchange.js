@@ -79,26 +79,18 @@ app.post('/', (req, res, next) => {
     })
 });
 
-/*
- * Route to verify exchange participation
- * Both classes must verify by the time verifyExchangeExpires expires
- * Notes: Here we could verify the expiration on the call or we could
- * run a cleanup function that voids all expired instances,
- * in which case the classes should be notified
- * If a one class has confirmed the exchange, that class will
- * be added to a new Exchnage instance as "sender", and the
- * class that did not confirm will be removed (not belong to any
- * exchange)
- */
+
 
 /*
+ * Route to verify exchange participation
+ * Both classes must verify by the time verifyExchangeExpires expires (7 days)
  * Route /verify handles the following scenarios:
  * 1.   Verifies class, exchanging class not verified yet.
  *      Sends reminder to exchanging class.
  * 2.   Verifies class, exchanging class is already verified
  *      Sends emails to both saying exchange is ready
  * 3.   Verification link on exchange instance has expired
-*/
+ */
 
 
 // [TODO]
@@ -106,6 +98,7 @@ app.post('/', (req, res, next) => {
 app.post('/verify', (req, res, next) => {
     const { classId, exchangeId } = req.body;
     let classRole, matchClassRole;
+
     return Exchange.findOne({
         where: {
             id: exchangeId,

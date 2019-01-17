@@ -6,9 +6,21 @@ const { generateEmail } = require('../utils/email/exchange');
 const { sendEmail } = require('../utils/email/smtp');
 
 
-// job runs every day at midnight
-// will cancel all pending exchanges that has not been confirmed by both teacher before the
-// verifyExchangeExpires date stamp has expired (7 days)
+/*
+ * Job runs every day at midnight
+ * will cancel all pending exchanges that has not been confirmed by both teacher before the
+ * verifyExchangeExpires date stamp has expired (7 days)
+ */
+
+/*
+ * verify the expiration on the call or we could
+ * run a cleanup function that voids all expired instances,
+ * in which case the classes should be notified
+ * If a one class has confirmed the exchange, that class will
+ * be added to a new Exchnage instance as "sender", and the
+ * class that did not confirm will be removed (not belong to any
+ * exchange)
+ */
 
 
 cron.schedule('0 0 0 * * *', function() {

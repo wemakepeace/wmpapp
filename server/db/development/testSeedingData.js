@@ -120,7 +120,6 @@ const classes = [
         ageGroupId: 2,
         schoolId: 3
     },
-    // class that will match with xx
     {
         teacherId: 3,
         name: '1F',
@@ -128,9 +127,8 @@ const classes = [
         ageGroupId: 2,
         schoolId: 1
     },
-    // class that will not find  match
     {
-        teacherId: 1,
+        teacherId: 1, // class that will not find  match
         name: '1C',
         size: 28,
         ageGroupId: 2,
