@@ -72,7 +72,7 @@ const exchangeStatusData = {
                     <h3>Congrats! You are now ready to begin the Exchange Program</h3>
                     <p>Your class will be exchanging letters with class {name} from {getCountryName(country)} <span className={`flag-icon flag-icon-${country.toLowerCase()}`}></span>.</p>
                     <p>The exchange class teacher is {firstName} {lastName}.</p>
-                    <p>Please see the instructions under Materials for next steps <a href='/#/portal/my-classes/materials/information'>here</a>.</p>
+                    <p>Please see the instructions under Materials for next steps.</p>
                     <p>Make sure to connect with the other teacher via their email address {email}, and most importantly of all have fun.</p>
                     <p>Thank you for being part of the Peace Letter community!</p>
                 </div>

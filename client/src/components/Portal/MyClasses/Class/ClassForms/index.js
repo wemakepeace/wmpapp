@@ -129,12 +129,7 @@ class ClassForms extends Component {
     };
 };
 
-const mapStateToProps = ({ teacher, currentClass, feedback }) => {
-    return { teacher, currentClass, feedback };
-};
 
-const toBeDispatched = { saveClass, removeCurrentClass };
-
-export default connect(mapStateToProps, toBeDispatched )(ClassForms);
+export default connect(null, { saveClass, removeCurrentClass })(ClassForms);
 
 

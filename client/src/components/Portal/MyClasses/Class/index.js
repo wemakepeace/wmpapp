@@ -1,17 +1,16 @@
 import React from 'react';
 import { Route, Link, Redirect, Switch } from 'react-router-dom';
-import Menu from './Menu';
-import Feedback from '../../../Feedback';
 import TabContent from './TabContent';
+import Menu from './Menu';
 
 const Class = (props) => {
-
 
     if (!props || (!props.currentClass || !props.currentClass.id)) {
         return(
             <Redirect exact from={`${props.match.path}`} to='/portal/my-classes' />
         );
     }
+
 
     return (
         <div>
@@ -29,7 +28,6 @@ const Class = (props) => {
                     )}
                 />
             </Switch>
-            <Feedback {...props.feedback} />
         </div>
     );
 }

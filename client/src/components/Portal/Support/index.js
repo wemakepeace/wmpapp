@@ -75,12 +75,5 @@ class Support extends Component {
     }
 }
 
-const mapStateToProps = ({ teacher, currentClass, exchange }) => {
-    return {
-        teacher,
-        currentClass,
-        exchange
-    };
-};
 
-export default connect(mapStateToProps, { fetchClass, sendSupportMessage, sendFeedback })(Support);
+export default connect(null, { fetchClass, sendSupportMessage, sendFeedback })(Support);

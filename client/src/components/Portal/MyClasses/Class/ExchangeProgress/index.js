@@ -86,12 +86,4 @@ class Progress extends Component {
     };
 };
 
-const mapStateToProps = ({ currentClass, feedback, exchange }) => {
-    return {
-        currentClass,
-        feedback,
-        exchange
-    };
-};
-
-export default connect(mapStateToProps, { initiateExchange, verifyExchange })(Progress);
+export default connect(null, { initiateExchange, verifyExchange })(Progress);

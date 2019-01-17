@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Accordion, Icon } from 'semantic-ui-react';
 import Information from './Information';
 import Letter1 from '../Letter1';
@@ -100,10 +99,4 @@ class InstructionsAccordion extends Component {
     }
 }
 
-const mapStateToProps = ({ currentClass }) => {
-    return {
-        classId: currentClass.id
-    }
-}
-
-export default connect(mapStateToProps)(InstructionsAccordion);
+export default InstructionsAccordion;

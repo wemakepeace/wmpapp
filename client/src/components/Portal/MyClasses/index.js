@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import Class from './Class';
 import SelectClass from '../../reusables/SelectClassDropdown';
 import RegisterClass from '../../reusables/RegisterClass';
-import Class from './Class';
 import { fetchClass, removeCurrentClass } from '../../../redux/actions/class';
 
-const Overview = ({ teacher, fetchClass, history, match, currentClass }) => {
+const Overview = ({ teacher, currentClass, fetchClass, history, match }) => {
      const onClassSelect = (selected) => {
         fetchClass(selected.value);
     }
@@ -57,12 +57,4 @@ const MyClasses = ({ match, ...props }) => {
     );
 }
 
-const mapStateToProps = ({ teacher, currentClass, exchange }) => {
-    return {
-        teacher,
-        currentClass,
-        exchange
-    };
-};
-
-export default connect(mapStateToProps, { fetchClass, removeCurrentClass })(MyClasses);
+export default connect(null, { fetchClass, removeCurrentClass })(MyClasses);

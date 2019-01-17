@@ -65,9 +65,7 @@ class AboutProgramAccordion extends Component {
                     </Accordion.Content>
                 </Accordion>
             </div>
-
         );
-
     }
 }
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Message } from 'semantic-ui-react';
 import InstructionsAccordion from './InstructionsAccordion';
@@ -50,8 +49,4 @@ const Materials = ({ exchange, match, location, history }) => {
     );
 }
 
-const mapStateToProps = ({ exchange }) => {
-    return { exchange }
-};
-
-export default connect(mapStateToProps)(Materials);
+export default Materials;

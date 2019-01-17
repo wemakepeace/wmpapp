@@ -68,6 +68,7 @@ class Routes extends Component  {
                             key={5}
                             path={match.url + 'portal'}
                             component={Portal}
+                            teacher={teacher}
                         />
                         <Route component={NotFoundPage} />
                     </Switch>

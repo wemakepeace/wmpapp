@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
 import ClassDetails from './ClassDetails';
 
@@ -24,8 +23,6 @@ const ExhangeDetails = ({ currentClass, teacher, exchange }) => {
     );
 }
 
-const mapStateToProps = ({ currentClass }) => {
-    return { currentClass }
-}
-export default connect(mapStateToProps)(ExhangeDetails);
+export default ExhangeDetails;
+
 

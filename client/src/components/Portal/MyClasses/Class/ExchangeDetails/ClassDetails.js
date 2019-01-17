@@ -6,7 +6,7 @@ const ClassDetails = ({ classData, teacher, title }) => {
     let school;
 
     if (!classData || !classData.id || !teacher) {
-        return null
+        return null;
     }
 
     if (classData && classData.school) {

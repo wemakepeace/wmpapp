@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import {  Redirect, Route } from 'react-router-dom';
 import axios from 'axios';
-
 import NoAccess from '../components/error_pages/NoAccess';
 
 class PrivateRoute extends Component {
@@ -12,13 +10,13 @@ class PrivateRoute extends Component {
 
     componentDidMount() {
         if (this.props.teacher && this.props.teacher.id) {
-            this.setState({isAuth: true});
+            this.setState({ isAuth: true });
         }
     }
 
     componentWillReceiveProps(newProps) {
         if(this.props.teacher && this.props.teacher.id) {
-            this.setState({isAuth: true});
+            this.setState({ isAuth: true });
         }
     }
 
@@ -47,8 +45,4 @@ class PrivateRoute extends Component {
     }
 };
 
-const mapStateToProps = (state) => ({
-    teacher: state.teacher
-});
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

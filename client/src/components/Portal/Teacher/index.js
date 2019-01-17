@@ -176,12 +176,6 @@ class TeacherFormContainer extends Component {
     };
 };
 
-const mapStateToProps = (state) => {
-    return {
-        teacher: state.teacher
-    };
-};
-
 const mapDispatchToProps = (dispatch) => {
     return {
         updateTeacher: (data) => dispatch(updateTeacher(data)),
@@ -191,4 +185,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TeacherFormContainer);
+export default connect(null, mapDispatchToProps)(TeacherFormContainer);

@@ -29,15 +29,15 @@ class Profile extends Component {
                 <div className='profile-column-container'>
                     <Menu {...this.props} />
                     <div className='profile-form-column'>
-                        <Image
-                            className='profile-logo'
-                            src='../../../../assets/logos/WMPlogo_transparent.png'
-                        />
                         <div className='profile-form'>
                             <Route
                                 path={`${match.path}/:path`}
                                 render={(props) => (
-                                    <TabContent feedback={feedback} {...this.props} {...props} />
+                                    <TabContent
+                                        feedback={feedback}
+                                        {...this.props}
+                                        {...props}
+                                    />
                                 )}
                             />
                             <Feedback {...feedback} />
@@ -49,11 +49,12 @@ class Profile extends Component {
     }
 }
 
-const mapStateToProps = ({ currentClass, feedback, teacher }) => {
+const mapStateToProps = ({ currentClass, feedback, teacher, exchange }) => {
     return {
         currentClass,
         feedback,
-        teacher
+        teacher,
+        exchange
     };
 };
 

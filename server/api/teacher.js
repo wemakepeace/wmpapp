@@ -234,6 +234,7 @@ app.post('/support', (req, res, next) => {
         subject: 'SUPPORT MESSAGE',
         html:
             `Teacher id: ${teacher.id}<br />
+            Teacher name: ${teacher.firstName} ${teacher.lastName}<br />
             email: ${teacher.email}<br />
             Class id: ${currentClass.id}<br />
             Exchange id: ${exchange && exchange.id}<br />
