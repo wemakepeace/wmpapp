@@ -18,11 +18,16 @@ const { findFurthestMatch } = require('../../utils/findExchangeMatch');
 const Exchange = conn.define('exchange', {
     status: Sequelize.STRING,
     verifyExchangeExpires: Sequelize.DATE,
+    sendReminderDate: Sequelize.DATE,
     senderVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     },
     receiverVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+    emailReminderSent: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
     }

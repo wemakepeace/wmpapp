@@ -1,32 +1,32 @@
 const teachers = [
     {
         firstName: 'Leonard',
-        lastName: 'Alnes',
+        lastName: 'Carlsen',
         email: 'k@m.com',
         password: 'z'
     },
     {
-        firstName: 'Moon',
-        lastName: 'Alnes',
-        email: 'moon@m.com',
+        firstName: 'Cindy',
+        lastName: 'Ingram',
+        email: 'cindyingram@m.com',
         password: 'z'
     },
     {
         firstName: 'Nacy',
-        lastName: 'Yo yo',
+        lastName: 'Johnsen',
         email: 'cantstopnanc@m.com',
         password: 'z'
     },
     {
-        firstName: 'Corn',
-        lastName: 'Flakes',
-        email: 'cornstar88@m.com',
+        firstName: 'Ted',
+        lastName: 'Zablowski',
+        email: 'ted_zab@m.com',
         password: 'z'
     },
     {
-        firstName: 'Corny',
-        lastName: 'Flakes',
-        email: 'kris.alnes@gmail.com',
+        firstName: 'Leanne',
+        lastName: 'Riis',
+        email: 'leanneriis@m.com',
         password: 'z'
     }
 ];

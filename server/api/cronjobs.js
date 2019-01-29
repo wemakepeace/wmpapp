@@ -6,6 +6,30 @@ const { generateEmail } = require('../utils/email/exchange');
 const { sendEmail } = require('../utils/email/smtp');
 
 
+
+
+/*
+ * Find all classes that have pending exchanges and have not yet confirmed and has not
+ * been reminded yet and if it is more than 3 days since match was made send email to
+ * remind unconfirmed teacher
+ *
+ */
+
+cron.schedule('0 0 0 * * *', function() {
+    Exchange.findAll({
+        where: {
+            status: 'pending',
+            emailReminderSent: false
+        }
+    })
+    .then(exchanges => {
+
+    });
+});
+
+
+
+
 /*
  * Job runs every day at midnight
  * will cancel all pending exchanges that has not been confirmed by both teacher before the
@@ -23,11 +47,16 @@ const { sendEmail } = require('../utils/email/smtp');
  */
 
 
-cron.schedule('0 0 0 * * *', function() {
+cron.schedule('*/2 * * * *', function() {
+
+    const date = new Date();
+    const expires = date.setDate(date.getDate() + 7);
+    const alreadyExpired = date.setDate(date.getDate() - 8);
+
     Exchange.findAll({
         where: {
             status: 'pending',
-             verifyExchangeExpires: { $lte: new Date()  }
+            sendReminderDate: { $eq: new Date() }
 	},
         include: [
             {
