@@ -16,7 +16,6 @@ class WPMenu extends Component {
 
         return (
             <div>
-                <div className='beta mobile'><Icon name='warning' />Beta release under continuous development</div>
                 <Menu attached='top' inverted stackable className='hamburger'>
                     <Menu.Menu position='left'>
                         <Menu.Item className='mobile-menu'onClick={this.handleItemClick}>

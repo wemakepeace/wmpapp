@@ -22,6 +22,8 @@ class SignupOrLogin extends Component {
         return (
             <div className='centered-outer-div'>
                 <div className='centered-inner-div login-signup-container'>
+                    <h1 className='heading'>Join Our Community</h1>
+                    <p class='sub-heading'>Learn more about the Peace Letter Program <a href='https://wemakepeace.org/peace-letter-program/'>here</a>.</p>
                     <Header history={history} />
                     <div className='login-signup'>
                         <div className='signup-login-tabs'>
