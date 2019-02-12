@@ -4,6 +4,7 @@ import Feedback from '../../../../Feedback';
 import { Status } from './Status';
 import { initiateExchange, verifyExchange } from '../../../../../redux/actions/exchange';
 import { LoaderWithText } from '../../../../reusables/LoaderWithText';
+import GoogleMap from './GoogleMap';
 
 class Progress extends Component {
     constructor(props) {
@@ -81,6 +82,7 @@ class Progress extends Component {
                 />
                 { showFeedback && (feedback && feedback.type) ?
                     <Feedback {...feedback} /> : null }
+                <GoogleMap />
             </div>
         );
     };

@@ -2,11 +2,17 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const dotenv = require('dotenv');
 
+const getEnvKeys = () => {
+    const env = dotenv.config().parsed;
+    return Object.keys(env).reduce((prev, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(env[next]);
+        return prev;
+    }, {});
+}
 
-const extractPlugin = new ExtractTextPlugin({
-   filename: 'main.css'
-});
+const extractPlugin = new ExtractTextPlugin({ filename: 'main.css' });
 
 module.exports = {
     entry: [
@@ -83,5 +89,8 @@ module.exports = {
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.DefinePlugin(getEnvKeys())
     ]
 };
+
+

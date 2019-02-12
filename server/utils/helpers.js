@@ -77,7 +77,9 @@ const valuesForFrontend = [
     'senderVerified',
     'receiverVerified',
     'exchangeClass',
-    'classRole'
+    'classRole',
+    'lat',
+    'lng'
 ];
 
 const isObject = (obj) => {

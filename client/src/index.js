@@ -12,9 +12,18 @@ const token = localStorage.getItem('token');
 const root = document.createElement('div');
 document.body.appendChild(root);
 
+const script = document.createElement("script");
+
+script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLEKEY}`;
+script.async = true;
+
+document.body.appendChild(script);
+
 if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
+
+
 
 const renderApp = () => {
     render(
