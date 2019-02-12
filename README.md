@@ -9,32 +9,53 @@ See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-This project requires that you have
+This project requires that you have the following utilities available globally in your execution environment:
 ```
 Node
 Nodemon
-Psql
+Postgres / psql
 ```
 
-### Installing
+### Configuration
 
-To install the project on your local machine
+#### Postgres
+
+When connecting to postgres, you will need to create a db with the name `wmp`. You can use the following command to initiate a psql session:
+
+```
+psql
+```
+
+...if this command fails for the following reason `psql: FATAL:  database "<username>" does not exist`, then you can connect to any existing db and go from there. To get the list of available databases, you can type `psql -l`. You should see some output with the list of available dbs. Assuming you have one with the name `postgres`, you could run the following command to connect to psql:
+
+```
+psql -d postgres
+```
+
+From there, you should be able to run the following command to create the wmp db:
+
+```
+CREATE DATABASE wmp;
+```
+
+#### Creating a .env file
+
+You will also need to create a .env file in the root of the repository. This should be based on the .env.example file that is also located in the root of the repository. You will need to either get accurate values from an Admin of the repo, or create some of your own in order for the app to function as expected.
+
+### Installation
+
+Run the following commands in order to install the npm dependencies and start the app up locally. This will start a local server, that will connect to your locally running postgres db, and also start up a client and automatically open the client in your browser.
 
 ```
 npm install
-
-psql
-psql CREATE DATABASE wmp;
-
 npm run start:dev
 
 ```
 
-To see the data in the database
+To see the seed data in the database after the startup, connect to the wmp db and go from there, e.g.:
 
 ```
-psql
-\c wmp
+psql -d wmp
 select * from [tablename];
 ```
 
