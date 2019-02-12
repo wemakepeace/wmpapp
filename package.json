@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test DATABASE_URL=postgres://localhost/wmp jasmine",
+    "test": "NODE_ENV=test DEV_DATABASE_URL=postgres://localhost/wmp jasmine",
     "start": "node server.js",
     "clean": "rm -rf dist",
     "devClient": "npx webpack-dev-server --hot --open --config webpack.dev.js",
-    "devServer": "PORT=8080 JWT_SECRET=foo NODE_ENV=development DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/ server.js sass --watch",
+    "devServer": "PORT=8080 JWT_SECRET=foo NODE_ENV=development DEV_DATABASE_URL=postgres://localhost/wmp nodemon --ignore dist/ --ignore client/ server.js sass --watch",
     "start:dev": "npm run devClient & npm run devServer",
     "start:prod": "NODE_ENV=production pm2 start server.js && pm2 save && sudo pm2 startup && sudo service nginx restart",
     "build": "npm run clean && webpack --config webpack.prod.js --progress --display-error-details",
