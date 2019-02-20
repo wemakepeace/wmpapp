@@ -76,6 +76,7 @@ app.set('port', port);
 
 app.listen(app.get('port'), () => console.log(`${port} is a beautiful port.`));
 
+// comment out seed() in prod
 if (process.env.NODE_ENV !== 'test') {
    seed();
 }
