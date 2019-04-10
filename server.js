@@ -18,6 +18,7 @@ const schoolRoutes = require('./server/api/school');
 const port = process.env.PORT || 3000;
 const cronjobs = require('./server/api/cronjobs');
 
+console.log('running');
 
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
